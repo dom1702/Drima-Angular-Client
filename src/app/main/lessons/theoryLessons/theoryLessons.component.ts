@@ -62,7 +62,10 @@ export class TheoryLessonsComponent extends AppComponentBase {
         super(injector);
     }
 
-    getTheoryLessons(event?: LazyLoadEvent) {
+    getTheoryLessons(event?: LazyLoadEvent) 
+    {
+        // Test comment here
+        
         if (this.primengTableHelper.shouldResetPaging(event)) {
             this.paginator.changePage(0);
             return;

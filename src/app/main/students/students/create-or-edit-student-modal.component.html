@@ -1,0 +1,103 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #studentForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="student.id">{{l("EditStudent")}}</span>
+                        <span *ngIf="!student.id">{{l("CreateNewStudent")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+					<div class="form-group m-form__group">
+                        <label for="LicenseClassClass">{{l("LicenseClass")}}</label>
+                        <!-- <div class="input-group">
+                            <input class="form-control" id="LicenseClassClass" name="licenseClassClass" [(ngModel)]="licenseClassClass" type="text" disabled>     
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectLicenseClassModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
+                            </div> <div class="input-group-prepend">
+                                <button class="btn btn-danger" type="button" (click)="setLicenseClassesToAcquireNull()"><i class="fa fa-times"></i></button>
+                            </div>
+						</div> -->
+						<ng-multiselect-dropdown
+						[placeholder]="placeholder"
+						[data]="dropdownList"
+						[(ngModel)]="selectedItems" [ngModelOptions]="{standalone: true}"
+						[settings]="dropdownSettings"
+						(onSelect)="onItemSelect($event)"
+						(onSelectAll)="onSelectAll($event)"
+						>
+						</ng-multiselect-dropdown>
+					</div> 
+					
+					
+                    <input class="form-control" name="student.licenseClassesToAcquire" [(ngModel)]="student.licenseClassesToAcquire" type="text"  hidden>
+		 
+
+								<div class="form-group">
+									<label for="Student_FirstName">{{l("FirstName")}} *</label>
+									<input type="text" id="Student_FirstName" class="form-control" [(ngModel)]="student.firstName" name="FirstName"     required/>
+								</div>
+					
+								<div class="form-group">
+									<label for="Student_LastName">{{l("LastName")}} *</label>
+									<input type="text" id="Student_LastName" class="form-control" [(ngModel)]="student.lastName" name="LastName"     required/>
+								</div>
+					
+								<div class="form-group">
+									<label for="Student_Email">{{l("Email")}}</label>
+									<input type="text" id="Student_Email" class="form-control" [(ngModel)]="student.email" name="Email"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="Student_PhoneNumber">{{l("PhoneNumber")}}</label>
+									<input type="text" id="Student_PhoneNumber" class="form-control" [(ngModel)]="student.phoneNumber" name="PhoneNumber"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="Student_DateOfBirth">{{l("DateOfBirth")}}</label>
+									 <input class="form-control m-input" type="datetime" bsDatepicker [(ngModel)]="dateOfBirth" id="Student_DateOfBirth" name="Student_DateOfBirth">
+								</div>
+					
+								<div class="form-group">
+									<label for="Student_Street">{{l("Street")}}</label>
+									<input type="text" id="Student_Street" class="form-control" [(ngModel)]="student.street" name="Street"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="Student_City">{{l("City")}}</label>
+									<input type="text" id="Student_City" class="form-control" [(ngModel)]="student.city" name="City"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="Student_ZipCode">{{l("ZipCode")}}</label>
+									<input type="text" id="Student_ZipCode" class="form-control" [(ngModel)]="student.zipCode" name="ZipCode"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="Student_State">{{l("State")}}</label>
+									<input type="text" id="Student_State" class="form-control" [(ngModel)]="student.state" name="State"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="Student_Country">{{l("Country")}}</label>
+									<input type="text" id="Student_Country" class="form-control" [(ngModel)]="student.country" name="Country"    />
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!studentForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+<licenseClassLookupTableModal #licenseClassLookupTableModal (modalSave)="getNewLicenseClassesToAcquire()"></licenseClassLookupTableModal>
+		 
+</div>

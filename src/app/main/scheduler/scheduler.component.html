@@ -1,0 +1,26 @@
+
+
+<div [@routerTransition]>
+    <div class="m-subheader">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-md-6">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("DrivingLessons")}}</span>
+                </h3>
+                <span class="m-section__sub">
+                    {{l("DrivingLessonsHeaderInfo")}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="m-content">
+            <ejs-schedule #scheduleObj [allowDragAndDrop] = 'false' [eventSettings]='eventSettings' [currentView]='currentView'
+             (popupOpen)='onPopupOpen($event)' (cellClick)='onCellClick($event)'
+             (eventClick)='onEventClick($event)' (recordDoubleClick)='Doubleclick($event)'> </ejs-schedule>
+    </div>
+
+    <createOrEditDrivingLessonModal #createOrEditDrivingLessonModal (modalSave)="getDrivingLessons()"></createOrEditDrivingLessonModal>
+    <createEventTypeModal #createEventTypeModal (modalSave)="getDrivingLessons()"></createEventTypeModal>
+    <createOrEditTheoryLessonModal #createOrEditTheoryLessonModal (modalSave)="getTheoryLessons()"></createOrEditTheoryLessonModal>
+    <createOrEditEventModal #createOrEditEventModal (modalSave)="getEvents()"></createOrEditEventModal>
+</div>

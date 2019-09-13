@@ -1,6 +1,6 @@
 import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { VehiclesServiceProxy, VehicleDto , Powertrain } from '@shared/service-proxies/service-proxies';
+import { VehiclesServiceProxy, VehicleDto , Powertrain, Gearbox } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -38,6 +38,7 @@ export class VehiclesComponent extends AppComponentBase {
         licenseClassClassFilter = '';
 
     powertrain = Powertrain;
+    gearbox = Gearbox;
 
 
 

@@ -1,6 +1,6 @@
 import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
-import { GetVehicleForViewDto, VehicleDto , Powertrain} from '@shared/service-proxies/service-proxies';
+import { GetVehicleForViewDto, VehicleDto , Powertrain, Gearbox} from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 
 @Component({
@@ -17,6 +17,7 @@ export class ViewVehicleModalComponent extends AppComponentBase {
 
     item: GetVehicleForViewDto;
     powertrain = Powertrain;
+    gearbox = Gearbox;
     licenseClasses = 'None';
 
 
@@ -31,7 +32,7 @@ export class ViewVehicleModalComponent extends AppComponentBase {
 
     show(item: GetVehicleForViewDto): void {
         this.item = item;
-        console.log(item.vehicle.vehiclePowertrain);
+
         this.updateLicenseClass();
         this.active = true;
         this.modal.show();

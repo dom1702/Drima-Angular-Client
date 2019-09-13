@@ -100,6 +100,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxBootstrapDatePickerConfigService } from 'assets/ngx-bootstrap/ngx-bootstrap-datepicker-config.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { VehicleInstructorLookupTableModalComponent } from './resources/vehicles/vehicle-instructor-lookup-table-modal.component';
 
 @NgModule({
     imports: [
@@ -134,7 +135,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     declarations: [
 		VehiclesComponent,
 		ViewVehicleModalComponent,		CreateOrEditVehicleModalComponent,
-    VehicleLicenseClassLookupTableModalComponent,
+    VehicleLicenseClassLookupTableModalComponent, VehicleInstructorLookupTableModalComponent,
 		DrivingLessonTopicsComponent,
 		ViewDrivingLessonTopicModalComponent,		CreateOrEditDrivingLessonTopicModalComponent,
 		InstructorsComponent,

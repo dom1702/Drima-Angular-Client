@@ -14,18 +14,7 @@
                 <div class="modal-body">
                  
 
-					<div class="form-group m-form__group">
-                        <label for="LicenseClassClass">{{l("LicenseClass")}}</label>
-                        <div class="input-group">
-                            <input class="form-control" id="LicenseClassClass" name="licenseClassClass" [(ngModel)]="licenseClassClass" type="text" disabled>     
-                            <div class="input-group-append">
-                                <button class="btn btn-primary blue" (click)="openSelectLicenseClassModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
-                            </div> <div class="input-group-prepend">
-                                <button class="btn btn-danger btn-icon" type="button" (click)="setLicenseClassIdNull()"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <input class="form-control" name="vehicle.licenseClassId" [(ngModel)]="vehicle.licenseClassId" type="text"  hidden>
+				
 		 
 					<div class="form-group m-form__group">
                         <label for="LicenseClassClass">{{l("LicenseClass")}}</label>
@@ -70,6 +59,15 @@
 
 									</select>
 								</div>
+
+								<div class="form-group">
+									<label for="Vehicle_Gearbox">{{l("Gearbox")}}</label>
+									<select class="form-control" name="Gearbox" id="Vehicle_Gearbox" [(ngModel)]="vehicle.gearbox">
+									<option value="0">{{l('Manual')}}</option>
+
+									<option value="1">{{l('Automatic')}}</option>
+									</select>
+								</div>
 					
 								<div class="form-group">
 									<label for="Vehicle_Year">{{l("Year")}}</label>
@@ -80,7 +78,18 @@
 									<label for="Vehicle_LicensePlate">{{l("LicensePlate")}}</label>
 									<input type="text" id="Vehicle_LicensePlate" class="form-control" [(ngModel)]="vehicle.licensePlate" name="LicensePlate"    />
 								</div>
-					
+								<div class="form-group m-form__group">
+									<label for="ResponsibleInstructor">{{l("ResponsibleInstructor")}}</label>
+									<div class="input-group">
+										<input class="form-control" id="instructorFullName" name="instructorFullName" [(ngModel)]="instructorFullName" type="text" disabled>     
+										<div class="input-group-append">
+											<button class="btn btn-primary blue" (click)="openSelectInstructorModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
+										</div> <div class="input-group-prepend">
+											<button class="btn btn-danger btn-icon" type="button" (click)="setInstructorNull()"><i class="fa fa-times"></i></button>
+										</div>
+									</div>
+								</div>
+								<input class="form-control" name="vehicle.responsibleInstructorId" [(ngModel)]="vehicle.responsibleInstructorId" type="text"  hidden>
 								<br/><div class="m-checkbox-list">
 									<label for="Vehicle_InUse" class="kt-checkbox">
 										<input id="Vehicle_InUse" type="checkbox" name="InUse" [(ngModel)]="vehicle.inUse"> 
@@ -101,5 +110,6 @@
         </div>
     </div>
 <vehicleLicenseClassLookupTableModal #vehicleLicenseClassLookupTableModal (modalSave)="getNewLicenseClassId()"></vehicleLicenseClassLookupTableModal>
+<vehicle-instructorLookupTableModal #instructorLookupTableModal (modalSave)="getNewInstructorId()"></vehicle-instructorLookupTableModal>
 		 
 </div>

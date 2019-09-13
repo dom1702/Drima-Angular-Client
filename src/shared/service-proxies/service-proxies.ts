@@ -14005,6 +14005,69 @@ export class VehiclesServiceProxy {
         }
         return _observableOf<PagedResultDtoOfVehicleLicenseClassLookupTableDto>(<any>null);
     }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllInstructorForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfVehicleInstructorLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/Vehicles/GetAllInstructorForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllInstructorForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllInstructorForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfVehicleInstructorLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfVehicleInstructorLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllInstructorForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfVehicleInstructorLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfVehicleInstructorLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfVehicleInstructorLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfVehicleInstructorLookupTableDto>(<any>null);
+    }
 }
 
 @Injectable()
@@ -27819,6 +27882,7 @@ export interface IPagedResultDtoOfGetVehicleForViewDto {
 export class GetVehicleForViewDto implements IGetVehicleForViewDto {
     vehicle!: VehicleDto | undefined;
     licenseClassClass!: string | undefined;
+    instructorFullName!: string | undefined;
 
     constructor(data?: IGetVehicleForViewDto) {
         if (data) {
@@ -27833,6 +27897,7 @@ export class GetVehicleForViewDto implements IGetVehicleForViewDto {
         if (data) {
             this.vehicle = data["vehicle"] ? VehicleDto.fromJS(data["vehicle"]) : <any>undefined;
             this.licenseClassClass = data["licenseClassClass"];
+            this.instructorFullName = data["instructorFullName"];
         }
     }
 
@@ -27847,6 +27912,7 @@ export class GetVehicleForViewDto implements IGetVehicleForViewDto {
         data = typeof data === 'object' ? data : {};
         data["vehicle"] = this.vehicle ? this.vehicle.toJSON() : <any>undefined;
         data["licenseClassClass"] = this.licenseClassClass;
+        data["instructorFullName"] = this.instructorFullName;
         return data; 
     }
 }
@@ -27854,6 +27920,7 @@ export class GetVehicleForViewDto implements IGetVehicleForViewDto {
 export interface IGetVehicleForViewDto {
     vehicle: VehicleDto | undefined;
     licenseClassClass: string | undefined;
+    instructorFullName: string | undefined;
 }
 
 export class VehicleDto implements IVehicleDto {
@@ -27864,7 +27931,9 @@ export class VehicleDto implements IVehicleDto {
     licensePlate!: string | undefined;
     inUse!: boolean | undefined;
     vehiclePowertrain!: Powertrain | undefined;
+    gearbox!: Gearbox | undefined;
     licenseClasses!: string[] | undefined;
+    responsibleInstructorId!: number | undefined;
     id!: number | undefined;
 
     constructor(data?: IVehicleDto) {
@@ -27885,11 +27954,13 @@ export class VehicleDto implements IVehicleDto {
             this.licensePlate = data["licensePlate"];
             this.inUse = data["inUse"];
             this.vehiclePowertrain = data["vehiclePowertrain"];
+            this.gearbox = data["gearbox"];
             if (data["licenseClasses"] && data["licenseClasses"].constructor === Array) {
                 this.licenseClasses = [] as any;
                 for (let item of data["licenseClasses"])
                     this.licenseClasses!.push(item);
             }
+            this.responsibleInstructorId = data["responsibleInstructorId"];
             this.id = data["id"];
         }
     }
@@ -27910,11 +27981,13 @@ export class VehicleDto implements IVehicleDto {
         data["licensePlate"] = this.licensePlate;
         data["inUse"] = this.inUse;
         data["vehiclePowertrain"] = this.vehiclePowertrain;
+        data["gearbox"] = this.gearbox;
         if (this.licenseClasses && this.licenseClasses.constructor === Array) {
             data["licenseClasses"] = [];
             for (let item of this.licenseClasses)
                 data["licenseClasses"].push(item);
         }
+        data["responsibleInstructorId"] = this.responsibleInstructorId;
         data["id"] = this.id;
         return data; 
     }
@@ -27928,7 +28001,9 @@ export interface IVehicleDto {
     licensePlate: string | undefined;
     inUse: boolean | undefined;
     vehiclePowertrain: Powertrain | undefined;
+    gearbox: Gearbox | undefined;
     licenseClasses: string[] | undefined;
+    responsibleInstructorId: number | undefined;
     id: number | undefined;
 }
 
@@ -27940,9 +28015,16 @@ export enum Powertrain {
     Electric = 4, 
 }
 
+export enum Gearbox {
+    Manual = 0, 
+    Automatic = 1, 
+}
+
 export class GetVehicleForEditOutput implements IGetVehicleForEditOutput {
     vehicle!: CreateOrEditVehicleDto | undefined;
     licenseClassClass!: string | undefined;
+    instructorFirstName!: string | undefined;
+    instructorLastName!: string | undefined;
 
     constructor(data?: IGetVehicleForEditOutput) {
         if (data) {
@@ -27957,6 +28039,8 @@ export class GetVehicleForEditOutput implements IGetVehicleForEditOutput {
         if (data) {
             this.vehicle = data["vehicle"] ? CreateOrEditVehicleDto.fromJS(data["vehicle"]) : <any>undefined;
             this.licenseClassClass = data["licenseClassClass"];
+            this.instructorFirstName = data["instructorFirstName"];
+            this.instructorLastName = data["instructorLastName"];
         }
     }
 
@@ -27971,6 +28055,8 @@ export class GetVehicleForEditOutput implements IGetVehicleForEditOutput {
         data = typeof data === 'object' ? data : {};
         data["vehicle"] = this.vehicle ? this.vehicle.toJSON() : <any>undefined;
         data["licenseClassClass"] = this.licenseClassClass;
+        data["instructorFirstName"] = this.instructorFirstName;
+        data["instructorLastName"] = this.instructorLastName;
         return data; 
     }
 }
@@ -27978,6 +28064,8 @@ export class GetVehicleForEditOutput implements IGetVehicleForEditOutput {
 export interface IGetVehicleForEditOutput {
     vehicle: CreateOrEditVehicleDto | undefined;
     licenseClassClass: string | undefined;
+    instructorFirstName: string | undefined;
+    instructorLastName: string | undefined;
 }
 
 export class CreateOrEditVehicleDto implements ICreateOrEditVehicleDto {
@@ -27988,7 +28076,9 @@ export class CreateOrEditVehicleDto implements ICreateOrEditVehicleDto {
     licensePlate!: string | undefined;
     inUse!: boolean | undefined;
     vehiclePowertrain!: Powertrain | undefined;
+    gearbox!: Gearbox | undefined;
     licenseClasses!: string[] | undefined;
+    responsibleInstructorId!: number | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditVehicleDto) {
@@ -28009,11 +28099,13 @@ export class CreateOrEditVehicleDto implements ICreateOrEditVehicleDto {
             this.licensePlate = data["licensePlate"];
             this.inUse = data["inUse"];
             this.vehiclePowertrain = data["vehiclePowertrain"];
+            this.gearbox = data["gearbox"];
             if (data["licenseClasses"] && data["licenseClasses"].constructor === Array) {
                 this.licenseClasses = [] as any;
                 for (let item of data["licenseClasses"])
                     this.licenseClasses!.push(item);
             }
+            this.responsibleInstructorId = data["responsibleInstructorId"];
             this.id = data["id"];
         }
     }
@@ -28034,11 +28126,13 @@ export class CreateOrEditVehicleDto implements ICreateOrEditVehicleDto {
         data["licensePlate"] = this.licensePlate;
         data["inUse"] = this.inUse;
         data["vehiclePowertrain"] = this.vehiclePowertrain;
+        data["gearbox"] = this.gearbox;
         if (this.licenseClasses && this.licenseClasses.constructor === Array) {
             data["licenseClasses"] = [];
             for (let item of this.licenseClasses)
                 data["licenseClasses"].push(item);
         }
+        data["responsibleInstructorId"] = this.responsibleInstructorId;
         data["id"] = this.id;
         return data; 
     }
@@ -28052,7 +28146,9 @@ export interface ICreateOrEditVehicleDto {
     licensePlate: string | undefined;
     inUse: boolean | undefined;
     vehiclePowertrain: Powertrain | undefined;
+    gearbox: Gearbox | undefined;
     licenseClasses: string[] | undefined;
+    responsibleInstructorId: number | undefined;
     id: number | undefined;
 }
 
@@ -28142,6 +28238,98 @@ export class VehicleLicenseClassLookupTableDto implements IVehicleLicenseClassLo
 export interface IVehicleLicenseClassLookupTableDto {
     id: number | undefined;
     displayName: string | undefined;
+}
+
+export class PagedResultDtoOfVehicleInstructorLookupTableDto implements IPagedResultDtoOfVehicleInstructorLookupTableDto {
+    totalCount!: number | undefined;
+    items!: VehicleInstructorLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfVehicleInstructorLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(VehicleInstructorLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfVehicleInstructorLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfVehicleInstructorLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfVehicleInstructorLookupTableDto {
+    totalCount: number | undefined;
+    items: VehicleInstructorLookupTableDto[] | undefined;
+}
+
+export class VehicleInstructorLookupTableDto implements IVehicleInstructorLookupTableDto {
+    id!: number | undefined;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+
+    constructor(data?: IVehicleInstructorLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+        }
+    }
+
+    static fromJS(data: any): VehicleInstructorLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new VehicleInstructorLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        return data; 
+    }
+}
+
+export interface IVehicleInstructorLookupTableDto {
+    id: number | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
 }
 
 export class GetLatestWebLogsOutput implements IGetLatestWebLogsOutput {

@@ -40,12 +40,18 @@
                         <h6>{{l("Powertrain")}} :</h6>
                         {{l( powertrain[item.vehicle.vehiclePowertrain])}}
                     </div>
-
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Gearbox")}} :</h6>
+                        {{l(gearbox[item.vehicle.gearbox])}}
+                    </div>
                     <div class="col-6 mb-3">
                         <h6>{{l("LicenseClasses")}} :</h6>
                         {{licenseClasses}}
                     </div>
-
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ResponsibleInstructor")}} :</h6>
+                        {{item.instructorFullName}}
+                    </div>
                 </div>
 
             </div>

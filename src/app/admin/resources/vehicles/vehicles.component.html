@@ -146,7 +146,7 @@
                                         {{l('Model')}}
                                         <p-sortIcon field="vehicle.model"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="year">
+                                    <th style="width: 80px" pSortableColumn="year">
                                         {{l('Year')}}
                                         <p-sortIcon field="vehicle.year"></p-sortIcon>
                                     </th>
@@ -154,13 +154,17 @@
                                         {{l('LicensePlate')}}
                                         <p-sortIcon field="vehicle.licensePlate"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="inUse">
+                                    <th style="width: 80px" pSortableColumn="inUse">
                                         {{l('InUse')}}
                                         <p-sortIcon field="vehicle.inUse"></p-sortIcon>
                                     </th>
                                     <th style="width: 150px" pSortableColumn="powertrain">
                                         {{l('Powertrain')}}
                                         <p-sortIcon field="vehicle.vehiclePowertrain"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="gearbox">
+                                        {{l('Gearbox')}}
+                                        <p-sortIcon field="vehicle.gearbox"></p-sortIcon>
                                     </th>
 
                                 </tr>
@@ -205,7 +209,7 @@
 											<span class="ui-column-title"> {{l('Model')}}</span>
 											{{record.vehicle.model}}
 										</td>
-                                    <td style="width:150px">
+                                    <td style="width:80px">
 											<span class="ui-column-title"> {{l('Year')}}</span>
 											{{record.vehicle.year}}
 										</td>
@@ -213,7 +217,7 @@
 											<span class="ui-column-title"> {{l('LicensePlate')}}</span>
 											{{record.vehicle.licensePlate}}
 										</td>
-                                    <td style="width:150px">
+                                    <td style="width:80px">
 										<span class="ui-column-title"> {{l('InUse')}}</span>
                                         <div *ngIf="record.vehicle.inUse" class="text-center"><i class="fa fa-check-circle kt--font-success" title="True"></i></div>
 										<div *ngIf="!record.vehicle.inUse" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
@@ -222,7 +226,10 @@
 										<span class="ui-column-title"> {{l('Powertrain')}}</span>
 										{{l( powertrain[record.vehicle.vehiclePowertrain])}}
                                     </td>
-
+                                    <td style="width:150px">
+										<span class="ui-column-title"> {{l('Gearbox')}}</span>
+										{{l( gearbox[record.vehicle.gearbox])}}
+                                    </td>
                                 </tr>
                             </ng-template>
                         </p-table>

@@ -61,6 +61,7 @@ export class DrivingLessonsComponent extends AppComponentBase {
 
     ngOnInit(): void {
         this.entityHistoryEnabled = this.setIsEntityHistoryEnabled();
+        
     }
 
     private setIsEntityHistoryEnabled(): boolean {
@@ -72,6 +73,8 @@ export class DrivingLessonsComponent extends AppComponentBase {
         if (this.primengTableHelper.shouldResetPaging(event)) {
             this.paginator.changePage(0);
             return;
+
+           
         }
 
         this.primengTableHelper.showLoadingIndicator();

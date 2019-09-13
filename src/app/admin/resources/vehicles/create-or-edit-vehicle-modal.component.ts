@@ -5,6 +5,7 @@ import { VehiclesServiceProxy, CreateOrEditVehicleDto } from '@shared/service-pr
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { VehicleLicenseClassLookupTableModalComponent } from './vehicle-licenseClass-lookup-table-modal.component';
+import { VehicleInstructorLookupTableModalComponent } from './vehicle-instructor-lookup-table-modal.component';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class CreateOrEditVehicleModalComponent extends AppComponentBase implemen
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('vehicleLicenseClassLookupTableModal') vehicleLicenseClassLookupTableModal: VehicleLicenseClassLookupTableModalComponent;
-
+    @ViewChild('instructorLookupTableModal') instructorLookupTableModal: VehicleInstructorLookupTableModalComponent;
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
 
@@ -29,7 +30,7 @@ export class CreateOrEditVehicleModalComponent extends AppComponentBase implemen
     dropdownSettings = {};
     placeholder = 'None';
 
-
+    instructorFullName = '';
 
     constructor(
         injector: Injector,
@@ -54,6 +55,7 @@ export class CreateOrEditVehicleModalComponent extends AppComponentBase implemen
         if (!vehicleId) {
             this.vehicle = new CreateOrEditVehicleDto();
             this.vehicle.id = vehicleId;
+            this.instructorFullName = '';
 
             this.active = true;
             this.updateLicenseClass(false);
@@ -61,6 +63,7 @@ export class CreateOrEditVehicleModalComponent extends AppComponentBase implemen
         } else {
             this._vehiclesServiceProxy.getVehicleForEdit(vehicleId).subscribe(result => {
                 this.vehicle = result.vehicle;
+                this.instructorFullName = result.instructorFirstName + ' ' + result.instructorLastName;
 
                 this.active = true;
                 this.updateLicenseClass(true);
@@ -162,6 +165,24 @@ export class CreateOrEditVehicleModalComponent extends AppComponentBase implemen
         getNewLicenseClassId() {
         //this.vehicle.licenseClassId = this.vehicleLicenseClassLookupTableModal.id;
        // this.licenseClassClass = this.vehicleLicenseClassLookupTableModal.displayName;
+    }
+
+    openSelectInstructorModal() {
+        //this.vehicleLicenseClassLookupTableModal.id = this.vehicle.licenseClassId;
+        //this.vehicleLicenseClassLookupTableModal.displayName = this.licenseClassClass;
+        this.instructorLookupTableModal.show();
+    }
+
+
+        setInstructorNull() {
+        this.vehicle.responsibleInstructorId = null;
+        this.instructorFullName = '';
+    }
+
+
+        getNewInstructorId() {
+        this.vehicle.responsibleInstructorId = this.instructorLookupTableModal.id;
+        this.instructorFullName = this.instructorLookupTableModal.firstName + ' ' + this.instructorLookupTableModal.lastName;
     }
 
 

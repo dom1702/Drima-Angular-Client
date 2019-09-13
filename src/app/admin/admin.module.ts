@@ -2,6 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
+import { VehiclesComponent } from './resources/vehicles/vehicles.component';
+import { ViewVehicleModalComponent } from './resources/vehicles/view-vehicle-modal.component';
+import { CreateOrEditVehicleModalComponent } from './resources/vehicles/create-or-edit-vehicle-modal.component';
+import { VehicleLicenseClassLookupTableModalComponent } from './resources/vehicles/vehicle-licenseClass-lookup-table-modal.component';
+
 import { DrivingLessonTopicsComponent } from './templates/drivingLessonTopics/drivingLessonTopics.component';
 import { ViewDrivingLessonTopicModalComponent } from './templates/drivingLessonTopics/view-drivingLessonTopic-modal.component';
 import { CreateOrEditDrivingLessonTopicModalComponent } from './templates/drivingLessonTopics/create-or-edit-drivingLessonTopic-modal.component';
@@ -127,6 +132,9 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
         NgMultiSelectDropDownModule.forRoot()
     ],
     declarations: [
+		VehiclesComponent,
+		ViewVehicleModalComponent,		CreateOrEditVehicleModalComponent,
+    VehicleLicenseClassLookupTableModalComponent,
 		DrivingLessonTopicsComponent,
 		ViewDrivingLessonTopicModalComponent,		CreateOrEditDrivingLessonTopicModalComponent,
 		InstructorsComponent,

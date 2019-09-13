@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { VehiclesComponent } from './resources/vehicles/vehicles.component';
 import { DrivingLessonTopicsComponent } from './templates/drivingLessonTopics/drivingLessonTopics.component';
 import { InstructorsComponent } from './instructors/instructors/instructors.component';
 import { TheoryLessonTopicsComponent } from './templates/theoryLessonTopics/theoryLessonTopics.component';
@@ -28,6 +29,7 @@ import { UsersComponent } from './users/users.component';
             {
                 path: '',
                 children: [
+                    { path: 'resources/vehicles', component: VehiclesComponent, data: { permission: 'Pages.Administration.Vehicles' }  },
                     { path: 'templates/drivingLessonTopics', component: DrivingLessonTopicsComponent, data: { permission: 'Pages.Administration.DrivingLessonTopics' }  },
                     { path: 'instructors/instructors', component: InstructorsComponent, data: { permission: 'Pages.Administration.Instructors' }  },
                     { path: 'templates/theoryLessonTopics', component: TheoryLessonTopicsComponent, data: { permission: 'Pages.Administration.TheoryLessonTopics' }  },

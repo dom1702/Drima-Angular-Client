@@ -13558,6 +13558,456 @@ export class UserLoginServiceProxy {
 }
 
 @Injectable()
+export class VehiclesServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param nameFilter (optional) 
+     * @param brandFilter (optional) 
+     * @param modelFilter (optional) 
+     * @param yearFilter (optional) 
+     * @param licensePlateFilter (optional) 
+     * @param inUseFilter (optional) 
+     * @param powertrainFilter (optional) 
+     * @param licenseClassClassFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAll(filter: string | null | undefined, nameFilter: string | null | undefined, brandFilter: string | null | undefined, modelFilter: string | null | undefined, yearFilter: string | null | undefined, licensePlateFilter: string | null | undefined, inUseFilter: number | null | undefined, powertrainFilter: number | null | undefined, licenseClassClassFilter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfGetVehicleForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/Vehicles/GetAll?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (nameFilter !== undefined)
+            url_ += "NameFilter=" + encodeURIComponent("" + nameFilter) + "&"; 
+        if (brandFilter !== undefined)
+            url_ += "BrandFilter=" + encodeURIComponent("" + brandFilter) + "&"; 
+        if (modelFilter !== undefined)
+            url_ += "ModelFilter=" + encodeURIComponent("" + modelFilter) + "&"; 
+        if (yearFilter !== undefined)
+            url_ += "YearFilter=" + encodeURIComponent("" + yearFilter) + "&"; 
+        if (licensePlateFilter !== undefined)
+            url_ += "LicensePlateFilter=" + encodeURIComponent("" + licensePlateFilter) + "&"; 
+        if (inUseFilter !== undefined)
+            url_ += "InUseFilter=" + encodeURIComponent("" + inUseFilter) + "&"; 
+        if (powertrainFilter !== undefined)
+            url_ += "PowertrainFilter=" + encodeURIComponent("" + powertrainFilter) + "&"; 
+        if (licenseClassClassFilter !== undefined)
+            url_ += "LicenseClassClassFilter=" + encodeURIComponent("" + licenseClassClassFilter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfGetVehicleForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfGetVehicleForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PagedResultDtoOfGetVehicleForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfGetVehicleForViewDto.fromJS(resultData200) : new PagedResultDtoOfGetVehicleForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfGetVehicleForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getVehicleForView(id: number | null | undefined): Observable<GetVehicleForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/Vehicles/GetVehicleForView?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetVehicleForView(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetVehicleForView(<any>response_);
+                } catch (e) {
+                    return <Observable<GetVehicleForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetVehicleForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetVehicleForView(response: HttpResponseBase): Observable<GetVehicleForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetVehicleForViewDto.fromJS(resultData200) : new GetVehicleForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetVehicleForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getVehicleForEdit(id: number | null | undefined): Observable<GetVehicleForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/Vehicles/GetVehicleForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetVehicleForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetVehicleForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetVehicleForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetVehicleForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetVehicleForEdit(response: HttpResponseBase): Observable<GetVehicleForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetVehicleForEditOutput.fromJS(resultData200) : new GetVehicleForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetVehicleForEditOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    createOrEdit(input: CreateOrEditVehicleDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Vehicles/CreateOrEdit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateOrEdit(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    delete(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Vehicles/Delete?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param nameFilter (optional) 
+     * @param brandFilter (optional) 
+     * @param modelFilter (optional) 
+     * @param yearFilter (optional) 
+     * @param licensePlateFilter (optional) 
+     * @param inUseFilter (optional) 
+     * @param powertrainFilter (optional) 
+     * @param licenseClassClassFilter (optional) 
+     * @return Success
+     */
+    getVehiclesToExcel(filter: string | null | undefined, nameFilter: string | null | undefined, brandFilter: string | null | undefined, modelFilter: string | null | undefined, yearFilter: string | null | undefined, licensePlateFilter: string | null | undefined, inUseFilter: number | null | undefined, powertrainFilter: number | null | undefined, licenseClassClassFilter: string | null | undefined): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/Vehicles/GetVehiclesToExcel?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (nameFilter !== undefined)
+            url_ += "NameFilter=" + encodeURIComponent("" + nameFilter) + "&"; 
+        if (brandFilter !== undefined)
+            url_ += "BrandFilter=" + encodeURIComponent("" + brandFilter) + "&"; 
+        if (modelFilter !== undefined)
+            url_ += "ModelFilter=" + encodeURIComponent("" + modelFilter) + "&"; 
+        if (yearFilter !== undefined)
+            url_ += "YearFilter=" + encodeURIComponent("" + yearFilter) + "&"; 
+        if (licensePlateFilter !== undefined)
+            url_ += "LicensePlateFilter=" + encodeURIComponent("" + licensePlateFilter) + "&"; 
+        if (inUseFilter !== undefined)
+            url_ += "InUseFilter=" + encodeURIComponent("" + inUseFilter) + "&"; 
+        if (powertrainFilter !== undefined)
+            url_ += "PowertrainFilter=" + encodeURIComponent("" + powertrainFilter) + "&"; 
+        if (licenseClassClassFilter !== undefined)
+            url_ += "LicenseClassClassFilter=" + encodeURIComponent("" + licenseClassClassFilter) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetVehiclesToExcel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetVehiclesToExcel(<any>response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetVehiclesToExcel(response: HttpResponseBase): Observable<FileDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileDto>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllLicenseClassForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfVehicleLicenseClassLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/Vehicles/GetAllLicenseClassForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllLicenseClassForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllLicenseClassForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfVehicleLicenseClassLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfVehicleLicenseClassLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllLicenseClassForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfVehicleLicenseClassLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfVehicleLicenseClassLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfVehicleLicenseClassLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfVehicleLicenseClassLookupTableDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class WebLogServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -27316,6 +27766,382 @@ export interface IUserLoginAttemptDto {
     browserInfo: string | undefined;
     result: string | undefined;
     creationTime: moment.Moment | undefined;
+}
+
+export class PagedResultDtoOfGetVehicleForViewDto implements IPagedResultDtoOfGetVehicleForViewDto {
+    totalCount!: number | undefined;
+    items!: GetVehicleForViewDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfGetVehicleForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(GetVehicleForViewDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfGetVehicleForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfGetVehicleForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfGetVehicleForViewDto {
+    totalCount: number | undefined;
+    items: GetVehicleForViewDto[] | undefined;
+}
+
+export class GetVehicleForViewDto implements IGetVehicleForViewDto {
+    vehicle!: VehicleDto | undefined;
+    licenseClassClass!: string | undefined;
+
+    constructor(data?: IGetVehicleForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.vehicle = data["vehicle"] ? VehicleDto.fromJS(data["vehicle"]) : <any>undefined;
+            this.licenseClassClass = data["licenseClassClass"];
+        }
+    }
+
+    static fromJS(data: any): GetVehicleForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetVehicleForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["vehicle"] = this.vehicle ? this.vehicle.toJSON() : <any>undefined;
+        data["licenseClassClass"] = this.licenseClassClass;
+        return data; 
+    }
+}
+
+export interface IGetVehicleForViewDto {
+    vehicle: VehicleDto | undefined;
+    licenseClassClass: string | undefined;
+}
+
+export class VehicleDto implements IVehicleDto {
+    name!: string | undefined;
+    brand!: string | undefined;
+    model!: string | undefined;
+    year!: string | undefined;
+    licensePlate!: string | undefined;
+    inUse!: boolean | undefined;
+    vehiclePowertrain!: Powertrain | undefined;
+    licenseClasses!: string[] | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IVehicleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.brand = data["brand"];
+            this.model = data["model"];
+            this.year = data["year"];
+            this.licensePlate = data["licensePlate"];
+            this.inUse = data["inUse"];
+            this.vehiclePowertrain = data["vehiclePowertrain"];
+            if (data["licenseClasses"] && data["licenseClasses"].constructor === Array) {
+                this.licenseClasses = [] as any;
+                for (let item of data["licenseClasses"])
+                    this.licenseClasses!.push(item);
+            }
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): VehicleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new VehicleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["brand"] = this.brand;
+        data["model"] = this.model;
+        data["year"] = this.year;
+        data["licensePlate"] = this.licensePlate;
+        data["inUse"] = this.inUse;
+        data["vehiclePowertrain"] = this.vehiclePowertrain;
+        if (this.licenseClasses && this.licenseClasses.constructor === Array) {
+            data["licenseClasses"] = [];
+            for (let item of this.licenseClasses)
+                data["licenseClasses"].push(item);
+        }
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IVehicleDto {
+    name: string | undefined;
+    brand: string | undefined;
+    model: string | undefined;
+    year: string | undefined;
+    licensePlate: string | undefined;
+    inUse: boolean | undefined;
+    vehiclePowertrain: Powertrain | undefined;
+    licenseClasses: string[] | undefined;
+    id: number | undefined;
+}
+
+export enum Powertrain {
+    Gas = 0, 
+    Diesel = 1, 
+    CNG = 2, 
+    Hybrid = 3, 
+    Electric = 4, 
+}
+
+export class GetVehicleForEditOutput implements IGetVehicleForEditOutput {
+    vehicle!: CreateOrEditVehicleDto | undefined;
+    licenseClassClass!: string | undefined;
+
+    constructor(data?: IGetVehicleForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.vehicle = data["vehicle"] ? CreateOrEditVehicleDto.fromJS(data["vehicle"]) : <any>undefined;
+            this.licenseClassClass = data["licenseClassClass"];
+        }
+    }
+
+    static fromJS(data: any): GetVehicleForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetVehicleForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["vehicle"] = this.vehicle ? this.vehicle.toJSON() : <any>undefined;
+        data["licenseClassClass"] = this.licenseClassClass;
+        return data; 
+    }
+}
+
+export interface IGetVehicleForEditOutput {
+    vehicle: CreateOrEditVehicleDto | undefined;
+    licenseClassClass: string | undefined;
+}
+
+export class CreateOrEditVehicleDto implements ICreateOrEditVehicleDto {
+    name!: string;
+    brand!: string;
+    model!: string;
+    year!: string | undefined;
+    licensePlate!: string | undefined;
+    inUse!: boolean | undefined;
+    vehiclePowertrain!: Powertrain | undefined;
+    licenseClasses!: string[] | undefined;
+    id!: number | undefined;
+
+    constructor(data?: ICreateOrEditVehicleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.brand = data["brand"];
+            this.model = data["model"];
+            this.year = data["year"];
+            this.licensePlate = data["licensePlate"];
+            this.inUse = data["inUse"];
+            this.vehiclePowertrain = data["vehiclePowertrain"];
+            if (data["licenseClasses"] && data["licenseClasses"].constructor === Array) {
+                this.licenseClasses = [] as any;
+                for (let item of data["licenseClasses"])
+                    this.licenseClasses!.push(item);
+            }
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): CreateOrEditVehicleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrEditVehicleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["brand"] = this.brand;
+        data["model"] = this.model;
+        data["year"] = this.year;
+        data["licensePlate"] = this.licensePlate;
+        data["inUse"] = this.inUse;
+        data["vehiclePowertrain"] = this.vehiclePowertrain;
+        if (this.licenseClasses && this.licenseClasses.constructor === Array) {
+            data["licenseClasses"] = [];
+            for (let item of this.licenseClasses)
+                data["licenseClasses"].push(item);
+        }
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface ICreateOrEditVehicleDto {
+    name: string;
+    brand: string;
+    model: string;
+    year: string | undefined;
+    licensePlate: string | undefined;
+    inUse: boolean | undefined;
+    vehiclePowertrain: Powertrain | undefined;
+    licenseClasses: string[] | undefined;
+    id: number | undefined;
+}
+
+export class PagedResultDtoOfVehicleLicenseClassLookupTableDto implements IPagedResultDtoOfVehicleLicenseClassLookupTableDto {
+    totalCount!: number | undefined;
+    items!: VehicleLicenseClassLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfVehicleLicenseClassLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(VehicleLicenseClassLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfVehicleLicenseClassLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfVehicleLicenseClassLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfVehicleLicenseClassLookupTableDto {
+    totalCount: number | undefined;
+    items: VehicleLicenseClassLookupTableDto[] | undefined;
+}
+
+export class VehicleLicenseClassLookupTableDto implements IVehicleLicenseClassLookupTableDto {
+    id!: number | undefined;
+    displayName!: string | undefined;
+
+    constructor(data?: IVehicleLicenseClassLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.displayName = data["displayName"];
+        }
+    }
+
+    static fromJS(data: any): VehicleLicenseClassLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new VehicleLicenseClassLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["displayName"] = this.displayName;
+        return data; 
+    }
+}
+
+export interface IVehicleLicenseClassLookupTableDto {
+    id: number | undefined;
+    displayName: string | undefined;
 }
 
 export class GetLatestWebLogsOutput implements IGetLatestWebLogsOutput {

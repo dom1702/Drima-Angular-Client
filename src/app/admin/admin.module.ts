@@ -2,6 +2,19 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
+import { ProductsComponent } from './sales/products/products.component';
+import { ViewProductModalComponent } from './sales/products/view-product-modal.component';
+import { CreateOrEditProductModalComponent } from './sales/products/create-or-edit-product-modal.component';
+
+import { SimulatorsComponent } from './resources/simulators/simulators.component';
+import { ViewSimulatorModalComponent } from './resources/simulators/view-simulator-modal.component';
+import { CreateOrEditSimulatorModalComponent } from './resources/simulators/create-or-edit-simulator-modal.component';
+import { SimulatorOfficeLookupTableModalComponent } from './resources/simulators/simulator-office-lookup-table-modal.component';
+
+import { OfficesComponent } from './resources/offices/offices.component';
+import { ViewOfficeModalComponent } from './resources/offices/view-office-modal.component';
+import { CreateOrEditOfficeModalComponent } from './resources/offices/create-or-edit-office-modal.component';
+
 import { VehiclesComponent } from './resources/vehicles/vehicles.component';
 import { ViewVehicleModalComponent } from './resources/vehicles/view-vehicle-modal.component';
 import { CreateOrEditVehicleModalComponent } from './resources/vehicles/create-or-edit-vehicle-modal.component';
@@ -101,6 +114,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxBootstrapDatePickerConfigService } from 'assets/ngx-bootstrap/ngx-bootstrap-datepicker-config.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { VehicleInstructorLookupTableModalComponent } from './resources/vehicles/vehicle-instructor-lookup-table-modal.component';
+import { OfficeLookupTableModalComponent } from './instructors/instructors/office-lookup-table-modal.component';
 
 @NgModule({
     imports: [
@@ -133,6 +147,13 @@ import { VehicleInstructorLookupTableModalComponent } from './resources/vehicles
         NgMultiSelectDropDownModule.forRoot()
     ],
     declarations: [
+		ProductsComponent,
+		ViewProductModalComponent,		CreateOrEditProductModalComponent,
+		SimulatorsComponent,
+		ViewSimulatorModalComponent,		CreateOrEditSimulatorModalComponent,
+    SimulatorOfficeLookupTableModalComponent,
+		OfficesComponent,
+		ViewOfficeModalComponent,		CreateOrEditOfficeModalComponent,
 		VehiclesComponent,
 		ViewVehicleModalComponent,		CreateOrEditVehicleModalComponent,
     VehicleLicenseClassLookupTableModalComponent, VehicleInstructorLookupTableModalComponent,
@@ -140,7 +161,7 @@ import { VehicleInstructorLookupTableModalComponent } from './resources/vehicles
 		ViewDrivingLessonTopicModalComponent,		CreateOrEditDrivingLessonTopicModalComponent,
 		InstructorsComponent,
 		ViewInstructorModalComponent,		CreateOrEditInstructorModalComponent,
-    LicenseClassLookupTableModalComponent,
+    LicenseClassLookupTableModalComponent, OfficeLookupTableModalComponent,
 		TheoryLessonTopicsComponent,
 		ViewTheoryLessonTopicModalComponent,		CreateOrEditTheoryLessonTopicModalComponent,
 		LicenseClassesComponent,

@@ -3,16 +3,16 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto col-md-6">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <span>{{l("Vehicles")}}</span>
+                    <span>{{l("Offices")}}</span>
                 </h3>
                 <span class="m-section__sub">
-                    {{l("VehiclesHeaderInfo")}}
+                    {{l("OfficesHeaderInfo")}}
                 </span>
             </div>
             <div class="col-md-6 text-right">
                 <button (click)="exportToExcel()" class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button>
-                <button *ngIf="isGranted('Pages.Administration.Vehicles.Create')" (click)="createVehicle()" 
-			class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewVehicle")}}</button>
+                <button *ngIf="isGranted('Pages.Administration.Offices.Create')" (click)="createOffice()" 
+			class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewOffice")}}</button>
             </div>
         </div>
     </div>
@@ -28,7 +28,7 @@
                                     <div class="input-group">
                                         <input [(ngModel)]="filterText" name="filterText" autoFocus class="form-control m-input" [placeholder]="l('SearchWithThreeDot')" type="text">
                                         <span class="input-group-btn">
-                                            <button (click)="getVehicles()" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                            <button (click)="getOffices()" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
                                         </span>
                                     </div>
                                 </div>
@@ -48,58 +48,45 @@
                             </div>
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="BrandFilter">{{l("Brand")}}</label>
-									<input type="text" class="form-control" id="BrandFilter" name="brandFilter" [(ngModel)]="brandFilter">
+									<label for="StreetFilter">{{l("Street")}}</label>
+									<input type="text" class="form-control" id="StreetFilter" name="streetFilter" [(ngModel)]="streetFilter">
 								</div>
                             </div>
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="ModelFilter">{{l("Model")}}</label>
-									<input type="text" class="form-control" id="ModelFilter" name="modelFilter" [(ngModel)]="modelFilter">
+									<label for="CityFilter">{{l("City")}}</label>
+									<input type="text" class="form-control" id="CityFilter" name="cityFilter" [(ngModel)]="cityFilter">
 								</div>
                             </div>
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="YearFilter">{{l("Year")}}</label>
-									<input type="text" class="form-control" id="YearFilter" name="yearFilter" [(ngModel)]="yearFilter">
+									<label for="ZipCodeFilter">{{l("ZipCode")}}</label>
+									<input type="text" class="form-control" id="ZipCodeFilter" name="zipCodeFilter" [(ngModel)]="zipCodeFilter">
 								</div>
                             </div>
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="LicensePlateFilter">{{l("LicensePlate")}}</label>
-									<input type="text" class="form-control" id="LicensePlateFilter" name="licensePlateFilter" [(ngModel)]="licensePlateFilter">
+									<label for="StateFilter">{{l("State")}}</label>
+									<input type="text" class="form-control" id="StateFilter" name="stateFilter" [(ngModel)]="stateFilter">
 								</div>
-                            </div>	
-							<div class="col-md-3">
-								<label for="InUseFilterSelect">{{l("InUse")}}</label>
-								<select class="form-control" name="InUseFilter" id="InUseFilterSelect" [(ngModel)]="inUseFilter">
-								<option value="-1">{{l("All")}}</option>
-								<option value="0">{{l("False")}}</option>
-								<option value="1">{{l("True")}}</option>
-								</select>
-                            </div>
-							<div class="col-md-3">
-								<label for="PowertrainFilterSelect">{{l("Powertrain")}}</label>
-								<select class="form-control" name="PowertrainFilter" id="PowertrainFilterSelect" [(ngModel)]="powertrainFilter">
-								<option value="-1">{{l("All")}}</option>
-																			<option value="0">{{l('Gas')}}</option>
-
-										<option value="1">{{l('Diesel')}}</option>
-
-										<option value="2">{{l('CNG')}}</option>
-
-										<option value="3">{{l('Hybrid')}}</option>
-
-										<option value="4">{{l('Electric')}}</option>
-
-
-								</select>
                             </div>
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="LicenseClassClassFilter">({{l("LicenseClass")}}) {{l("Class")}}</label>
-									<input type="text" class="form-control" id="LicenseClassClassFilter" name="licenseClassClassFilter" [(ngModel)]="licenseClassClassFilter">
-                                </div>
+									<label for="CountryFilter">{{l("Country")}}</label>
+									<input type="text" class="form-control" id="CountryFilter" name="countryFilter" [(ngModel)]="countryFilter">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="PhoneNumberFilter">{{l("PhoneNumber")}}</label>
+									<input type="text" class="form-control" id="PhoneNumberFilter" name="phoneNumberFilter" [(ngModel)]="phoneNumberFilter">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="EmailFilter">{{l("Email")}}</label>
+									<input type="text" class="form-control" id="EmailFilter" name="emailFilter" [(ngModel)]="emailFilter">
+								</div>
                             </div>
 
                         </div>
@@ -117,7 +104,7 @@
                     <div class="primeng-datatable-container col-12"
                          [busyIf]="primengTableHelper.isLoading">
                         <p-table #dataTable
-                                     (onLazyLoad)="getVehicles($event)"
+                                     (onLazyLoad)="getOffices($event)"
                                      [value]="primengTableHelper.records"
                                      rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
                                      [paginator]="false"
@@ -128,42 +115,38 @@
                                      [resizableColumns]="primengTableHelper.resizableColumns">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th style="width: 130px" [hidden]="!isGrantedAny('Pages.Administration.Vehicles.Edit', 'Pages.Administration.Vehicles.Delete')">{{l('Actions')}}</th>
-                                    <th style="width: 150px" pSortableColumn="licenseClassFk.class">
-                                        {{l('Class')}}
-                                        <p-sortIcon field="licenseClassClass"></p-sortIcon>
-                                    </th>
+                                    <th style="width: 130px" [hidden]="!isGrantedAny('Pages.Administration.Offices.Edit', 'Pages.Administration.Offices.Delete')">{{l('Actions')}}</th>
                                     <th style="width: 150px" pSortableColumn="name">
                                         {{l('Name')}}
-                                        <p-sortIcon field="vehicle.name"></p-sortIcon>
+                                        <p-sortIcon field="office.name"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="brand">
-                                        {{l('Brand')}}
-                                        <p-sortIcon field="vehicle.brand"></p-sortIcon>
+                                    <th style="width: 150px" pSortableColumn="street">
+                                        {{l('Street')}}
+                                        <p-sortIcon field="office.street"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="model">
-                                        {{l('Model')}}
-                                        <p-sortIcon field="vehicle.model"></p-sortIcon>
+                                    <th style="width: 150px" pSortableColumn="city">
+                                        {{l('City')}}
+                                        <p-sortIcon field="office.city"></p-sortIcon>
                                     </th>
-                                    <th style="width: 80px" pSortableColumn="year">
-                                        {{l('Year')}}
-                                        <p-sortIcon field="vehicle.year"></p-sortIcon>
+                                    <th style="width: 150px" pSortableColumn="zipCode">
+                                        {{l('ZipCode')}}
+                                        <p-sortIcon field="office.zipCode"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="licensePlate">
-                                        {{l('LicensePlate')}}
-                                        <p-sortIcon field="vehicle.licensePlate"></p-sortIcon>
+                                    <th style="width: 150px" pSortableColumn="state">
+                                        {{l('State')}}
+                                        <p-sortIcon field="office.state"></p-sortIcon>
                                     </th>
-                                    <th style="width: 80px" pSortableColumn="inUse">
-                                        {{l('InUse')}}
-                                        <p-sortIcon field="vehicle.inUse"></p-sortIcon>
+                                    <th style="width: 150px" pSortableColumn="country">
+                                        {{l('Country')}}
+                                        <p-sortIcon field="office.country"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="powertrain">
-                                        {{l('Powertrain')}}
-                                        <p-sortIcon field="vehicle.vehiclePowertrain"></p-sortIcon>
+                                    <th style="width: 150px" pSortableColumn="phoneNumber">
+                                        {{l('PhoneNumber')}}
+                                        <p-sortIcon field="office.phoneNumber"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="gearbox">
-                                        {{l('Gearbox')}}
-                                        <p-sortIcon field="vehicle.gearbox"></p-sortIcon>
+                                    <th style="width: 150px" pSortableColumn="email">
+                                        {{l('Email')}}
+                                        <p-sortIcon field="office.email"></p-sortIcon>
                                     </th>
 
                                 </tr>
@@ -171,7 +154,7 @@
 							<ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
                                     <td style="width: 130px"
-                                        [hidden]="!isGrantedAny('Pages.Administration.Vehicles.Edit', 'Pages.Administration.Vehicles.Delete')">
+                                        [hidden]="!isGrantedAny('Pages.Administration.Offices.Edit', 'Pages.Administration.Offices.Delete')">
                                        <div class="btn-group dropdown" dropdown container="body">
                                             <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
@@ -179,56 +162,56 @@
 												<ul class="dropdown-menu"  *dropdownMenu>
 												<li>
 													<a href="javascript:;"
-														(click)="viewVehicleModal.show(record)">{{l('View')}}</a>
+														(click)="viewOfficeModal.show(record)">{{l('View')}}</a>
 												</li>
 												<li>
-													<a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Vehicles.Edit')"
-														(click)="createOrEditVehicleModal.show(record.vehicle.id)">{{l('Edit')}}</a>
+													<a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Offices.Edit')"
+														(click)="createOrEditOfficeModal.show(record.office.id)">{{l('Edit')}}</a>
 												</li>
 												<li>
-											        <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Vehicles.Delete')"
-														(click)="deleteVehicle(record.vehicle)">{{l('Delete')}}</a>
+											        <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Offices.Delete')"
+														(click)="deleteOffice(record.office)">{{l('Delete')}}</a>
 												</li>
+                                                <li>
+                                                    <a href="javascript:;" *ngIf="entityHistoryEnabled"
+                                                       (click)="showHistory(record.office)">{{l('History')}}</a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </td>
                                     <td style="width:150px">
-												<span class="ui-column-title"> {{l('Class')}}</span>
-												{{record.vehicle.licenseClasses}}
-											</td>
-                                    <td style="width:150px">
 											<span class="ui-column-title"> {{l('Name')}}</span>
-											{{record.vehicle.name}}
+											{{record.office.name}}
 										</td>
                                     <td style="width:150px">
-											<span class="ui-column-title"> {{l('Brand')}}</span>
-											{{record.vehicle.brand}}
+											<span class="ui-column-title"> {{l('Street')}}</span>
+											{{record.office.street}}
 										</td>
                                     <td style="width:150px">
-											<span class="ui-column-title"> {{l('Model')}}</span>
-											{{record.vehicle.model}}
-										</td>
-                                    <td style="width:80px">
-											<span class="ui-column-title"> {{l('Year')}}</span>
-											{{record.vehicle.year}}
+											<span class="ui-column-title"> {{l('City')}}</span>
+											{{record.office.city}}
 										</td>
                                     <td style="width:150px">
-											<span class="ui-column-title"> {{l('LicensePlate')}}</span>
-											{{record.vehicle.licensePlate}}
+											<span class="ui-column-title"> {{l('ZipCode')}}</span>
+											{{record.office.zipCode}}
 										</td>
-                                    <td style="width:80px">
-										<span class="ui-column-title"> {{l('InUse')}}</span>
-                                        <div *ngIf="record.vehicle.inUse" class="text-center"><i class="fa fa-check-circle kt--font-success" title="True"></i></div>
-										<div *ngIf="!record.vehicle.inUse" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
-                                    </td>
                                     <td style="width:150px">
-										<span class="ui-column-title"> {{l('Powertrain')}}</span>
-										{{l( powertrain[record.vehicle.vehiclePowertrain])}}
-                                    </td>
+											<span class="ui-column-title"> {{l('State')}}</span>
+											{{record.office.state}}
+										</td>
                                     <td style="width:150px">
-										<span class="ui-column-title"> {{l('Gearbox')}}</span>
-										{{l( gearbox[record.vehicle.gearbox])}}
-                                    </td>
+											<span class="ui-column-title"> {{l('Country')}}</span>
+											{{record.office.country}}
+										</td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('PhoneNumber')}}</span>
+											{{record.office.phoneNumber}}
+										</td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('Email')}}</span>
+											{{record.office.email}}
+										</td>
+
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -238,7 +221,7 @@
                         <div class="primeng-paging-container">
                             <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage"
                                          #paginator
-                                         (onPageChange)="getVehicles($event)"
+                                         (onPageChange)="getOffices($event)"
                                          [totalRecords]="primengTableHelper.totalRecordsCount"
                                          [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
                             </p-paginator>
@@ -253,7 +236,8 @@
         </div>
     </div>
 
-    <createOrEditVehicleModal #createOrEditVehicleModal (modalSave)="getVehicles()"></createOrEditVehicleModal>
-    <viewVehicleModal #viewVehicleModal></viewVehicleModal>
-    
+    <createOrEditOfficeModal #createOrEditOfficeModal (modalSave)="getOffices()"></createOrEditOfficeModal>
+    <viewOfficeModal #viewOfficeModal></viewOfficeModal>
+     <entityTypeHistoryModal #entityTypeHistoryModal></entityTypeHistoryModal>
+  
 </div>

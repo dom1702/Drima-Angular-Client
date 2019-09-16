@@ -5,6 +5,7 @@ import { InstructorsServiceProxy, CreateOrEditInstructorDto } from '@shared/serv
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { LicenseClassLookupTableModalComponent } from './licenseClass-lookup-table-modal.component';
+import { OfficeLookupTableModalComponent } from './office-lookup-table-modal.component';
 
 
 @Component({
@@ -15,6 +16,7 @@ export class CreateOrEditInstructorModalComponent extends AppComponentBase imple
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('licenseClassLookupTableModal') licenseClassLookupTableModal: LicenseClassLookupTableModalComponent;
+    @ViewChild('officeLookupTableModal') officeLookupTableModal: OfficeLookupTableModalComponent;
 
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
@@ -29,7 +31,7 @@ export class CreateOrEditInstructorModalComponent extends AppComponentBase imple
     dropdownSettings = {};
     placeholder = 'None';
 
-    licenseClassClass = '';
+    defaultOffice = '';
 
 
     constructor(
@@ -56,7 +58,7 @@ export class CreateOrEditInstructorModalComponent extends AppComponentBase imple
             this.instructor = new CreateOrEditInstructorDto();
             this.instructor.id = instructorId;
             this.instructor.dateOfBirth = moment().startOf('day');
-            this.licenseClassClass = '';
+            this.defaultOffice = '';
 
             this.active = true;
             this.updateLicenseClass(false);
@@ -64,7 +66,8 @@ export class CreateOrEditInstructorModalComponent extends AppComponentBase imple
         } else {
             this._instructorsServiceProxy.getInstructorForEdit(instructorId).subscribe(result => {
                 this.instructor = result.instructor;
-
+                this.defaultOffice = result.defaultOfficeName;
+            
                 this.active = true;
                 this.updateLicenseClass(true);
                 this.modal.show();
@@ -149,23 +152,25 @@ export class CreateOrEditInstructorModalComponent extends AppComponentBase imple
             });
     }
 
-    //     openSelectLicenseClassModal() {
-    //     this.licenseClassLookupTableModal.id = this.instructor.allowedClassesToTeach;
-    //     this.licenseClassLookupTableModal.displayName = this.licenseClassClass;
-    //     this.licenseClassLookupTableModal.show();
-    // }
+        openSelectOfficeModal() {
+        // this.licenseClassLookupTableModal.id = this.instructor.allowedClassesToTeach;
+        // this.licenseClassLookupTableModal.displayName = this.licenseClassClass;
+        this.officeLookupTableModal.show();
+        }
 
 
-    //     setAllowedClassesToTeachNull() {
-    //     this.instructor.allowedClassesToTeach = null;
-    //     this.licenseClassClass = '';
-    // }
+        setOfficeNull() {
+        this.instructor.defaultOfficeId = null;
+        this.defaultOffice = '';
+        }
 
 
-    //     getNewAllowedClassesToTeach() {
-    //     this.instructor.allowedClassesToTeach = this.licenseClassLookupTableModal.id;
-    //     this.licenseClassClass = this.licenseClassLookupTableModal.displayName;
-    // }
+        getOffice() {
+        this.instructor.defaultOfficeId = this.officeLookupTableModal.id;
+        this.defaultOffice = this.officeLookupTableModal.name;
+        }
+
+    
 
 
     close(): void {

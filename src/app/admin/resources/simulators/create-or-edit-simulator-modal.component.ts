@@ -13,8 +13,8 @@ import { SimulatorOfficeLookupTableModalComponent } from './simulator-office-loo
 })
 export class CreateOrEditSimulatorModalComponent extends AppComponentBase {
 
-    @ViewChild('createOrEditModal', { static: true }) modal: ModalDirective;
-    @ViewChild('simulatorOfficeLookupTableModal', { static: true }) simulatorOfficeLookupTableModal: SimulatorOfficeLookupTableModalComponent;
+    @ViewChild('createOrEditModal') modal: ModalDirective;
+    @ViewChild('simulatorOfficeLookupTableModal') simulatorOfficeLookupTableModal: SimulatorOfficeLookupTableModalComponent;
 
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();

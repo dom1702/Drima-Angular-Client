@@ -22,11 +22,11 @@ import * as moment from 'moment';
 })
 export class ProductsComponent extends AppComponentBase {
 
-    @ViewChild('createOrEditProductModal', { static: true }) createOrEditProductModal: CreateOrEditProductModalComponent;
-    @ViewChild('viewProductModalComponent', { static: true }) viewProductModal: ViewProductModalComponent;
-    @ViewChild('entityTypeHistoryModal', { static: true }) entityTypeHistoryModal: EntityTypeHistoryModalComponent;
-    @ViewChild('dataTable', { static: true }) dataTable: Table;
-    @ViewChild('paginator', { static: true }) paginator: Paginator;
+    @ViewChild('createOrEditProductModal') createOrEditProductModal: CreateOrEditProductModalComponent;
+    @ViewChild('viewProductModalComponent') viewProductModal: ViewProductModalComponent;
+    @ViewChild('entityTypeHistoryModal') entityTypeHistoryModal: EntityTypeHistoryModalComponent;
+    @ViewChild('dataTable') dataTable: Table;
+    @ViewChild('paginator') paginator: Paginator;
 
     advancedFiltersAreShown = false;
     filterText = '';

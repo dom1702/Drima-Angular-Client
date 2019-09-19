@@ -1,16 +1,16 @@
 import { Component, ViewChild, Injector, Output, EventEmitter} from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
-import { ProductsServiceProxy, CreateOrEditProductDto } from '@shared/service-proxies/service-proxies';
+import { StudentInvoicesServiceProxy, CreateOrEditStudentInvoiceDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 
 
 @Component({
-    selector: 'createOrEditProductModal',
-    templateUrl: './create-or-edit-product-modal.component.html'
+    selector: 'createOrEditStudentInvoiceModal',
+    templateUrl: './create-or-edit-studentInvoice-modal.component.html'
 })
-export class CreateOrEditProductModalComponent extends AppComponentBase {
+export class CreateOrEditStudentInvoiceModalComponent extends AppComponentBase {
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
 
@@ -20,28 +20,30 @@ export class CreateOrEditProductModalComponent extends AppComponentBase {
     active = false;
     saving = false;
 
-    product: CreateOrEditProductDto = new CreateOrEditProductDto();
+    studentInvoice: CreateOrEditStudentInvoiceDto = new CreateOrEditStudentInvoiceDto();
 
 
 
     constructor(
         injector: Injector,
-        private _productsServiceProxy: ProductsServiceProxy
+        private _studentInvoicesServiceProxy: StudentInvoicesServiceProxy
     ) {
         super(injector);
     }
 
-    show(productId?: number): void {
+    show(studentInvoiceId?: number): void {
 
-        if (!productId) {
-            this.product = new CreateOrEditProductDto();
-            this.product.id = productId;
+        if (!studentInvoiceId) {
+            this.studentInvoice = new CreateOrEditStudentInvoiceDto();
+            this.studentInvoice.id = studentInvoiceId;
+            this.studentInvoice.date = moment().startOf('day');
+            this.studentInvoice.dateDue = moment().startOf('day');
 
             this.active = true;
             this.modal.show();
         } else {
-            this._productsServiceProxy.getProductForEdit(productId).subscribe(result => {
-                this.product = result.product;
+            this._studentInvoicesServiceProxy.getStudentInvoiceForEdit(studentInvoiceId).subscribe(result => {
+                this.studentInvoice = result.studentInvoice;
 
 
                 this.active = true;
@@ -54,7 +56,7 @@ export class CreateOrEditProductModalComponent extends AppComponentBase {
             this.saving = true;
 
 			
-            this._productsServiceProxy.createOrEdit(this.product)
+            this._studentInvoicesServiceProxy.createOrEdit(this.studentInvoice)
              .pipe(finalize(() => { this.saving = false;}))
              .subscribe(() => {
                 this.notify.info(this.l('SavedSuccessfully'));

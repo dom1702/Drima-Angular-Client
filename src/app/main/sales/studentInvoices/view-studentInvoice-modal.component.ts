@@ -1,13 +1,13 @@
 import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
-import { GetSimulatorForViewDto, SimulatorDto } from '@shared/service-proxies/service-proxies';
+import { GetStudentInvoiceForViewDto, StudentInvoiceDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 
 @Component({
-    selector: 'viewSimulatorModal',
-    templateUrl: './view-simulator-modal.component.html'
+    selector: 'viewStudentInvoiceModal',
+    templateUrl: './view-studentInvoice-modal.component.html'
 })
-export class ViewSimulatorModalComponent extends AppComponentBase {
+export class ViewStudentInvoiceModalComponent extends AppComponentBase {
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
@@ -15,18 +15,18 @@ export class ViewSimulatorModalComponent extends AppComponentBase {
     active = false;
     saving = false;
 
-    item: GetSimulatorForViewDto;
+    item: GetStudentInvoiceForViewDto;
 
 
     constructor(
         injector: Injector
     ) {
         super(injector);
-        this.item = new GetSimulatorForViewDto();
-        this.item.simulator = new SimulatorDto();
+        this.item = new GetStudentInvoiceForViewDto();
+        this.item.studentInvoice = new StudentInvoiceDto();
     }
 
-    show(item: GetSimulatorForViewDto): void {
+    show(item: GetStudentInvoiceForViewDto): void {
         this.item = item;
         this.active = true;
         this.modal.show();

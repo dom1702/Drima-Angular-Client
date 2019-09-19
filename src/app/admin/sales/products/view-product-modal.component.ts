@@ -9,7 +9,7 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 })
 export class ViewProductModalComponent extends AppComponentBase {
 
-    @ViewChild('createOrEditModal', { static: true }) modal: ModalDirective;
+    @ViewChild('createOrEditModal') modal: ModalDirective;
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
 
     active = false;

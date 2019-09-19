@@ -1,6 +1,12 @@
+
+
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { StudentInvoicesComponent } from './sales/studentInvoices/studentInvoices.component';
+import { ViewStudentInvoiceModalComponent } from './sales/studentInvoices/view-studentInvoice-modal.component';
+import { CreateOrEditStudentInvoiceModalComponent } from './sales/studentInvoices/create-or-edit-studentInvoice-modal.component';
+
 import { AppCommonModule } from '@app/shared/common/app-common.module';
 import { TheoryLessonsComponent } from './lessons/theoryLessons/theoryLessons.component';
 import { ViewTheoryLessonModalComponent } from './lessons/theoryLessons/view-theoryLesson-modal.component';
@@ -92,7 +98,10 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       SchedulerComponent,
       CreateEventTypeModalComponent,
       CreateOrEditEventModalComponent,
-      EditStudentsTheoryLessonModalComponent
+      EditStudentsTheoryLessonModalComponent,
+      StudentInvoicesComponent,
+      ViewStudentInvoiceModalComponent,
+      CreateOrEditStudentInvoiceModalComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

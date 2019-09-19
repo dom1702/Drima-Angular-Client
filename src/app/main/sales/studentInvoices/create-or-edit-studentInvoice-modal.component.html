@@ -1,0 +1,188 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #studentInvoiceForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="studentInvoice.id">{{l("EditStudentInvoice")}}</span>
+                        <span *ngIf="!studentInvoice.id">{{l("CreateNewStudentInvoice")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+								<div class="form-group">
+									<label for="StudentInvoice_SenderCompanyName">{{l("SenderCompanyName")}} *</label>
+									<input type="text" id="StudentInvoice_SenderCompanyName" class="form-control" [(ngModel)]="studentInvoice.senderCompanyName" name="SenderCompanyName"     required/>
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_SenderStreet">{{l("SenderStreet")}} *</label>
+									<input type="text" id="StudentInvoice_SenderStreet" class="form-control" [(ngModel)]="studentInvoice.senderStreet" name="SenderStreet"     required/>
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_SenderZipCode">{{l("SenderZipCode")}} *</label>
+									<input type="text" id="StudentInvoice_SenderZipCode" class="form-control" [(ngModel)]="studentInvoice.senderZipCode" name="SenderZipCode"     required/>
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_SenderCity">{{l("SenderCity")}} *</label>
+									<input type="text" id="StudentInvoice_SenderCity" class="form-control" [(ngModel)]="studentInvoice.senderCity" name="SenderCity"     required/>
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_SenderCountry">{{l("SenderCountry")}}</label>
+									<input type="text" id="StudentInvoice_SenderCountry" class="form-control" [(ngModel)]="studentInvoice.senderCountry" name="SenderCountry"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_RecipientFirstName">{{l("RecipientFirstName")}} *</label>
+									<input type="text" id="StudentInvoice_RecipientFirstName" class="form-control" [(ngModel)]="studentInvoice.recipientFirstName" name="RecipientFirstName"     required/>
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_RecipientLastName">{{l("RecipientLastName")}} *</label>
+									<input type="text" id="StudentInvoice_RecipientLastName" class="form-control" [(ngModel)]="studentInvoice.recipientLastName" name="RecipientLastName"     required/>
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_RecipientStreet">{{l("RecipientStreet")}}</label>
+									<input type="text" id="StudentInvoice_RecipientStreet" class="form-control" [(ngModel)]="studentInvoice.recipientStreet" name="RecipientStreet"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_RecipientZipCode">{{l("RecipientZipCode")}}</label>
+									<input type="text" id="StudentInvoice_RecipientZipCode" class="form-control" [(ngModel)]="studentInvoice.recipientZipCode" name="RecipientZipCode"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_RecipientCity">{{l("RecipientCity")}}</label>
+									<input type="text" id="StudentInvoice_RecipientCity" class="form-control" [(ngModel)]="studentInvoice.recipientCity" name="RecipientCity"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_RecipientCountry">{{l("RecipientCountry")}}</label>
+									<input type="text" id="StudentInvoice_RecipientCountry" class="form-control" [(ngModel)]="studentInvoice.recipientCountry" name="RecipientCountry"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_RecipientEmail">{{l("RecipientEmail")}}</label>
+									<input type="text" id="StudentInvoice_RecipientEmail" class="form-control" [(ngModel)]="studentInvoice.recipientEmail" name="RecipientEmail"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_RecipientPhone">{{l("RecipientPhone")}}</label>
+									<input type="text" id="StudentInvoice_RecipientPhone" class="form-control" [(ngModel)]="studentInvoice.recipientPhone" name="RecipientPhone"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_Date">{{l("Date")}}</label>
+									 <input required class="form-control m-input" type="datetime" bsDatepicker [(ngModel)]="studentInvoice.date._d" id="StudentInvoice_Date" name="StudentInvoice_Date">
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_UserFriendlyInvoiceId">{{l("UserFriendlyInvoiceId")}} *</label>
+									<input type="text" id="StudentInvoice_UserFriendlyInvoiceId" class="form-control" [(ngModel)]="studentInvoice.userFriendlyInvoiceId" name="UserFriendlyInvoiceId"     required/>
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_OverallDiscount">{{l("OverallDiscount")}}</label>
+									<input type="number" id="StudentInvoice_OverallDiscount" class="form-control" [(ngModel)]="studentInvoice.overallDiscount" name="OverallDiscount"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_TotalBeforeVat">{{l("TotalBeforeVat")}}</label>
+									<input type="number" id="StudentInvoice_TotalBeforeVat" class="form-control" [(ngModel)]="studentInvoice.totalBeforeVat" name="TotalBeforeVat"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_TotalAfterVat">{{l("TotalAfterVat")}}</label>
+									<input type="number" id="StudentInvoice_TotalAfterVat" class="form-control" [(ngModel)]="studentInvoice.totalAfterVat" name="TotalAfterVat"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_TotalVatFullRate">{{l("TotalVatFullRate")}}</label>
+									<input type="number" id="StudentInvoice_TotalVatFullRate" class="form-control" [(ngModel)]="studentInvoice.totalVatFullRate" name="TotalVatFullRate"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_TotalVatReducedRate">{{l("TotalVatReducedRate")}}</label>
+									<input type="number" id="StudentInvoice_TotalVatReducedRate" class="form-control" [(ngModel)]="studentInvoice.totalVatReducedRate" name="TotalVatReducedRate"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_TotalVat">{{l("TotalVat")}}</label>
+									<input type="number" id="StudentInvoice_TotalVat" class="form-control" [(ngModel)]="studentInvoice.totalVat" name="TotalVat"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_Interest">{{l("Interest")}}</label>
+									<input type="number" id="StudentInvoice_Interest" class="form-control" [(ngModel)]="studentInvoice.interest" name="Interest"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_DateDue">{{l("DateDue")}}</label>
+									 <input required class="form-control m-input" type="datetime" bsDatepicker [(ngModel)]="studentInvoice.dateDue._d" id="StudentInvoice_DateDue" name="StudentInvoice_DateDue">
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_Reference">{{l("Reference")}}</label>
+									<input type="text" id="StudentInvoice_Reference" class="form-control" [(ngModel)]="studentInvoice.reference" name="Reference"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_SenderPhoneCell">{{l("SenderPhoneCell")}}</label>
+									<input type="text" id="StudentInvoice_SenderPhoneCell" class="form-control" [(ngModel)]="studentInvoice.senderPhoneCell" name="SenderPhoneCell"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_SenderPhoneLand">{{l("SenderPhoneLand")}}</label>
+									<input type="text" id="StudentInvoice_SenderPhoneLand" class="form-control" [(ngModel)]="studentInvoice.senderPhoneLand" name="SenderPhoneLand"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_SenderWebsite">{{l("SenderWebsite")}}</label>
+									<input type="text" id="StudentInvoice_SenderWebsite" class="form-control" [(ngModel)]="studentInvoice.senderWebsite" name="SenderWebsite"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_SenderEmail">{{l("SenderEmail")}}</label>
+									<input type="text" id="StudentInvoice_SenderEmail" class="form-control" [(ngModel)]="studentInvoice.senderEmail" name="SenderEmail"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_TaxId">{{l("TaxId")}}</label>
+									<input type="text" id="StudentInvoice_TaxId" class="form-control" [(ngModel)]="studentInvoice.taxId" name="TaxId"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_VatId">{{l("VatId")}}</label>
+									<input type="text" id="StudentInvoice_VatId" class="form-control" [(ngModel)]="studentInvoice.vatId" name="VatId"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_Text1">{{l("Text1")}}</label>
+									<input type="text" id="StudentInvoice_Text1" class="form-control" [(ngModel)]="studentInvoice.text1" name="Text1"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="StudentInvoice_Text2">{{l("Text2")}}</label>
+									<input type="text" id="StudentInvoice_Text2" class="form-control" [(ngModel)]="studentInvoice.text2" name="Text2"    />
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!studentInvoiceForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

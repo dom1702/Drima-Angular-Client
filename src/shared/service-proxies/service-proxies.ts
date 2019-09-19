@@ -10157,6 +10157,324 @@ export class StripePaymentServiceProxy {
 }
 
 @Injectable()
+export class StudentInvoicesServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param recipientFirstNameFilter (optional) 
+     * @param recipientLastNameFilter (optional) 
+     * @param recipientStreetFilter (optional) 
+     * @param recipientZipCodeFilter (optional) 
+     * @param recipientCityFilter (optional) 
+     * @param maxDateFilter (optional) 
+     * @param minDateFilter (optional) 
+     * @param maxTotalAfterVatFilter (optional) 
+     * @param minTotalAfterVatFilter (optional) 
+     * @param maxDateDueFilter (optional) 
+     * @param minDateDueFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAll(filter: string | null | undefined, recipientFirstNameFilter: string | null | undefined, recipientLastNameFilter: string | null | undefined, recipientStreetFilter: string | null | undefined, recipientZipCodeFilter: string | null | undefined, recipientCityFilter: string | null | undefined, maxDateFilter: moment.Moment | null | undefined, minDateFilter: moment.Moment | null | undefined, maxTotalAfterVatFilter: number | null | undefined, minTotalAfterVatFilter: number | null | undefined, maxDateDueFilter: moment.Moment | null | undefined, minDateDueFilter: moment.Moment | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfGetStudentInvoiceForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/StudentInvoices/GetAll?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (recipientFirstNameFilter !== undefined)
+            url_ += "RecipientFirstNameFilter=" + encodeURIComponent("" + recipientFirstNameFilter) + "&"; 
+        if (recipientLastNameFilter !== undefined)
+            url_ += "RecipientLastNameFilter=" + encodeURIComponent("" + recipientLastNameFilter) + "&"; 
+        if (recipientStreetFilter !== undefined)
+            url_ += "RecipientStreetFilter=" + encodeURIComponent("" + recipientStreetFilter) + "&"; 
+        if (recipientZipCodeFilter !== undefined)
+            url_ += "RecipientZipCodeFilter=" + encodeURIComponent("" + recipientZipCodeFilter) + "&"; 
+        if (recipientCityFilter !== undefined)
+            url_ += "RecipientCityFilter=" + encodeURIComponent("" + recipientCityFilter) + "&"; 
+        if (maxDateFilter !== undefined)
+            url_ += "MaxDateFilter=" + encodeURIComponent(maxDateFilter ? "" + maxDateFilter.toJSON() : "") + "&"; 
+        if (minDateFilter !== undefined)
+            url_ += "MinDateFilter=" + encodeURIComponent(minDateFilter ? "" + minDateFilter.toJSON() : "") + "&"; 
+        if (maxTotalAfterVatFilter !== undefined)
+            url_ += "MaxTotalAfterVatFilter=" + encodeURIComponent("" + maxTotalAfterVatFilter) + "&"; 
+        if (minTotalAfterVatFilter !== undefined)
+            url_ += "MinTotalAfterVatFilter=" + encodeURIComponent("" + minTotalAfterVatFilter) + "&"; 
+        if (maxDateDueFilter !== undefined)
+            url_ += "MaxDateDueFilter=" + encodeURIComponent(maxDateDueFilter ? "" + maxDateDueFilter.toJSON() : "") + "&"; 
+        if (minDateDueFilter !== undefined)
+            url_ += "MinDateDueFilter=" + encodeURIComponent(minDateDueFilter ? "" + minDateDueFilter.toJSON() : "") + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfGetStudentInvoiceForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfGetStudentInvoiceForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PagedResultDtoOfGetStudentInvoiceForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfGetStudentInvoiceForViewDto.fromJS(resultData200) : new PagedResultDtoOfGetStudentInvoiceForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfGetStudentInvoiceForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getStudentInvoiceForView(id: number | null | undefined): Observable<GetStudentInvoiceForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/StudentInvoices/GetStudentInvoiceForView?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetStudentInvoiceForView(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetStudentInvoiceForView(<any>response_);
+                } catch (e) {
+                    return <Observable<GetStudentInvoiceForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetStudentInvoiceForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetStudentInvoiceForView(response: HttpResponseBase): Observable<GetStudentInvoiceForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetStudentInvoiceForViewDto.fromJS(resultData200) : new GetStudentInvoiceForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetStudentInvoiceForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getStudentInvoiceForEdit(id: number | null | undefined): Observable<GetStudentInvoiceForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/StudentInvoices/GetStudentInvoiceForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetStudentInvoiceForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetStudentInvoiceForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetStudentInvoiceForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetStudentInvoiceForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetStudentInvoiceForEdit(response: HttpResponseBase): Observable<GetStudentInvoiceForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetStudentInvoiceForEditOutput.fromJS(resultData200) : new GetStudentInvoiceForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetStudentInvoiceForEditOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    createOrEdit(input: CreateOrEditStudentInvoiceDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/StudentInvoices/CreateOrEdit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateOrEdit(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    delete(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/StudentInvoices/Delete?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class StudentsServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -25694,6 +26012,354 @@ export class StripeConfigurationDto implements IStripeConfigurationDto {
 
 export interface IStripeConfigurationDto {
     publishableKey: string | undefined;
+}
+
+export class PagedResultDtoOfGetStudentInvoiceForViewDto implements IPagedResultDtoOfGetStudentInvoiceForViewDto {
+    totalCount!: number | undefined;
+    items!: GetStudentInvoiceForViewDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfGetStudentInvoiceForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(GetStudentInvoiceForViewDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfGetStudentInvoiceForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfGetStudentInvoiceForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfGetStudentInvoiceForViewDto {
+    totalCount: number | undefined;
+    items: GetStudentInvoiceForViewDto[] | undefined;
+}
+
+export class GetStudentInvoiceForViewDto implements IGetStudentInvoiceForViewDto {
+    studentInvoice!: StudentInvoiceDto | undefined;
+
+    constructor(data?: IGetStudentInvoiceForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.studentInvoice = data["studentInvoice"] ? StudentInvoiceDto.fromJS(data["studentInvoice"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetStudentInvoiceForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetStudentInvoiceForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["studentInvoice"] = this.studentInvoice ? this.studentInvoice.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IGetStudentInvoiceForViewDto {
+    studentInvoice: StudentInvoiceDto | undefined;
+}
+
+export class StudentInvoiceDto implements IStudentInvoiceDto {
+    recipientFirstName!: string | undefined;
+    recipientLastName!: string | undefined;
+    recipientZipCode!: string | undefined;
+    recipientCity!: string | undefined;
+    date!: moment.Moment | undefined;
+    totalAfterVat!: number | undefined;
+    dateDue!: moment.Moment | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IStudentInvoiceDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.recipientFirstName = data["recipientFirstName"];
+            this.recipientLastName = data["recipientLastName"];
+            this.recipientZipCode = data["recipientZipCode"];
+            this.recipientCity = data["recipientCity"];
+            this.date = data["date"] ? moment(data["date"].toString()) : <any>undefined;
+            this.totalAfterVat = data["totalAfterVat"];
+            this.dateDue = data["dateDue"] ? moment(data["dateDue"].toString()) : <any>undefined;
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): StudentInvoiceDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentInvoiceDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["recipientFirstName"] = this.recipientFirstName;
+        data["recipientLastName"] = this.recipientLastName;
+        data["recipientZipCode"] = this.recipientZipCode;
+        data["recipientCity"] = this.recipientCity;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["totalAfterVat"] = this.totalAfterVat;
+        data["dateDue"] = this.dateDue ? this.dateDue.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IStudentInvoiceDto {
+    recipientFirstName: string | undefined;
+    recipientLastName: string | undefined;
+    recipientZipCode: string | undefined;
+    recipientCity: string | undefined;
+    date: moment.Moment | undefined;
+    totalAfterVat: number | undefined;
+    dateDue: moment.Moment | undefined;
+    id: number | undefined;
+}
+
+export class GetStudentInvoiceForEditOutput implements IGetStudentInvoiceForEditOutput {
+    studentInvoice!: CreateOrEditStudentInvoiceDto | undefined;
+
+    constructor(data?: IGetStudentInvoiceForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.studentInvoice = data["studentInvoice"] ? CreateOrEditStudentInvoiceDto.fromJS(data["studentInvoice"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetStudentInvoiceForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetStudentInvoiceForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["studentInvoice"] = this.studentInvoice ? this.studentInvoice.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IGetStudentInvoiceForEditOutput {
+    studentInvoice: CreateOrEditStudentInvoiceDto | undefined;
+}
+
+export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoiceDto {
+    senderCompanyName!: string;
+    senderStreet!: string;
+    senderZipCode!: string;
+    senderCity!: string;
+    senderCountry!: string | undefined;
+    recipientFirstName!: string;
+    recipientLastName!: string;
+    recipientStreet!: string | undefined;
+    recipientZipCode!: string | undefined;
+    recipientCity!: string | undefined;
+    recipientCountry!: string | undefined;
+    recipientEmail!: string | undefined;
+    recipientPhone!: string | undefined;
+    date!: moment.Moment | undefined;
+    userFriendlyInvoiceId!: string;
+    overallDiscount!: number | undefined;
+    totalBeforeVat!: number | undefined;
+    totalAfterVat!: number | undefined;
+    totalVatFullRate!: number | undefined;
+    totalVatReducedRate!: number | undefined;
+    totalVat!: number | undefined;
+    interest!: number | undefined;
+    dateDue!: moment.Moment | undefined;
+    reference!: string | undefined;
+    senderPhoneCell!: string | undefined;
+    senderPhoneLand!: string | undefined;
+    senderWebsite!: string | undefined;
+    senderEmail!: string | undefined;
+    taxId!: string | undefined;
+    vatId!: string | undefined;
+    text1!: string | undefined;
+    text2!: string | undefined;
+    id!: number | undefined;
+
+    constructor(data?: ICreateOrEditStudentInvoiceDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.senderCompanyName = data["senderCompanyName"];
+            this.senderStreet = data["senderStreet"];
+            this.senderZipCode = data["senderZipCode"];
+            this.senderCity = data["senderCity"];
+            this.senderCountry = data["senderCountry"];
+            this.recipientFirstName = data["recipientFirstName"];
+            this.recipientLastName = data["recipientLastName"];
+            this.recipientStreet = data["recipientStreet"];
+            this.recipientZipCode = data["recipientZipCode"];
+            this.recipientCity = data["recipientCity"];
+            this.recipientCountry = data["recipientCountry"];
+            this.recipientEmail = data["recipientEmail"];
+            this.recipientPhone = data["recipientPhone"];
+            this.date = data["date"] ? moment(data["date"].toString()) : <any>undefined;
+            this.userFriendlyInvoiceId = data["userFriendlyInvoiceId"];
+            this.overallDiscount = data["overallDiscount"];
+            this.totalBeforeVat = data["totalBeforeVat"];
+            this.totalAfterVat = data["totalAfterVat"];
+            this.totalVatFullRate = data["totalVatFullRate"];
+            this.totalVatReducedRate = data["totalVatReducedRate"];
+            this.totalVat = data["totalVat"];
+            this.interest = data["interest"];
+            this.dateDue = data["dateDue"] ? moment(data["dateDue"].toString()) : <any>undefined;
+            this.reference = data["reference"];
+            this.senderPhoneCell = data["senderPhoneCell"];
+            this.senderPhoneLand = data["senderPhoneLand"];
+            this.senderWebsite = data["senderWebsite"];
+            this.senderEmail = data["senderEmail"];
+            this.taxId = data["taxId"];
+            this.vatId = data["vatId"];
+            this.text1 = data["text1"];
+            this.text2 = data["text2"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): CreateOrEditStudentInvoiceDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrEditStudentInvoiceDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["senderCompanyName"] = this.senderCompanyName;
+        data["senderStreet"] = this.senderStreet;
+        data["senderZipCode"] = this.senderZipCode;
+        data["senderCity"] = this.senderCity;
+        data["senderCountry"] = this.senderCountry;
+        data["recipientFirstName"] = this.recipientFirstName;
+        data["recipientLastName"] = this.recipientLastName;
+        data["recipientStreet"] = this.recipientStreet;
+        data["recipientZipCode"] = this.recipientZipCode;
+        data["recipientCity"] = this.recipientCity;
+        data["recipientCountry"] = this.recipientCountry;
+        data["recipientEmail"] = this.recipientEmail;
+        data["recipientPhone"] = this.recipientPhone;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["userFriendlyInvoiceId"] = this.userFriendlyInvoiceId;
+        data["overallDiscount"] = this.overallDiscount;
+        data["totalBeforeVat"] = this.totalBeforeVat;
+        data["totalAfterVat"] = this.totalAfterVat;
+        data["totalVatFullRate"] = this.totalVatFullRate;
+        data["totalVatReducedRate"] = this.totalVatReducedRate;
+        data["totalVat"] = this.totalVat;
+        data["interest"] = this.interest;
+        data["dateDue"] = this.dateDue ? this.dateDue.toISOString() : <any>undefined;
+        data["reference"] = this.reference;
+        data["senderPhoneCell"] = this.senderPhoneCell;
+        data["senderPhoneLand"] = this.senderPhoneLand;
+        data["senderWebsite"] = this.senderWebsite;
+        data["senderEmail"] = this.senderEmail;
+        data["taxId"] = this.taxId;
+        data["vatId"] = this.vatId;
+        data["text1"] = this.text1;
+        data["text2"] = this.text2;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface ICreateOrEditStudentInvoiceDto {
+    senderCompanyName: string;
+    senderStreet: string;
+    senderZipCode: string;
+    senderCity: string;
+    senderCountry: string | undefined;
+    recipientFirstName: string;
+    recipientLastName: string;
+    recipientStreet: string | undefined;
+    recipientZipCode: string | undefined;
+    recipientCity: string | undefined;
+    recipientCountry: string | undefined;
+    recipientEmail: string | undefined;
+    recipientPhone: string | undefined;
+    date: moment.Moment | undefined;
+    userFriendlyInvoiceId: string;
+    overallDiscount: number | undefined;
+    totalBeforeVat: number | undefined;
+    totalAfterVat: number | undefined;
+    totalVatFullRate: number | undefined;
+    totalVatReducedRate: number | undefined;
+    totalVat: number | undefined;
+    interest: number | undefined;
+    dateDue: moment.Moment | undefined;
+    reference: string | undefined;
+    senderPhoneCell: string | undefined;
+    senderPhoneLand: string | undefined;
+    senderWebsite: string | undefined;
+    senderEmail: string | undefined;
+    taxId: string | undefined;
+    vatId: string | undefined;
+    text1: string | undefined;
+    text2: string | undefined;
+    id: number | undefined;
 }
 
 export class PagedResultDtoOfGetStudentForViewDto implements IPagedResultDtoOfGetStudentForViewDto {

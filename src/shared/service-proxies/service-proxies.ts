@@ -10472,6 +10472,132 @@ export class StudentInvoicesServiceProxy {
         }
         return _observableOf<void>(<any>null);
     }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllStudentForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfStudentInvoiceStudentLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/StudentInvoices/GetAllStudentForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllStudentForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllStudentForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfStudentInvoiceStudentLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfStudentInvoiceStudentLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllStudentForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfStudentInvoiceStudentLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfStudentInvoiceStudentLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfStudentInvoiceStudentLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfStudentInvoiceStudentLookupTableDto>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllProductsForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfStudentInvoiceProductLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/StudentInvoices/GetAllProductsForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllProductsForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllProductsForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfStudentInvoiceProductLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfStudentInvoiceProductLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllProductsForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfStudentInvoiceProductLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfStudentInvoiceProductLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfStudentInvoiceProductLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfStudentInvoiceProductLookupTableDto>(<any>null);
+    }
 }
 
 @Injectable()
@@ -26199,6 +26325,7 @@ export interface IGetStudentInvoiceForEditOutput {
 }
 
 export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoiceDto {
+    studentId!: number | undefined;
     senderCompanyName!: string;
     senderStreet!: string;
     senderZipCode!: string;
@@ -26244,6 +26371,7 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
 
     init(data?: any) {
         if (data) {
+            this.studentId = data["studentId"];
             this.senderCompanyName = data["senderCompanyName"];
             this.senderStreet = data["senderStreet"];
             this.senderZipCode = data["senderZipCode"];
@@ -26289,6 +26417,7 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["studentId"] = this.studentId;
         data["senderCompanyName"] = this.senderCompanyName;
         data["senderStreet"] = this.senderStreet;
         data["senderZipCode"] = this.senderZipCode;
@@ -26327,6 +26456,7 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
 }
 
 export interface ICreateOrEditStudentInvoiceDto {
+    studentId: number | undefined;
     senderCompanyName: string;
     senderStreet: string;
     senderZipCode: string;
@@ -26360,6 +26490,190 @@ export interface ICreateOrEditStudentInvoiceDto {
     text1: string | undefined;
     text2: string | undefined;
     id: number | undefined;
+}
+
+export class PagedResultDtoOfStudentInvoiceStudentLookupTableDto implements IPagedResultDtoOfStudentInvoiceStudentLookupTableDto {
+    totalCount!: number | undefined;
+    items!: StudentInvoiceStudentLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfStudentInvoiceStudentLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(StudentInvoiceStudentLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfStudentInvoiceStudentLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfStudentInvoiceStudentLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfStudentInvoiceStudentLookupTableDto {
+    totalCount: number | undefined;
+    items: StudentInvoiceStudentLookupTableDto[] | undefined;
+}
+
+export class StudentInvoiceStudentLookupTableDto implements IStudentInvoiceStudentLookupTableDto {
+    id!: number | undefined;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+
+    constructor(data?: IStudentInvoiceStudentLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+        }
+    }
+
+    static fromJS(data: any): StudentInvoiceStudentLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentInvoiceStudentLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        return data; 
+    }
+}
+
+export interface IStudentInvoiceStudentLookupTableDto {
+    id: number | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+}
+
+export class PagedResultDtoOfStudentInvoiceProductLookupTableDto implements IPagedResultDtoOfStudentInvoiceProductLookupTableDto {
+    totalCount!: number | undefined;
+    items!: StudentInvoiceProductLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfStudentInvoiceProductLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(StudentInvoiceProductLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfStudentInvoiceProductLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfStudentInvoiceProductLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfStudentInvoiceProductLookupTableDto {
+    totalCount: number | undefined;
+    items: StudentInvoiceProductLookupTableDto[] | undefined;
+}
+
+export class StudentInvoiceProductLookupTableDto implements IStudentInvoiceProductLookupTableDto {
+    id!: number | undefined;
+    productName!: string | undefined;
+    productType!: string | undefined;
+
+    constructor(data?: IStudentInvoiceProductLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.productName = data["productName"];
+            this.productType = data["productType"];
+        }
+    }
+
+    static fromJS(data: any): StudentInvoiceProductLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentInvoiceProductLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["productName"] = this.productName;
+        data["productType"] = this.productType;
+        return data; 
+    }
+}
+
+export interface IStudentInvoiceProductLookupTableDto {
+    id: number | undefined;
+    productName: string | undefined;
+    productType: string | undefined;
 }
 
 export class PagedResultDtoOfGetStudentForViewDto implements IPagedResultDtoOfGetStudentForViewDto {
@@ -26463,6 +26777,12 @@ export class StudentDto implements IStudentDto {
     lastName!: string | undefined;
     email!: string | undefined;
     phoneNumber!: string | undefined;
+    dateOfBirth!: moment.Moment | undefined;
+    street!: string | undefined;
+    city!: string | undefined;
+    zipCode!: string | undefined;
+    state!: string | undefined;
+    country!: string | undefined;
     licenseClasses!: string[] | undefined;
     id!: number | undefined;
 
@@ -26481,6 +26801,12 @@ export class StudentDto implements IStudentDto {
             this.lastName = data["lastName"];
             this.email = data["email"];
             this.phoneNumber = data["phoneNumber"];
+            this.dateOfBirth = data["dateOfBirth"] ? moment(data["dateOfBirth"].toString()) : <any>undefined;
+            this.street = data["street"];
+            this.city = data["city"];
+            this.zipCode = data["zipCode"];
+            this.state = data["state"];
+            this.country = data["country"];
             if (data["licenseClasses"] && data["licenseClasses"].constructor === Array) {
                 this.licenseClasses = [] as any;
                 for (let item of data["licenseClasses"])
@@ -26503,6 +26829,12 @@ export class StudentDto implements IStudentDto {
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         data["phoneNumber"] = this.phoneNumber;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["street"] = this.street;
+        data["city"] = this.city;
+        data["zipCode"] = this.zipCode;
+        data["state"] = this.state;
+        data["country"] = this.country;
         if (this.licenseClasses && this.licenseClasses.constructor === Array) {
             data["licenseClasses"] = [];
             for (let item of this.licenseClasses)
@@ -26518,6 +26850,12 @@ export interface IStudentDto {
     lastName: string | undefined;
     email: string | undefined;
     phoneNumber: string | undefined;
+    dateOfBirth: moment.Moment | undefined;
+    street: string | undefined;
+    city: string | undefined;
+    zipCode: string | undefined;
+    state: string | undefined;
+    country: string | undefined;
     licenseClasses: string[] | undefined;
     id: number | undefined;
 }

@@ -1,28 +1,26 @@
 <div [@routerTransition]>
-  
-    <div class="kt-subheader kt-grid__item">
-      
-        <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">
-                <span>{{l("StudentInvoices")}}</span>
-            </h3>
-            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <span class="kt-subheader__desc">
-                {{l("StudentInvoicesHeaderInfo")}}
-            </span>
-        </div>
-        <div class="kt-subheader__toolbar">
-            <div class="kt-subheader__wrapper">
+
+    <div class="m-subheader">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-md-6">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("StudentInvoices")}}</span>
+                </h3>
+                <span class="m-section__sub">
+                    {{l("StudentInvoicesHeaderInfo")}}
+                </span>
+            </div>
+            <div class="col-md-6 text-right">
 				<button *ngIf="isGranted('Pages.StudentInvoices.Create')" (click)="createStudentInvoice()" 
-			class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewStudentInvoice")}}</button>
+			class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewDrivingLesson")}}</button>
             </div>
         </div>
-      
     </div>
-    <div class="kt-content">
-        <div class="kt-portlet kt-portlet--mobile">
-            <div class="kt-portlet__body">
-                <form class="kt-form" autocomplete="off">
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+
+				<form class="horizontal-form" autocomplete="off">
                     <div>
                         <div class="row align-items-center">
                             <div class="col-xl-12">
@@ -247,7 +245,7 @@
         </div>
     </div>
 
-    <createOrEditStudentInvoiceModal #createOrEditStudentInvoiceModal (modalSave)="getStudentInvoices()"></createOrEditStudentInvoiceModal>
+    
     <viewStudentInvoiceModal #viewStudentInvoiceModal></viewStudentInvoiceModal>
      <entityTypeHistoryModal #entityTypeHistoryModal></entityTypeHistoryModal>
   

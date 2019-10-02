@@ -1,5 +1,5 @@
 import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StudentInvoicesServiceProxy, StudentInvoiceDto  } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
@@ -22,11 +22,11 @@ import * as moment from 'moment';
 })
 export class StudentInvoicesComponent extends AppComponentBase {
 
-    @ViewChild('createOrEditStudentInvoiceModal') createOrEditStudentInvoiceModal: CreateOrEditStudentInvoiceModalComponent;
     @ViewChild('viewStudentInvoiceModalComponent') viewStudentInvoiceModal: ViewStudentInvoiceModalComponent;
     @ViewChild('entityTypeHistoryModal') entityTypeHistoryModal: EntityTypeHistoryModalComponent;
     @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
+
 
     advancedFiltersAreShown = false;
     filterText = '';
@@ -54,7 +54,8 @@ export class StudentInvoicesComponent extends AppComponentBase {
         private _notifyService: NotifyService,
         private _tokenAuth: TokenAuthServiceProxy,
         private _activatedRoute: ActivatedRoute,
-        private _fileDownloadService: FileDownloadService
+        private _fileDownloadService: FileDownloadService,
+        private _router: Router
     ) {
         super(injector);
     }
@@ -104,7 +105,7 @@ export class StudentInvoicesComponent extends AppComponentBase {
     }
 
     createStudentInvoice(): void {
-        this.createOrEditStudentInvoiceModal.show();
+        this._router.navigate(['app/main/sales/studentInvoices/create-studentInvoice']);
     }
 
     showHistory(studentInvoice: StudentInvoiceDto): void {

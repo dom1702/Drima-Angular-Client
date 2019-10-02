@@ -74,6 +74,11 @@ import { LayoutConfigService } from '@metronic/app/core/services/layout-config.s
 import { UtilsService } from '@metronic/app/core/services/utils.service';
 import { LayoutRefService } from '@metronic/app/core/services/layout/layout-ref.service';
 
+import localeDe from '@angular/common/locales/de'
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeDe);
+
 @NgModule({
     declarations: [
         AppComponent,

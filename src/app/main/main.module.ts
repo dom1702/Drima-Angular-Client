@@ -2,10 +2,10 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StudentInvoicesComponent } from './sales/studentInvoices/studentInvoices.component';
 import { ViewStudentInvoiceModalComponent } from './sales/studentInvoices/view-studentInvoice-modal.component';
-import { CreateOrEditStudentInvoiceModalComponent } from './sales/studentInvoices/create-or-edit-studentInvoice-modal.component';
+import { CreateStudentInvoiceComponent } from './sales/studentInvoices/create-studentInvoice.component';
 
 import { AppCommonModule } from '@app/shared/common/app-common.module';
 import { TheoryLessonsComponent } from './lessons/theoryLessons/theoryLessons.component';
@@ -46,10 +46,13 @@ import { DLStudentLookupTableModalComponent } from './lessons/drivingLessons/dri
 import { TLStudentLookupTableModalComponent } from './lessons/theoryLessons/theoryLesson-student-lookup-table-modal.component';
 import { ScheduleAllModule } from '@syncfusion/ej2-angular-schedule';
 import { SchedulerComponent } from './scheduler/scheduler.component';
+import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
 
 import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { CreateOrEditEventModalComponent } from './scheduler/create-or-edit-event-modal.component';
 import { EditStudentsTheoryLessonModalComponent } from './lessons/theoryLessons/edit-students-theoryLesson-modal.component';
+import { InvoiceStudentLookupTableModalComponent } from './sales/studentInvoices/invoice-student-lookup-table-modal.component';
+import { InvoiceProductLookupTableModalComponent } from './sales/studentInvoices/invoice-product-lookup-table-modal.component';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -64,6 +67,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       TableModule,
       CommonModule,
       FormsModule,
+      ReactiveFormsModule,
       ModalModule,
       TabsModule,
       TooltipModule,
@@ -77,6 +81,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       PopoverModule.forRoot(),
       NgMultiSelectDropDownModule.forRoot(),
       ScheduleAllModule,
+      NumericTextBoxModule,
       TimepickerModule.forRoot()
     ],
     declarations: 
@@ -101,7 +106,9 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       EditStudentsTheoryLessonModalComponent,
       StudentInvoicesComponent,
       ViewStudentInvoiceModalComponent,
-      CreateOrEditStudentInvoiceModalComponent
+      CreateStudentInvoiceComponent,
+      InvoiceStudentLookupTableModalComponent,
+      InvoiceProductLookupTableModalComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

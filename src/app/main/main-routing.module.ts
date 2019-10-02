@@ -6,6 +6,7 @@ import { StudentsComponent } from './students/students/students.component';
 import { TheoryLessonsComponent } from './lessons/theoryLessons/theoryLessons.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {SchedulerComponent } from './scheduler/scheduler.component';
+import { CreateStudentInvoiceComponent } from './sales/studentInvoices/create-studentInvoice.component';
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import {SchedulerComponent } from './scheduler/scheduler.component';
                     { path: 'students/students', component: StudentsComponent, data: { permission: 'Pages.Students' }  },
                     { path: 'lessons/theoryLessons', component: TheoryLessonsComponent, data: { permission: 'Pages.TheoryLessons' }  },
                     { path: 'dashboard', component: DashboardComponent, data: { permission: 'Pages.Tenant.Dashboard' } },
-                    { path: 'scheduler', component: SchedulerComponent }
+                    { path: 'scheduler', component: SchedulerComponent },
+                    { path: 'sales/studentInvoices/create-studentInvoice', component: CreateStudentInvoiceComponent},
                 ]
             }
         ])

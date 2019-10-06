@@ -108,6 +108,10 @@ export class StudentInvoicesComponent extends AppComponentBase {
         this._router.navigate(['app/main/sales/studentInvoices/create-studentInvoice']);
     }
 
+    editStudentInvoice(id : number): void {
+        this._router.navigate(['app/main/sales/studentInvoices/create-studentInvoice', { id: id }]);
+    }
+
     showHistory(studentInvoice: StudentInvoiceDto): void {
         this.entityTypeHistoryModal.show({
             entityId: studentInvoice.id.toString(),
@@ -129,5 +133,15 @@ export class StudentInvoicesComponent extends AppComponentBase {
                 }
             }
         );
+    }
+
+    getPdf(studentInvoice: StudentInvoiceDto): void {
+        this._studentInvoicesServiceProxy.createPdfById(studentInvoice.id)
+        .subscribe((result) => {
+           
+            this._fileDownloadService.downloadTempFile(result);
+        });
+
+  
     }
 }

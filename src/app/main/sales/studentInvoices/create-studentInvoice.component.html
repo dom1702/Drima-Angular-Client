@@ -3,7 +3,7 @@
         <div class="row align-items-center">
             <div class="mr-auto col-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <span>{{"CreateNewStudentInvoice" | localize}}</span>
+                    <span>{{ header }}</span>
                 </h3>
                 <span class="m-section__sub">
                     {{"CreateStudentInvoiceHeaderInfo" | localize}}
@@ -14,7 +14,7 @@
     <div class="m-content">
         <div class="m-portlet m-portlet--mobile">
             <div class="m-portlet__body">
-                    <div class="form-group m-form__group">
+                    <div *ngIf="!isEdit" class="form-group m-form__group">
                             <label for="StudentFirstName">{{l("Student")}}</label>
                             <div class="input-group">
                                 <input class="form-control" id="studentFullName" name="studentFullName" [(ngModel)]="studentFullName" type="text" disabled>     
@@ -29,6 +29,21 @@
 
                 <form *ngIf="active && studentSet" #studentInvoiceForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off" [formGroup]="form">
                    
+                    <div class="form-group">
+                        <label for="StudentInvoice_Date">{{l("InvoiceDate")}}</label>
+                        <input required class="form-control m-input" type="timepicker" bsDatepicker formControlName="date">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="StudentInvoice_DueDate">{{l("InvoiceDueDate")}}</label>
+                        <input required class="form-control m-input" type="timepicker" bsDatepicker formControlName="date_due">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="StudentInvoice_Interest">{{l("Interest")}}</label>
+                        <input type="text" class="form-control"  formControlName="interest" required/>
+                    </div>
+
                     <div class="form-group">
                         <label for="StudentInvoice_RecipientFirstName">{{l("RecipientFirstName")}} *</label>
                         <input type="text" class="form-control"  formControlName="recipientFirstName" required/>
@@ -52,6 +67,21 @@
                     <div class="form-group">
                         <label for="StudentInvoice_RecipientCity">{{l("RecipientCity")}} *</label>
                         <input type="text" class="form-control"  formControlName="recipientCity" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="StudentInvoice_TextStart">{{l("InvoiceTextStart")}}</label>
+                        <input type="text" class="form-control"  formControlName="text1" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="StudentInvoice_TextEnd">{{l("InvoiceTextEnd")}}</label>
+                        <input type="text" class="form-control"  formControlName="text2" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="StudentInvoice_Reference">{{l("InvoiceReference")}}</label>
+                        <input type="text" class="form-control"  formControlName="reference" required/>
                     </div>
 
                     <label for="Items">{{l("Items")}}</label>
@@ -121,6 +151,7 @@
                     <div class="m--margin-top-40">
                         <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
                         <button type="submit" class="btn btn-primary blue" [disabled]="!studentInvoiceForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                        <button type="button" class="btn btn-default" [buttonBusy]="currentlyCreatingPdf" [busyText]="l('CreatingPdfFile')" (click)="createPdfFile()"><span>{{l("CreatePDF")}}</span></button>
                     </div>
                 </form>
             </div>

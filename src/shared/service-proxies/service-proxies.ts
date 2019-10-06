@@ -10598,6 +10598,116 @@ export class StudentInvoicesServiceProxy {
         }
         return _observableOf<PagedResultDtoOfStudentInvoiceProductLookupTableDto>(<any>null);
     }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    createPdf(input: CreateOrEditStudentInvoiceDto | null | undefined): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/StudentInvoices/CreatePdf";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreatePdf(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreatePdf(<any>response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreatePdf(response: HttpResponseBase): Observable<FileDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    createPdfById(id: number | null | undefined): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/StudentInvoices/CreatePdfById?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreatePdfById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreatePdfById(<any>response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreatePdfById(response: HttpResponseBase): Observable<FileDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileDto>(<any>null);
+    }
 }
 
 @Injectable()
@@ -12252,6 +12362,57 @@ export class TenantSettingsServiceProxy {
     }
 
     /**
+     * @return Success
+     */
+    getInvoiceLogo(): Observable<string> {
+        let url_ = this.baseUrl + "/api/services/app/TenantSettings/GetInvoiceLogo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetInvoiceLogo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetInvoiceLogo(<any>response_);
+                } catch (e) {
+                    return <Observable<string>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetInvoiceLogo(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string>(<any>null);
+    }
+
+    /**
      * @param input (optional) 
      * @return Success
      */
@@ -12285,6 +12446,106 @@ export class TenantSettingsServiceProxy {
     }
 
     protected processUpdateAllSettings(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    updateInvoiceLogoId(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/TenantSettings/UpdateInvoiceLogoId?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateInvoiceLogoId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateInvoiceLogoId(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateInvoiceLogoId(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param fileType (optional) 
+     * @return Success
+     */
+    updateInvoiceLogoFileType(fileType: string | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/TenantSettings/UpdateInvoiceLogoFileType?";
+        if (fileType !== undefined)
+            url_ += "fileType=" + encodeURIComponent("" + fileType) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateInvoiceLogoFileType(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateInvoiceLogoFileType(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateInvoiceLogoFileType(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -12379,6 +12640,53 @@ export class TenantSettingsServiceProxy {
     }
 
     protected processClearCustomCss(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    clearInvoiceLogo(): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/TenantSettings/ClearInvoiceLogo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processClearInvoiceLogo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processClearInvoiceLogo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processClearInvoiceLogo(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -26232,6 +26540,7 @@ export class StudentInvoiceDto implements IStudentInvoiceDto {
     date!: moment.Moment | undefined;
     totalAfterVat!: number | undefined;
     dateDue!: moment.Moment | undefined;
+    pdfFileCreated!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: IStudentInvoiceDto) {
@@ -26252,6 +26561,7 @@ export class StudentInvoiceDto implements IStudentInvoiceDto {
             this.date = data["date"] ? moment(data["date"].toString()) : <any>undefined;
             this.totalAfterVat = data["totalAfterVat"];
             this.dateDue = data["dateDue"] ? moment(data["dateDue"].toString()) : <any>undefined;
+            this.pdfFileCreated = data["pdfFileCreated"];
             this.id = data["id"];
         }
     }
@@ -26272,6 +26582,7 @@ export class StudentInvoiceDto implements IStudentInvoiceDto {
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["totalAfterVat"] = this.totalAfterVat;
         data["dateDue"] = this.dateDue ? this.dateDue.toISOString() : <any>undefined;
+        data["pdfFileCreated"] = this.pdfFileCreated;
         data["id"] = this.id;
         return data; 
     }
@@ -26285,6 +26596,7 @@ export interface IStudentInvoiceDto {
     date: moment.Moment | undefined;
     totalAfterVat: number | undefined;
     dateDue: moment.Moment | undefined;
+    pdfFileCreated: boolean | undefined;
     id: number | undefined;
 }
 
@@ -26326,10 +26638,10 @@ export interface IGetStudentInvoiceForEditOutput {
 
 export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoiceDto {
     studentId!: number | undefined;
-    senderCompanyName!: string;
-    senderStreet!: string;
-    senderZipCode!: string;
-    senderCity!: string;
+    senderCompanyName!: string | undefined;
+    senderStreet!: string | undefined;
+    senderZipCode!: string | undefined;
+    senderCity!: string | undefined;
     senderCountry!: string | undefined;
     recipientFirstName!: string;
     recipientLastName!: string;
@@ -26340,7 +26652,7 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
     recipientEmail!: string | undefined;
     recipientPhone!: string | undefined;
     date!: moment.Moment | undefined;
-    userFriendlyInvoiceId!: string;
+    userFriendlyInvoiceId!: string | undefined;
     overallDiscount!: number | undefined;
     totalBeforeVat!: number | undefined;
     totalAfterVat!: number | undefined;
@@ -26358,6 +26670,7 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
     vatId!: string | undefined;
     text1!: string | undefined;
     text2!: string | undefined;
+    items!: StudentInvoiceItemDto[] | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditStudentInvoiceDto) {
@@ -26404,6 +26717,11 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
             this.vatId = data["vatId"];
             this.text1 = data["text1"];
             this.text2 = data["text2"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(StudentInvoiceItemDto.fromJS(item));
+            }
             this.id = data["id"];
         }
     }
@@ -26450,6 +26768,11 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
         data["vatId"] = this.vatId;
         data["text1"] = this.text1;
         data["text2"] = this.text2;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -26457,10 +26780,10 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
 
 export interface ICreateOrEditStudentInvoiceDto {
     studentId: number | undefined;
-    senderCompanyName: string;
-    senderStreet: string;
-    senderZipCode: string;
-    senderCity: string;
+    senderCompanyName: string | undefined;
+    senderStreet: string | undefined;
+    senderZipCode: string | undefined;
+    senderCity: string | undefined;
     senderCountry: string | undefined;
     recipientFirstName: string;
     recipientLastName: string;
@@ -26471,7 +26794,7 @@ export interface ICreateOrEditStudentInvoiceDto {
     recipientEmail: string | undefined;
     recipientPhone: string | undefined;
     date: moment.Moment | undefined;
-    userFriendlyInvoiceId: string;
+    userFriendlyInvoiceId: string | undefined;
     overallDiscount: number | undefined;
     totalBeforeVat: number | undefined;
     totalAfterVat: number | undefined;
@@ -26489,7 +26812,76 @@ export interface ICreateOrEditStudentInvoiceDto {
     vatId: string | undefined;
     text1: string | undefined;
     text2: string | undefined;
+    items: StudentInvoiceItemDto[] | undefined;
     id: number | undefined;
+}
+
+export class StudentInvoiceItemDto implements IStudentInvoiceItemDto {
+    productId!: number | undefined;
+    productName!: string | undefined;
+    description!: string | undefined;
+    quantity!: number | undefined;
+    priceBeforeVat!: number | undefined;
+    itemVat!: number | undefined;
+    discount!: number | undefined;
+    priceAfterVat!: number | undefined;
+    sumIncludingVat!: number | undefined;
+
+    constructor(data?: IStudentInvoiceItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.productId = data["productId"];
+            this.productName = data["productName"];
+            this.description = data["description"];
+            this.quantity = data["quantity"];
+            this.priceBeforeVat = data["priceBeforeVat"];
+            this.itemVat = data["itemVat"];
+            this.discount = data["discount"];
+            this.priceAfterVat = data["priceAfterVat"];
+            this.sumIncludingVat = data["sumIncludingVat"];
+        }
+    }
+
+    static fromJS(data: any): StudentInvoiceItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentInvoiceItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["productId"] = this.productId;
+        data["productName"] = this.productName;
+        data["description"] = this.description;
+        data["quantity"] = this.quantity;
+        data["priceBeforeVat"] = this.priceBeforeVat;
+        data["itemVat"] = this.itemVat;
+        data["discount"] = this.discount;
+        data["priceAfterVat"] = this.priceAfterVat;
+        data["sumIncludingVat"] = this.sumIncludingVat;
+        return data; 
+    }
+}
+
+export interface IStudentInvoiceItemDto {
+    productId: number | undefined;
+    productName: string | undefined;
+    description: string | undefined;
+    quantity: number | undefined;
+    priceBeforeVat: number | undefined;
+    itemVat: number | undefined;
+    discount: number | undefined;
+    priceAfterVat: number | undefined;
+    sumIncludingVat: number | undefined;
 }
 
 export class PagedResultDtoOfStudentInvoiceStudentLookupTableDto implements IPagedResultDtoOfStudentInvoiceStudentLookupTableDto {
@@ -28299,6 +28691,8 @@ export class TenantSettingsEditDto implements ITenantSettingsEditDto {
     security!: SecuritySettingsEditDto;
     billing!: TenantBillingSettingsEditDto | undefined;
     otherSettings!: TenantOtherSettingsEditDto | undefined;
+    coreDataSettings!: TenantCoreDataSettingsEditDto | undefined;
+    studentInvoiceSettings!: TenantStudentInvoiceSettingsEditDto | undefined;
 
     constructor(data?: ITenantSettingsEditDto) {
         if (data) {
@@ -28322,6 +28716,8 @@ export class TenantSettingsEditDto implements ITenantSettingsEditDto {
             this.security = data["security"] ? SecuritySettingsEditDto.fromJS(data["security"]) : new SecuritySettingsEditDto();
             this.billing = data["billing"] ? TenantBillingSettingsEditDto.fromJS(data["billing"]) : <any>undefined;
             this.otherSettings = data["otherSettings"] ? TenantOtherSettingsEditDto.fromJS(data["otherSettings"]) : <any>undefined;
+            this.coreDataSettings = data["coreDataSettings"] ? TenantCoreDataSettingsEditDto.fromJS(data["coreDataSettings"]) : <any>undefined;
+            this.studentInvoiceSettings = data["studentInvoiceSettings"] ? TenantStudentInvoiceSettingsEditDto.fromJS(data["studentInvoiceSettings"]) : <any>undefined;
         }
     }
 
@@ -28341,6 +28737,8 @@ export class TenantSettingsEditDto implements ITenantSettingsEditDto {
         data["security"] = this.security ? this.security.toJSON() : <any>undefined;
         data["billing"] = this.billing ? this.billing.toJSON() : <any>undefined;
         data["otherSettings"] = this.otherSettings ? this.otherSettings.toJSON() : <any>undefined;
+        data["coreDataSettings"] = this.coreDataSettings ? this.coreDataSettings.toJSON() : <any>undefined;
+        data["studentInvoiceSettings"] = this.studentInvoiceSettings ? this.studentInvoiceSettings.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -28353,6 +28751,8 @@ export interface ITenantSettingsEditDto {
     security: SecuritySettingsEditDto;
     billing: TenantBillingSettingsEditDto | undefined;
     otherSettings: TenantOtherSettingsEditDto | undefined;
+    coreDataSettings: TenantCoreDataSettingsEditDto | undefined;
+    studentInvoiceSettings: TenantStudentInvoiceSettingsEditDto | undefined;
 }
 
 export class TenantUserManagementSettingsEditDto implements ITenantUserManagementSettingsEditDto {
@@ -28613,6 +29013,134 @@ export class TenantOtherSettingsEditDto implements ITenantOtherSettingsEditDto {
 
 export interface ITenantOtherSettingsEditDto {
     isQuickThemeSelectEnabled: boolean | undefined;
+}
+
+export class TenantCoreDataSettingsEditDto implements ITenantCoreDataSettingsEditDto {
+    companyName!: string | undefined;
+    fromStreet!: string | undefined;
+    fromZipCode!: string | undefined;
+    fromCity!: string | undefined;
+    vatId!: string | undefined;
+    taxId!: string | undefined;
+    phoneCell!: string | undefined;
+    phoneLand!: string | undefined;
+    website!: string | undefined;
+    email!: string | undefined;
+
+    constructor(data?: ITenantCoreDataSettingsEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.companyName = data["companyName"];
+            this.fromStreet = data["fromStreet"];
+            this.fromZipCode = data["fromZipCode"];
+            this.fromCity = data["fromCity"];
+            this.vatId = data["vatId"];
+            this.taxId = data["taxId"];
+            this.phoneCell = data["phoneCell"];
+            this.phoneLand = data["phoneLand"];
+            this.website = data["website"];
+            this.email = data["email"];
+        }
+    }
+
+    static fromJS(data: any): TenantCoreDataSettingsEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TenantCoreDataSettingsEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["companyName"] = this.companyName;
+        data["fromStreet"] = this.fromStreet;
+        data["fromZipCode"] = this.fromZipCode;
+        data["fromCity"] = this.fromCity;
+        data["vatId"] = this.vatId;
+        data["taxId"] = this.taxId;
+        data["phoneCell"] = this.phoneCell;
+        data["phoneLand"] = this.phoneLand;
+        data["website"] = this.website;
+        data["email"] = this.email;
+        return data; 
+    }
+}
+
+export interface ITenantCoreDataSettingsEditDto {
+    companyName: string | undefined;
+    fromStreet: string | undefined;
+    fromZipCode: string | undefined;
+    fromCity: string | undefined;
+    vatId: string | undefined;
+    taxId: string | undefined;
+    phoneCell: string | undefined;
+    phoneLand: string | undefined;
+    website: string | undefined;
+    email: string | undefined;
+}
+
+export class TenantStudentInvoiceSettingsEditDto implements ITenantStudentInvoiceSettingsEditDto {
+    invoiceCompanyLogo!: string | undefined;
+    defaultStartText!: string | undefined;
+    defaultEndText!: string | undefined;
+    defaultReference!: string | undefined;
+    defaultInterest!: string | undefined;
+    defaultDaysToPay!: string | undefined;
+
+    constructor(data?: ITenantStudentInvoiceSettingsEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.invoiceCompanyLogo = data["invoiceCompanyLogo"];
+            this.defaultStartText = data["defaultStartText"];
+            this.defaultEndText = data["defaultEndText"];
+            this.defaultReference = data["defaultReference"];
+            this.defaultInterest = data["defaultInterest"];
+            this.defaultDaysToPay = data["defaultDaysToPay"];
+        }
+    }
+
+    static fromJS(data: any): TenantStudentInvoiceSettingsEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TenantStudentInvoiceSettingsEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["invoiceCompanyLogo"] = this.invoiceCompanyLogo;
+        data["defaultStartText"] = this.defaultStartText;
+        data["defaultEndText"] = this.defaultEndText;
+        data["defaultReference"] = this.defaultReference;
+        data["defaultInterest"] = this.defaultInterest;
+        data["defaultDaysToPay"] = this.defaultDaysToPay;
+        return data; 
+    }
+}
+
+export interface ITenantStudentInvoiceSettingsEditDto {
+    invoiceCompanyLogo: string | undefined;
+    defaultStartText: string | undefined;
+    defaultEndText: string | undefined;
+    defaultReference: string | undefined;
+    defaultInterest: string | undefined;
+    defaultDaysToPay: string | undefined;
 }
 
 export class PagedResultDtoOfGetTheoryLessonForViewDto implements IPagedResultDtoOfGetTheoryLessonForViewDto {

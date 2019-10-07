@@ -38,6 +38,7 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
   studentLastName = '';
 
   studentId : number;
+  studentInvoiceId? : number;
   studentSet: boolean;
   isEdit: boolean;
   currentlyCreatingPdf : boolean;
@@ -116,7 +117,9 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
       text1: [''],
       text2: [''],
-      reference: ['']
+      reference: [''],
+
+      createPdfOnSave: [true]
 
     });
   }
@@ -146,7 +149,7 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
     });
 
-    this.getExampleItems();
+    //this.getExampleItems();
 
     this.subscribeToItemFormValueChanges();
 
@@ -174,6 +177,8 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
     //     });
     // }
 
+    this.studentInvoiceId = null;
+
     this.subscription = this._route.params.subscribe(params => {
       const id = params['id'] || '';
 
@@ -185,26 +190,61 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
       }
       else
       {
+        this.form.get('createPdfOnSave').setValue(false);
+
         this._studentInvoicesServiceProxy.getStudentInvoiceForEdit(id).subscribe(result => {
           this.studentInvoice = result.studentInvoice;
+          this.studentInvoiceId = result.studentInvoice.id;
           
-         // this.header
-          console.log(result.studentInvoice.studentId);
-
           this.isEdit = true;
           this.studentSet = true;
 
-          this._studentsServiceProxy.getStudentForView(this.studentInvoice.studentId)
-          .subscribe(result => {
-    
-            this.header = 'Edit invoice ' + this.studentInvoice.userFriendlyInvoiceId + ' from student ' + result.student.firstName + ' ' + result.student.lastName;
-            
+          this._studentsServiceProxy
+          .getStudentForView(this.studentInvoice.studentId).subscribe(studentResult => {
+            this.header = 'Edit invoice ' + this.studentInvoice.userFriendlyInvoiceId + ' from student ' + studentResult.student.firstName + ' ' + studentResult.student.lastName;
           });
+
+          this.studentId = this.studentInvoice.studentId;
+
+          console.log(result.studentInvoice.date);
+
+          this.form.get('date').setValue(moment(result.studentInvoice.date).toDate());
+          this.form.get('date_due').setValue(moment(result.studentInvoice.dateDue).toDate());
+          this.form.get('recipientFirstName').setValue(result.studentInvoice.recipientFirstName);
+          this.form.get('recipientLastName').setValue(result.studentInvoice.recipientLastName);
+          this.form.get('recipientStreet').setValue(result.studentInvoice.recipientStreet);
+          this.form.get('recipientZipCode').setValue(result.studentInvoice.recipientZipCode);
+          this.form.get('recipientCity').setValue(result.studentInvoice.recipientCity);
+  
+          this.form.get('interest').setValue(result.studentInvoice.interest);
+          this.form.get('text1').setValue(result.studentInvoice.text1);
+          this.form.get('text2').setValue(result.studentInvoice.text2);
+          this.form.get('reference').setValue(result.studentInvoice.reference);
+
+          this.unsubscribeToItemFormValueChanges();
+
+          var control = <FormArray>this.itemForm.get('items');
+
+          for(var i = 0; i < this.studentInvoice.items.length; i++)
+          {
+            this.addItem();
+
+            control.at(control.length - 1).get('product').setValue(result.studentInvoice.items[i].productName);
+            control.at(control.length - 1).get('qty').setValue(result.studentInvoice.items[i].quantity);
+            control.at(control.length - 1).get('priceBeforeVat').setValue(result.studentInvoice.items[i].priceBeforeVat);
+            control.at(control.length - 1).get('priceAfterVat').setValue(result.studentInvoice.items[i].priceAfterVat);
+            control.at(control.length - 1).get('itemVat').setValue(result.studentInvoice.items[i].itemVat);
+            control.at(control.length - 1).get('sum').setValue(result.studentInvoice.items[i].sumIncludingVat);
+          }
+
+          this.subscribeToItemFormValueChanges();
+
+          this.updateTotalBeforeVat();
+          this.updateTotalVat();
+          this.updateTotalAfterVat();
         });
       }
     })
-
-   
   }
 
   ngOnDestroy()
@@ -231,11 +271,11 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
   getEmptyItem(): FormGroup {
     return this.fb.group({
       product: ['', Validators.required],
-      qty: [''],
-      priceBeforeVat: ['', [Validators.min(10)]],
-      itemVat: [''],
-      priceAfterVat: [''],
-      sum: [''],
+      qty: ['1'],
+      priceBeforeVat: ['0', [Validators.min(10)]],
+      itemVat: ['0'],
+      priceAfterVat: ['0'],
+      sum: ['0'],
     });
   }
 
@@ -305,8 +345,8 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
   updateItems() {
     this.unsubscribeToItemFormValueChanges();
 
-    console.log(this.previousItemForm);
-    console.log(this.itemForm);
+    //console.log(this.previousItemForm);
+    //console.log(this.itemForm);
 
     var control = <FormArray>this.itemForm.get('items');
     var controlPrev = <FormArray>this.previousItemForm.get('items');
@@ -371,42 +411,78 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
   }
 
   save(): void {
-    this.saving = true;
-    console.log('isValid', this.itemForm.valid);
-    console.log('value', this.itemForm.value);
-    console.log(this.form);
-    this._studentInvoicesServiceProxy.createOrEdit(this.createDto())
-     .pipe(finalize(() => { this.saving = false;}))
-     .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
-        this.close();
-     });
-  }
+   
 
-  close(): void {
+    this.message.confirm(
+      'Keep in mind that a previously created PDF will be deleted.',
+      'Do you really want to edit the invoice?',
+      (isConfirmed) => {
+          if (isConfirmed) {
+            this.saving = true;
 
+            this._studentInvoicesServiceProxy.createOrEdit(this.createDto(this.studentInvoiceId))
+            .pipe(finalize(() => 
+            { 
+              if(!this.form.get('createPdfOnSave').value)
+                this.saving = false;
+             }))
+            .subscribe((result : number) => {
+               this.notify.info(this.l('SavedSuccessfully'));
+       
+               if(this.form.get('createPdfOnSave').value)
+               {
+                 this.getPdf(result);
+               }
+               else
+               {
+                 this.close();
+               }
+           });
+          }
+      }
+  );
+   
+  }  
+
+  close(): void
+  {
     this.active = false;
     this._router.navigate(['app/main/sales/studentInvoices']);
   }
 
-  
+  // createPdfFile()
+  // {
+  //   var input = this.createDto();
 
-  createPdfFile()
+  //   this.currentlyCreatingPdf = true;
+
+  //   this._studentInvoicesServiceProxy.createPdf(input)
+  //     .subscribe(result => {
+  //       this.currentlyCreatingPdf = false;
+  //       this._fileDownloadService.downloadTempFile(result);
+  //      });
+  // }
+
+  getPdf(id : number): void 
   {
-    var input = this.createDto();
-
-    this.currentlyCreatingPdf = true;
-
-    this._studentInvoicesServiceProxy.createPdf(input)
-      .subscribe(result => {
-        this.currentlyCreatingPdf = false;
+    this._studentInvoicesServiceProxy.createPdfById(id)
+    .pipe(finalize(() => {   this.saving = false; }))
+    .subscribe((result) => {
         this._fileDownloadService.downloadTempFile(result);
-       });
+
+        if(this.form.get('createPdfOnSave').value)
+        {
+          this.close();
+        }
+    });
   }
 
-  createDto() : CreateOrEditStudentInvoiceDto
+  createDto(id?: number) : CreateOrEditStudentInvoiceDto
   {
     var input = new CreateOrEditStudentInvoiceDto();
+
+    if(id != null)
+      input.id = id;
 
     input.date = moment(this.form.get('date').value);
     input.dateDue = moment(this.form.get('date_due').value);
@@ -515,7 +591,7 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
   getNewStudentId() {
 
     this.studentSet = true;
-    console.log(this.studentSet);
+    //console.log(this.studentSet);
     this.studentInvoice.studentId = this.studentLookupTableModal.id;
     this.studentFirstName = this.studentLookupTableModal.firstName;
     this.studentLastName = this.studentLookupTableModal.lastName;

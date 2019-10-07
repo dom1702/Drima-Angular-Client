@@ -22,6 +22,8 @@ export class CreateEventTypeModalComponent extends AppComponentBase implements O
 
     scheduler : SchedulerComponent;
 
+    saving : boolean;
+
     constructor(
         injector: Injector,
         private _drivingLessonsServiceProxy: DrivingLessonsServiceProxy

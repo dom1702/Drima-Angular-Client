@@ -4,7 +4,7 @@ import { finalize } from 'rxjs/operators';
 import { TheoryLessonsServiceProxy, CreateOrEditTheoryLessonDto, InstructorDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
-import { LicenseClassLookupTableModalComponent } from '@app/shared/common/lookup/licenseClass-lookup-table-modal.component';
+import { DLLicenseClassLookupTableModalComponent } from '@app/shared/common/lookup/drivingLesson-licenseClass-lookup-table-modal.component';
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { Paginator } from 'primeng/components/paginator/paginator';
 import { Table } from 'primeng/components/table/table';
@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
 export class CreateOrEditTheoryLessonModalComponent extends AppComponentBase implements OnInit {
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
-    @ViewChild('licenseClassLookupTableModal') licenseClassLookupTableModal: LicenseClassLookupTableModalComponent;
+    @ViewChild('licenseClassLookupTableModal') licenseClassLookupTableModal: DLLicenseClassLookupTableModalComponent;
 
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();

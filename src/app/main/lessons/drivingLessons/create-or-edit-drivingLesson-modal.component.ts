@@ -5,7 +5,7 @@ import { DrivingLessonsServiceProxy, CreateOrEditDrivingLessonDto, InstructorDto
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { DrivingLessonTopicLookupTableModalComponent } from './drivingLessonTopic-lookup-table-modal.component';
-import { LicenseClassLookupTableModalComponent } from '../../../shared/common/lookup/licenseClass-lookup-table-modal.component';
+import { DLLicenseClassLookupTableModalComponent } from '../../../shared/common/lookup/drivingLesson-licenseClass-lookup-table-modal.component';
 import { DLStudentLookupTableModalComponent } from './drivingLesson-student-lookup-table-modal.component';
 import { TimepickerComponent } from 'ngx-bootstrap/timepicker';
 
@@ -17,7 +17,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('drivingLessonTopicLookupTableModal') drivingLessonTopicLookupTableModal: DrivingLessonTopicLookupTableModalComponent;
-    @ViewChild('licenseClassLookupTableModal') licenseClassLookupTableModal: LicenseClassLookupTableModalComponent;
+    @ViewChild('licenseClassLookupTableModal') licenseClassLookupTableModal: DLLicenseClassLookupTableModalComponent;
     @ViewChild('studentLookupTableModal') studentLookupTableModal: DLStudentLookupTableModalComponent;
 
 

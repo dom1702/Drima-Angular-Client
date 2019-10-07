@@ -15,6 +15,7 @@ import { CreateOrEditTheoryLessonModalComponent } from './lessons/theoryLessons/
 import { StudentsComponent } from './students/students/students.component';
 import { ViewStudentModalComponent } from './students/students/view-student-modal.component';
 import { CreateOrEditStudentModalComponent } from './students/students/create-or-edit-student-modal.component';
+import {LicenseClassLookupTableModalComponent} from './students/students/licenseClass-lookup-table-modal.component';
 
 import { DrivingLessonTopicLookupTableModalComponent } from './lessons/drivingLessons/drivingLessonTopic-lookup-table-modal.component';
 
@@ -23,7 +24,6 @@ import { ViewDrivingLessonModalComponent } from './lessons/drivingLessons/view-d
 import { CreateOrEditDrivingLessonModalComponent } from './lessons/drivingLessons/create-or-edit-drivingLesson-modal.component';
 import { CreateEventTypeModalComponent } from './scheduler/create-event-type-modal.component';
 
-import { LicenseClassLookupTableModalComponent } from '../shared/common/lookup/licenseClass-lookup-table-modal.component';
 
 import { AutoCompleteModule } from 'primeng/primeng';
 import { PaginatorModule } from 'primeng/primeng';
@@ -53,6 +53,8 @@ import { CreateOrEditEventModalComponent } from './scheduler/create-or-edit-even
 import { EditStudentsTheoryLessonModalComponent } from './lessons/theoryLessons/edit-students-theoryLesson-modal.component';
 import { InvoiceStudentLookupTableModalComponent } from './sales/studentInvoices/invoice-student-lookup-table-modal.component';
 import { InvoiceProductLookupTableModalComponent } from './sales/studentInvoices/invoice-product-lookup-table-modal.component';
+import { DLLicenseClassLookupTableModalComponent } from '@app/shared/common/lookup/drivingLesson-licenseClass-lookup-table-modal.component';
+
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -108,7 +110,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       ViewStudentInvoiceModalComponent,
       CreateStudentInvoiceComponent,
       InvoiceStudentLookupTableModalComponent,
-      InvoiceProductLookupTableModalComponent
+      InvoiceProductLookupTableModalComponent,
+      DLLicenseClassLookupTableModalComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

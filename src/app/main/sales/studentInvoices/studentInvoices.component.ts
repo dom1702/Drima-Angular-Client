@@ -4,7 +4,6 @@ import { StudentInvoicesServiceProxy, StudentInvoiceDto  } from '@shared/service
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
-import { CreateOrEditStudentInvoiceModalComponent } from './create-or-edit-studentInvoice-modal.component';
 import { ViewStudentInvoiceModalComponent } from './view-studentInvoice-modal.component';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { Table } from 'primeng/components/table/table';

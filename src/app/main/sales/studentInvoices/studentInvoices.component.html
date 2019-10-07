@@ -171,10 +171,10 @@
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
                                             </button>
 												<ul class="dropdown-menu"  *dropdownMenu>
-												<li>
+												<!-- <li>
 													<a href="javascript:;"
 														(click)="viewStudentInvoiceModal.show(record)">{{l('View')}}</a>
-                                                </li>
+                                                </li> -->
                                                 <li *ngIf="record.studentInvoice.pdfFileCreated">
 											        <a href="javascript:;" *ngIf="permission.isGranted('Pages.StudentInvoices.Edit')"
 														(click)="getPdf(record.studentInvoice)">{{l('GetPdf')}}</a>

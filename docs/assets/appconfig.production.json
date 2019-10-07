@@ -1,6 +1,7 @@
 {
   "remoteServiceBaseUrl": "https://drima-test.azurewebsites.net",
   "appBaseUrl": "https://dom1702.github.io/Drima-Angular-Client",
+  "CorsOrigins": "https://drima-test.azurewebsites.net",
   "localeMappings": {
     "angular": [
       {

@@ -2,6 +2,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
+import { PricePackagesComponent } from './sales/pricePackages/pricePackages.component';
+import { ViewPricePackageModalComponent } from './sales/pricePackages/view-pricePackage-modal.component';
+import { CreateOrEditPricePackageModalComponent } from './sales/pricePackages/create-or-edit-pricePackage-modal.component';
+
 import { ProductsComponent } from './sales/products/products.component';
 import { ViewProductModalComponent } from './sales/products/view-product-modal.component';
 import { CreateOrEditProductModalComponent } from './sales/products/create-or-edit-product-modal.component';
@@ -115,6 +119,7 @@ import { NgxBootstrapDatePickerConfigService } from 'assets/ngx-bootstrap/ngx-bo
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { VehicleInstructorLookupTableModalComponent } from './resources/vehicles/vehicle-instructor-lookup-table-modal.component';
 import { OfficeLookupTableModalComponent } from './instructors/instructors/office-lookup-table-modal.component';
+import { PricePackageProductLookupTableModalComponent } from './sales/pricePackages/pricePackage-product-lookup-table-modal.component';
 
 @NgModule({
     imports: [
@@ -147,6 +152,8 @@ import { OfficeLookupTableModalComponent } from './instructors/instructors/offic
         NgMultiSelectDropDownModule.forRoot()
     ],
     declarations: [
+		PricePackagesComponent,
+		ViewPricePackageModalComponent,		CreateOrEditPricePackageModalComponent,
 		ProductsComponent,
 		ViewProductModalComponent,		CreateOrEditProductModalComponent,
 		SimulatorsComponent,
@@ -165,7 +172,8 @@ import { OfficeLookupTableModalComponent } from './instructors/instructors/offic
 		TheoryLessonTopicsComponent,
 		ViewTheoryLessonTopicModalComponent,		CreateOrEditTheoryLessonTopicModalComponent,
 		LicenseClassesComponent,
-		ViewLicenseClassModalComponent,		CreateOrEditLicenseClassModalComponent,
+    ViewLicenseClassModalComponent,		CreateOrEditLicenseClassModalComponent,
+    PricePackageProductLookupTableModalComponent,
         UsersComponent,
         PermissionComboComponent,
         RoleComboComponent,

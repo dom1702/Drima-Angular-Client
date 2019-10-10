@@ -47,36 +47,6 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
   form: FormGroup;
 
-  exampleItems = [
-    {
-      index: 0,
-      product: 'tuna',
-      qty: 2,
-      priceBeforeVat: 10000,
-      itemVat: 20,
-      priceAfterVat: 12000,
-      sum: 24000
-    },
-    {
-      index: 1,
-      product: 'tuna',
-      qty: 2,
-      priceBeforeVat: 10000,
-      itemVat: 20,
-      priceAfterVat: 12000,
-      sum: 24000
-    },
-    {
-      index: 2,
-      product: 'tuna',
-      qty: 2,
-      priceBeforeVat: 10000,
-      itemVat: 20,
-      priceAfterVat: 12000,
-      sum: 24000
-    }
-  ];
-
   itemForm: FormGroup;
 
   previousItemForm: FormGroup;
@@ -252,21 +222,21 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
     this.subscription.unsubscribe();
   }
 
-  getExampleItems() {
-    const control = <FormArray>this.itemForm.get('items');
-    for (const emp of this.exampleItems) {
-      const grp = this.fb.group({
-        product: [emp.product, Validators.required],
-        qty: [emp.qty],
-        priceBeforeVat: [emp.priceBeforeVat],
-        itemVat: [emp.itemVat, Validators.required],
-        priceAfterVat: [emp.priceAfterVat, Validators.required],
-        sum: [emp.sum, Validators.required],
-        index: [emp.index]
-      });
-      control.push(grp);
-    }
-  }
+  // getExampleItems() {
+  //   const control = <FormArray>this.itemForm.get('items');
+  //   for (const emp of this.exampleItems) {
+  //     const grp = this.fb.group({
+  //       product: [emp.product, Validators.required],
+  //       qty: [emp.qty],
+  //       priceBeforeVat: [emp.priceBeforeVat],
+  //       itemVat: [emp.itemVat, Validators.required],
+  //       priceAfterVat: [emp.priceAfterVat, Validators.required],
+  //       sum: [emp.sum, Validators.required],
+  //       index: [emp.index]
+  //     });
+  //     control.push(grp);
+  //   }
+  // }
 
   getEmptyItem(): FormGroup {
     return this.fb.group({
@@ -274,6 +244,7 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
       qty: ['1'],
       priceBeforeVat: ['0', [Validators.min(10)]],
       itemVat: ['0'],
+      discount: ['0'],
       priceAfterVat: ['0'],
       sum: ['0'],
     });

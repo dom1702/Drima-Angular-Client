@@ -36,6 +36,8 @@ export class AppNavigationService {
                 new AppMenuItem('OrganizationUnits', 'Pages.Administration.OrganizationUnits', 'flaticon-map', '/app/admin/organization-units'),
                 new AppMenuItem('Roles', 'Pages.Administration.Roles', 'flaticon-suitcase', '/app/admin/roles'),
                 new AppMenuItem('Users', 'Pages.Administration.Users', 'flaticon-users', '/app/admin/users'),
+            new AppMenuItem('PricePackages', 'Pages.Administration.PricePackages', 'flaticon-more', '/app/admin/sales/pricePackages'),
+            
             new AppMenuItem('Products', 'Pages.Administration.Products', 'flaticon-more', '/app/admin/sales/products'),
             
             new AppMenuItem('Simulators', 'Pages.Administration.Simulators', 'flaticon-more', '/app/admin/resources/simulators'),

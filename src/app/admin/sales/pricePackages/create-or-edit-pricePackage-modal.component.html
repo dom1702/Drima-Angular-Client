@@ -1,0 +1,116 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #pricePackageForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="pricePackage.id">{{l("EditPricePackage")}}</span>
+                        <span *ngIf="!pricePackage.id">{{l("CreateNewPricePackage")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="PricePackage_Name">{{l("Name")}} *</label>
+                        <input type="text" id="PricePackage_Name" class="form-control" [(ngModel)]="pricePackage.name" name="Name"     required/>
+                    </div>
+					
+                    <!-- START -->
+                    <br/>
+                    <div [hidden]="!isEdit" class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                        <div class="primeng-datatable-container col-12"
+                            [busyIf]="primengTableHelper.isLoading">
+                            <p-table #dataTableProducts
+                                        (onLazyLoad)="updateProducts($event)"
+                                        [value]="primengTableHelper.records"
+                                        rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                        [paginator]="false"
+                                        [lazy]="true"
+                                        [scrollable]="true"
+                                        ScrollWidth="100%"
+                                        [responsive]="primengTableHelper.isResponsive"
+                                        [resizableColumns]="primengTableHelper.resizableColumns">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 130px" [hidden]="!isGrantedAny('Pages.Administration.PricePackages.Edit', 'Pages.Administration.PricePackages.Delete')">{{l('Actions')}}</th>
+                                        <th style="width: 100px" pSortableColumn="id">
+                                            {{l('Id')}}
+                                            <p-sortIcon field="id"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="firstName">
+                                            {{l('ProductName')}}
+                                            <p-sortIcon field="firstName"></p-sortIcon>
+                                        </th>
+
+                                    </tr>
+                                </ng-template>                           
+                                <ng-template pTemplate="body" let-record="$implicit">
+                                    <tr>
+                                        <td style="width: 130px"
+                                            [hidden]="!isGrantedAny('Pages.Administration.PricePackages.Edit', 'Pages.Administration.PricePackages.Delete')">
+                                            
+                                            <div class="input-group">
+                                                <div class="input-group-append">
+                                                    <button type="button"  class="btn btn-danger btn-icon" (click)="openProductViewModal(record.id)" aria-label="Close"><i class="fa fa-user"></i></button>
+                                                </div> <div class="input-group-prepend">
+                                                    <button type="button"  class="btn btn-danger btn-icon" (click)="deleteProductFromPricePackage(record.id)" aria-label="Close"><i class="fa fa-times"></i></button>
+                                                </div>
+                                            </div>
+                                            
+                                        </td>
+
+                                        <td style="width:100px">
+                                                <span class="ui-column-title"> {{l('Id')}}</span>
+                                                {{record.id}}
+                                            </td>
+                                        <td style="width:150px">
+                                                <span class="ui-column-title"> {{l('ProductName')}}</span>
+                                                {{record.productName}}
+                                            </td>
+
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                                {{l('NoData')}}
+                            </div>
+                            <div class="primeng-paging-container">
+                                <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                            #paginatorProducts
+                                            (onPageChange)="updateProducts($event)"
+                                            [totalRecords]="primengTableHelper.totalRecordsCount"
+                                            [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                                </p-paginator>
+                                <span class="total-records-count">
+                                    {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+                                </span>
+                            </div>
+                        </div>
+                    <!--<Primeng-Datatable-End>-->
+                    </div>
+
+                    <br/>
+                    <div [hidden]="!isEdit" class="form-group">
+                        <button class="btn btn-primary blue" (click)="openSelectProductModal()" type="button"><i class="fa fa-search"></i> {{l("AddProduct")}}</button>
+                    </div>
+                    <div [hidden]="isEdit">
+                        <label >To add products to this new price package, first click save and then open the edit window.</label>
+                    </div>
+                <!--END-->
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!pricePackageForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <viewProductModal #viewProductModal></viewProductModal>
+    <pricePackage-productLookupTableModal #productLookupTableModal (modalSave)="getNewProductId()"></pricePackage-productLookupTableModal>
+</div>

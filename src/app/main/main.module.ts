@@ -15,7 +15,6 @@ import { CreateOrEditTheoryLessonModalComponent } from './lessons/theoryLessons/
 import { StudentsComponent } from './students/students/students.component';
 import { ViewStudentModalComponent } from './students/students/view-student-modal.component';
 import { CreateOrEditStudentModalComponent } from './students/students/create-or-edit-student-modal.component';
-import {LicenseClassLookupTableModalComponent} from './students/students/licenseClass-lookup-table-modal.component';
 
 import { DrivingLessonTopicLookupTableModalComponent } from './lessons/drivingLessons/drivingLessonTopic-lookup-table-modal.component';
 
@@ -54,6 +53,11 @@ import { EditStudentsTheoryLessonModalComponent } from './lessons/theoryLessons/
 import { InvoiceStudentLookupTableModalComponent } from './sales/studentInvoices/invoice-student-lookup-table-modal.component';
 import { InvoiceProductLookupTableModalComponent } from './sales/studentInvoices/invoice-product-lookup-table-modal.component';
 import { DLLicenseClassLookupTableModalComponent } from '@app/shared/common/lookup/drivingLesson-licenseClass-lookup-table-modal.component';
+import { PricePackageLookupTableModalComponent } from './students/students/pricePackage-lookup-table-modal.component';
+import { StudentsOverviewComponent } from './students/students/students-overview.component';
+import { StudentsOverviewOverviewComponent } from './students/students/students-overview-overview.component';
+import { StudentsOverviewPricePackageComponent } from './students/students/students-overview-pricePackage.component';
+import { StudentsOverviewInvoicesComponent } from './students/students/students-overview-invoices.component';
 
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
@@ -71,7 +75,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       FormsModule,
       ReactiveFormsModule,
       ModalModule,
-      TabsModule,
+      TabsModule.forRoot(),
       TooltipModule,
       AppCommonModule,
       UtilsModule,
@@ -84,7 +88,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       NgMultiSelectDropDownModule.forRoot(),
       ScheduleAllModule,
       NumericTextBoxModule,
-      TimepickerModule.forRoot()
+      TimepickerModule.forRoot(),
     ],
     declarations: 
     [
@@ -98,7 +102,6 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       ViewDrivingLessonModalComponent,		
       CreateOrEditDrivingLessonModalComponent,
       DrivingLessonTopicLookupTableModalComponent,
-      LicenseClassLookupTableModalComponent,
       DashboardComponent,
       DLStudentLookupTableModalComponent,
       TLStudentLookupTableModalComponent,
@@ -111,7 +114,13 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       CreateStudentInvoiceComponent,
       InvoiceStudentLookupTableModalComponent,
       InvoiceProductLookupTableModalComponent,
-      DLLicenseClassLookupTableModalComponent
+      DLLicenseClassLookupTableModalComponent,
+      PricePackageLookupTableModalComponent,
+      StudentsOverviewComponent,
+      StudentsOverviewOverviewComponent,
+      StudentsOverviewPricePackageComponent,
+      StudentsOverviewInvoicesComponent,
+      
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

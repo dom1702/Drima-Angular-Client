@@ -1,5 +1,5 @@
 import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Http } from '@angular/http';
 import { StudentsServiceProxy, StudentDto  } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
@@ -53,7 +53,8 @@ export class StudentsComponent extends AppComponentBase {
         private _notifyService: NotifyService,
         private _tokenAuth: TokenAuthServiceProxy,
         private _activatedRoute: ActivatedRoute,
-        private _fileDownloadService: FileDownloadService
+        private _fileDownloadService: FileDownloadService,
+        private _router: Router
     ) {
         super(injector);
     }
@@ -127,6 +128,10 @@ export class StudentsComponent extends AppComponentBase {
                 }
             }
         );
+    }
+
+    goToOverview(id: number): void{
+        this._router.navigate(['app/main/students/students/students-overview', { id: id }]);
     }
 
     formatClassesString(classesString : string) : string{

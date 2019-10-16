@@ -7,6 +7,7 @@ import { TheoryLessonsComponent } from './lessons/theoryLessons/theoryLessons.co
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {SchedulerComponent } from './scheduler/scheduler.component';
 import { CreateStudentInvoiceComponent } from './sales/studentInvoices/create-studentInvoice.component';
+import { StudentsOverviewComponent } from './students/students/students-overview.component';
 
 @NgModule({
     imports: [
@@ -21,6 +22,7 @@ import { CreateStudentInvoiceComponent } from './sales/studentInvoices/create-st
                     { path: 'dashboard', component: DashboardComponent, data: { permission: 'Pages.Tenant.Dashboard' } },
                     { path: 'scheduler', component: SchedulerComponent },
                     { path: 'sales/studentInvoices/create-studentInvoice', component: CreateStudentInvoiceComponent},
+                    { path: 'students/students/students-overview', component: StudentsOverviewComponent }
                 ]
             }
         ])

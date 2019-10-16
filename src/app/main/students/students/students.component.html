@@ -163,6 +163,10 @@
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
                                             </button>
 												<ul class="dropdown-menu"  *dropdownMenu>
+                                                <li>
+                                                    <a href="javascript:;"
+                                                        (click)="goToOverview(record.student.id)">{{l('Overview')}}</a>
+                                                </li>
 												<li>
 													<a href="javascript:;"
 														(click)="viewStudentModal.show(record)">{{l('View')}}</a>

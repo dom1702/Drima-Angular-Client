@@ -56,7 +56,7 @@ export class PricePackageProductLookupTableModalComponent extends AppComponentBa
 
         this.primengTableHelper.showLoadingIndicator();
 
-        this._pricePackagesServiceProxy.getAllStudentForLookupTable(
+        this._pricePackagesServiceProxy.getAllProductsForLookupTable(
             this.pricePackageId,
             this.filterText,
             this.primengTableHelper.getSorting(this.dataTable),

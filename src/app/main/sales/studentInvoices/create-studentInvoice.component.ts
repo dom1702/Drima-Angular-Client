@@ -1,6 +1,6 @@
 import { Component, ViewChild, Injector, Output, EventEmitter, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { StudentInvoicesServiceProxy, CreateOrEditStudentInvoiceDto, StudentsServiceProxy, ProductsServiceProxy, StudentInvoiceItemDto } from '@shared/service-proxies/service-proxies';
+import { StudentInvoicesServiceProxy, CreateOrEditStudentInvoiceDto, StudentsServiceProxy, ProductsServiceProxy, StudentInvoiceItemDto, PricePackagesServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
@@ -38,6 +38,7 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
   studentLastName = '';
 
   studentId : number;
+  studentPricePackageId : number;
   studentInvoiceId? : number;
   studentSet: boolean;
   isEdit: boolean;
@@ -58,6 +59,7 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
     private _studentInvoicesServiceProxy: StudentInvoicesServiceProxy,
     private _studentsServiceProxy: StudentsServiceProxy,
     private _productsServiceProxy: ProductsServiceProxy,
+    private _pricePackagesServiceProxy: PricePackagesServiceProxy,
     private _fileDownloadService: FileDownloadService,
     private _router: Router,
     private _route: ActivatedRoute,
@@ -537,9 +539,40 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
         this.primengTableHelper.hideLoadingIndicator();
 
       });
+  }
 
+  addPricePackage()
+  {
+    this._pricePackagesServiceProxy.getPricePackageForView(this.studentPricePackageId)
+      .subscribe(result => {
 
+        this.unsubscribeToItemFormValueChanges();
 
+        var control = <FormArray>this.itemForm.get('items');
+
+        for(var i = 0; i < result.pricePackage.products.length; i++)
+        {
+          this.addItem();
+
+          control.at(control.length - 1).get('product').setValue(result.pricePackage.products[i].productName);
+          control.at(control.length - 1).get('qty').setValue(result.pricePackage.products[i].quantity);
+          control.at(control.length - 1).get('priceAfterVat').setValue(result.pricePackage.products[i].priceAfterVat);
+          control.at(control.length - 1).get('itemVat').setValue(result.pricePackage.products[i].itemVat);
+
+          var priceBeforeVatValue = result.pricePackage.products[i].priceAfterVat / (100 + result.pricePackage.products[i].itemVat) * 100;
+          control.at(control.length - 1).get('priceBeforeVat').setValue(priceBeforeVatValue);
+
+          control.at(control.length - 1).get('sum').setValue(result.pricePackage.products[i].quantity * result.pricePackage.products[i].priceAfterVat);
+        }
+        this.subscribeToItemFormValueChanges();
+
+        this.updateTotalBeforeVat();
+        this.updateTotalVat();
+        this.updateTotalAfterVat();
+
+        this.primengTableHelper.hideLoadingIndicator();
+
+      });
   }
 
   setStudentIdNull() {
@@ -573,6 +606,8 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
     this._studentsServiceProxy.getStudentForView(this.studentInvoice.studentId)
       .subscribe(result => {
+
+        this.studentPricePackageId = result.student.pricePackageId;
 
         this.form.get('recipientFirstName').setValue(result.student.firstName);
         this.form.get('recipientLastName').setValue(result.student.lastName);

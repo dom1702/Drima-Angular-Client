@@ -1,0 +1,62 @@
+<h5>General</h5>
+<div class="m--margin-top-20">
+    <div *ngIf="student" class="row">
+
+        <div class="col-6 mb-3">
+            <h6>{{l("FirstName")}} :</h6>
+            {{student.firstName}}
+        </div>
+        <div class="col-6 mb-3">
+            <h6>{{l("LastName")}} :</h6>
+            {{student.lastName}}
+        </div>
+        <div class="col-6 mb-3">
+            <h6>{{l("Email")}} :</h6>
+            {{student.email}}
+        </div>
+        <div class="col-6 mb-3">
+            <h6>{{l("PhoneNumber")}} :</h6>
+            {{student.phoneNumber}}
+        </div>
+
+        <div class="col-6 mb-3">
+            <h6>{{l("Class")}} :</h6>
+            {{licenseClasses}}
+        </div>
+    </div>
+</div>
+
+<h5 class="m--margin-top-30">Address</h5>
+
+<div class="m--margin-top-20">
+    <div *ngIf="student" class="row">
+
+        <div class="col-6 mb-3">
+            <h6>{{l("Street")}} :</h6>
+            {{student.street}}
+        </div>
+
+        <div class="col-6 mb-3">
+            <h6>{{l("ZipCode")}} :</h6>
+            {{student.zipCode}}
+        </div>
+
+        <div class="col-6 mb-3">
+            <h6>{{l("City")}} :</h6>
+            {{student.city}}
+        </div>
+
+    </div>
+</div>
+
+<div class="m--margin-top-30">
+    <div class="m--align-right">
+
+
+        <button type="button" (click)="editStudent()" class="btn btn-primary mr-5">Edit student data</button>
+
+
+    </div>
+</div>
+
+<createOrEditStudentModal #createOrEditStudentModal (modalSave)="updateStudent()"></createOrEditStudentModal>

@@ -1,10 +1,10 @@
 import { Component, ViewChild, Injector, Output, EventEmitter, OnInit} from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
-import { StudentsServiceProxy, CreateOrEditStudentDto, LicenseClassDto, LicenseClassesServiceProxy } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, CreateOrEditStudentDto, PricePackagesServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
-import { LicenseClassLookupTableModalComponent } from './licenseClass-lookup-table-modal.component';
+import { PricePackageLookupTableModalComponent } from './pricePackage-lookup-table-modal.component';
 
 
 @Component({
@@ -14,7 +14,7 @@ import { LicenseClassLookupTableModalComponent } from './licenseClass-lookup-tab
 export class CreateOrEditStudentModalComponent extends AppComponentBase implements OnInit {
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
-    @ViewChild('licenseClassLookupTableModal') licenseClassLookupTableModal: LicenseClassLookupTableModalComponent;
+    @ViewChild('pricePackageLookupTableModal') pricePackageLookupTableModal: PricePackageLookupTableModalComponent;
 
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
@@ -33,11 +33,12 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
     placeholder = 'None';
 
+    pricePackageName = '';
 
     constructor(
         injector: Injector,
         private _studentsServiceProxy: StudentsServiceProxy,
-        private _licenseClassServiceProxy : LicenseClassesServiceProxy
+        private _pricePackageServiceProxy : PricePackagesServiceProxy
     ) {
         super(injector);
     }
@@ -68,8 +69,10 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
         if (!studentId) {
             this.student = new CreateOrEditStudentDto();
-            this.student.id = studentId;
+            //this.student.id = 0;
             this.licenseClassClass = null;
+            this.pricePackageName = '';
+            //this.student.pricePackageId = 0;
 
             this.active = true;
             this.updateLicenseClass(false);
@@ -77,10 +80,13 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
         } else {
             this._studentsServiceProxy.getStudentForEdit(studentId).subscribe(result => {
                 this.student = result.student;
+                this.student.id = studentId;
 
                 if (this.student.dateOfBirth) {
 					this.dateOfBirth = this.student.dateOfBirth.toDate();
                 }
+
+                this.pricePackageName = result.pricePackageName;
 
                 this.active = true;
                 this.updateLicenseClass(true);
@@ -168,31 +174,33 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
         else {
             this.student.dateOfBirth = null;
         }
-            this._studentsServiceProxy.createOrEdit(this.student)
-             .pipe(finalize(() => { this.saving = false;}))
-             .subscribe(() => {
-                this.notify.info(this.l('SavedSuccessfully'));
-                this.close();
-                this.modalSave.emit(null);
-             });
+        
+        this._studentsServiceProxy.createOrEdit(this.student)
+            .pipe(finalize(() => { this.saving = false;}))
+            .subscribe(() => {
+            this.notify.info(this.l('SavedSuccessfully'));
+            this.close();
+            this.modalSave.emit(null);
+            });
     }
 
-        openSelectLicenseClassModal() {
-        this.licenseClassLookupTableModal.id = 0;
-        this.licenseClassLookupTableModal.displayName = this.licenseClassClass[0];
-        this.licenseClassLookupTableModal.show();
+    setPricePackageIdNull() {
+        this.student.pricePackageId = null;
+        this.pricePackageName = '';
     }
 
+    openSelectPricePackageModal() {
 
-        setLicenseClassesToAcquireNull() {
-        this.student.licenseClasses = null;
-        this.licenseClassClass = null;
+        this.pricePackageLookupTableModal.id = this.student.pricePackageId;
+        this.pricePackageLookupTableModal.displayName = this.pricePackageName;
+
+        this.pricePackageLookupTableModal.show();
     }
 
+    getNewPricePackageId() {
 
-        getNewLicenseClassesToAcquire() {
-         this.student.licenseClasses = this.licenseClassLookupTableModal[0].id;
-         this.licenseClassClass = this.licenseClassLookupTableModal.displayName;
+        this.student.pricePackageId = this.pricePackageLookupTableModal.id;
+        this.pricePackageName = this.pricePackageLookupTableModal.displayName;
     }
 
 

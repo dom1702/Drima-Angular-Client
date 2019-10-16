@@ -120,6 +120,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { VehicleInstructorLookupTableModalComponent } from './resources/vehicles/vehicle-instructor-lookup-table-modal.component';
 import { OfficeLookupTableModalComponent } from './instructors/instructors/office-lookup-table-modal.component';
 import { PricePackageProductLookupTableModalComponent } from './sales/pricePackages/pricePackage-product-lookup-table-modal.component';
+import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
 
 @NgModule({
     imports: [
@@ -149,7 +150,8 @@ import { PricePackageProductLookupTableModalComponent } from './sales/pricePacka
         CountoModule,
         TextMaskModule,
         ImageCropperModule,
-        NgMultiSelectDropDownModule.forRoot()
+        NgMultiSelectDropDownModule.forRoot(),
+        NumericTextBoxModule
     ],
     declarations: [
 		PricePackagesComponent,

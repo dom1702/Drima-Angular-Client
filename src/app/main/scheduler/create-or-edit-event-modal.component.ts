@@ -64,6 +64,10 @@ export class CreateOrEditEventModalComponent extends AppComponentBase implements
         if (!eventId) {
             this.event = new CreateOrEditAppointmentDto();
             this.event.id = eventId;
+
+            this.endTime = new Date(this.startTime);
+            this.endTime.setHours(this.endTime.getHours() + 1);
+
             this.event.startTime = moment().startOf('day');
             this.event.endTime = moment().startOf('day').add(60);
             // this.drivingLessonTopic = '';
@@ -97,6 +101,9 @@ export class CreateOrEditEventModalComponent extends AppComponentBase implements
 
             //this.drivingLesson.instructors = [];
           
+            this.event.startTime = moment(this.startTime);
+            this.event.endTime = moment(this.endTime);
+
             this.event.startTime.hours(this.startTime.getHours());
             this.event.startTime.minutes(this.startTime.getMinutes());
             this.event.endTime.hours(this.endTime.getHours());
@@ -180,6 +187,22 @@ export class CreateOrEditEventModalComponent extends AppComponentBase implements
 
         //         this.primengTableHelper.hideLoadingIndicator();
         //     });
+    }
+
+    delete(): void{
+        this.message.confirm(
+            '',
+            (isConfirmed) => {
+                if (isConfirmed) {
+                    this._appointmentsServiceProxy.delete(this.event.id)
+                        .subscribe(() => {
+                            this.notify.success(this.l('SuccessfullyDeleted'));
+                            this.close();
+                            this.modalSave.emit(null);
+                        });
+                }
+            }
+        );
     }
 
     close(): void {

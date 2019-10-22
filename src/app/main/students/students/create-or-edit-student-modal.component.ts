@@ -25,13 +25,16 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
     student: CreateOrEditStudentDto = new CreateOrEditStudentDto();
 
     dateOfBirth: Date;
-    licenseClassClass = '';
 
     dropdownList = [];
     selectedItems = [];
     dropdownSettings = {};
-
     placeholder = 'None';
+
+    dropdownListLicenseClassesOwned = [];
+    selectedItemsLicenseClassesOwned = [];
+    dropdownSettingsLicenseClassesOwned = {};
+    placeholderLicenseClassesOwned = 'None';
 
     pricePackageName = '';
 
@@ -45,6 +48,15 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
     ngOnInit() {
         this.dropdownSettings = {
+            singleSelection: false,
+            idField: 'item_id',
+            textField: 'item_text',
+            selectAllText: 'Select All',
+            unSelectAllText: 'Unselect All',
+            allowSearchFilter: false
+        };
+
+        this.dropdownSettingsLicenseClassesOwned = {
             singleSelection: false,
             idField: 'item_id',
             textField: 'item_text',
@@ -69,13 +81,11 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
         if (!studentId) {
             this.student = new CreateOrEditStudentDto();
-            //this.student.id = 0;
-            this.licenseClassClass = null;
             this.pricePackageName = '';
-            //this.student.pricePackageId = 0;
 
             this.active = true;
             this.updateLicenseClass(false);
+            this.updateLicenseClassesOwned(false);
             this.modal.show();
         } else {
             this._studentsServiceProxy.getStudentForEdit(studentId).subscribe(result => {
@@ -90,6 +100,7 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
                 this.active = true;
                 this.updateLicenseClass(true);
+                this.updateLicenseClassesOwned(true);
                 this.modal.show();
             });
         }
@@ -151,14 +162,78 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
             });
     }
 
+    updateLicenseClassesOwned(studentAvailable : boolean ) : void
+    {
+        if (!this.active) {
+            return;
+        }
+
+        this.primengTableHelper.showLoadingIndicator();
+
+        this._studentsServiceProxy.getAllLicenseClassForLookupTable(
+            "",
+            "",
+            0,
+            1000).subscribe(result => {
+
+                // for(var r = 0; r < result.items.length; r++)
+                //     console.log(result.items[r].id);
+    
+                this.dropdownListLicenseClassesOwned = [];
+                this.selectedItemsLicenseClassesOwned = [];
+
+                for (var _i = 0; _i < result.items.length; _i++) 
+                {   
+                    this.dropdownListLicenseClassesOwned.push(
+                    {
+                        item_id: _i, 
+                        item_text: result.items[_i].displayName
+                    });
+                }
+
+                if(studentAvailable)
+                {
+                    for (var item of this.dropdownListLicenseClassesOwned) {
+                        for (var studentClasses of this.student.licenseClassesAlreadyOwned) {
+                            //console.log(item.item_text);
+                            //console.log(studentClasses);
+                            if(item.item_text == studentClasses)
+                            {
+                                //console.log("Add it now");
+                                this.selectedItemsLicenseClassesOwned.push(
+                                    {
+                                        item_id: item.item_id,
+                                        item_text: item.item_text
+                                    }
+                                );
+                            }
+                        }
+                        
+                    }
+
+                    //console.log(this.selectedItems.length);
+                }
+
+                this.primengTableHelper.hideLoadingIndicator();
+            });
+    }
+
     save(): void {
             this.saving = true;
 
         this.student.licenseClasses = [];
+        this.student.licenseClassesAlreadyOwned = [];
 
         for (var licenseClass of this.selectedItems)
         {
             this.student.licenseClasses.push(
+                licenseClass.item_text
+            );
+        }
+
+        for (var licenseClass of this.selectedItemsLicenseClassesOwned)
+        {
+            this.student.licenseClassesAlreadyOwned.push(
                 licenseClass.item_text
             );
         }
@@ -185,6 +260,7 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
     }
 
     setPricePackageIdNull() {
+        console.log("Set to null");
         this.student.pricePackageId = null;
         this.pricePackageName = '';
     }

@@ -18,6 +18,11 @@ import { DateRangePickerInitialValueSetterDirective } from './timing/date-range-
 import { DatePickerInitialValueSetterDirective } from './timing/date-picker-initial-value.directive';
 import { DateTimeService } from './timing/date-time.service';
 import { TimeZoneComboComponent } from './timing/timezone-combo.component';
+import { PricePackageProductLookupTableModalComponent } from './sales/pricePackages/pricePackage-product-lookup-table-modal.component';
+import { ViewPricePackageModalComponent } from './sales/pricePackages/view-pricePackage-modal.component';
+import { CreateOrEditPricePackageModalComponent } from './sales/pricePackages/create-or-edit-pricePackage-modal.component';
+import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
+import { ViewProductModalComponent } from '@app/admin/sales/products/view-product-modal.component';
 
 @NgModule({
     imports: [
@@ -29,7 +34,8 @@ import { TimeZoneComboComponent } from './timing/timezone-combo.component';
         AbpModule,
         CommonModule,
         TableModule,
-        PaginatorModule
+        PaginatorModule,
+        NumericTextBoxModule
     ],
     declarations: [
         TimeZoneComboComponent,
@@ -37,7 +43,11 @@ import { TimeZoneComboComponent } from './timing/timezone-combo.component';
         EntityTypeHistoryModalComponent,
         EntityChangeDetailModalComponent,
         DateRangePickerInitialValueSetterDirective,
-        DatePickerInitialValueSetterDirective
+        DatePickerInitialValueSetterDirective,
+        PricePackageProductLookupTableModalComponent,
+        ViewPricePackageModalComponent,		
+        CreateOrEditPricePackageModalComponent,
+        ViewProductModalComponent
     ],
     exports: [
         TimeZoneComboComponent,
@@ -45,7 +55,11 @@ import { TimeZoneComboComponent } from './timing/timezone-combo.component';
         EntityTypeHistoryModalComponent,
         EntityChangeDetailModalComponent,
         DateRangePickerInitialValueSetterDirective,
-        DatePickerInitialValueSetterDirective
+        DatePickerInitialValueSetterDirective,
+        PricePackageProductLookupTableModalComponent,
+        ViewPricePackageModalComponent,		
+        CreateOrEditPricePackageModalComponent,
+        ViewProductModalComponent
     ],
     providers: [
         DateTimeService,

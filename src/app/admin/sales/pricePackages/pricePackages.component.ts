@@ -4,8 +4,8 @@ import { PricePackagesServiceProxy, PricePackageDto  } from '@shared/service-pro
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
-import { CreateOrEditPricePackageModalComponent } from './create-or-edit-pricePackage-modal.component';
-import { ViewPricePackageModalComponent } from './view-pricePackage-modal.component';
+import { CreateOrEditPricePackageModalComponent } from '../../../shared/common/sales/pricePackages/create-or-edit-pricePackage-modal.component';
+import { ViewPricePackageModalComponent } from '../../../shared/common/sales/pricePackages/view-pricePackage-modal.component';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { Table } from 'primeng/components/table/table';
 import { Paginator } from 'primeng/components/paginator/paginator';

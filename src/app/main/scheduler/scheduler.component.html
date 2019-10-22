@@ -1,5 +1,3 @@
-
-
 <div [@routerTransition]>
     <div class="m-subheader">
         <div class="d-flex align-items-center">
@@ -14,13 +12,34 @@
         </div>
     </div>
     <div class="m-content">
-            <ejs-schedule #scheduleObj [allowDragAndDrop] = 'false' [eventSettings]='eventSettings' [currentView]='currentView'
-             (popupOpen)='onPopupOpen($event)' (cellClick)='onCellClick($event)'
-             (eventClick)='onEventClick($event)' (recordDoubleClick)='Doubleclick($event)'> </ejs-schedule>
+            <div class="m-portlet m-portlet--mobile">
+            <div class="form-group m-form__group">
+                    <div class="m-portlet__body">
+                    <label for="Instructor">{{l("Instructor")}}</label>
+                    <div class="input-group">
+                        <input class="form-control" id="currentInstructorFullName" name="currentInstructorFullName" [(ngModel)]="currentInstructorFullName" type="text" disabled>     
+                        <div class="input-group-append">
+                            <button class="btn btn-primary blue" (click)="openSelectInstructorModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
+                        </div> <div class="input-group-prepend">
+                            <button class="btn btn-danger btn-icon" type="button" (click)="setInstructorNull()"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            <input class="form-control" name="instructorId" [(ngModel)]="instructorId" type="text"  hidden>
+            </div>
+        </div>
+        <ejs-schedule #scheduleObj [allowDragAndDrop]='false' [eventSettings]='eventSettings'
+            [currentView]='currentView' (popupOpen)='onPopupOpen($event)' (cellClick)='onCellClick($event)'
+            (eventClick)='onEventClick($event)' (recordDoubleClick)='Doubleclick($event)'
+            (navigating)='navigating($event)' (actionComplete)='actionComplete($event)'
+            (created)='schedulerCreated($event)' (eventRendered)="onEventRendered($event)"></ejs-schedule>
     </div>
 
-    <!-- <createOrEditDrivingLessonModal #createOrEditDrivingLessonModal (modalSave)="getDrivingLessons()"></createOrEditDrivingLessonModal>
-    <createEventTypeModal #createEventTypeModal (modalSave)="getDrivingLessons()"></createEventTypeModal>
-    <createOrEditTheoryLessonModal #createOrEditTheoryLessonModal (modalSave)="getTheoryLessons()"></createOrEditTheoryLessonModal>
-    <createOrEditEventModal #createOrEditEventModal (modalSave)="getEvents()"></createOrEditEventModal> -->
+    <createOrEditDrivingLessonModal #createOrEditDrivingLessonModal (modalSave)="updateCurrentView()">
+    </createOrEditDrivingLessonModal>
+    <createEventTypeModal #createEventTypeModal></createEventTypeModal>
+    <createOrEditTheoryLessonModal #createOrEditTheoryLessonModal (modalSave)="updateCurrentView()">
+    </createOrEditTheoryLessonModal>
+    <createOrEditEventModal #createOrEditEventModal (modalSave)="updateCurrentView()"></createOrEditEventModal>
+    <instructorLookupTableModal #instructorLookupTableModal (modalSave)="getNewInstructorId()"></instructorLookupTableModal>
 </div>

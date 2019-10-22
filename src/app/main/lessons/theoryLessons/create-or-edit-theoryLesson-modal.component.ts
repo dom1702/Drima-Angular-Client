@@ -62,14 +62,19 @@ export class CreateOrEditTheoryLessonModalComponent extends AppComponentBase imp
 
  
 
-    show(theoryLessonId?: number, event?: LazyLoadEvent): void {
+    show(theoryLessonId?: number, event?: LazyLoadEvent, startTime? : Date): void {
 
         this.theoryLessonId = theoryLessonId;
 
         if (!theoryLessonId) {
             this.theoryLesson = new CreateOrEditTheoryLessonDto();
             this.theoryLesson.id = theoryLessonId;
-            this.theoryLesson.startTime = moment().startOf('day');
+
+            if(startTime != null)
+                this.startTime = startTime;
+            else
+                this.startTime = new Date();
+
             this.licenseClass = '';
 
             this.active = true;
@@ -98,6 +103,7 @@ export class CreateOrEditTheoryLessonModalComponent extends AppComponentBase imp
 
             this.theoryLesson.instructors = [];
 
+            this.theoryLesson.startTime = moment(this.startTime);
             this.theoryLesson.startTime.hours(this.startTime.getHours());
             this.theoryLesson.startTime.minutes(this.startTime.getMinutes());
 

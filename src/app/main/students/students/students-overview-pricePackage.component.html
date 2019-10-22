@@ -44,7 +44,11 @@
 
     </div>
 
+    <div *ngIf="!pricePackage">
+        <h6 style="color:red">No price package assigned yet!</h6>
+    </div>
+
 
 </div>
 
-<createOrEditPricePackageModal #createOrEditPricePackageModal (modalSave)="editPricePackage()"></createOrEditPricePackageModal>
+<createOrEditPricePackageModal #createOrEditPricePackageModal (modalSave)="updatePricePackage()"></createOrEditPricePackageModal>

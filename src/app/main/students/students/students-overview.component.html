@@ -10,7 +10,7 @@
                 </span>
             </div>
             <div class="col-md-6 text-right">
-		
+
             </div>
         </div>
     </div>
@@ -20,16 +20,27 @@
 
                 <tabset>
                     <tab heading={{overviewTabName}} id="tab1">
-                        <students-overview-overview [student]="student" [parentOverview]="this"></students-overview-overview>
+                        <students-overview-overview [student]="student" [parentOverview]="this"
+                            [pricePackageName]="pricePackageName"></students-overview-overview>
                     </tab>
 
                     <tab heading={{pricePackageTabName}}>
-                            <students-overview-pricePackage [student]="student"></students-overview-pricePackage>
+                        <students-overview-pricePackage [student]="student"></students-overview-pricePackage>
                     </tab>
-                    <tab heading={{studentInvoicesTabName}}>Basic content 2</tab>
+                    <tab heading={{studentInvoicesTabName}}>
+                        <students-overview-invoices [student]="student"></students-overview-invoices>
+                    </tab>
                 </tabset>
-				
+
             </div>
         </div>
     </div>
+
+
+    <div class="m--margin-left-20">
+
+        <button type="button" (click)="goBack()" class="btn btn-primary mr-5">Back</button>
+
+    </div>
+
 </div>

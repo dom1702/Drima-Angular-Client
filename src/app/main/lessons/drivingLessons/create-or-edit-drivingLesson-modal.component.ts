@@ -110,6 +110,8 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
             this.drivingLesson.instructors = [];
           
+            //this.drivingLesson.startTime.date(this.startTime.getDay());
+            this.drivingLesson.startTime = moment(this.startTime);
             this.drivingLesson.startTime.hours(this.startTime.getHours());
             this.drivingLesson.startTime.minutes(this.startTime.getMinutes());
             
@@ -252,6 +254,22 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     refreshStudentFullName()
     {
         this.studentFullName = this.studentFirstName + ' ' + this.studentLastName; 
+    }
+
+    delete(): void{
+        this.message.confirm(
+            '',
+            (isConfirmed) => {
+                if (isConfirmed) {
+                    this._drivingLessonsServiceProxy.delete(this.drivingLesson.id)
+                        .subscribe(() => {
+                            this.notify.success(this.l('SuccessfullyDeleted'));
+                            this.close();
+                            this.modalSave.emit(null);
+                        });
+                }
+            }
+        );
     }
 
     close(): void {

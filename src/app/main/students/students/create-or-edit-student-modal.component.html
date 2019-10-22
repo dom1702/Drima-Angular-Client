@@ -15,15 +15,7 @@
                  
 
 					<div class="form-group m-form__group">
-                        <label for="LicenseClassClass">{{l("LicenseClass")}}</label>
-                        <!-- <div class="input-group">
-                            <input class="form-control" id="LicenseClassClass" name="licenseClassClass" [(ngModel)]="licenseClassClass" type="text" disabled>     
-                            <div class="input-group-append">
-                                <button class="btn btn-primary blue" (click)="openSelectLicenseClassModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
-                            </div> <div class="input-group-prepend">
-                                <button class="btn btn-danger" type="button" (click)="setLicenseClassesToAcquireNull()"><i class="fa fa-times"></i></button>
-                            </div>
-						</div> -->
+                        <label>{{l("LicenseClass")}}</label>
 						<ng-multiselect-dropdown
 						[placeholder]="placeholder"
 						[data]="dropdownList"
@@ -34,6 +26,19 @@
 						>
 						</ng-multiselect-dropdown>
 					</div> 
+
+					<div class="form-group m-form__group">
+							<label>{{l("LicenseClassAlreadyOwned")}}</label>
+							<ng-multiselect-dropdown
+							[placeholder]="placeholderLicenseClassesOwned"
+							[data]="dropdownListLicenseClassesOwned"
+							[(ngModel)]="selectedItemsLicenseClassesOwned" [ngModelOptions]="{standalone: true}"
+							[settings]="dropdownSettingsLicenseClassesOwned"
+							(onSelect)="onItemSelect($event)"
+							(onSelectAll)="onSelectAll($event)"
+							>
+							</ng-multiselect-dropdown>
+						</div> 
 					
 					
                     <input class="form-control" name="student.licenseClassesToAcquire" [(ngModel)]="student.licenseClassesToAcquire" type="text"  hidden>

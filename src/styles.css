@@ -11,6 +11,10 @@
 @import '../node_modules/@syncfusion/ej2-angular-schedule/styles/bootstrap4.css';
 @import '../node_modules/@syncfusion/ej2-angular-inputs/styles/bootstrap4.css';
 
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+
 .margin-left-5 {
     margin-left: 5px !important;
 }

@@ -1,7 +1,7 @@
 import { Component, Injector, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
-import { StudentsServiceProxy, StudentDto, PricePackagesServiceProxy, PricePackageDto  } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, StudentDto, PricePackagesServiceProxy, PricePackageDto } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -11,8 +11,8 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { PricePackageLookupTableModalComponent } from './pricePackage-lookup-table-modal.component';
-import {TableModule} from 'primeng/table';
-import { CreateOrEditPricePackageModalComponent } from '@app/admin/sales/pricePackages/create-or-edit-pricePackage-modal.component';
+import { TableModule } from 'primeng/table';
+import { CreateOrEditPricePackageModalComponent } from '@app/shared/common/sales/pricePackages/create-or-edit-pricePackage-modal.component';
 
 @Component({
     selector: 'students-overview-pricePackage',
@@ -26,11 +26,11 @@ export class StudentsOverviewPricePackageComponent extends AppComponentBase {
     // This component is shared between this class and the price package admin part, maybe moving it into a shared folder?
     @ViewChild('createOrEditPricePackageModal') createOrEditPricePackageModal: CreateOrEditPricePackageModalComponent;
 
-    @Input() student : StudentDto;
+    @Input() student: StudentDto;
 
-    pricePackage : PricePackageDto;
+    pricePackage: PricePackageDto;
 
-    pricePackageName : string = 'None';
+    pricePackageName: string = 'None';
 
     constructor(
         injector: Injector,
@@ -39,20 +39,38 @@ export class StudentsOverviewPricePackageComponent extends AppComponentBase {
         private _tokenAuth: TokenAuthServiceProxy,
         private _activatedRoute: ActivatedRoute,
         private _fileDownloadService: FileDownloadService,
-        private _pricePackageServiceProxy : PricePackagesServiceProxy
+        private _pricePackageServiceProxy: PricePackagesServiceProxy
     ) {
         super(injector);
     }
 
     ngOnInit(): void {
-        if(this.student.pricePackageId != null)
-        {
+        if (this.student.pricePackageId != null) {
             this._pricePackageServiceProxy.getPricePackageForView(this.student.pricePackageId).subscribe(result => {
-                
+
                 this.pricePackage = result.pricePackage;
                 this.pricePackageName = result.pricePackage.name;
             });
         }
+    }
+
+    updatePricePackage(pricePackageId?: number) {
+        if (pricePackageId != null) {
+            this._pricePackageServiceProxy.getPricePackageForView(pricePackageId).subscribe(result => {
+
+                this.pricePackage = result.pricePackage;
+                this.pricePackageName = result.pricePackage.name;
+            });
+        }
+        else
+        {
+            this.pricePackage = null;
+            this.pricePackageName = null;
+        }
+    }
+
+    editPricePackage() {
+        this.createOrEditPricePackageModal.show(this.student.pricePackageId, true, false);
     }
 
     setPricePackageIdNull() {

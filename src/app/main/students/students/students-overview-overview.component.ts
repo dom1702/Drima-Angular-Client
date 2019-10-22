@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { CreateOrEditStudentModalComponent } from './create-or-edit-student-modal.component';
 import { StudentsOverviewComponent } from './students-overview.component';
+import { StudentsOverviewPricePackageComponent } from './students-overview-pricePackage.component';
 
 @Component({
     selector: 'students-overview-overview',
@@ -24,9 +25,11 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     @ViewChild('createOrEditStudentModal') createOrEditStudentModal: CreateOrEditStudentModalComponent;
     
     @Input() student : StudentDto;
+    @Input() pricePackageName : string;
     @Input() parentOverview : StudentsOverviewComponent;
 
     licenseClasses = 'None';
+    licenseClassesAlreadyOwned = 'None';
 
     constructor(
         injector: Injector,
@@ -42,6 +45,7 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     ngOnInit(): void {
 
         this.updateLicenseClass();
+        this.updateLicenseClassesAlreadyOwned();
     }
 
     updateLicenseClass() : void 
@@ -58,10 +62,25 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
         }
     }
 
+    updateLicenseClassesAlreadyOwned() : void 
+    {
+        if(this.student.licenseClassesAlreadyOwned == null)
+            return;
+
+        for(var i = 0; i < this.student.licenseClassesAlreadyOwned.length; i++)
+        {
+            if(i == 0)
+                this.licenseClassesAlreadyOwned = this.student.licenseClassesAlreadyOwned[i];
+            else
+                this.licenseClassesAlreadyOwned += ', ' + this.student.licenseClassesAlreadyOwned[i];
+        }
+    }
+
     updateStudent()
     {
         this.parentOverview.UpdateStudentView();
         this.updateLicenseClass();
+        this.updateLicenseClassesAlreadyOwned();
     }
 
     editStudent(): void {

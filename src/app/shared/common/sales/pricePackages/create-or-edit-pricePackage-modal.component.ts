@@ -8,7 +8,7 @@ import { Table } from 'primeng/table';
 import { Paginator, LazyLoadEvent } from 'primeng/primeng';
 import { Subscription } from 'rxjs';
 import { PrimengTableHelper } from '@shared/helpers/PrimengTableHelper';
-import { ViewProductModalComponent } from '../products/view-product-modal.component';
+import { ViewProductModalComponent } from '../../../../admin/sales/products/view-product-modal.component';
 import { PricePackageProductLookupTableModalComponent } from './pricePackage-product-lookup-table-modal.component';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 
@@ -33,6 +33,9 @@ export class CreateOrEditPricePackageModalComponent extends AppComponentBase {
 
     pricePackageId;
 
+    priceEditable : boolean;
+    nameEditable : boolean;
+
     pricePackage: CreateOrEditPricePackageDto = new CreateOrEditPricePackageDto();
 
     primengTableHelper = new PrimengTableHelper();
@@ -51,9 +54,10 @@ export class CreateOrEditPricePackageModalComponent extends AppComponentBase {
     }
 
 
-    show(pricePackageId?: number): void {
+    show(pricePackageId?: number, priceEditable: boolean = false, nameEditable = true): void {
 
-        
+        this.priceEditable = priceEditable;
+        this.nameEditable = nameEditable;
 
         this.itemForm = this.fb.group({
 

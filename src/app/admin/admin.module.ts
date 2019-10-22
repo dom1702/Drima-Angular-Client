@@ -3,11 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
 import { PricePackagesComponent } from './sales/pricePackages/pricePackages.component';
-import { ViewPricePackageModalComponent } from './sales/pricePackages/view-pricePackage-modal.component';
-import { CreateOrEditPricePackageModalComponent } from './sales/pricePackages/create-or-edit-pricePackage-modal.component';
 
 import { ProductsComponent } from './sales/products/products.component';
-import { ViewProductModalComponent } from './sales/products/view-product-modal.component';
+
 import { CreateOrEditProductModalComponent } from './sales/products/create-or-edit-product-modal.component';
 
 import { SimulatorsComponent } from './resources/simulators/simulators.component';
@@ -119,7 +117,6 @@ import { NgxBootstrapDatePickerConfigService } from 'assets/ngx-bootstrap/ngx-bo
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { VehicleInstructorLookupTableModalComponent } from './resources/vehicles/vehicle-instructor-lookup-table-modal.component';
 import { OfficeLookupTableModalComponent } from './instructors/instructors/office-lookup-table-modal.component';
-import { PricePackageProductLookupTableModalComponent } from './sales/pricePackages/pricePackage-product-lookup-table-modal.component';
 import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
 
 @NgModule({
@@ -155,9 +152,9 @@ import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
     ],
     declarations: [
 		PricePackagesComponent,
-		ViewPricePackageModalComponent,		CreateOrEditPricePackageModalComponent,
+
 		ProductsComponent,
-		ViewProductModalComponent,		CreateOrEditProductModalComponent,
+		CreateOrEditProductModalComponent,
 		SimulatorsComponent,
 		ViewSimulatorModalComponent,		CreateOrEditSimulatorModalComponent,
     SimulatorOfficeLookupTableModalComponent,
@@ -175,7 +172,6 @@ import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
 		ViewTheoryLessonTopicModalComponent,		CreateOrEditTheoryLessonTopicModalComponent,
 		LicenseClassesComponent,
     ViewLicenseClassModalComponent,		CreateOrEditLicenseClassModalComponent,
-    PricePackageProductLookupTableModalComponent,
         UsersComponent,
         PermissionComboComponent,
         RoleComboComponent,

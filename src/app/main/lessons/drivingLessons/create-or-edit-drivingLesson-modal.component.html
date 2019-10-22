@@ -109,6 +109,7 @@
                 </div>
                 <div class="modal-footer">
                     <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button *ngIf="drivingLesson.id" [disabled]="!isGranted('Pages.DrivingLessons.Delete')" type="button" class="btn btn-danger" (click)="delete()">{{l("Delete")}}</button>
                     <button type="submit" class="btn btn-primary blue" [disabled]="!drivingLessonForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
                 </div>
             </form>

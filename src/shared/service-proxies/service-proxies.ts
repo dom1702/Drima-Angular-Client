@@ -640,6 +640,70 @@ export class AppointmentsServiceProxy {
     }
 
     /**
+     * @param personId (optional) 
+     * @param startTimeFilter (optional) 
+     * @param endTimeFilter (optional) 
+     * @return Success
+     */
+    getAllAppointmentsOfInstructor(personId: number | null | undefined, startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined): Observable<AppointmentDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Appointments/GetAllAppointmentsOfInstructor?";
+        if (personId !== undefined)
+            url_ += "PersonId=" + encodeURIComponent("" + personId) + "&"; 
+        if (startTimeFilter !== undefined)
+            url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
+        if (endTimeFilter !== undefined)
+            url_ += "EndTimeFilter=" + encodeURIComponent(endTimeFilter ? "" + endTimeFilter.toJSON() : "") + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllAppointmentsOfInstructor(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllAppointmentsOfInstructor(<any>response_);
+                } catch (e) {
+                    return <Observable<AppointmentDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AppointmentDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllAppointmentsOfInstructor(response: HttpResponseBase): Observable<AppointmentDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(AppointmentDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AppointmentDto[]>(<any>null);
+    }
+
+    /**
      * @param id (optional) 
      * @return Success
      */
@@ -4906,6 +4970,69 @@ export class InstructorsServiceProxy {
             }));
         }
         return _observableOf<PagedResultDtoOfInstructorOfficeLookupTableDto>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfAllInstructorsForLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/Instructors/GetAllForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfAllInstructorsForLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfAllInstructorsForLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfAllInstructorsForLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfAllInstructorsForLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfAllInstructorsForLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfAllInstructorsForLookupTableDto>(<any>null);
     }
 }
 
@@ -11235,6 +11362,64 @@ export class StudentInvoicesServiceProxy {
             }));
         }
         return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getAllInvoicesByStudentId(id: number | null | undefined): Observable<StudentInvoiceDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/StudentInvoices/GetAllInvoicesByStudentId?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllInvoicesByStudentId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllInvoicesByStudentId(<any>response_);
+                } catch (e) {
+                    return <Observable<StudentInvoiceDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<StudentInvoiceDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllInvoicesByStudentId(response: HttpResponseBase): Observable<StudentInvoiceDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(StudentInvoiceDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<StudentInvoiceDto[]>(<any>null);
     }
 }
 
@@ -22121,6 +22306,98 @@ export interface IInstructorOfficeLookupTableDto {
     name: string | undefined;
 }
 
+export class PagedResultDtoOfAllInstructorsForLookupTableDto implements IPagedResultDtoOfAllInstructorsForLookupTableDto {
+    totalCount!: number | undefined;
+    items!: AllInstructorsForLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfAllInstructorsForLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(AllInstructorsForLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfAllInstructorsForLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfAllInstructorsForLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfAllInstructorsForLookupTableDto {
+    totalCount: number | undefined;
+    items: AllInstructorsForLookupTableDto[] | undefined;
+}
+
+export class AllInstructorsForLookupTableDto implements IAllInstructorsForLookupTableDto {
+    id!: number | undefined;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+
+    constructor(data?: IAllInstructorsForLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+        }
+    }
+
+    static fromJS(data: any): AllInstructorsForLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AllInstructorsForLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        return data; 
+    }
+}
+
+export interface IAllInstructorsForLookupTableDto {
+    id: number | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+}
+
 export class InvoiceDto implements IInvoiceDto {
     amount!: number | undefined;
     editionDisplayName!: string | undefined;
@@ -27608,6 +27885,8 @@ export class StudentInvoiceDto implements IStudentInvoiceDto {
     totalAfterVat!: number | undefined;
     dateDue!: moment.Moment | undefined;
     pdfFileCreated!: boolean | undefined;
+    studentId!: number | undefined;
+    items!: StudentInvoiceItemDto[] | undefined;
     id!: number | undefined;
 
     constructor(data?: IStudentInvoiceDto) {
@@ -27629,6 +27908,12 @@ export class StudentInvoiceDto implements IStudentInvoiceDto {
             this.totalAfterVat = data["totalAfterVat"];
             this.dateDue = data["dateDue"] ? moment(data["dateDue"].toString()) : <any>undefined;
             this.pdfFileCreated = data["pdfFileCreated"];
+            this.studentId = data["studentId"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(StudentInvoiceItemDto.fromJS(item));
+            }
             this.id = data["id"];
         }
     }
@@ -27650,6 +27935,12 @@ export class StudentInvoiceDto implements IStudentInvoiceDto {
         data["totalAfterVat"] = this.totalAfterVat;
         data["dateDue"] = this.dateDue ? this.dateDue.toISOString() : <any>undefined;
         data["pdfFileCreated"] = this.pdfFileCreated;
+        data["studentId"] = this.studentId;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -27664,7 +27955,77 @@ export interface IStudentInvoiceDto {
     totalAfterVat: number | undefined;
     dateDue: moment.Moment | undefined;
     pdfFileCreated: boolean | undefined;
+    studentId: number | undefined;
+    items: StudentInvoiceItemDto[] | undefined;
     id: number | undefined;
+}
+
+export class StudentInvoiceItemDto implements IStudentInvoiceItemDto {
+    productId!: number | undefined;
+    productName!: string | undefined;
+    description!: string | undefined;
+    quantity!: number | undefined;
+    priceBeforeVat!: number | undefined;
+    itemVat!: number | undefined;
+    discount!: number | undefined;
+    priceAfterVat!: number | undefined;
+    sumIncludingVat!: number | undefined;
+
+    constructor(data?: IStudentInvoiceItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.productId = data["productId"];
+            this.productName = data["productName"];
+            this.description = data["description"];
+            this.quantity = data["quantity"];
+            this.priceBeforeVat = data["priceBeforeVat"];
+            this.itemVat = data["itemVat"];
+            this.discount = data["discount"];
+            this.priceAfterVat = data["priceAfterVat"];
+            this.sumIncludingVat = data["sumIncludingVat"];
+        }
+    }
+
+    static fromJS(data: any): StudentInvoiceItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentInvoiceItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["productId"] = this.productId;
+        data["productName"] = this.productName;
+        data["description"] = this.description;
+        data["quantity"] = this.quantity;
+        data["priceBeforeVat"] = this.priceBeforeVat;
+        data["itemVat"] = this.itemVat;
+        data["discount"] = this.discount;
+        data["priceAfterVat"] = this.priceAfterVat;
+        data["sumIncludingVat"] = this.sumIncludingVat;
+        return data; 
+    }
+}
+
+export interface IStudentInvoiceItemDto {
+    productId: number | undefined;
+    productName: string | undefined;
+    description: string | undefined;
+    quantity: number | undefined;
+    priceBeforeVat: number | undefined;
+    itemVat: number | undefined;
+    discount: number | undefined;
+    priceAfterVat: number | undefined;
+    sumIncludingVat: number | undefined;
 }
 
 export class GetStudentInvoiceForEditOutput implements IGetStudentInvoiceForEditOutput {
@@ -27881,74 +28242,6 @@ export interface ICreateOrEditStudentInvoiceDto {
     text2: string | undefined;
     items: StudentInvoiceItemDto[] | undefined;
     id: number | undefined;
-}
-
-export class StudentInvoiceItemDto implements IStudentInvoiceItemDto {
-    productId!: number | undefined;
-    productName!: string | undefined;
-    description!: string | undefined;
-    quantity!: number | undefined;
-    priceBeforeVat!: number | undefined;
-    itemVat!: number | undefined;
-    discount!: number | undefined;
-    priceAfterVat!: number | undefined;
-    sumIncludingVat!: number | undefined;
-
-    constructor(data?: IStudentInvoiceItemDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.productId = data["productId"];
-            this.productName = data["productName"];
-            this.description = data["description"];
-            this.quantity = data["quantity"];
-            this.priceBeforeVat = data["priceBeforeVat"];
-            this.itemVat = data["itemVat"];
-            this.discount = data["discount"];
-            this.priceAfterVat = data["priceAfterVat"];
-            this.sumIncludingVat = data["sumIncludingVat"];
-        }
-    }
-
-    static fromJS(data: any): StudentInvoiceItemDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new StudentInvoiceItemDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["productId"] = this.productId;
-        data["productName"] = this.productName;
-        data["description"] = this.description;
-        data["quantity"] = this.quantity;
-        data["priceBeforeVat"] = this.priceBeforeVat;
-        data["itemVat"] = this.itemVat;
-        data["discount"] = this.discount;
-        data["priceAfterVat"] = this.priceAfterVat;
-        data["sumIncludingVat"] = this.sumIncludingVat;
-        return data; 
-    }
-}
-
-export interface IStudentInvoiceItemDto {
-    productId: number | undefined;
-    productName: string | undefined;
-    description: string | undefined;
-    quantity: number | undefined;
-    priceBeforeVat: number | undefined;
-    itemVat: number | undefined;
-    discount: number | undefined;
-    priceAfterVat: number | undefined;
-    sumIncludingVat: number | undefined;
 }
 
 export class PagedResultDtoOfStudentInvoiceStudentLookupTableDto implements IPagedResultDtoOfStudentInvoiceStudentLookupTableDto {
@@ -28186,6 +28479,7 @@ export interface IPagedResultDtoOfGetStudentForViewDto {
 export class GetStudentForViewDto implements IGetStudentForViewDto {
     student!: StudentDto | undefined;
     licenseClasses!: string[] | undefined;
+    pricePackageName!: string | undefined;
 
     constructor(data?: IGetStudentForViewDto) {
         if (data) {
@@ -28204,6 +28498,7 @@ export class GetStudentForViewDto implements IGetStudentForViewDto {
                 for (let item of data["licenseClasses"])
                     this.licenseClasses!.push(item);
             }
+            this.pricePackageName = data["pricePackageName"];
         }
     }
 
@@ -28222,6 +28517,7 @@ export class GetStudentForViewDto implements IGetStudentForViewDto {
             for (let item of this.licenseClasses)
                 data["licenseClasses"].push(item);
         }
+        data["pricePackageName"] = this.pricePackageName;
         return data; 
     }
 }
@@ -28229,6 +28525,7 @@ export class GetStudentForViewDto implements IGetStudentForViewDto {
 export interface IGetStudentForViewDto {
     student: StudentDto | undefined;
     licenseClasses: string[] | undefined;
+    pricePackageName: string | undefined;
 }
 
 export class StudentDto implements IStudentDto {
@@ -28243,6 +28540,7 @@ export class StudentDto implements IStudentDto {
     state!: string | undefined;
     country!: string | undefined;
     licenseClasses!: string[] | undefined;
+    licenseClassesAlreadyOwned!: string[] | undefined;
     pricePackageId!: number | undefined;
     id!: number | undefined;
 
@@ -28271,6 +28569,11 @@ export class StudentDto implements IStudentDto {
                 this.licenseClasses = [] as any;
                 for (let item of data["licenseClasses"])
                     this.licenseClasses!.push(item);
+            }
+            if (data["licenseClassesAlreadyOwned"] && data["licenseClassesAlreadyOwned"].constructor === Array) {
+                this.licenseClassesAlreadyOwned = [] as any;
+                for (let item of data["licenseClassesAlreadyOwned"])
+                    this.licenseClassesAlreadyOwned!.push(item);
             }
             this.pricePackageId = data["pricePackageId"];
             this.id = data["id"];
@@ -28301,6 +28604,11 @@ export class StudentDto implements IStudentDto {
             for (let item of this.licenseClasses)
                 data["licenseClasses"].push(item);
         }
+        if (this.licenseClassesAlreadyOwned && this.licenseClassesAlreadyOwned.constructor === Array) {
+            data["licenseClassesAlreadyOwned"] = [];
+            for (let item of this.licenseClassesAlreadyOwned)
+                data["licenseClassesAlreadyOwned"].push(item);
+        }
         data["pricePackageId"] = this.pricePackageId;
         data["id"] = this.id;
         return data; 
@@ -28319,13 +28627,13 @@ export interface IStudentDto {
     state: string | undefined;
     country: string | undefined;
     licenseClasses: string[] | undefined;
+    licenseClassesAlreadyOwned: string[] | undefined;
     pricePackageId: number | undefined;
     id: number | undefined;
 }
 
 export class GetStudentForEditOutput implements IGetStudentForEditOutput {
     student!: CreateOrEditStudentDto | undefined;
-    licenseClasses!: string[] | undefined;
     pricePackageName!: string | undefined;
 
     constructor(data?: IGetStudentForEditOutput) {
@@ -28340,11 +28648,6 @@ export class GetStudentForEditOutput implements IGetStudentForEditOutput {
     init(data?: any) {
         if (data) {
             this.student = data["student"] ? CreateOrEditStudentDto.fromJS(data["student"]) : <any>undefined;
-            if (data["licenseClasses"] && data["licenseClasses"].constructor === Array) {
-                this.licenseClasses = [] as any;
-                for (let item of data["licenseClasses"])
-                    this.licenseClasses!.push(item);
-            }
             this.pricePackageName = data["pricePackageName"];
         }
     }
@@ -28359,11 +28662,6 @@ export class GetStudentForEditOutput implements IGetStudentForEditOutput {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["student"] = this.student ? this.student.toJSON() : <any>undefined;
-        if (this.licenseClasses && this.licenseClasses.constructor === Array) {
-            data["licenseClasses"] = [];
-            for (let item of this.licenseClasses)
-                data["licenseClasses"].push(item);
-        }
         data["pricePackageName"] = this.pricePackageName;
         return data; 
     }
@@ -28371,7 +28669,6 @@ export class GetStudentForEditOutput implements IGetStudentForEditOutput {
 
 export interface IGetStudentForEditOutput {
     student: CreateOrEditStudentDto | undefined;
-    licenseClasses: string[] | undefined;
     pricePackageName: string | undefined;
 }
 
@@ -28387,6 +28684,7 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
     state!: string | undefined;
     country!: string | undefined;
     licenseClasses!: string[] | undefined;
+    licenseClassesAlreadyOwned!: string[] | undefined;
     pricePackageId!: number | undefined;
     id!: number | undefined;
 
@@ -28415,6 +28713,11 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
                 this.licenseClasses = [] as any;
                 for (let item of data["licenseClasses"])
                     this.licenseClasses!.push(item);
+            }
+            if (data["licenseClassesAlreadyOwned"] && data["licenseClassesAlreadyOwned"].constructor === Array) {
+                this.licenseClassesAlreadyOwned = [] as any;
+                for (let item of data["licenseClassesAlreadyOwned"])
+                    this.licenseClassesAlreadyOwned!.push(item);
             }
             this.pricePackageId = data["pricePackageId"];
             this.id = data["id"];
@@ -28445,6 +28748,11 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
             for (let item of this.licenseClasses)
                 data["licenseClasses"].push(item);
         }
+        if (this.licenseClassesAlreadyOwned && this.licenseClassesAlreadyOwned.constructor === Array) {
+            data["licenseClassesAlreadyOwned"] = [];
+            for (let item of this.licenseClassesAlreadyOwned)
+                data["licenseClassesAlreadyOwned"].push(item);
+        }
         data["pricePackageId"] = this.pricePackageId;
         data["id"] = this.id;
         return data; 
@@ -28463,6 +28771,7 @@ export interface ICreateOrEditStudentDto {
     state: string | undefined;
     country: string | undefined;
     licenseClasses: string[] | undefined;
+    licenseClassesAlreadyOwned: string[] | undefined;
     pricePackageId: number | undefined;
     id: number | undefined;
 }

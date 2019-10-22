@@ -20,9 +20,14 @@
         </div>
 
         <div class="col-6 mb-3">
-            <h6>{{l("Class")}} :</h6>
+            <h6>{{l("Classes")}} :</h6>
             {{licenseClasses}}
         </div>
+
+        <div class="col-6 mb-3">
+                <h6>{{l("ClassesAlreadyOwned")}} :</h6>
+                {{licenseClassesAlreadyOwned}}
+            </div>
     </div>
 </div>
 
@@ -44,6 +49,22 @@
         <div class="col-6 mb-3">
             <h6>{{l("City")}} :</h6>
             {{student.city}}
+        </div>
+
+    </div>
+</div>
+
+<h5 class="m--margin-top-30">PricePackage</h5>
+
+<div class="m--margin-top-20">
+    <div *ngIf="student" class="row">
+
+        <div *ngIf="pricePackageName" class="col-6 mb-3">
+            <h6>{{l("Name")}} :</h6>
+            {{pricePackageName}}
+        </div>
+        <div *ngIf="!pricePackageName" class="col-6 mb-3">
+            <h6 style="color:red">No price package assigned yet!</h6>
         </div>
 
     </div>

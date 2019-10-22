@@ -59,6 +59,9 @@ import { StudentsOverviewOverviewComponent } from './students/students/students-
 import { StudentsOverviewPricePackageComponent } from './students/students/students-overview-pricePackage.component';
 import { StudentsOverviewInvoicesComponent } from './students/students/students-overview-invoices.component';
 
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
+
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -89,6 +92,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       ScheduleAllModule,
       NumericTextBoxModule,
       TimepickerModule.forRoot(),
+      FullCalendarModule 
     ],
     declarations: 
     [
@@ -120,7 +124,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       StudentsOverviewOverviewComponent,
       StudentsOverviewPricePackageComponent,
       StudentsOverviewInvoicesComponent,
-      
+      InstructorLookupTableModalComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

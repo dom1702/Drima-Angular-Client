@@ -173,61 +173,86 @@ export class SchedulerComponent extends AppComponentBase implements OnInit {
 
         this.scheduleObj.showSpinner();
 
-        if(this.instructorId == null)
-        {
-            this._appointmentsServiceProxy.getAll(
-                moment(from).startOf('day'),
-                moment(to).startOf('day')).subscribe(result => {
+        this._appointmentsServiceProxy.getAllAppointmentsOfCurrentPerson(
+                    moment(from).startOf('day'),
+                    moment(to).startOf('day')).subscribe(result => {
+    
+                        //console.log(result);
+    
+                        for (var item of result) {
+                            this.data.push(
+                                {
+                                    Id: item.id,
+                                    Subject: item.subject,
+                                    StartTime: item.startTime.toDate(),
+                                    EndTime: item.endTime.toDate(),
+                                    AppointmentType: item.appointmentType.toString()
+                                });
+                        }
+    
+                        //console.log( this.data);
+    
+                        this.scheduleObj.refresh();
+    
+                        this.scheduleObj.hideSpinner();
+    
+                    });
 
-                    //console.log(result);
+        // if(this.instructorId == null)
+        // {
+        //     this._appointmentsServiceProxy.getAll(
+        //         moment(from).startOf('day'),
+        //         moment(to).startOf('day')).subscribe(result => {
 
-                    for (var item of result.items) {
-                        this.data.push(
-                            {
-                                Id: item.id,
-                                Subject: item.subject,
-                                StartTime: item.startTime.toDate(),
-                                EndTime: item.endTime.toDate(),
-                                AppointmentType: item.appointmentType.toString()
-                            });
-                    }
+        //             //console.log(result);
 
-                    //console.log( this.data);
+        //             for (var item of result.items) {
+        //                 this.data.push(
+        //                     {
+        //                         Id: item.id,
+        //                         Subject: item.subject,
+        //                         StartTime: item.startTime.toDate(),
+        //                         EndTime: item.endTime.toDate(),
+        //                         AppointmentType: item.appointmentType.toString()
+        //                     });
+        //             }
 
-                    this.scheduleObj.refresh();
+        //             //console.log( this.data);
 
-                    this.scheduleObj.hideSpinner();
+        //             this.scheduleObj.refresh();
 
-                });
-        }
-        else
-        {
-            this._appointmentsServiceProxy.getAllAppointmentsOfInstructor(
-                this.instructorId,
-                moment(from).startOf('day'),
-                moment(to).startOf('day')).subscribe(result => {
+        //             this.scheduleObj.hideSpinner();
 
-                    //console.log(result);
+        //         });
+        // }
+        // else
+        // {
+        //     this._appointmentsServiceProxy.getAllAppointmentsOfInstructor(
+        //         this.instructorId,
+        //         moment(from).startOf('day'),
+        //         moment(to).startOf('day')).subscribe(result => {
 
-                    for (var item of result) {
-                        this.data.push(
-                            {
-                                Id: item.id,
-                                Subject: item.subject,
-                                StartTime: item.startTime.toDate(),
-                                EndTime: item.endTime.toDate(),
-                                AppointmentType: item.appointmentType.toString()
-                            });
-                    }
+        //             //console.log(result);
 
-                    //console.log( this.data);
+        //             for (var item of result) {
+        //                 this.data.push(
+        //                     {
+        //                         Id: item.id,
+        //                         Subject: item.subject,
+        //                         StartTime: item.startTime.toDate(),
+        //                         EndTime: item.endTime.toDate(),
+        //                         AppointmentType: item.appointmentType.toString()
+        //                     });
+        //             }
 
-                    this.scheduleObj.refresh();
+        //             //console.log( this.data);
 
-                    this.scheduleObj.hideSpinner();
+        //             this.scheduleObj.refresh();
 
-                });
-        }
+        //             this.scheduleObj.hideSpinner();
+
+        //         });
+        // }
     }
 
     updateCurrentView(): void {

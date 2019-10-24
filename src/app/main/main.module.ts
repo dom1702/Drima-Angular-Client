@@ -61,6 +61,7 @@ import { StudentsOverviewInvoicesComponent } from './students/students/students-
 
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
+import { CreateOrEditStudentUserModalComponent } from './students/students/create-or-edit-student-user-modal.component';
 
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
@@ -124,7 +125,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       StudentsOverviewOverviewComponent,
       StudentsOverviewPricePackageComponent,
       StudentsOverviewInvoicesComponent,
-      InstructorLookupTableModalComponent
+      InstructorLookupTableModalComponent,
+      CreateOrEditStudentUserModalComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

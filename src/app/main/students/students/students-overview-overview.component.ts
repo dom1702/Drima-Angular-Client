@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { CreateOrEditStudentModalComponent } from './create-or-edit-student-modal.component';
 import { StudentsOverviewComponent } from './students-overview.component';
 import { StudentsOverviewPricePackageComponent } from './students-overview-pricePackage.component';
+import { CreateOrEditStudentUserModalComponent } from './create-or-edit-student-user-modal.component';
 
 @Component({
     selector: 'students-overview-overview',
@@ -23,6 +24,7 @@ import { StudentsOverviewPricePackageComponent } from './students-overview-price
 export class StudentsOverviewOverviewComponent extends AppComponentBase {
 
     @ViewChild('createOrEditStudentModal') createOrEditStudentModal: CreateOrEditStudentModalComponent;
+    @ViewChild('createOrEditStudentUserModal') createOrEditStudentUserModal: CreateOrEditStudentUserModalComponent;
     
     @Input() student : StudentDto;
     @Input() pricePackageName : string;
@@ -85,5 +87,9 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
 
     editStudent(): void {
         this.createOrEditStudentModal.show(this.student.id);
+    }
+
+    createUserAccount(): void {
+        this.createOrEditStudentUserModal.show(this.student.lastName, this.student.firstName, this.student.email, this.student);
     }
 }

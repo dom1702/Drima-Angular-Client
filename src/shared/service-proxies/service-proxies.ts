@@ -858,6 +858,67 @@ export class AppointmentsServiceProxy {
         }
         return _observableOf<void>(<any>null);
     }
+
+    /**
+     * @param startTimeFilter (optional) 
+     * @param endTimeFilter (optional) 
+     * @return Success
+     */
+    getAllAppointmentsOfCurrentPerson(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined): Observable<AppointmentDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Appointments/GetAllAppointmentsOfCurrentPerson?";
+        if (startTimeFilter !== undefined)
+            url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
+        if (endTimeFilter !== undefined)
+            url_ += "EndTimeFilter=" + encodeURIComponent(endTimeFilter ? "" + endTimeFilter.toJSON() : "") + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllAppointmentsOfCurrentPerson(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllAppointmentsOfCurrentPerson(<any>response_);
+                } catch (e) {
+                    return <Observable<AppointmentDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AppointmentDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllAppointmentsOfCurrentPerson(response: HttpResponseBase): Observable<AppointmentDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(AppointmentDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AppointmentDto[]>(<any>null);
+    }
 }
 
 @Injectable()
@@ -11951,6 +12012,121 @@ export class StudentsServiceProxy {
             }));
         }
         return _observableOf<PagedResultDtoOfStudentPricePackageLookupTableDto>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllUsersForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfStudentUsersLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/Students/GetAllUsersForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllUsersForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllUsersForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfStudentUsersLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfStudentUsersLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllUsersForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfStudentUsersLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfStudentUsersLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfStudentUsersLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfStudentUsersLookupTableDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    createUserAsync(input: CreateStudentUserInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Students/CreateUserAsync";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateUserAsync(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateUserAsync(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateUserAsync(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
     }
 }
 
@@ -28542,6 +28718,8 @@ export class StudentDto implements IStudentDto {
     licenseClasses!: string[] | undefined;
     licenseClassesAlreadyOwned!: string[] | undefined;
     pricePackageId!: number | undefined;
+    userId!: number | undefined;
+    userName!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: IStudentDto) {
@@ -28576,6 +28754,8 @@ export class StudentDto implements IStudentDto {
                     this.licenseClassesAlreadyOwned!.push(item);
             }
             this.pricePackageId = data["pricePackageId"];
+            this.userId = data["userId"];
+            this.userName = data["userName"];
             this.id = data["id"];
         }
     }
@@ -28610,6 +28790,8 @@ export class StudentDto implements IStudentDto {
                 data["licenseClassesAlreadyOwned"].push(item);
         }
         data["pricePackageId"] = this.pricePackageId;
+        data["userId"] = this.userId;
+        data["userName"] = this.userName;
         data["id"] = this.id;
         return data; 
     }
@@ -28629,6 +28811,8 @@ export interface IStudentDto {
     licenseClasses: string[] | undefined;
     licenseClassesAlreadyOwned: string[] | undefined;
     pricePackageId: number | undefined;
+    userId: number | undefined;
+    userName: string | undefined;
     id: number | undefined;
 }
 
@@ -28950,6 +29134,226 @@ export class StudentPricePackageLookupTableDto implements IStudentPricePackageLo
 export interface IStudentPricePackageLookupTableDto {
     id: number | undefined;
     displayName: string | undefined;
+}
+
+export class PagedResultDtoOfStudentUsersLookupTableDto implements IPagedResultDtoOfStudentUsersLookupTableDto {
+    totalCount!: number | undefined;
+    items!: StudentUsersLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfStudentUsersLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(StudentUsersLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfStudentUsersLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfStudentUsersLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfStudentUsersLookupTableDto {
+    totalCount: number | undefined;
+    items: StudentUsersLookupTableDto[] | undefined;
+}
+
+export class StudentUsersLookupTableDto implements IStudentUsersLookupTableDto {
+    id!: number | undefined;
+    displayName!: string | undefined;
+
+    constructor(data?: IStudentUsersLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.displayName = data["displayName"];
+        }
+    }
+
+    static fromJS(data: any): StudentUsersLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentUsersLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["displayName"] = this.displayName;
+        return data; 
+    }
+}
+
+export interface IStudentUsersLookupTableDto {
+    id: number | undefined;
+    displayName: string | undefined;
+}
+
+export class CreateStudentUserInput implements ICreateStudentUserInput {
+    user!: UserEditDto;
+    student!: StudentDto;
+    sendActivationEmail!: boolean | undefined;
+    setRandomPassword!: boolean | undefined;
+
+    constructor(data?: ICreateStudentUserInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.user = new UserEditDto();
+            this.student = new StudentDto();
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.user = data["user"] ? UserEditDto.fromJS(data["user"]) : new UserEditDto();
+            this.student = data["student"] ? StudentDto.fromJS(data["student"]) : new StudentDto();
+            this.sendActivationEmail = data["sendActivationEmail"];
+            this.setRandomPassword = data["setRandomPassword"];
+        }
+    }
+
+    static fromJS(data: any): CreateStudentUserInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateStudentUserInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["student"] = this.student ? this.student.toJSON() : <any>undefined;
+        data["sendActivationEmail"] = this.sendActivationEmail;
+        data["setRandomPassword"] = this.setRandomPassword;
+        return data; 
+    }
+}
+
+export interface ICreateStudentUserInput {
+    user: UserEditDto;
+    student: StudentDto;
+    sendActivationEmail: boolean | undefined;
+    setRandomPassword: boolean | undefined;
+}
+
+export class UserEditDto implements IUserEditDto {
+    id!: number | undefined;
+    name!: string;
+    surname!: string;
+    userName!: string;
+    emailAddress!: string;
+    phoneNumber!: string | undefined;
+    password!: string | undefined;
+    isActive!: boolean | undefined;
+    shouldChangePasswordOnNextLogin!: boolean | undefined;
+    isTwoFactorEnabled!: boolean | undefined;
+    isLockoutEnabled!: boolean | undefined;
+    personId!: number | undefined;
+
+    constructor(data?: IUserEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.name = data["name"];
+            this.surname = data["surname"];
+            this.userName = data["userName"];
+            this.emailAddress = data["emailAddress"];
+            this.phoneNumber = data["phoneNumber"];
+            this.password = data["password"];
+            this.isActive = data["isActive"];
+            this.shouldChangePasswordOnNextLogin = data["shouldChangePasswordOnNextLogin"];
+            this.isTwoFactorEnabled = data["isTwoFactorEnabled"];
+            this.isLockoutEnabled = data["isLockoutEnabled"];
+            this.personId = data["personId"];
+        }
+    }
+
+    static fromJS(data: any): UserEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["surname"] = this.surname;
+        data["userName"] = this.userName;
+        data["emailAddress"] = this.emailAddress;
+        data["phoneNumber"] = this.phoneNumber;
+        data["password"] = this.password;
+        data["isActive"] = this.isActive;
+        data["shouldChangePasswordOnNextLogin"] = this.shouldChangePasswordOnNextLogin;
+        data["isTwoFactorEnabled"] = this.isTwoFactorEnabled;
+        data["isLockoutEnabled"] = this.isLockoutEnabled;
+        data["personId"] = this.personId;
+        return data; 
+    }
+}
+
+export interface IUserEditDto {
+    id: number | undefined;
+    name: string;
+    surname: string;
+    userName: string;
+    emailAddress: string;
+    phoneNumber: string | undefined;
+    password: string | undefined;
+    isActive: boolean | undefined;
+    shouldChangePasswordOnNextLogin: boolean | undefined;
+    isTwoFactorEnabled: boolean | undefined;
+    isLockoutEnabled: boolean | undefined;
+    personId: number | undefined;
 }
 
 export class PagedResultDtoOfTenantListDto implements IPagedResultDtoOfTenantListDto {
@@ -32356,82 +32760,6 @@ export interface IGetUserForEditOutput {
     roles: UserRoleDto[] | undefined;
     allOrganizationUnits: OrganizationUnitDto[] | undefined;
     memberedOrganizationUnits: string[] | undefined;
-}
-
-export class UserEditDto implements IUserEditDto {
-    id!: number | undefined;
-    name!: string;
-    surname!: string;
-    userName!: string;
-    emailAddress!: string;
-    phoneNumber!: string | undefined;
-    password!: string | undefined;
-    isActive!: boolean | undefined;
-    shouldChangePasswordOnNextLogin!: boolean | undefined;
-    isTwoFactorEnabled!: boolean | undefined;
-    isLockoutEnabled!: boolean | undefined;
-
-    constructor(data?: IUserEditDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"];
-            this.name = data["name"];
-            this.surname = data["surname"];
-            this.userName = data["userName"];
-            this.emailAddress = data["emailAddress"];
-            this.phoneNumber = data["phoneNumber"];
-            this.password = data["password"];
-            this.isActive = data["isActive"];
-            this.shouldChangePasswordOnNextLogin = data["shouldChangePasswordOnNextLogin"];
-            this.isTwoFactorEnabled = data["isTwoFactorEnabled"];
-            this.isLockoutEnabled = data["isLockoutEnabled"];
-        }
-    }
-
-    static fromJS(data: any): UserEditDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserEditDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["surname"] = this.surname;
-        data["userName"] = this.userName;
-        data["emailAddress"] = this.emailAddress;
-        data["phoneNumber"] = this.phoneNumber;
-        data["password"] = this.password;
-        data["isActive"] = this.isActive;
-        data["shouldChangePasswordOnNextLogin"] = this.shouldChangePasswordOnNextLogin;
-        data["isTwoFactorEnabled"] = this.isTwoFactorEnabled;
-        data["isLockoutEnabled"] = this.isLockoutEnabled;
-        return data; 
-    }
-}
-
-export interface IUserEditDto {
-    id: number | undefined;
-    name: string;
-    surname: string;
-    userName: string;
-    emailAddress: string;
-    phoneNumber: string | undefined;
-    password: string | undefined;
-    isActive: boolean | undefined;
-    shouldChangePasswordOnNextLogin: boolean | undefined;
-    isTwoFactorEnabled: boolean | undefined;
-    isLockoutEnabled: boolean | undefined;
 }
 
 export class UserRoleDto implements IUserRoleDto {

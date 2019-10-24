@@ -70,6 +70,13 @@
     </div>
 </div>
 
+<h5 class="m--margin-top-30">UserAccount</h5>
+
+       <label *ngIf="!student.userId">Student not linked to a user account</label>
+       <br><button *ngIf="!student.userId" type="button" (click)="createUserAccount()" class="btn btn mr-5">Create and assign user account</button>
+       <label *ngIf="student.userId">Username: {{student.userName}} ({{student.userId}})</label>
+
+
 <div class="m--margin-top-30">
     <div class="m--align-right">
 
@@ -81,3 +88,4 @@
 </div>
 
 <createOrEditStudentModal #createOrEditStudentModal (modalSave)="updateStudent()"></createOrEditStudentModal>
+<createOrEditStudentUserModal #createOrEditStudentUserModal (modalSave)="createUserAccount()"></createOrEditStudentUserModal>

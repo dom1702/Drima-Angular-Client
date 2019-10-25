@@ -12131,6 +12131,177 @@ export class StudentsServiceProxy {
 }
 
 @Injectable()
+export class StudentsViewServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    getPersonalData(): Observable<SVPersonalDataDto> {
+        let url_ = this.baseUrl + "/api/services/app/StudentsView/GetPersonalData";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPersonalData(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPersonalData(<any>response_);
+                } catch (e) {
+                    return <Observable<SVPersonalDataDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<SVPersonalDataDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPersonalData(response: HttpResponseBase): Observable<SVPersonalDataDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? SVPersonalDataDto.fromJS(resultData200) : new SVPersonalDataDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<SVPersonalDataDto>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getCompletedDrivingLessons(): Observable<SVDrivingLessonsDto> {
+        let url_ = this.baseUrl + "/api/services/app/StudentsView/GetCompletedDrivingLessons";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCompletedDrivingLessons(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCompletedDrivingLessons(<any>response_);
+                } catch (e) {
+                    return <Observable<SVDrivingLessonsDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<SVDrivingLessonsDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetCompletedDrivingLessons(response: HttpResponseBase): Observable<SVDrivingLessonsDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? SVDrivingLessonsDto.fromJS(resultData200) : new SVDrivingLessonsDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<SVDrivingLessonsDto>(<any>null);
+    }
+
+    /**
+     * @param fromDate (optional) 
+     * @param toDate (optional) 
+     * @return Success
+     */
+    getPlannedDrivingLessons(fromDate: moment.Moment | null | undefined, toDate: moment.Moment | null | undefined): Observable<SVDrivingLessonsDto> {
+        let url_ = this.baseUrl + "/api/services/app/StudentsView/GetPlannedDrivingLessons?";
+        if (fromDate !== undefined)
+            url_ += "FromDate=" + encodeURIComponent(fromDate ? "" + fromDate.toJSON() : "") + "&"; 
+        if (toDate !== undefined)
+            url_ += "ToDate=" + encodeURIComponent(toDate ? "" + toDate.toJSON() : "") + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPlannedDrivingLessons(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPlannedDrivingLessons(<any>response_);
+                } catch (e) {
+                    return <Observable<SVDrivingLessonsDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<SVDrivingLessonsDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPlannedDrivingLessons(response: HttpResponseBase): Observable<SVDrivingLessonsDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? SVDrivingLessonsDto.fromJS(resultData200) : new SVDrivingLessonsDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<SVDrivingLessonsDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class SubscriptionServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -29354,6 +29525,90 @@ export interface IUserEditDto {
     isTwoFactorEnabled: boolean | undefined;
     isLockoutEnabled: boolean | undefined;
     personId: number | undefined;
+}
+
+export class SVPersonalDataDto implements ISVPersonalDataDto {
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+
+    constructor(data?: ISVPersonalDataDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+        }
+    }
+
+    static fromJS(data: any): SVPersonalDataDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SVPersonalDataDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        return data; 
+    }
+}
+
+export interface ISVPersonalDataDto {
+    firstName: string | undefined;
+    lastName: string | undefined;
+}
+
+export class SVDrivingLessonsDto implements ISVDrivingLessonsDto {
+    drivingLessons!: DrivingLessonDto[] | undefined;
+
+    constructor(data?: ISVDrivingLessonsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["drivingLessons"] && data["drivingLessons"].constructor === Array) {
+                this.drivingLessons = [] as any;
+                for (let item of data["drivingLessons"])
+                    this.drivingLessons!.push(DrivingLessonDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): SVDrivingLessonsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SVDrivingLessonsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.drivingLessons && this.drivingLessons.constructor === Array) {
+            data["drivingLessons"] = [];
+            for (let item of this.drivingLessons)
+                data["drivingLessons"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ISVDrivingLessonsDto {
+    drivingLessons: DrivingLessonDto[] | undefined;
 }
 
 export class PagedResultDtoOfTenantListDto implements IPagedResultDtoOfTenantListDto {

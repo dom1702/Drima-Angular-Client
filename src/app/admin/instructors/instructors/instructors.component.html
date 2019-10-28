@@ -131,11 +131,14 @@
                                         {{l('Email')}}
                                         <p-sortIcon field="instructor.email"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="instructor.phoneNumber">
-                                        {{l('PhoneNumber')}}
-                                        <p-sortIcon field="instructor.phoneNumber"></p-sortIcon>
+                                    <th style="width: 80px" pSortableColumn="userExists">
+                                        {{l('UserExists')}}
+                                        <p-sortIcon field="userExists"></p-sortIcon>
                                     </th>
-
+                                    <th style="width: 150px" pSortableColumn="userName">
+                                        {{l('UserName')}}
+                                        <p-sortIcon field="userName"></p-sortIcon>
+                                    </th>
                                 </tr>
                             </ng-template>                           
 							<ng-template pTemplate="body" let-record="$implicit">
@@ -158,7 +161,11 @@
 												<li>
 											        <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Instructors.Delete')"
 														(click)="deleteInstructor(record.instructor)">{{l('Delete')}}</a>
-												</li>
+                                                </li>
+                                                <li>
+											        <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Instructors.Edit') && !record.userExists"
+														(click)="createUserAccount(record.instructor)">{{l('CreateUser')}}</a>
+                                                </li>
                                                 <li>
                                                     <a href="javascript:;" *ngIf="entityHistoryEnabled"
                                                        (click)="showHistory(record.instructor)">{{l('History')}}</a>
@@ -178,9 +185,13 @@
 											<span class="ui-column-title"> {{l('Email')}}</span>
 											{{record.instructor.email}}
 										</td>
-                                    <td style="width:150px">
-											<span class="ui-column-title"> {{l('PhoneNumber')}}</span>
-											{{record.instructor.phoneNumber}}
+                                        <td style="width:80px">
+                                            <div *ngIf="record.userExists" class="text-center"><i class="fa fa-check-circle m--font-success" title="True"></i></div>
+                                            <div *ngIf="!record.userExists" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
+                                        </td>
+                                        <td style="width:150px">
+											<span class="ui-column-title"> {{l('UserName')}}</span>
+											{{record.userName}}
 										</td>
 
                                 </tr>
@@ -210,4 +221,5 @@
     <createOrEditInstructorModal #createOrEditInstructorModal (modalSave)="getInstructors()"></createOrEditInstructorModal>
     <viewInstructorModal #viewInstructorModal></viewInstructorModal>
      <entityTypeHistoryModal #entityTypeHistoryModal></entityTypeHistoryModal>
+     <createOrEditInstructorUserModal #createOrEditInstructorUserModal (modalSave)="userAccountCreated()"></createOrEditInstructorUserModal>
 </div>

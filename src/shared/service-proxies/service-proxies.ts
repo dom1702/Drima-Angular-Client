@@ -5095,6 +5095,58 @@ export class InstructorsServiceProxy {
         }
         return _observableOf<PagedResultDtoOfAllInstructorsForLookupTableDto>(<any>null);
     }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    createUserAsync(input: CreateInstructorUserInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Instructors/CreateUserAsync";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateUserAsync(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateUserAsync(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateUserAsync(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
 }
 
 @Injectable()
@@ -12012,69 +12064,6 @@ export class StudentsServiceProxy {
             }));
         }
         return _observableOf<PagedResultDtoOfStudentPricePackageLookupTableDto>(<any>null);
-    }
-
-    /**
-     * @param filter (optional) 
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
-     * @return Success
-     */
-    getAllUsersForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfStudentUsersLookupTableDto> {
-        let url_ = this.baseUrl + "/api/services/app/Students/GetAllUsersForLookupTable?";
-        if (filter !== undefined)
-            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
-        if (sorting !== undefined)
-            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
-        if (skipCount !== undefined)
-            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
-        if (maxResultCount !== undefined)
-            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllUsersForLookupTable(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllUsersForLookupTable(<any>response_);
-                } catch (e) {
-                    return <Observable<PagedResultDtoOfStudentUsersLookupTableDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<PagedResultDtoOfStudentUsersLookupTableDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAllUsersForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfStudentUsersLookupTableDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? PagedResultDtoOfStudentUsersLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfStudentUsersLookupTableDto();
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<PagedResultDtoOfStudentUsersLookupTableDto>(<any>null);
     }
 
     /**
@@ -22299,6 +22288,8 @@ export interface IPagedResultDtoOfGetInstructorForViewDto {
 
 export class GetInstructorForViewDto implements IGetInstructorForViewDto {
     instructor!: InstructorDto | undefined;
+    userExists!: boolean | undefined;
+    userName!: string | undefined;
 
     constructor(data?: IGetInstructorForViewDto) {
         if (data) {
@@ -22312,6 +22303,8 @@ export class GetInstructorForViewDto implements IGetInstructorForViewDto {
     init(data?: any) {
         if (data) {
             this.instructor = data["instructor"] ? InstructorDto.fromJS(data["instructor"]) : <any>undefined;
+            this.userExists = data["userExists"];
+            this.userName = data["userName"];
         }
     }
 
@@ -22325,12 +22318,16 @@ export class GetInstructorForViewDto implements IGetInstructorForViewDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["instructor"] = this.instructor ? this.instructor.toJSON() : <any>undefined;
+        data["userExists"] = this.userExists;
+        data["userName"] = this.userName;
         return data; 
     }
 }
 
 export interface IGetInstructorForViewDto {
     instructor: InstructorDto | undefined;
+    userExists: boolean | undefined;
+    userName: string | undefined;
 }
 
 export class GetInstructorForEditOutput implements IGetInstructorForEditOutput {
@@ -22388,7 +22385,7 @@ export interface IGetInstructorForEditOutput {
 export class CreateOrEditInstructorDto implements ICreateOrEditInstructorDto {
     firstName!: string;
     lastName!: string;
-    email!: string | undefined;
+    email!: string;
     phoneNumber!: string | undefined;
     dateOfBirth!: moment.Moment | undefined;
     street!: string | undefined;
@@ -22464,7 +22461,7 @@ export class CreateOrEditInstructorDto implements ICreateOrEditInstructorDto {
 export interface ICreateOrEditInstructorDto {
     firstName: string;
     lastName: string;
-    email: string | undefined;
+    email: string;
     phoneNumber: string | undefined;
     dateOfBirth: moment.Moment | undefined;
     street: string | undefined;
@@ -22743,6 +22740,138 @@ export interface IAllInstructorsForLookupTableDto {
     id: number | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
+}
+
+export class CreateInstructorUserInput implements ICreateInstructorUserInput {
+    user!: UserEditDto;
+    instructor!: InstructorDto;
+    sendActivationEmail!: boolean | undefined;
+    setRandomPassword!: boolean | undefined;
+
+    constructor(data?: ICreateInstructorUserInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.user = new UserEditDto();
+            this.instructor = new InstructorDto();
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.user = data["user"] ? UserEditDto.fromJS(data["user"]) : new UserEditDto();
+            this.instructor = data["instructor"] ? InstructorDto.fromJS(data["instructor"]) : new InstructorDto();
+            this.sendActivationEmail = data["sendActivationEmail"];
+            this.setRandomPassword = data["setRandomPassword"];
+        }
+    }
+
+    static fromJS(data: any): CreateInstructorUserInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateInstructorUserInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["instructor"] = this.instructor ? this.instructor.toJSON() : <any>undefined;
+        data["sendActivationEmail"] = this.sendActivationEmail;
+        data["setRandomPassword"] = this.setRandomPassword;
+        return data; 
+    }
+}
+
+export interface ICreateInstructorUserInput {
+    user: UserEditDto;
+    instructor: InstructorDto;
+    sendActivationEmail: boolean | undefined;
+    setRandomPassword: boolean | undefined;
+}
+
+export class UserEditDto implements IUserEditDto {
+    id!: number | undefined;
+    name!: string;
+    surname!: string;
+    userName!: string;
+    emailAddress!: string;
+    phoneNumber!: string | undefined;
+    password!: string | undefined;
+    isActive!: boolean | undefined;
+    shouldChangePasswordOnNextLogin!: boolean | undefined;
+    isTwoFactorEnabled!: boolean | undefined;
+    isLockoutEnabled!: boolean | undefined;
+    personId!: number | undefined;
+
+    constructor(data?: IUserEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.name = data["name"];
+            this.surname = data["surname"];
+            this.userName = data["userName"];
+            this.emailAddress = data["emailAddress"];
+            this.phoneNumber = data["phoneNumber"];
+            this.password = data["password"];
+            this.isActive = data["isActive"];
+            this.shouldChangePasswordOnNextLogin = data["shouldChangePasswordOnNextLogin"];
+            this.isTwoFactorEnabled = data["isTwoFactorEnabled"];
+            this.isLockoutEnabled = data["isLockoutEnabled"];
+            this.personId = data["personId"];
+        }
+    }
+
+    static fromJS(data: any): UserEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["surname"] = this.surname;
+        data["userName"] = this.userName;
+        data["emailAddress"] = this.emailAddress;
+        data["phoneNumber"] = this.phoneNumber;
+        data["password"] = this.password;
+        data["isActive"] = this.isActive;
+        data["shouldChangePasswordOnNextLogin"] = this.shouldChangePasswordOnNextLogin;
+        data["isTwoFactorEnabled"] = this.isTwoFactorEnabled;
+        data["isLockoutEnabled"] = this.isLockoutEnabled;
+        data["personId"] = this.personId;
+        return data; 
+    }
+}
+
+export interface IUserEditDto {
+    id: number | undefined;
+    name: string;
+    surname: string;
+    userName: string;
+    emailAddress: string;
+    phoneNumber: string | undefined;
+    password: string | undefined;
+    isActive: boolean | undefined;
+    shouldChangePasswordOnNextLogin: boolean | undefined;
+    isTwoFactorEnabled: boolean | undefined;
+    isLockoutEnabled: boolean | undefined;
+    personId: number | undefined;
 }
 
 export class InvoiceDto implements IInvoiceDto {
@@ -28891,6 +29020,7 @@ export class StudentDto implements IStudentDto {
     pricePackageId!: number | undefined;
     userId!: number | undefined;
     userName!: string | undefined;
+    ssn!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: IStudentDto) {
@@ -28927,6 +29057,7 @@ export class StudentDto implements IStudentDto {
             this.pricePackageId = data["pricePackageId"];
             this.userId = data["userId"];
             this.userName = data["userName"];
+            this.ssn = data["ssn"];
             this.id = data["id"];
         }
     }
@@ -28963,6 +29094,7 @@ export class StudentDto implements IStudentDto {
         data["pricePackageId"] = this.pricePackageId;
         data["userId"] = this.userId;
         data["userName"] = this.userName;
+        data["ssn"] = this.ssn;
         data["id"] = this.id;
         return data; 
     }
@@ -28984,6 +29116,7 @@ export interface IStudentDto {
     pricePackageId: number | undefined;
     userId: number | undefined;
     userName: string | undefined;
+    ssn: string | undefined;
     id: number | undefined;
 }
 
@@ -29041,6 +29174,7 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
     licenseClasses!: string[] | undefined;
     licenseClassesAlreadyOwned!: string[] | undefined;
     pricePackageId!: number | undefined;
+    ssn!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditStudentDto) {
@@ -29075,6 +29209,7 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
                     this.licenseClassesAlreadyOwned!.push(item);
             }
             this.pricePackageId = data["pricePackageId"];
+            this.ssn = data["ssn"];
             this.id = data["id"];
         }
     }
@@ -29109,6 +29244,7 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
                 data["licenseClassesAlreadyOwned"].push(item);
         }
         data["pricePackageId"] = this.pricePackageId;
+        data["ssn"] = this.ssn;
         data["id"] = this.id;
         return data; 
     }
@@ -29128,6 +29264,7 @@ export interface ICreateOrEditStudentDto {
     licenseClasses: string[] | undefined;
     licenseClassesAlreadyOwned: string[] | undefined;
     pricePackageId: number | undefined;
+    ssn: string | undefined;
     id: number | undefined;
 }
 
@@ -29307,94 +29444,6 @@ export interface IStudentPricePackageLookupTableDto {
     displayName: string | undefined;
 }
 
-export class PagedResultDtoOfStudentUsersLookupTableDto implements IPagedResultDtoOfStudentUsersLookupTableDto {
-    totalCount!: number | undefined;
-    items!: StudentUsersLookupTableDto[] | undefined;
-
-    constructor(data?: IPagedResultDtoOfStudentUsersLookupTableDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.totalCount = data["totalCount"];
-            if (data["items"] && data["items"].constructor === Array) {
-                this.items = [] as any;
-                for (let item of data["items"])
-                    this.items!.push(StudentUsersLookupTableDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): PagedResultDtoOfStudentUsersLookupTableDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultDtoOfStudentUsersLookupTableDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["totalCount"] = this.totalCount;
-        if (this.items && this.items.constructor === Array) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IPagedResultDtoOfStudentUsersLookupTableDto {
-    totalCount: number | undefined;
-    items: StudentUsersLookupTableDto[] | undefined;
-}
-
-export class StudentUsersLookupTableDto implements IStudentUsersLookupTableDto {
-    id!: number | undefined;
-    displayName!: string | undefined;
-
-    constructor(data?: IStudentUsersLookupTableDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"];
-            this.displayName = data["displayName"];
-        }
-    }
-
-    static fromJS(data: any): StudentUsersLookupTableDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new StudentUsersLookupTableDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["displayName"] = this.displayName;
-        return data; 
-    }
-}
-
-export interface IStudentUsersLookupTableDto {
-    id: number | undefined;
-    displayName: string | undefined;
-}
-
 export class CreateStudentUserInput implements ICreateStudentUserInput {
     user!: UserEditDto;
     student!: StudentDto;
@@ -29445,86 +29494,6 @@ export interface ICreateStudentUserInput {
     student: StudentDto;
     sendActivationEmail: boolean | undefined;
     setRandomPassword: boolean | undefined;
-}
-
-export class UserEditDto implements IUserEditDto {
-    id!: number | undefined;
-    name!: string;
-    surname!: string;
-    userName!: string;
-    emailAddress!: string;
-    phoneNumber!: string | undefined;
-    password!: string | undefined;
-    isActive!: boolean | undefined;
-    shouldChangePasswordOnNextLogin!: boolean | undefined;
-    isTwoFactorEnabled!: boolean | undefined;
-    isLockoutEnabled!: boolean | undefined;
-    personId!: number | undefined;
-
-    constructor(data?: IUserEditDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"];
-            this.name = data["name"];
-            this.surname = data["surname"];
-            this.userName = data["userName"];
-            this.emailAddress = data["emailAddress"];
-            this.phoneNumber = data["phoneNumber"];
-            this.password = data["password"];
-            this.isActive = data["isActive"];
-            this.shouldChangePasswordOnNextLogin = data["shouldChangePasswordOnNextLogin"];
-            this.isTwoFactorEnabled = data["isTwoFactorEnabled"];
-            this.isLockoutEnabled = data["isLockoutEnabled"];
-            this.personId = data["personId"];
-        }
-    }
-
-    static fromJS(data: any): UserEditDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserEditDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["surname"] = this.surname;
-        data["userName"] = this.userName;
-        data["emailAddress"] = this.emailAddress;
-        data["phoneNumber"] = this.phoneNumber;
-        data["password"] = this.password;
-        data["isActive"] = this.isActive;
-        data["shouldChangePasswordOnNextLogin"] = this.shouldChangePasswordOnNextLogin;
-        data["isTwoFactorEnabled"] = this.isTwoFactorEnabled;
-        data["isLockoutEnabled"] = this.isLockoutEnabled;
-        data["personId"] = this.personId;
-        return data; 
-    }
-}
-
-export interface IUserEditDto {
-    id: number | undefined;
-    name: string;
-    surname: string;
-    userName: string;
-    emailAddress: string;
-    phoneNumber: string | undefined;
-    password: string | undefined;
-    isActive: boolean | undefined;
-    shouldChangePasswordOnNextLogin: boolean | undefined;
-    isTwoFactorEnabled: boolean | undefined;
-    isLockoutEnabled: boolean | undefined;
-    personId: number | undefined;
 }
 
 export class SVPersonalDataDto implements ISVPersonalDataDto {
@@ -31161,6 +31130,7 @@ export class TenantCoreDataSettingsEditDto implements ITenantCoreDataSettingsEdi
     phoneLand!: string | undefined;
     website!: string | undefined;
     email!: string | undefined;
+    drivingSchoolNumber!: string | undefined;
 
     constructor(data?: ITenantCoreDataSettingsEditDto) {
         if (data) {
@@ -31183,6 +31153,7 @@ export class TenantCoreDataSettingsEditDto implements ITenantCoreDataSettingsEdi
             this.phoneLand = data["phoneLand"];
             this.website = data["website"];
             this.email = data["email"];
+            this.drivingSchoolNumber = data["drivingSchoolNumber"];
         }
     }
 
@@ -31205,6 +31176,7 @@ export class TenantCoreDataSettingsEditDto implements ITenantCoreDataSettingsEdi
         data["phoneLand"] = this.phoneLand;
         data["website"] = this.website;
         data["email"] = this.email;
+        data["drivingSchoolNumber"] = this.drivingSchoolNumber;
         return data; 
     }
 }
@@ -31220,6 +31192,7 @@ export interface ITenantCoreDataSettingsEditDto {
     phoneLand: string | undefined;
     website: string | undefined;
     email: string | undefined;
+    drivingSchoolNumber: string | undefined;
 }
 
 export class TenantStudentInvoiceSettingsEditDto implements ITenantStudentInvoiceSettingsEditDto {
@@ -31229,6 +31202,8 @@ export class TenantStudentInvoiceSettingsEditDto implements ITenantStudentInvoic
     defaultReference!: string | undefined;
     defaultInterest!: string | undefined;
     defaultDaysToPay!: string | undefined;
+    fullVat!: string | undefined;
+    reducedVat!: string | undefined;
 
     constructor(data?: ITenantStudentInvoiceSettingsEditDto) {
         if (data) {
@@ -31247,6 +31222,8 @@ export class TenantStudentInvoiceSettingsEditDto implements ITenantStudentInvoic
             this.defaultReference = data["defaultReference"];
             this.defaultInterest = data["defaultInterest"];
             this.defaultDaysToPay = data["defaultDaysToPay"];
+            this.fullVat = data["fullVat"];
+            this.reducedVat = data["reducedVat"];
         }
     }
 
@@ -31265,6 +31242,8 @@ export class TenantStudentInvoiceSettingsEditDto implements ITenantStudentInvoic
         data["defaultReference"] = this.defaultReference;
         data["defaultInterest"] = this.defaultInterest;
         data["defaultDaysToPay"] = this.defaultDaysToPay;
+        data["fullVat"] = this.fullVat;
+        data["reducedVat"] = this.reducedVat;
         return data; 
     }
 }
@@ -31276,6 +31255,8 @@ export interface ITenantStudentInvoiceSettingsEditDto {
     defaultReference: string | undefined;
     defaultInterest: string | undefined;
     defaultDaysToPay: string | undefined;
+    fullVat: string | undefined;
+    reducedVat: string | undefined;
 }
 
 export class PagedResultDtoOfGetTheoryLessonForViewDto implements IPagedResultDtoOfGetTheoryLessonForViewDto {

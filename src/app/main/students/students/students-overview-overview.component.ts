@@ -92,4 +92,9 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     createUserAccount(): void {
         this.createOrEditStudentUserModal.show(this.student.lastName, this.student.firstName, this.student.email, this.student);
     }
+
+    userAccountCreated()
+    {
+        this.parentOverview.UpdateStudentView();
+    }
 }

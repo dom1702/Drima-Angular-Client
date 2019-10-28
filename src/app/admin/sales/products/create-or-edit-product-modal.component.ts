@@ -22,7 +22,10 @@ export class CreateOrEditProductModalComponent extends AppComponentBase {
 
     product: CreateOrEditProductDto = new CreateOrEditProductDto();
 
+    fullVat : string;
+    reducedVat : string;
 
+    vat : number;
 
     constructor(
         injector: Injector,
@@ -33,9 +36,14 @@ export class CreateOrEditProductModalComponent extends AppComponentBase {
 
     show(productId?: number): void {
 
+       this.fullVat = abp.setting.get("App.Invoice.FullVat");
+       this.reducedVat = abp.setting.get("App.Invoice.ReducedVat");
+
         if (!productId) {
             this.product = new CreateOrEditProductDto();
             this.product.id = productId;
+
+            this.vat = 0;
 
             this.active = true;
             this.modal.show();
@@ -43,6 +51,12 @@ export class CreateOrEditProductModalComponent extends AppComponentBase {
             this._productsServiceProxy.getProductForEdit(productId).subscribe(result => {
                 this.product = result.product;
 
+                if(this.product.vat == Number(this.fullVat))
+                    this.vat = 0;
+                else if(this.product.vat == Number(this.reducedVat))
+                    this.vat = 1;
+                else
+                    this.vat = 2;
 
                 this.active = true;
                 this.modal.show();
@@ -53,6 +67,10 @@ export class CreateOrEditProductModalComponent extends AppComponentBase {
     save(): void {
             this.saving = true;
 
+            if(this.vat == 0)
+                this.product.vat = Number(this.fullVat);
+            else if(this.vat == 1)
+                this.product.vat = Number(this.reducedVat);
 			
             this._productsServiceProxy.createOrEdit(this.product)
              .pipe(finalize(() => { this.saving = false;}))
@@ -62,12 +80,6 @@ export class CreateOrEditProductModalComponent extends AppComponentBase {
                 this.modalSave.emit(null);
              });
     }
-
-
-
-
-
-
 
     close(): void {
 

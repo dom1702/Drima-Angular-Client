@@ -177,7 +177,7 @@ export class SchedulerComponent extends AppComponentBase implements OnInit {
                     moment(from).startOf('day'),
                     moment(to).startOf('day')).subscribe(result => {
     
-                        //console.log(result);
+                        console.log(result);
     
                         for (var item of result) {
                             this.data.push(
@@ -270,11 +270,8 @@ export class SchedulerComponent extends AppComponentBase implements OnInit {
     }
 
     onEventRendered(args: EventRenderedArgs): void {
-
-        console.log(args.data.AppointmentType);
         switch (args.data.AppointmentType) {
             case '0':
-                console.log("go");
                 (args.element as HTMLElement).style.backgroundColor = '#F57F17';
                 break;
             case '1':

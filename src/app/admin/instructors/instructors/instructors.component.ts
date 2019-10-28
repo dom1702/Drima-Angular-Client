@@ -15,6 +15,7 @@ import { FileDownloadService } from '@shared/utils/file-download.service';
 import { EntityTypeHistoryModalComponent } from '@app/shared/common/entityHistory/entity-type-history-modal.component';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { CreateOrEditInstructorUserModalComponent } from './create-or-edit-instructor-user-modal.component';
 
 @Component({
     templateUrl: './instructors.component.html',
@@ -28,6 +29,8 @@ export class InstructorsComponent extends AppComponentBase {
     @ViewChild('entityTypeHistoryModal') entityTypeHistoryModal: EntityTypeHistoryModalComponent;
     @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
+
+    @ViewChild('createOrEditInstructorUserModal') createOrEditInstructorUserModal: CreateOrEditInstructorUserModalComponent;
 
     advancedFiltersAreShown = false;
     filterText = '';
@@ -141,5 +144,14 @@ export class InstructorsComponent extends AppComponentBase {
         .subscribe(result => {
             this._fileDownloadService.downloadTempFile(result);
          });
+    }
+
+    createUserAccount(instructor : InstructorDto): void {
+        this.createOrEditInstructorUserModal.show(instructor.lastName, instructor.firstName, instructor.email, instructor);
+    }
+
+    userAccountCreated()
+    {
+        this.reloadPage();
     }
 }

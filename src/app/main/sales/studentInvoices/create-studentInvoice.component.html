@@ -92,7 +92,7 @@
                             <th>{{l("Qty")}}</th>
                             <th>{{l("PriceBeforeVat")}}</th>
                             <th width='100px'>{{l("ItemVat")}}</th>
-                            <th width='100px'>{{l("Discount")}}</th>
+                            <!-- <th width='100px'>{{l("Discount")}}</th> -->
                             <th>{{l("PriceAfterVat")}}</th>
                             <th>{{l("Sum")}}</th>
                             <th>Action</th>
@@ -117,10 +117,9 @@
                                 <!-- <input type="text" class="form-control" formControlName="itemVat" placeholder="itemVa"> -->
                                 <ejs-numerictextbox [showSpinButton]='false' locale='de' decimals='2' format='n' formControlName="itemVat" placeholder="itemVat"></ejs-numerictextbox>
                             </td>
-                            <td class="form-group" width='100px'>
-                                <!-- <input type="text" class="form-control" formControlName="itemVat" placeholder="itemVa"> -->
+                            <!-- <td class="form-group" width='100px'>
                                 <ejs-numerictextbox [showSpinButton]='false' locale='de' decimals='2' format='n' formControlName="discount" placeholder="discount"></ejs-numerictextbox>
-                            </td>
+                            </td> -->
                             <td class="form-group">
                                 <ejs-numerictextbox [showSpinButton]='false' locale='DE-de' currency='EUR' decimals='2' format='c2' formControlName="priceAfterVat" placeholder="priceAfterVat"></ejs-numerictextbox>
                             </td>

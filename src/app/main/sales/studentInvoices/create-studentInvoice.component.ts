@@ -14,6 +14,7 @@ import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
 import { InvoiceStudentLookupTableModalComponent } from './invoice-student-lookup-table-modal.component';
 import { InvoiceProductLookupTableModalComponent } from './invoice-product-lookup-table-modal.component';
 import { FileDownloadService } from '@shared/utils/file-download.service';
+import { ArrayValidators } from '@app/shared/common/formValidator/Array.validator';
 
 
 @Component({
@@ -121,7 +122,7 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
         //   sum: ['1', Validators.required]
         // })
 
-      ])
+      ], ArrayValidators.minLength(1))
 
     });
 
@@ -254,7 +255,7 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
       qty: ['1'],
       priceBeforeVat: ['0', [Validators.min(10)]],
       itemVat: ['0'],
-      discount: ['0'],
+      //discount: ['0'],
       priceAfterVat: ['0'],
       sum: ['0'],
     });

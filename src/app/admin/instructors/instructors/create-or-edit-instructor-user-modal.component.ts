@@ -1,20 +1,20 @@
 import { AfterViewChecked, Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { CreateOrUpdateUserInput, OrganizationUnitDto, PasswordComplexitySetting, ProfileServiceProxy, UserEditDto, UserRoleDto, UserServiceProxy, StudentsServiceProxy, CreateStudentUserInput, StudentDto } from '@shared/service-proxies/service-proxies';
+import { CreateOrUpdateUserInput, OrganizationUnitDto, PasswordComplexitySetting, ProfileServiceProxy, UserEditDto, UserRoleDto, UserServiceProxy, InstructorDto, InstructorsServiceProxy, CreateInstructorUserInput } from '@shared/service-proxies/service-proxies';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-    selector: 'createOrEditStudentUserModal',
-    templateUrl: './create-or-edit-student-user-modal.component.html',
+    selector: 'createOrEditInstructorUserModal',
+    templateUrl: './create-or-edit-instructor-user-modal.component.html',
     styles: [`.user-edit-dialog-profile-image {
              margin-bottom: 20px;
         }`
     ]
 })
-export class CreateOrEditStudentUserModalComponent extends AppComponentBase {
+export class CreateOrEditInstructorUserModalComponent extends AppComponentBase {
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
 
@@ -41,20 +41,20 @@ export class CreateOrEditStudentUserModalComponent extends AppComponentBase {
     allOrganizationUnits: OrganizationUnitDto[];
     memberedOrganizationUnits: string[];
 
-    student: StudentDto;
+    instructor: InstructorDto;
 
     constructor(
         injector: Injector,
-        private _studentService: StudentsServiceProxy,
+        private _instructorService: InstructorsServiceProxy,
         private _userService: UserServiceProxy,
         private _profileService: ProfileServiceProxy
     ) {
         super(injector);
     }
 
-    show(lastName: string, firstName: string, email: string, student: StudentDto, userId?: number): void {
+    show(lastName: string, firstName: string, email: string, instructor: InstructorDto, userId?: number): void {
 
-        console.log("Called show");
+
         if (!userId) {
             this.active = true;
             this.setRandomPassword = true;
@@ -64,7 +64,7 @@ export class CreateOrEditStudentUserModalComponent extends AppComponentBase {
             this.userLastName = lastName;
             this.userFirstName = firstName;
             this.userEmail = email;
-            this.student = student;
+            this.instructor = instructor;
         }
 
         this._userService.getUserForEdit(userId).subscribe(userResult => {
@@ -143,7 +143,7 @@ export class CreateOrEditStudentUserModalComponent extends AppComponentBase {
     }
 
     save(): void {
-        let input = new CreateStudentUserInput();
+        let input = new CreateInstructorUserInput();
 
         input.user = this.user;
         input.user.name = this.userLastName;
@@ -153,10 +153,10 @@ export class CreateOrEditStudentUserModalComponent extends AppComponentBase {
         input.setRandomPassword = this.setRandomPassword;
         input.sendActivationEmail = this.sendActivationEmail;
 
-        input.student = this.student;
+        input.instructor = this.instructor;
 
         this.saving = true;
-        this._studentService.createUserAsync(input)
+        this._instructorService.createUserAsync(input)
             .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
                 this.notify.info(this.l('SavedSuccessfully'));
@@ -168,7 +168,6 @@ export class CreateOrEditStudentUserModalComponent extends AppComponentBase {
     close(): void {
         this.active = false;
         this.modal.hide();
-        console.log("Called close");
     }
 
     getAssignedRoleCount(): number {

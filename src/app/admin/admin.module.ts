@@ -118,6 +118,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { VehicleInstructorLookupTableModalComponent } from './resources/vehicles/vehicle-instructor-lookup-table-modal.component';
 import { OfficeLookupTableModalComponent } from './instructors/instructors/office-lookup-table-modal.component';
 import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
+import { CreateOrEditInstructorUserModalComponent } from './instructors/instructors/create-or-edit-instructor-user-modal.component';
 
 @NgModule({
     imports: [
@@ -151,6 +152,7 @@ import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
         NumericTextBoxModule
     ],
     declarations: [
+      CreateOrEditInstructorUserModalComponent,
 		PricePackagesComponent,
 
 		ProductsComponent,

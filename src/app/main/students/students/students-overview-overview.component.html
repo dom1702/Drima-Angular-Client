@@ -20,6 +20,11 @@
         </div>
 
         <div class="col-6 mb-3">
+            <h6>{{l("SSN")}} :</h6>
+            {{student.ssn}}
+        </div>
+
+        <div class="col-6 mb-3">
             <h6>{{l("Classes")}} :</h6>
             {{licenseClasses}}
         </div>
@@ -88,4 +93,4 @@
 </div>
 
 <createOrEditStudentModal #createOrEditStudentModal (modalSave)="updateStudent()"></createOrEditStudentModal>
-<createOrEditStudentUserModal #createOrEditStudentUserModal (modalSave)="createUserAccount()"></createOrEditStudentUserModal>
+<createOrEditStudentUserModal #createOrEditStudentUserModal (modalSave)="userAccountCreated()"></createOrEditStudentUserModal>

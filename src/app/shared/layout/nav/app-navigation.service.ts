@@ -21,7 +21,8 @@ export class AppNavigationService {
             new AppMenuItem('Dashboard', 'Pages.Tenant.Dashboard', 'flaticon-line-graph', '/app/main/dashboard'),
             new AppMenuItem('Scheduler', null, 'flaticon-line-graph', '/app/main/scheduler'),
 
-            new AppMenuItem("PlannedDrivingLessons", 'StudentView', "flaticon-book", "/app/main/studentsView/plannedDrivingLessons"),
+            new AppMenuItem("PlannedDrivingLessons", 'StudentView', "flaticon-book", "/app/main/studentsView/plannedDrivingLessons"),    
+            new AppMenuItem("BookDrivingLesson", 'StudentView', "flaticon-book", "/app/main/studentsView/bookDrivingLesson"),    
             new AppMenuItem("PlannedInstructorDL", 'InstructorView', "flaticon-book", "/app/main/studentsView/plannedDrivingLessons"),
 
             new AppMenuItem('Tenants', 'Pages.Tenants', 'flaticon-list-3', '/app/admin/tenants'),

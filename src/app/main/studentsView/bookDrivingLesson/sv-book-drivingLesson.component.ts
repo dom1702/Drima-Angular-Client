@@ -10,11 +10,11 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 @Component({
-    templateUrl: './sv-planned-drivingLessons.component.html',
+    templateUrl: './sv-book-drivingLesson.component.html',
     encapsulation: ViewEncapsulation.None,
     animations: [appModuleAnimation()]
 })
-export class SVPlannedDrivingLessonsComponent extends AppComponentBase implements OnInit {
+export class SVBookDrivingLessonComponent extends AppComponentBase {
 
     constructor(
         injector: Injector,
@@ -25,7 +25,5 @@ export class SVPlannedDrivingLessonsComponent extends AppComponentBase implement
         super(injector);
     }
 
-    ngOnInit(): void {
-        var student;
-    }
+
 }

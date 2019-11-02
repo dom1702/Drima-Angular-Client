@@ -2,13 +2,14 @@ import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { View, EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService, ScheduleComponent, PopupOpenEventArgs, CellClickEventArgs, EventClickArgs, NavigatingEventArgs, ActionEventArgs, EventRenderedArgs } from '@syncfusion/ej2-angular-schedule';
-import { AppointmentsServiceProxy } from '@shared/service-proxies/service-proxies';
+import { SchedulerServiceProxy } from '@shared/service-proxies/service-proxies';
 import * as moment from 'moment';
 import { CreateOrEditDrivingLessonModalComponent } from '../lessons/drivingLessons/create-or-edit-drivingLesson-modal.component';
 import { CreateEventTypeModalComponent } from './create-event-type-modal.component';
 import { CreateOrEditTheoryLessonModalComponent } from '../lessons/theoryLessons/create-or-edit-theoryLesson-modal.component';
 import { CreateOrEditEventModalComponent } from './create-or-edit-event-modal.component';
 import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
+import { StudentLookupTableModalComponent } from '@app/shared/common/lookup/student-lookup-table-modal.component';
 
 
 @Component({
@@ -36,10 +37,20 @@ export class SchedulerComponent extends AppComponentBase implements OnInit {
     @ViewChild('instructorLookupTableModal')
     instructorLookupTableModal: InstructorLookupTableModalComponent;
 
+    @ViewChild('studentLookupTableModal')
+    studentLookupTableModal: StudentLookupTableModalComponent;
+
     currentInstructorFullName: string = '';
     instructorId: number;
 
+    studentFullName = '';
+    studentFirstName = '';
+    studentLastName = '';
+    studentId: number;
+
     startTime: Date;
+
+    eventTypeFilter: any = { drivingLessons: true, theoryLessons: true, otherEvents: true };
 
     // public data: object[] = [];
     public data: object[] = [{
@@ -59,7 +70,7 @@ export class SchedulerComponent extends AppComponentBase implements OnInit {
 
     constructor(
         injector: Injector,
-        private _appointmentsServiceProxy: AppointmentsServiceProxy
+        private _schedulerServiceProxy: SchedulerServiceProxy
     ) {
         super(injector);
     }
@@ -171,100 +182,65 @@ export class SchedulerComponent extends AppComponentBase implements OnInit {
 
         this.data.length = 0;
 
+        if(!this.eventTypeFilter.drivingLessons && !this.eventTypeFilter.theoryLessons && !this.eventTypeFilter.otherEvents)
+        {
+            this.scheduleObj.refresh();
+            return;
+        }
+
         this.scheduleObj.showSpinner();
 
-        this._appointmentsServiceProxy.getAllAppointmentsOfCurrentPerson(
-                    moment(from).startOf('day'),
-                    moment(to).startOf('day')).subscribe(result => {
-    
-                        console.log(result);
-    
-                        for (var item of result) {
-                            this.data.push(
-                                {
-                                    Id: item.id,
-                                    Subject: item.subject,
-                                    StartTime: item.startTime.toDate(),
-                                    EndTime: item.endTime.toDate(),
-                                    AppointmentType: item.appointmentType.toString()
-                                });
-                        }
-    
-                        //console.log( this.data);
-    
-                        this.scheduleObj.refresh();
-    
-                        this.scheduleObj.hideSpinner();
-    
-                    });
+        //console.log(moment(from).startOf('day'));
+        //console.log(moment(to).startOf('day'));
 
-        // if(this.instructorId == null)
-        // {
-        //     this._appointmentsServiceProxy.getAll(
-        //         moment(from).startOf('day'),
-        //         moment(to).startOf('day')).subscribe(result => {
+        this._schedulerServiceProxy.getAllAppointments(
+            moment(from),
+            moment(to),
+            (this.studentId == null) ? -1 : this.studentId,
+            (this.instructorId == null) ? -1 : this.instructorId,
+            this.eventTypeFilter.drivingLessons,
+            this.eventTypeFilter.theoryLessons,
+            this.eventTypeFilter.otherEvents).subscribe(result => {
 
-        //             //console.log(result);
+                //console.log(result);
 
-        //             for (var item of result.items) {
-        //                 this.data.push(
-        //                     {
-        //                         Id: item.id,
-        //                         Subject: item.subject,
-        //                         StartTime: item.startTime.toDate(),
-        //                         EndTime: item.endTime.toDate(),
-        //                         AppointmentType: item.appointmentType.toString()
-        //                     });
-        //             }
+                for (var item of result) {
+                    this.data.push(
+                        {
+                            Id: item.id,
+                            Subject: item.subject,
+                            StartTime: item.startTime.toDate(),
+                            EndTime: item.endTime.toDate(),
+                            AppointmentType: item.appointmentType.toString()
+                        });
+                }
 
-        //             //console.log( this.data);
+                //console.log( this.data);
 
-        //             this.scheduleObj.refresh();
+                this.scheduleObj.refresh();
 
-        //             this.scheduleObj.hideSpinner();
+                this.scheduleObj.hideSpinner();
 
-        //         });
-        // }
-        // else
-        // {
-        //     this._appointmentsServiceProxy.getAllAppointmentsOfInstructor(
-        //         this.instructorId,
-        //         moment(from).startOf('day'),
-        //         moment(to).startOf('day')).subscribe(result => {
+            });
 
-        //             //console.log(result);
-
-        //             for (var item of result) {
-        //                 this.data.push(
-        //                     {
-        //                         Id: item.id,
-        //                         Subject: item.subject,
-        //                         StartTime: item.startTime.toDate(),
-        //                         EndTime: item.endTime.toDate(),
-        //                         AppointmentType: item.appointmentType.toString()
-        //                     });
-        //             }
-
-        //             //console.log( this.data);
-
-        //             this.scheduleObj.refresh();
-
-        //             this.scheduleObj.hideSpinner();
-
-        //         });
-        // }
     }
 
+
+
     updateCurrentView(): void {
-        //console.log(this.scheduleObj.getCurrentViewDates());
         var dates = this.scheduleObj.getCurrentViewDates();
 
         if (dates == null || dates.length == 0)
             return;
 
+        console.log(dates);
+
         var fromDate: Date = new Date(dates[0].toString());
         var toDate = new Date(dates[dates.length - 1].toString());
         toDate.setDate(toDate.getDate() + 1);
+
+        console.log(fromDate);
+        console.log(toDate);
 
         this.updateView(fromDate, toDate);
     }
@@ -304,4 +280,30 @@ export class SchedulerComponent extends AppComponentBase implements OnInit {
         this.instructorLookupTableModal.show();
     }
 
+    setStudentIdNull() {
+        this.studentFirstName = '';
+        this.studentLastName = '';
+        this.studentId = null;
+        this.refreshStudentFullName();
+        this.updateCurrentView();
+    }
+
+    openSelectStudentModal() {
+        this.studentLookupTableModal.firstName = this.studentFirstName;
+        this.studentLookupTableModal.lastName = this.studentLastName;
+        this.refreshStudentFullName();
+        this.studentLookupTableModal.show();
+    }
+
+    getNewStudentId() {
+        this.studentFirstName = this.studentLookupTableModal.firstName;
+        this.studentLastName = this.studentLookupTableModal.lastName;
+        this.studentId = this.studentLookupTableModal.id;
+        this.refreshStudentFullName();
+        this.updateCurrentView();
+    }
+
+    refreshStudentFullName() {
+        this.studentFullName = this.studentFirstName + ' ' + this.studentLastName;
+    }
 }

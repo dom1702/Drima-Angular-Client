@@ -8,6 +8,7 @@ import { DrivingLessonTopicLookupTableModalComponent } from './drivingLessonTopi
 import { DLLicenseClassLookupTableModalComponent } from '../../../shared/common/lookup/drivingLesson-licenseClass-lookup-table-modal.component';
 import { DLStudentLookupTableModalComponent } from './drivingLesson-student-lookup-table-modal.component';
 import { TimepickerComponent } from 'ngx-bootstrap/timepicker';
+import { VehicleLookupTableModalComponent } from '@app/shared/common/lookup/vehicle-lookup-table-modal.component';
 
 @Component({
     selector: 'createOrEditDrivingLessonModal',
@@ -19,6 +20,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     @ViewChild('drivingLessonTopicLookupTableModal') drivingLessonTopicLookupTableModal: DrivingLessonTopicLookupTableModalComponent;
     @ViewChild('licenseClassLookupTableModal') licenseClassLookupTableModal: DLLicenseClassLookupTableModalComponent;
     @ViewChild('studentLookupTableModal') studentLookupTableModal: DLStudentLookupTableModalComponent;
+    @ViewChild('vehicleLookupTableModal') vehicleLookupTableModal: VehicleLookupTableModalComponent;
 
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
@@ -34,8 +36,9 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     licenseClass = '';
     studentFirstName = '';
     studentLastName = '';
-
     studentFullName = ''; 
+
+    vehicleName = '';
 
     dropdownListIds = [];
     dropdownList = [];
@@ -80,6 +83,9 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             this.licenseClass = '';
             this.studentFirstName = '';
             this.studentLastName = '';
+            this.vehicleName = '';
+            this.drivingLesson.length = 1;
+            this.drivingLesson.addingMinutesAfter = 0;
             this.refreshStudentFullName();
 
             this.active = true;
@@ -91,8 +97,9 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
                 this.drivingLesson = result.drivingLesson;
                 this.drivingLessonTopic = result.drivingLesson.topic;
                 this.licenseClass = result.drivingLesson.licenseClass;
-                this.studentFirstName = result.studentFirstName;
-                this.studentLastName = result.studentLastName;
+                this.studentFirstName = (result.studentFirstName == null) ? "" : result.studentFirstName;
+                this.studentLastName = (result.studentLastName == null) ? "" : result.studentLastName;
+                this.vehicleName = result.vehicleNameBrandModel;
                 this.refreshStudentFullName();
                 this.startTime = result.drivingLesson.startTime.toDate();
                 
@@ -206,6 +213,16 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         this.licenseClassLookupTableModal.show();
     }
 
+    openSelectVehicleModal() {
+        //this.licenseClassLookupTableModal.id = this.drivingLesson.licenseClass;
+        //this.vehicleLookupTableModal.displayName = this.licenseClass;
+        this.vehicleLookupTableModal.show();
+    }
+
+    setVehicleNull() {
+        this.drivingLesson.vehicleId = null;
+       this.vehicleName = '';
+    }
 
         setTopicNull() {
         this.drivingLesson.topic = null;
@@ -249,6 +266,11 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         getNewLicenseClass() {
         this.drivingLesson.licenseClass = this.licenseClassLookupTableModal.displayName;
         this.licenseClass = this.licenseClassLookupTableModal.displayName;
+    }
+
+    getNewVehicle() {
+        this.drivingLesson.vehicleId = this.vehicleLookupTableModal.id;
+        this.vehicleName = this.vehicleLookupTableModal.name + ' ( ' + this.vehicleLookupTableModal.brand + ' ' + this.vehicleLookupTableModal.model + ')';
     }
 
     refreshStudentFullName()

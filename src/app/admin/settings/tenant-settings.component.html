@@ -310,6 +310,14 @@
                             <input type="text" class="form-control" [ngClass]="{'edited':settings.coreDataSettings.drivingSchoolNumber}" [(ngModel)]="settings.coreDataSettings.drivingSchoolNumber" maxlength="64">
                         </div>
                         <div class="form-group">
+                            <label>{{"DrivingLessonDuration" | localize}}</label>
+                            <input type="text" class="form-control" [ngClass]="{'edited':settings.coreDataSettings.durationDrivingLesson}" [(ngModel)]="settings.coreDataSettings.durationDrivingLesson" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label>{{"DrivingTheoryDuration" | localize}}</label>
+                            <input type="text" class="form-control" [ngClass]="{'edited':settings.coreDataSettings.durationTheoryLesson}" [(ngModel)]="settings.coreDataSettings.durationTheoryLesson" maxlength="64">
+                        </div>
+                        <div class="form-group">
                             <label>{{"CompanyName" | localize}}</label>
                             <input type="text" class="form-control" [ngClass]="{'edited':settings.coreDataSettings.companyName}" [(ngModel)]="settings.coreDataSettings.companyName" maxlength="64">
                         </div>

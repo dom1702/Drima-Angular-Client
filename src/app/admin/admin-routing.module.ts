@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { FormsComponent } from './forms/forms/forms.component';
 import { PricePackagesComponent } from './sales/pricePackages/pricePackages.component';
 import { ProductsComponent } from './sales/products/products.component';
 import { SimulatorsComponent } from './resources/simulators/simulators.component';
@@ -33,6 +34,7 @@ import { UsersComponent } from './users/users.component';
             {
                 path: '',
                 children: [
+                    { path: 'forms/forms', component: FormsComponent, data: { permission: 'Pages.Administration.Forms' }  },
                     { path: 'sales/pricePackages', component: PricePackagesComponent, data: { permission: 'Pages.Administration.PricePackages' }  },
                     { path: 'sales/products', component: ProductsComponent, data: { permission: 'Pages.Administration.Products' }  },
                     { path: 'resources/simulators', component: SimulatorsComponent, data: { permission: 'Pages.Administration.Simulators' }  },

@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
+import { FormsComponent } from './forms/forms/forms.component';
+
 import { PricePackagesComponent } from './sales/pricePackages/pricePackages.component';
 
 import { ProductsComponent } from './sales/products/products.component';
@@ -152,6 +154,7 @@ import { CreateOrEditInstructorUserModalComponent } from './instructors/instruct
         NumericTextBoxModule
     ],
     declarations: [
+		FormsComponent,
       CreateOrEditInstructorUserModalComponent,
 		PricePackagesComponent,
 

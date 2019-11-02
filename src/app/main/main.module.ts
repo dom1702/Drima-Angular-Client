@@ -62,6 +62,10 @@ import { StudentsOverviewInvoicesComponent } from './students/students/students-
 import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
 import { CreateOrEditStudentUserModalComponent } from './students/students/create-or-edit-student-user-modal.component';
 import { SVPlannedDrivingLessonsComponent } from './studentsView/plannedDrivingLessons/sv-planned-drivingLessons.component';
+import { VehicleLookupTableModalComponent } from '@app/shared/common/lookup/vehicle-lookup-table-modal.component';
+import { StudentLookupTableModalComponent } from '@app/shared/common/lookup/student-lookup-table-modal.component';
+
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
@@ -92,7 +96,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       NgMultiSelectDropDownModule.forRoot(),
       ScheduleAllModule,
       NumericTextBoxModule,
-      TimepickerModule.forRoot()
+      TimepickerModule.forRoot(),
+      ButtonsModule.forRoot()
     ],
     declarations: 
     [
@@ -126,7 +131,9 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       StudentsOverviewInvoicesComponent,
       InstructorLookupTableModalComponent,
       CreateOrEditStudentUserModalComponent,
-      SVPlannedDrivingLessonsComponent
+      SVPlannedDrivingLessonsComponent,
+      VehicleLookupTableModalComponent,
+      StudentLookupTableModalComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

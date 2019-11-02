@@ -5,6 +5,7 @@ import * as ApiServiceProxies from './service-proxies';
 
 @NgModule({
     providers: [
+        ApiServiceProxies.FormsServiceProxy,        
         ApiServiceProxies.PricePackagesServiceProxy,        
         ApiServiceProxies.StudentInvoicesServiceProxy,        
         ApiServiceProxies.ProductsServiceProxy,        
@@ -60,6 +61,7 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.StudentsServiceProxy,
         ApiServiceProxies.InstructorsServiceProxy,
         ApiServiceProxies.AppointmentsServiceProxy,
+        ApiServiceProxies.SchedulerServiceProxy,
         { provide: HTTP_INTERCEPTORS, useClass: AbpHttpInterceptor, multi: true }
     ]
 })

@@ -1,4 +1,5 @@
-<div bsModal #createOrEditModal="bs-modal" class="modal fade" style="overflow-y: inherit" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" style="overflow-y: inherit" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form *ngIf="active" #drivingLessonForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
@@ -12,122 +13,117 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                 
-                    <!-- <div class="form-group m-form__group">
-                        <label for="LicenseClassClass">{{l("Instructors")}}</label>
-						<ng-multiselect-dropdown
-						[placeholder]="placeholder"
-						[data]="dropdownList"
-						[(ngModel)]="selectedItems" [ngModelOptions]="{standalone: true}"
-						[settings]="dropdownSettings"
-						(onSelect)="onItemSelect($event)"
-						(onSelectAll)="onSelectAll($event)"
-						>
-						</ng-multiselect-dropdown>
-					</div> 
 
-					<div class="form-group m-form__group">
-                        <label for="DrivingLessonTopic">{{l("DrivingLessonTopic")}}</label>
-                        <div class="input-group">
-                            <input class="form-control" id="DrivingLessonTopic" name="drivingLessonTopic" [(ngModel)]="drivingLessonTopic" type="text">     
-                            <div class="input-group-append">
-                                <button class="btn btn-primary blue" (click)="openSelectDrivingLessonTopicModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
-                            </div> <div class="input-group-prepend">
-                                <button class="btn btn-danger" type="button" (click)="setTopicNull()"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <input class="form-control" name="drivingLesson.topic" [(ngModel)]="drivingLesson.topic" type="text"  hidden>
+                    <div name="PersonSelection" *ngIf="!personSelected">
 
-                    <div class="form-group m-form__group">
-                        <label for="StudentFirstName">{{l("Student")}}</label>
-                        <div class="input-group">
-                            <input class="form-control" id="StudentFirstName" name="studentFirstName" [(ngModel)]="studentFirstName" type="text" disabled>     
-                            <div class="input-group-append">
-                                <button class="btn btn-primary blue" (click)="openSelectStudentModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
-                            </div> <div class="input-group-prepend">
-                                <button class="btn btn-danger btn-icon" type="button" (click)="setStudentIdNull()"><i class="fa fa-times"></i></button>
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" name="studentSelection" class="btn btn-default"
+                                    (click)="personTypeSelected(0)" [(ngModel)]="studentSelected" btnCheckbox>
+                                    Select Student
+                                </button>
+                            </div>
+
+                            <div class="col">
+                                <button type="button" name="instructorSelection" class="btn btn-default"
+                                    (click)="personTypeSelected(1)" [(ngModel)]="instructorSelected" btnCheckbox>
+                                    Select Instructor
+                                </button>
+                            </div>
+
+                            <div class="col">
+                                <button type="button" name="userSelection" class="btn btn-default"
+                                    (click)="personTypeSelected(2)" [(ngModel)]="userSelected" btnCheckbox>
+                                    Select User
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <input class="form-control" name="drivingLesson.studentId" [(ngModel)]="drivingLesson.studentId" type="text"  hidden>
-		 
-					<div class="form-group m-form__group">
-                        <label for="LicenseClass">{{l("LicenseClass")}}</label>
-                        <div class="input-group">
-                            <input class="form-control" id="LicenseClass" name="licenseClass" [(ngModel)]="licenseClass" type="text" disabled>     
-                            <div class="input-group-append">
-                                <button class="btn btn-primary blue" (click)="openSelectLicenseClassModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
-                            </div> <div class="input-group-prepend">
-                                <button class="btn btn-danger" type="button" (click)="setLicenseClassNull()"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <input class="form-control" name="drivingLesson.licenseClass" [(ngModel)]="drivingLesson.licenseClass" type="text"  hidden> -->
-         
-                    <div class="form-group">
-                        <label for="Event_Topic">{{l("Topic")}}</label>
-                        <input type="text" id="Event_Topic" class="form-control" [(ngModel)]="event.subject" name="Event_Subject"  />
-                    </div>
-                    
-                                <div class="form-group">
-									<label for="Event_StartTime">Start Date</label>
-									 <input required class="form-control m-input" type="timepicker" bsDatepicker [(ngModel)]="startTime" id="Event_StartTime" name="Event_StartTime">
-                                </div> 
-                         
-								<div class="form-group">
-                                    <label for="Event_StartTime">{{l("StartTime")}}</label>
-                                    <timepicker [(ngModel)]="startTime" [showMeridian]="ismeridian" name="StartTime"></timepicker>
-									
+
+
+                    <div class="m--margin-top-30" [hidden]="personSelected"> </div>
+                    <div [hidden]="disallowPersonSelection">
+                        <div class="form-group m-form__group" [hidden]="!instructorSelected">
+                            <label for="Instructor">{{l("Instructor")}}</label>
+                            <div class="input-group">
+                                <input class="form-control" id="currentInstructorFullName"
+                                    name="currentInstructorFullName" [(ngModel)]="currentInstructorFullName" type="text"
+                                    disabled>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary blue" (click)="openSelectInstructorModal()"
+                                        type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
                                 </div>
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-danger btn-icon" type="button"
+                                        (click)="setInstructorNull()"><i class="fa fa-times"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <input class="form-control" name="instructorId" [(ngModel)]="instructorId" type="text" hidden>
+                        <div class="form-group m-form__group" [hidden]="!studentSelected">
+                            <label for="StudentFirstName">{{l("Student")}}</label>
+                            <div class="input-group">
+                                <input class="form-control" id="studentFullName" name="studentFullName"
+                                    [(ngModel)]="studentFullName" type="text" disabled>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary blue" (click)="openSelectStudentModal()"
+                                        type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-danger btn-icon" type="button"
+                                        (click)="setStudentIdNull()"><i class="fa fa-times"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <input class="form-control" name="studentId" [(ngModel)]="studentId" type="text" hidden>
+                    </div>
+                    <div *ngIf="personSelected">
+                        <div class="form-group">
+                            <label for="Event_Topic">{{l("Topic")}}</label>
+                            <input type="text" id="Event_Topic" class="form-control" [(ngModel)]="event.subject"
+                                name="Event_Subject" />
+                        </div>
 
-                                <div class="form-group">
-									<label for="Event_EndTime">End Date</label>
-									 <input required class="form-control m-input" type="timepicker" bsDatepicker [(ngModel)]="endTime" id="Event_EndTime" name="Event_EndTime">
-                                </div> 
-                         
-								<div class="form-group">
-                                    <label for="Event_EndTime">{{l("EndTime")}}</label>
-                                    <timepicker [(ngModel)]="endTime" [showMeridian]="ismeridian" name="endTime"></timepicker>
-								</div>
-			<!--       
-                
-								<div class="form-group">
-									<label for="DrivingLesson_AddingMinutesAfter">{{l("AddingMinutesAfter")}}</label>
-									<input type="number" id="DrivingLesson_AddingMinutesAfter" class="form-control" [(ngModel)]="drivingLesson.addingMinutesAfter" name="AddingMinutesAfter"  />
-								</div>
-					
-								<div class="form-group">
-									<label for="DrivingLesson_Description">{{l("Description")}}</label>
-									<input type="text" id="DrivingLesson_Description" class="form-control" [(ngModel)]="drivingLesson.description" name="Description"    />
-								</div>
-					
-								<div class="form-group">
-									<label for="DrivingLesson_InternalDescription">{{l("InternalDescription")}}</label>
-									<input type="text" id="DrivingLesson_InternalDescription" class="form-control" [(ngModel)]="drivingLesson.internalDescription" name="InternalDescription"    />
-								</div>
-					
-								<br/><div class="m-checkbox-list">
-									<label for="DrivingLesson_Completed" class="m-checkbox">
-										<input id="DrivingLesson_Completed" type="checkbox" name="Completed" [(ngModel)]="drivingLesson.completed"> 
-										{{l("Completed")}}
-										<span></span>
-									</label>
-								</div> 
-					 -->
+                        <div class="form-group">
+                            <label for="Event_StartTime">Start Date</label>
+                            <input required class="form-control m-input" type="timepicker" bsDatepicker
+                                [(ngModel)]="startTime" id="Event_StartTime" name="Event_StartTime">
+                        </div>
 
+                        <div class="form-group">
+                            <label for="Event_StartTime">{{l("StartTime")}}</label>
+                            <timepicker [(ngModel)]="startTime" [showMeridian]="ismeridian" name="StartTime">
+                            </timepicker>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Event_EndTime">End Date</label>
+                            <input required class="form-control m-input" type="timepicker" bsDatepicker
+                                [(ngModel)]="endTime" id="Event_EndTime" name="Event_EndTime">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Event_EndTime">{{l("EndTime")}}</label>
+                            <timepicker [(ngModel)]="endTime" [showMeridian]="ismeridian" name="endTime"></timepicker>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
-                    <button *ngIf="event.id" [disabled]="!isGranted('Pages.DrivingLessons.Delete')" type="button" class="btn btn-danger" (click)="delete()">{{l("Delete")}}</button>
-                    <button type="submit" class="btn btn-primary blue" [disabled]="!drivingLessonForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <button *ngIf="event.id" [disabled]="!isGranted('Pages.DrivingLessons.Delete')" type="button"
+                        class="btn btn-danger" (click)="delete()">{{l("Delete")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!drivingLessonForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span>{{l("Save")}}</span></button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- <drivingLessonTopicLookupTableModal #drivingLessonTopicLookupTableModal (modalSave)="getNewTopic()"></drivingLessonTopicLookupTableModal>
     <studentLookupTableModal #studentLookupTableModal (modalSave)="getNewStudentId()"></studentLookupTableModal>
-	<licenseClassLookupTableModal #licenseClassLookupTableModal (modalSave)="getNewLicenseClass()"></licenseClassLookupTableModal> -->
-        
+    <instructorLookupTableModal #instructorLookupTableModal (modalSave)="getNewInstructorId()">
+    </instructorLookupTableModal>
+
 </div>

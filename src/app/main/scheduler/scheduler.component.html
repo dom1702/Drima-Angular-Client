@@ -3,31 +3,95 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto col-md-6">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <span>{{l("DrivingLessons")}}</span>
+                    <span>{{l("Scheduler")}}</span>
                 </h3>
                 <span class="m-section__sub">
-                    {{l("DrivingLessonsHeaderInfo")}}
+                    {{l("SchedulerHeaderInfo")}}
                 </span>
             </div>
         </div>
     </div>
     <div class="m-content">
-            <div class="m-portlet m-portlet--mobile">
-            <div class="form-group m-form__group">
-                    <div class="m-portlet__body">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <div class="form-group m-form__group">
+
                     <label for="Instructor">{{l("Instructor")}}</label>
                     <div class="input-group">
-                        <input class="form-control" id="currentInstructorFullName" name="currentInstructorFullName" [(ngModel)]="currentInstructorFullName" type="text" disabled>     
+                        <input class="form-control" id="currentInstructorFullName" name="currentInstructorFullName"
+                            [(ngModel)]="currentInstructorFullName" type="text" disabled>
                         <div class="input-group-append">
-                            <button class="btn btn-primary blue" (click)="openSelectInstructorModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
-                        </div> <div class="input-group-prepend">
-                            <button class="btn btn-danger btn-icon" type="button" (click)="setInstructorNull()"><i class="fa fa-times"></i></button>
+                            <button class="btn btn-primary blue" (click)="openSelectInstructorModal()" type="button"><i
+                                    class="fa fa-search"></i> {{l("Pick")}}</button>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button class="btn btn-danger btn-icon" type="button" (click)="setInstructorNull()"><i
+                                    class="fa fa-times"></i></button>
                         </div>
                     </div>
                 </div>
-            <input class="form-control" name="instructorId" [(ngModel)]="instructorId" type="text"  hidden>
+                <input class="form-control" name="instructorId" [(ngModel)]="instructorId" type="text" hidden>
+                <div class="form-group m-form__group">
+                    <label for="StudentFirstName">{{l("Student")}}</label>
+                    <div class="input-group">
+                        <input class="form-control" id="studentFullName" name="studentFullName"
+                            [(ngModel)]="studentFullName" type="text" disabled>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary blue" (click)="openSelectStudentModal()" type="button"><i
+                                    class="fa fa-search"></i> {{l("Pick")}}</button>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button class="btn btn-danger btn-icon" type="button" (click)="setStudentIdNull()"><i
+                                    class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <input class="form-control" name="studentId" [(ngModel)]="studentId" type="text" hidden>
+
+                <h5 class="m--margin-top-30">{{l("Filter")}}</h5>
+                <div class="m--margin-top-20">
+                    <!-- <div class="row">
+                        <div class="col">
+                            <label class="m-checkbox">
+                                <input id="DrivingLessonFilter" type="checkbox" name="DrivingLessonFilter"
+                                    [(ngModel)]="eventTypeFilter.drivingLessons">
+                                {{"DrivingLessons" | localize}}
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="col">
+                            <label class="m-checkbox">
+                                <input type="checkbox" name="TheoryLessonFilter"
+                                    [(ngModel)]="eventTypeFilter.theoryLessons">
+                                {{"TheoryLessons" | localize}}
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="col">
+                            <label class="m-checkbox" name="OtherEventsFilter"  [(ngModel)]="eventTypeFilter.otherEvents" (click)="updateCurrentView()">
+                                <input type="checkbox" 
+                                  >
+                                {{"Appointments" | localize}}
+                                <span></span>
+                            </label>
+                        </div>
+                    </div> -->
+                    <div class="btn-group">
+                        <label class="btn btn-primary" [(ngModel)]="eventTypeFilter.drivingLessons"
+                            (click)="updateCurrentView()" btnCheckbox tabindex="0"
+                            role="button">{{l("DrivingLessons")}}</label>
+                        <label class="btn btn-primary" [(ngModel)]="eventTypeFilter.theoryLessons"
+                            (click)="updateCurrentView()" btnCheckbox tabindex="0"
+                            role="button">{{l("TheoryLessons")}}</label>
+                        <label class="btn btn-primary" [(ngModel)]="eventTypeFilter.otherEvents"
+                            (click)="updateCurrentView()" btnCheckbox tabindex="0"
+                            role="button">{{l("Appointments")}}</label>
+                    </div>
+                </div>
+
             </div>
         </div>
+
         <ejs-schedule #scheduleObj [allowDragAndDrop]='false' [eventSettings]='eventSettings'
             [currentView]='currentView' (popupOpen)='onPopupOpen($event)' (cellClick)='onCellClick($event)'
             (eventClick)='onEventClick($event)' (recordDoubleClick)='Doubleclick($event)'
@@ -41,5 +105,7 @@
     <createOrEditTheoryLessonModal #createOrEditTheoryLessonModal (modalSave)="updateCurrentView()">
     </createOrEditTheoryLessonModal>
     <createOrEditEventModal #createOrEditEventModal (modalSave)="updateCurrentView()"></createOrEditEventModal>
-    <instructorLookupTableModal #instructorLookupTableModal (modalSave)="getNewInstructorId()"></instructorLookupTableModal>
+    <instructorLookupTableModal #instructorLookupTableModal (modalSave)="getNewInstructorId()">
+    </instructorLookupTableModal>
+    <studentLookupTableModal #studentLookupTableModal (modalSave)="getNewStudentId()"></studentLookupTableModal>
 </div>

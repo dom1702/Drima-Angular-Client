@@ -64,11 +64,23 @@
                         </div>
                     </div>
                     <input class="form-control" name="drivingLesson.licenseClass" [(ngModel)]="drivingLesson.licenseClass" type="text"  hidden>
-		 
+         
+                    <div class="form-group m-form__group">
+                        <label for="Vehicle">{{l("Vehicle")}}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="Vehicle" name="vehicleName" [(ngModel)]="vehicleName" type="text" disabled>     
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectVehicleModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
+                            </div> <div class="input-group-prepend">
+                                <button class="btn btn-danger" type="button" (click)="setVehicleNull()"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="form-control" name="drivingLesson.vehicleId" [(ngModel)]="drivingLesson.vehicleId" type="text"  hidden>
 
 								<div class="form-group">
 									<label for="DrivingLesson_Length">{{l("Length")}}</label>
-									<input type="number" id="DrivingLesson_Length" class="form-control" [(ngModel)]="drivingLesson.length" name="Length"  />
+									<input type="number" id="DrivingLesson_Length" min="1" max="10" class="form-control" [(ngModel)]="drivingLesson.length" name="Length"  />
 								</div>
                     
                                 <div class="form-group">
@@ -84,7 +96,7 @@
 					
 								<div class="form-group">
 									<label for="DrivingLesson_AddingMinutesAfter">{{l("AddingMinutesAfter")}}</label>
-									<input type="number" id="DrivingLesson_AddingMinutesAfter" class="form-control" [(ngModel)]="drivingLesson.addingMinutesAfter" name="AddingMinutesAfter"  />
+									<input type="number" id="DrivingLesson_AddingMinutesAfter" min="0" max="200" class="form-control" [(ngModel)]="drivingLesson.addingMinutesAfter" name="AddingMinutesAfter"  />
 								</div>
 					
 								<div class="form-group">
@@ -118,6 +130,7 @@
 
     <drivingLessonTopicLookupTableModal #drivingLessonTopicLookupTableModal (modalSave)="getNewTopic()"></drivingLessonTopicLookupTableModal>
     <drivingLesson-studentLookupTableModal #studentLookupTableModal (modalSave)="getNewStudentId()"></drivingLesson-studentLookupTableModal>
-	<drivingLesson-licenseClassLookupTableModal #licenseClassLookupTableModal (modalSave)="getNewLicenseClass()"></drivingLesson-licenseClassLookupTableModal>
+    <drivingLesson-licenseClassLookupTableModal #licenseClassLookupTableModal (modalSave)="getNewLicenseClass()"></drivingLesson-licenseClassLookupTableModal>
+    <vehicleLookupTableModal #vehicleLookupTableModal (modalSave)="getNewVehicle()"></vehicleLookupTableModal>
         
 </div>

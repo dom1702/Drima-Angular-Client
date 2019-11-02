@@ -585,14 +585,23 @@ export class AppointmentsServiceProxy {
     /**
      * @param startTimeFilter (optional) 
      * @param endTimeFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
      * @return Success
      */
-    getAll(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined): Observable<PagedResultDtoOfAppointmentDto> {
+    getAll(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfAppointmentDto> {
         let url_ = this.baseUrl + "/api/services/app/Appointments/GetAll?";
         if (startTimeFilter !== undefined)
             url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
         if (endTimeFilter !== undefined)
             url_ += "EndTimeFilter=" + encodeURIComponent(endTimeFilter ? "" + endTimeFilter.toJSON() : "") + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -637,70 +646,6 @@ export class AppointmentsServiceProxy {
             }));
         }
         return _observableOf<PagedResultDtoOfAppointmentDto>(<any>null);
-    }
-
-    /**
-     * @param personId (optional) 
-     * @param startTimeFilter (optional) 
-     * @param endTimeFilter (optional) 
-     * @return Success
-     */
-    getAllAppointmentsOfInstructor(personId: number | null | undefined, startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined): Observable<AppointmentDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/Appointments/GetAllAppointmentsOfInstructor?";
-        if (personId !== undefined)
-            url_ += "PersonId=" + encodeURIComponent("" + personId) + "&"; 
-        if (startTimeFilter !== undefined)
-            url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
-        if (endTimeFilter !== undefined)
-            url_ += "EndTimeFilter=" + encodeURIComponent(endTimeFilter ? "" + endTimeFilter.toJSON() : "") + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllAppointmentsOfInstructor(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllAppointmentsOfInstructor(<any>response_);
-                } catch (e) {
-                    return <Observable<AppointmentDto[]>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<AppointmentDto[]>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAllAppointmentsOfInstructor(response: HttpResponseBase): Observable<AppointmentDto[]> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(AppointmentDto.fromJS(item));
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<AppointmentDto[]>(<any>null);
     }
 
     /**
@@ -857,67 +802,6 @@ export class AppointmentsServiceProxy {
             }));
         }
         return _observableOf<void>(<any>null);
-    }
-
-    /**
-     * @param startTimeFilter (optional) 
-     * @param endTimeFilter (optional) 
-     * @return Success
-     */
-    getAllAppointmentsOfCurrentPerson(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined): Observable<AppointmentDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/Appointments/GetAllAppointmentsOfCurrentPerson?";
-        if (startTimeFilter !== undefined)
-            url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
-        if (endTimeFilter !== undefined)
-            url_ += "EndTimeFilter=" + encodeURIComponent(endTimeFilter ? "" + endTimeFilter.toJSON() : "") + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllAppointmentsOfCurrentPerson(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllAppointmentsOfCurrentPerson(<any>response_);
-                } catch (e) {
-                    return <Observable<AppointmentDto[]>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<AppointmentDto[]>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAllAppointmentsOfCurrentPerson(response: HttpResponseBase): Observable<AppointmentDto[]> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(AppointmentDto.fromJS(item));
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<AppointmentDto[]>(<any>null);
     }
 }
 
@@ -3708,6 +3592,144 @@ export class EditionServiceProxy {
             }));
         }
         return _observableOf<number>(<any>null);
+    }
+}
+
+@Injectable()
+export class FormsServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param nameFilter (optional) 
+     * @param countryFilter (optional) 
+     * @param documentTypeFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAll(filter: string | null | undefined, nameFilter: string | null | undefined, countryFilter: string | null | undefined, documentTypeFilter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfGetFormForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/Forms/GetAll?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (nameFilter !== undefined)
+            url_ += "NameFilter=" + encodeURIComponent("" + nameFilter) + "&"; 
+        if (countryFilter !== undefined)
+            url_ += "CountryFilter=" + encodeURIComponent("" + countryFilter) + "&"; 
+        if (documentTypeFilter !== undefined)
+            url_ += "DocumentTypeFilter=" + encodeURIComponent("" + documentTypeFilter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfGetFormForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfGetFormForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PagedResultDtoOfGetFormForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfGetFormForViewDto.fromJS(resultData200) : new PagedResultDtoOfGetFormForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfGetFormForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getBlankPdf(id: number | null | undefined): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/Forms/GetBlankPdf?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetBlankPdf(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetBlankPdf(<any>response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetBlankPdf(response: HttpResponseBase): Observable<FileDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileDto>(<any>null);
     }
 }
 
@@ -8340,6 +8362,88 @@ export class PermissionServiceProxy {
 }
 
 @Injectable()
+export class PersonalSchedulerServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param startTimeFilter (optional) 
+     * @param endTimeFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllAppointmentsOfCurrentPerson(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<AppointmentDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/PersonalScheduler/GetAllAppointmentsOfCurrentPerson?";
+        if (startTimeFilter !== undefined)
+            url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
+        if (endTimeFilter !== undefined)
+            url_ += "EndTimeFilter=" + encodeURIComponent(endTimeFilter ? "" + endTimeFilter.toJSON() : "") + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllAppointmentsOfCurrentPerson(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllAppointmentsOfCurrentPerson(<any>response_);
+                } catch (e) {
+                    return <Observable<AppointmentDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AppointmentDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllAppointmentsOfCurrentPerson(response: HttpResponseBase): Observable<AppointmentDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(AppointmentDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AppointmentDto[]>(<any>null);
+    }
+}
+
+@Injectable()
 export class PricePackagesServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -10096,6 +10200,94 @@ export class RoleServiceProxy {
             }));
         }
         return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
+export class SchedulerServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param startTimeFilter (optional) 
+     * @param endTimeFilter (optional) 
+     * @param studentId (optional) 
+     * @param instructorId (optional) 
+     * @param returnDrivingLessons (optional) 
+     * @param returnTheoryLessons (optional) 
+     * @param returnOtherEvents (optional) 
+     * @return Success
+     */
+    getAllAppointments(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined, studentId: number | null | undefined, instructorId: number | null | undefined, returnDrivingLessons: boolean | null | undefined, returnTheoryLessons: boolean | null | undefined, returnOtherEvents: boolean | null | undefined): Observable<SchedulerEventDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Scheduler/GetAllAppointments?";
+        if (startTimeFilter !== undefined)
+            url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
+        if (endTimeFilter !== undefined)
+            url_ += "EndTimeFilter=" + encodeURIComponent(endTimeFilter ? "" + endTimeFilter.toJSON() : "") + "&"; 
+        if (studentId !== undefined)
+            url_ += "StudentId=" + encodeURIComponent("" + studentId) + "&"; 
+        if (instructorId !== undefined)
+            url_ += "InstructorId=" + encodeURIComponent("" + instructorId) + "&"; 
+        if (returnDrivingLessons !== undefined)
+            url_ += "ReturnDrivingLessons=" + encodeURIComponent("" + returnDrivingLessons) + "&"; 
+        if (returnTheoryLessons !== undefined)
+            url_ += "ReturnTheoryLessons=" + encodeURIComponent("" + returnTheoryLessons) + "&"; 
+        if (returnOtherEvents !== undefined)
+            url_ += "ReturnOtherEvents=" + encodeURIComponent("" + returnOtherEvents) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllAppointments(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllAppointments(<any>response_);
+                } catch (e) {
+                    return <Observable<SchedulerEventDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<SchedulerEventDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllAppointments(response: HttpResponseBase): Observable<SchedulerEventDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(SchedulerEventDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<SchedulerEventDto[]>(<any>null);
     }
 }
 
@@ -12064,6 +12256,69 @@ export class StudentsServiceProxy {
             }));
         }
         return _observableOf<PagedResultDtoOfStudentPricePackageLookupTableDto>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllStudentForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfStudentLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/Students/GetAllStudentForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllStudentForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllStudentForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfStudentLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfStudentLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllStudentForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfStudentLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfStudentLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfStudentLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfStudentLookupTableDto>(<any>null);
     }
 
     /**
@@ -17195,6 +17450,69 @@ export class VehiclesServiceProxy {
         }
         return _observableOf<PagedResultDtoOfVehicleInstructorLookupTableDto>(<any>null);
     }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfVehiclesForLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/Vehicles/GetAllForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfVehiclesForLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfVehiclesForLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfVehiclesForLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfVehiclesForLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfVehiclesForLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfVehiclesForLookupTableDto>(<any>null);
+    }
 }
 
 @Injectable()
@@ -17948,7 +18266,6 @@ export interface IPagedResultDtoOfAppointmentDto {
 export class AppointmentDto implements IAppointmentDto {
     startTime!: moment.Moment | undefined;
     endTime!: moment.Moment | undefined;
-    appointmentType!: EventType | undefined;
     subject!: string | undefined;
     description!: string | undefined;
     allDay!: boolean | undefined;
@@ -17969,7 +18286,6 @@ export class AppointmentDto implements IAppointmentDto {
         if (data) {
             this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
             this.endTime = data["endTime"] ? moment(data["endTime"].toString()) : <any>undefined;
-            this.appointmentType = data["appointmentType"];
             this.subject = data["subject"];
             this.description = data["description"];
             this.allDay = data["allDay"];
@@ -17990,7 +18306,6 @@ export class AppointmentDto implements IAppointmentDto {
         data = typeof data === 'object' ? data : {};
         data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
         data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
-        data["appointmentType"] = this.appointmentType;
         data["subject"] = this.subject;
         data["description"] = this.description;
         data["allDay"] = this.allDay;
@@ -18004,20 +18319,12 @@ export class AppointmentDto implements IAppointmentDto {
 export interface IAppointmentDto {
     startTime: moment.Moment | undefined;
     endTime: moment.Moment | undefined;
-    appointmentType: EventType | undefined;
     subject: string | undefined;
     description: string | undefined;
     allDay: boolean | undefined;
     location: string | undefined;
     isBlocked: boolean | undefined;
     id: number | undefined;
-}
-
-export enum EventType {
-    DrivingLesson = 0, 
-    TheoryLesson = 1, 
-    Event = 2, 
-    Holiday = 3, 
 }
 
 export class GetAppointmentForEditOutput implements IGetAppointmentForEditOutput {
@@ -18058,8 +18365,8 @@ export interface IGetAppointmentForEditOutput {
 
 export class CreateOrEditAppointmentDto implements ICreateOrEditAppointmentDto {
     startTime!: moment.Moment | undefined;
+    personId!: number | undefined;
     endTime!: moment.Moment | undefined;
-    appointmentType!: EventType | undefined;
     subject!: string | undefined;
     description!: string | undefined;
     allDay!: boolean | undefined;
@@ -18079,8 +18386,8 @@ export class CreateOrEditAppointmentDto implements ICreateOrEditAppointmentDto {
     init(data?: any) {
         if (data) {
             this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
+            this.personId = data["personId"];
             this.endTime = data["endTime"] ? moment(data["endTime"].toString()) : <any>undefined;
-            this.appointmentType = data["appointmentType"];
             this.subject = data["subject"];
             this.description = data["description"];
             this.allDay = data["allDay"];
@@ -18100,8 +18407,8 @@ export class CreateOrEditAppointmentDto implements ICreateOrEditAppointmentDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
+        data["personId"] = this.personId;
         data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
-        data["appointmentType"] = this.appointmentType;
         data["subject"] = this.subject;
         data["description"] = this.description;
         data["allDay"] = this.allDay;
@@ -18114,8 +18421,8 @@ export class CreateOrEditAppointmentDto implements ICreateOrEditAppointmentDto {
 
 export interface ICreateOrEditAppointmentDto {
     startTime: moment.Moment | undefined;
+    personId: number | undefined;
     endTime: moment.Moment | undefined;
-    appointmentType: EventType | undefined;
     subject: string | undefined;
     description: string | undefined;
     allDay: boolean | undefined;
@@ -19316,6 +19623,7 @@ export interface IPagedResultDtoOfGetDrivingLessonForViewDto {
 export class GetDrivingLessonForViewDto implements IGetDrivingLessonForViewDto {
     drivingLesson!: DrivingLessonDto | undefined;
     studentFullName!: string | undefined;
+    vehicleNameBrandModel!: string | undefined;
     instructorNames!: string[] | undefined;
     description!: string | undefined;
     instructors!: InstructorDto[] | undefined;
@@ -19333,6 +19641,7 @@ export class GetDrivingLessonForViewDto implements IGetDrivingLessonForViewDto {
         if (data) {
             this.drivingLesson = data["drivingLesson"] ? DrivingLessonDto.fromJS(data["drivingLesson"]) : <any>undefined;
             this.studentFullName = data["studentFullName"];
+            this.vehicleNameBrandModel = data["vehicleNameBrandModel"];
             if (data["instructorNames"] && data["instructorNames"].constructor === Array) {
                 this.instructorNames = [] as any;
                 for (let item of data["instructorNames"])
@@ -19358,6 +19667,7 @@ export class GetDrivingLessonForViewDto implements IGetDrivingLessonForViewDto {
         data = typeof data === 'object' ? data : {};
         data["drivingLesson"] = this.drivingLesson ? this.drivingLesson.toJSON() : <any>undefined;
         data["studentFullName"] = this.studentFullName;
+        data["vehicleNameBrandModel"] = this.vehicleNameBrandModel;
         if (this.instructorNames && this.instructorNames.constructor === Array) {
             data["instructorNames"] = [];
             for (let item of this.instructorNames)
@@ -19376,6 +19686,7 @@ export class GetDrivingLessonForViewDto implements IGetDrivingLessonForViewDto {
 export interface IGetDrivingLessonForViewDto {
     drivingLesson: DrivingLessonDto | undefined;
     studentFullName: string | undefined;
+    vehicleNameBrandModel: string | undefined;
     instructorNames: string[] | undefined;
     description: string | undefined;
     instructors: InstructorDto[] | undefined;
@@ -19388,7 +19699,7 @@ export class DrivingLessonDto implements IDrivingLessonDto {
     topic!: string | undefined;
     licenseClass!: string | undefined;
     studentId!: number | undefined;
-    instructorId!: number | undefined;
+    vehicleId!: number | undefined;
     id!: number | undefined;
 
     constructor(data?: IDrivingLessonDto) {
@@ -19408,7 +19719,7 @@ export class DrivingLessonDto implements IDrivingLessonDto {
             this.topic = data["topic"];
             this.licenseClass = data["licenseClass"];
             this.studentId = data["studentId"];
-            this.instructorId = data["instructorId"];
+            this.vehicleId = data["vehicleId"];
             this.id = data["id"];
         }
     }
@@ -19428,7 +19739,7 @@ export class DrivingLessonDto implements IDrivingLessonDto {
         data["topic"] = this.topic;
         data["licenseClass"] = this.licenseClass;
         data["studentId"] = this.studentId;
-        data["instructorId"] = this.instructorId;
+        data["vehicleId"] = this.vehicleId;
         data["id"] = this.id;
         return data; 
     }
@@ -19441,7 +19752,7 @@ export interface IDrivingLessonDto {
     topic: string | undefined;
     licenseClass: string | undefined;
     studentId: number | undefined;
-    instructorId: number | undefined;
+    vehicleId: number | undefined;
     id: number | undefined;
 }
 
@@ -19517,6 +19828,7 @@ export class GetDrivingLessonForEditOutput implements IGetDrivingLessonForEditOu
     drivingLesson!: CreateOrEditDrivingLessonDto | undefined;
     studentFirstName!: string | undefined;
     studentLastName!: string | undefined;
+    vehicleNameBrandModel!: string | undefined;
 
     constructor(data?: IGetDrivingLessonForEditOutput) {
         if (data) {
@@ -19532,6 +19844,7 @@ export class GetDrivingLessonForEditOutput implements IGetDrivingLessonForEditOu
             this.drivingLesson = data["drivingLesson"] ? CreateOrEditDrivingLessonDto.fromJS(data["drivingLesson"]) : <any>undefined;
             this.studentFirstName = data["studentFirstName"];
             this.studentLastName = data["studentLastName"];
+            this.vehicleNameBrandModel = data["vehicleNameBrandModel"];
         }
     }
 
@@ -19547,6 +19860,7 @@ export class GetDrivingLessonForEditOutput implements IGetDrivingLessonForEditOu
         data["drivingLesson"] = this.drivingLesson ? this.drivingLesson.toJSON() : <any>undefined;
         data["studentFirstName"] = this.studentFirstName;
         data["studentLastName"] = this.studentLastName;
+        data["vehicleNameBrandModel"] = this.vehicleNameBrandModel;
         return data; 
     }
 }
@@ -19555,6 +19869,7 @@ export interface IGetDrivingLessonForEditOutput {
     drivingLesson: CreateOrEditDrivingLessonDto | undefined;
     studentFirstName: string | undefined;
     studentLastName: string | undefined;
+    vehicleNameBrandModel: string | undefined;
 }
 
 export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonDto {
@@ -19567,6 +19882,7 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
     topic!: string | undefined;
     licenseClass!: string | undefined;
     studentId!: number | undefined;
+    vehicleId!: number | undefined;
     instructors!: InstructorDto[] | undefined;
     id!: number | undefined;
 
@@ -19590,6 +19906,7 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
             this.topic = data["topic"];
             this.licenseClass = data["licenseClass"];
             this.studentId = data["studentId"];
+            this.vehicleId = data["vehicleId"];
             if (data["instructors"] && data["instructors"].constructor === Array) {
                 this.instructors = [] as any;
                 for (let item of data["instructors"])
@@ -19617,6 +19934,7 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
         data["topic"] = this.topic;
         data["licenseClass"] = this.licenseClass;
         data["studentId"] = this.studentId;
+        data["vehicleId"] = this.vehicleId;
         if (this.instructors && this.instructors.constructor === Array) {
             data["instructors"] = [];
             for (let item of this.instructors)
@@ -19637,6 +19955,7 @@ export interface ICreateOrEditDrivingLessonDto {
     topic: string | undefined;
     licenseClass: string | undefined;
     studentId: number | undefined;
+    vehicleId: number | undefined;
     instructors: InstructorDto[] | undefined;
     id: number | undefined;
 }
@@ -20875,6 +21194,138 @@ export class MoveTenantsToAnotherEditionDto implements IMoveTenantsToAnotherEdit
 export interface IMoveTenantsToAnotherEditionDto {
     sourceEditionId: number | undefined;
     targetEditionId: number | undefined;
+}
+
+export class PagedResultDtoOfGetFormForViewDto implements IPagedResultDtoOfGetFormForViewDto {
+    totalCount!: number | undefined;
+    items!: GetFormForViewDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfGetFormForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(GetFormForViewDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfGetFormForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfGetFormForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfGetFormForViewDto {
+    totalCount: number | undefined;
+    items: GetFormForViewDto[] | undefined;
+}
+
+export class GetFormForViewDto implements IGetFormForViewDto {
+    form!: FormDto | undefined;
+
+    constructor(data?: IGetFormForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.form = data["form"] ? FormDto.fromJS(data["form"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetFormForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetFormForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["form"] = this.form ? this.form.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IGetFormForViewDto {
+    form: FormDto | undefined;
+}
+
+export class FormDto implements IFormDto {
+    name!: string | undefined;
+    country!: string | undefined;
+    documentType!: string | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IFormDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.country = data["country"];
+            this.documentType = data["documentType"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): FormDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new FormDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["country"] = this.country;
+        data["documentType"] = this.documentType;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IFormDto {
+    name: string | undefined;
+    country: string | undefined;
+    documentType: string | undefined;
+    id: number | undefined;
 }
 
 export class CreateFriendshipRequestInput implements ICreateFriendshipRequestInput {
@@ -27110,6 +27561,81 @@ export interface ICreateOrUpdateRoleInput {
     grantedPermissionNames: string[];
 }
 
+export class SchedulerEventDto implements ISchedulerEventDto {
+    startTime!: moment.Moment | undefined;
+    endTime!: moment.Moment | undefined;
+    appointmentType!: EventType | undefined;
+    subject!: string | undefined;
+    description!: string | undefined;
+    allDay!: boolean | undefined;
+    location!: string | undefined;
+    isBlocked!: boolean | undefined;
+    id!: number | undefined;
+
+    constructor(data?: ISchedulerEventDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
+            this.endTime = data["endTime"] ? moment(data["endTime"].toString()) : <any>undefined;
+            this.appointmentType = data["appointmentType"];
+            this.subject = data["subject"];
+            this.description = data["description"];
+            this.allDay = data["allDay"];
+            this.location = data["location"];
+            this.isBlocked = data["isBlocked"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): SchedulerEventDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SchedulerEventDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
+        data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
+        data["appointmentType"] = this.appointmentType;
+        data["subject"] = this.subject;
+        data["description"] = this.description;
+        data["allDay"] = this.allDay;
+        data["location"] = this.location;
+        data["isBlocked"] = this.isBlocked;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface ISchedulerEventDto {
+    startTime: moment.Moment | undefined;
+    endTime: moment.Moment | undefined;
+    appointmentType: EventType | undefined;
+    subject: string | undefined;
+    description: string | undefined;
+    allDay: boolean | undefined;
+    location: string | undefined;
+    isBlocked: boolean | undefined;
+    id: number | undefined;
+}
+
+export enum EventType {
+    DrivingLesson = 0, 
+    TheoryLesson = 1, 
+    Event = 2, 
+    Holiday = 3, 
+}
+
 export class GetCurrentLoginInformationsOutput implements IGetCurrentLoginInformationsOutput {
     user!: UserLoginInfoDto | undefined;
     tenant!: TenantLoginInfoDto | undefined;
@@ -29444,6 +29970,98 @@ export interface IStudentPricePackageLookupTableDto {
     displayName: string | undefined;
 }
 
+export class PagedResultDtoOfStudentLookupTableDto implements IPagedResultDtoOfStudentLookupTableDto {
+    totalCount!: number | undefined;
+    items!: StudentLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfStudentLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(StudentLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfStudentLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfStudentLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfStudentLookupTableDto {
+    totalCount: number | undefined;
+    items: StudentLookupTableDto[] | undefined;
+}
+
+export class StudentLookupTableDto implements IStudentLookupTableDto {
+    id!: number | undefined;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+
+    constructor(data?: IStudentLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+        }
+    }
+
+    static fromJS(data: any): StudentLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        return data; 
+    }
+}
+
+export interface IStudentLookupTableDto {
+    id: number | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+}
+
 export class CreateStudentUserInput implements ICreateStudentUserInput {
     user!: UserEditDto;
     student!: StudentDto;
@@ -31131,6 +31749,8 @@ export class TenantCoreDataSettingsEditDto implements ITenantCoreDataSettingsEdi
     website!: string | undefined;
     email!: string | undefined;
     drivingSchoolNumber!: string | undefined;
+    durationDrivingLesson!: number | undefined;
+    durationTheoryLesson!: number | undefined;
 
     constructor(data?: ITenantCoreDataSettingsEditDto) {
         if (data) {
@@ -31154,6 +31774,8 @@ export class TenantCoreDataSettingsEditDto implements ITenantCoreDataSettingsEdi
             this.website = data["website"];
             this.email = data["email"];
             this.drivingSchoolNumber = data["drivingSchoolNumber"];
+            this.durationDrivingLesson = data["durationDrivingLesson"];
+            this.durationTheoryLesson = data["durationTheoryLesson"];
         }
     }
 
@@ -31177,6 +31799,8 @@ export class TenantCoreDataSettingsEditDto implements ITenantCoreDataSettingsEdi
         data["website"] = this.website;
         data["email"] = this.email;
         data["drivingSchoolNumber"] = this.drivingSchoolNumber;
+        data["durationDrivingLesson"] = this.durationDrivingLesson;
+        data["durationTheoryLesson"] = this.durationTheoryLesson;
         return data; 
     }
 }
@@ -31193,6 +31817,8 @@ export interface ITenantCoreDataSettingsEditDto {
     website: string | undefined;
     email: string | undefined;
     drivingSchoolNumber: string | undefined;
+    durationDrivingLesson: number | undefined;
+    durationTheoryLesson: number | undefined;
 }
 
 export class TenantStudentInvoiceSettingsEditDto implements ITenantStudentInvoiceSettingsEditDto {
@@ -34088,6 +34714,102 @@ export interface IVehicleInstructorLookupTableDto {
     id: number | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
+}
+
+export class PagedResultDtoOfVehiclesForLookupTableDto implements IPagedResultDtoOfVehiclesForLookupTableDto {
+    totalCount!: number | undefined;
+    items!: VehiclesForLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfVehiclesForLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(VehiclesForLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfVehiclesForLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfVehiclesForLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfVehiclesForLookupTableDto {
+    totalCount: number | undefined;
+    items: VehiclesForLookupTableDto[] | undefined;
+}
+
+export class VehiclesForLookupTableDto implements IVehiclesForLookupTableDto {
+    id!: number | undefined;
+    name!: string | undefined;
+    brand!: string | undefined;
+    model!: string | undefined;
+
+    constructor(data?: IVehiclesForLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.name = data["name"];
+            this.brand = data["brand"];
+            this.model = data["model"];
+        }
+    }
+
+    static fromJS(data: any): VehiclesForLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new VehiclesForLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["brand"] = this.brand;
+        data["model"] = this.model;
+        return data; 
+    }
+}
+
+export interface IVehiclesForLookupTableDto {
+    id: number | undefined;
+    name: string | undefined;
+    brand: string | undefined;
+    model: string | undefined;
 }
 
 export class GetLatestWebLogsOutput implements IGetLatestWebLogsOutput {

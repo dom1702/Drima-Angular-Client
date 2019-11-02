@@ -135,7 +135,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       CreateOrEditStudentUserModalComponent,
       SVPlannedDrivingLessonsComponent,
       VehicleLookupTableModalComponent,
-      StudentLookupTableModalComponent
+      StudentLookupTableModalComponent,
       SVDrivingLessonsOverviewComponent,
       SVBookDrivingLessonComponent
     ],

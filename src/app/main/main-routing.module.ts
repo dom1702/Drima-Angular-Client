@@ -11,6 +11,7 @@ import { StudentsOverviewComponent } from './students/students/students-overview
 import { SVPlannedDrivingLessonsComponent } from './studentsView/plannedDrivingLessons/sv-planned-drivingLessons.component';
 import { SVDrivingLessonsOverviewComponent } from './studentsView/drivingLessonsOverview/sv-drivingLessons-overview.component';
 import { SVBookDrivingLessonComponent } from './studentsView/bookDrivingLesson/sv-book-drivingLesson.component';
+import { PersonalSchedulerComponent } from './personalScheduler/personalScheduler.component';
 
 @NgModule({
     imports: [
@@ -23,12 +24,13 @@ import { SVBookDrivingLessonComponent } from './studentsView/bookDrivingLesson/s
                     { path: 'students/students', component: StudentsComponent, data: { permission: 'Pages.Students' }  },
                     { path: 'lessons/theoryLessons', component: TheoryLessonsComponent, data: { permission: 'Pages.TheoryLessons' }  },
                     { path: 'dashboard', component: DashboardComponent, data: { permission: 'Pages.Tenant.Dashboard' } },
-                    { path: 'scheduler', component: SchedulerComponent },
-                    { path: 'sales/studentInvoices/create-studentInvoice', component: CreateStudentInvoiceComponent},
+                    { path: 'scheduler', component: SchedulerComponent, data: { permission: 'Pages.Scheduler' } },
+                    { path: 'personalScheduler', component: PersonalSchedulerComponent, data: { permission: 'Pages.PersonalScheduler' } },
+                    { path: 'sales/studentInvoices/create-studentInvoice', component: CreateStudentInvoiceComponent, data: { permission: 'Pages.StudentInvoices.Create' }},
                     { path: 'students/students/students-overview', component: StudentsOverviewComponent },
-                    { path: 'studentsView/plannedDrivingLessons', component: SVPlannedDrivingLessonsComponent },
-                    { path: 'studentsView/drivingLessonsOverview', component: SVDrivingLessonsOverviewComponent},
-                    { path: 'studentsView/bookDrivingLesson', component: SVBookDrivingLessonComponent}
+                    { path: 'studentsView/plannedDrivingLessons', component: SVPlannedDrivingLessonsComponent, data: { permission: 'StudentView' } },
+                    { path: 'studentsView/drivingLessonsOverview', component: SVDrivingLessonsOverviewComponent, data: { permission: 'StudentView' }},
+                    { path: 'studentsView/bookDrivingLesson', component: SVBookDrivingLessonComponent, data: { permission: 'StudentView' }}
                 ]
             }
         ])

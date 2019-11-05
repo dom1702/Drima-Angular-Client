@@ -2,23 +2,21 @@ import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { View, EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService, ScheduleComponent, PopupOpenEventArgs, CellClickEventArgs, EventClickArgs, NavigatingEventArgs, ActionEventArgs, EventRenderedArgs } from '@syncfusion/ej2-angular-schedule';
-import { SchedulerServiceProxy } from '@shared/service-proxies/service-proxies';
+import { PersonalSchedulerServiceProxy } from '@shared/service-proxies/service-proxies';
 import * as moment from 'moment';
 import { CreateOrEditDrivingLessonModalComponent } from '../lessons/drivingLessons/create-or-edit-drivingLesson-modal.component';
-import { CreateEventTypeModalComponent } from './create-event-type-modal.component';
+import { CreateEventTypeModalComponent } from '../scheduler/create-event-type-modal.component';
 import { CreateOrEditTheoryLessonModalComponent } from '../lessons/theoryLessons/create-or-edit-theoryLesson-modal.component';
-import { CreateOrEditEventModalComponent } from './create-or-edit-event-modal.component';
-import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
-import { StudentLookupTableModalComponent } from '@app/shared/common/lookup/student-lookup-table-modal.component';
-import { IScheduler } from './scheduler-interface';
+import { CreateOrEditEventModalComponent } from '../scheduler/create-or-edit-event-modal.component';
+import { IScheduler } from '../scheduler/scheduler-interface';
 
 
 @Component({
     providers: [DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService],
-    templateUrl: './scheduler.component.html',
+    templateUrl: './personalScheduler.component.html',
     animations: [appModuleAnimation()]
 })
-export class SchedulerComponent extends AppComponentBase implements IScheduler, OnInit {
+export class PersonalSchedulerComponent extends AppComponentBase implements IScheduler, OnInit {
 
     @ViewChild('scheduleObj')
     scheduleObj: ScheduleComponent;
@@ -34,12 +32,6 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
 
     @ViewChild('createEventTypeModal')
     createEventTypeModal: CreateEventTypeModalComponent;
-
-    @ViewChild('instructorLookupTableModal')
-    instructorLookupTableModal: InstructorLookupTableModalComponent;
-
-    @ViewChild('studentLookupTableModal')
-    studentLookupTableModal: StudentLookupTableModalComponent;
 
     currentInstructorFullName: string = '';
     instructorId: number;
@@ -71,7 +63,7 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
 
     constructor(
         injector: Injector,
-        private _schedulerServiceProxy: SchedulerServiceProxy
+        private _personalSchedulerServiceProxy: PersonalSchedulerServiceProxy
     ) {
         super(injector);
     }
@@ -87,9 +79,16 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
     }
 
     onCellClick(args: CellClickEventArgs): void {
-        console.log(args);
-        this.startTime = args.startTime;
-        this.createEventTypeModal.show(this, this.isGranted('Pages.DrivingLessons.Create'), this.isGranted('Pages.DrivingLessons.Create'), true); 
+
+        if(!this.isGranted('Pages.InstructorsOwnDrivingLessons.Create') && !this.isGranted('Pages.TheoryLessons.Create'))
+        {
+            this.openEventModal();
+        }
+        else
+        {
+            this.startTime = args.startTime;
+            this.createEventTypeModal.show(this, this.isGranted('Pages.InstructorsOwnDrivingLessons.Create'), this.isGranted('Pages.TheoryLessons.Create'), true); 
+        }
     }
 
     onEventClick(args: EventClickArgs): void {
@@ -97,7 +96,7 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
         console.log(args.event["Id"]);
 
         if (args.event["AppointmentType"] == 0)
-            this.createOrEditDrivingLessonModal.show(args.event["Id"]);
+            this.createOrEditDrivingLessonModal.show(args.event["Id"], true);
         else if (args.event["AppointmentType"] == 1)
             this.createOrEditTheoryLessonModal.show(args.event["Id"]);
         else if (args.event["AppointmentType"] == 2)
@@ -164,7 +163,7 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
     openDrivingLessonModal(): void {
         this.createEventTypeModal.close();
         this.createOrEditDrivingLessonModal.startTime = this.startTime;
-        this.createOrEditDrivingLessonModal.show();
+        this.createOrEditDrivingLessonModal.show(null, true);
     }
 
     openTheoryLessonModal(): void {
@@ -191,14 +190,9 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
 
         this.scheduleObj.showSpinner();
 
-        //console.log(moment(from).startOf('day'));
-        //console.log(moment(to).startOf('day'));
-
-        this._schedulerServiceProxy.getAllAppointments(
+        this._personalSchedulerServiceProxy.getAllEventsOfCurrentPerson(
             moment(from),
             moment(to),
-            (this.studentId == null) ? -1 : this.studentId,
-            (this.instructorId == null) ? -1 : this.instructorId,
             this.eventTypeFilter.drivingLessons,
             this.eventTypeFilter.theoryLessons,
             this.eventTypeFilter.otherEvents).subscribe(result => {
@@ -258,53 +252,5 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
                 (args.element as HTMLElement).style.backgroundColor = '#8e24aa';
                 break;
         }
-    }
-
-    setInstructorNull() {
-        this.instructorId = null;
-        this.currentInstructorFullName = '';
-
-        this.updateCurrentView();
-    }
-
-
-    getNewInstructorId() {
-        this.instructorId = this.instructorLookupTableModal.id;
-        this.currentInstructorFullName = this.instructorLookupTableModal.firstName + ' ' + this.instructorLookupTableModal.lastName;
-
-        this.updateCurrentView();
-    }
-
-    openSelectInstructorModal() {
-        //this.vehicleLicenseClassLookupTableModal.id = this.vehicle.licenseClassId;
-        //this.vehicleLicenseClassLookupTableModal.displayName = this.licenseClassClass;
-        this.instructorLookupTableModal.show();
-    }
-
-    setStudentIdNull() {
-        this.studentFirstName = '';
-        this.studentLastName = '';
-        this.studentId = null;
-        this.refreshStudentFullName();
-        this.updateCurrentView();
-    }
-
-    openSelectStudentModal() {
-        this.studentLookupTableModal.firstName = this.studentFirstName;
-        this.studentLookupTableModal.lastName = this.studentLastName;
-        this.refreshStudentFullName();
-        this.studentLookupTableModal.show();
-    }
-
-    getNewStudentId() {
-        this.studentFirstName = this.studentLookupTableModal.firstName;
-        this.studentLastName = this.studentLookupTableModal.lastName;
-        this.studentId = this.studentLookupTableModal.id;
-        this.refreshStudentFullName();
-        this.updateCurrentView();
-    }
-
-    refreshStudentFullName() {
-        this.studentFullName = this.studentFirstName + ' ' + this.studentLastName;
     }
 }

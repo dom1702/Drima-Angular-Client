@@ -17,9 +17,12 @@ export class AppNavigationService {
 
     getMenu(): AppMenu {
         return new AppMenu('MainMenu', 'MainMenu', [
+
+            new AppMenuItem("PersonalScheduler", 'Pages.PersonalScheduler', "flaticon-line-graph", "/app/main/personalScheduler"),
+
             new AppMenuItem('Dashboard', 'Pages.Administration.Host.Dashboard', 'flaticon-line-graph', '/app/admin/hostDashboard'),
             new AppMenuItem('Dashboard', 'Pages.Tenant.Dashboard', 'flaticon-line-graph', '/app/main/dashboard'),
-            new AppMenuItem('Scheduler', null, 'flaticon-line-graph', '/app/main/scheduler'),
+            new AppMenuItem('Scheduler', 'Pages.Scheduler', 'flaticon-line-graph', '/app/main/scheduler'),
 
             new AppMenuItem("PlannedDrivingLessons", 'StudentView', "flaticon-book", "/app/main/studentsView/plannedDrivingLessons"),    
             new AppMenuItem("BookDrivingLesson", 'StudentView', "flaticon-book", "/app/main/studentsView/bookDrivingLesson"),    

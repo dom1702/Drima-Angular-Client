@@ -1,7 +1,7 @@
-import { Component, ViewChild, Injector, Output, EventEmitter, OnInit} from '@angular/core';
+import { Component, ViewChild, Injector, Output, EventEmitter, OnInit } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
-import { DrivingLessonsServiceProxy, CreateOrEditDrivingLessonDto, InstructorDto } from '@shared/service-proxies/service-proxies';
+import { DrivingLessonsServiceProxy, CreateOrEditDrivingLessonDto, InstructorDto, InstructorsOwnDrivingLessonsServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { DrivingLessonTopicLookupTableModalComponent } from './drivingLessonTopic-lookup-table-modal.component';
@@ -14,7 +14,7 @@ import { VehicleLookupTableModalComponent } from '@app/shared/common/lookup/vehi
     selector: 'createOrEditDrivingLessonModal',
     templateUrl: './create-or-edit-drivingLesson-modal.component.html',
 })
-export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase implements OnInit{
+export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase implements OnInit {
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('drivingLessonTopicLookupTableModal') drivingLessonTopicLookupTableModal: DrivingLessonTopicLookupTableModalComponent;
@@ -36,9 +36,12 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     licenseClass = '';
     studentFirstName = '';
     studentLastName = '';
-    studentFullName = ''; 
+    studentFullName = '';
 
     vehicleName = '';
+
+    instructorPersonalLesson: boolean;
+    instructorId?: number;
 
     dropdownListIds = [];
     dropdownList = [];
@@ -47,7 +50,8 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
     constructor(
         injector: Injector,
-        private _drivingLessonsServiceProxy: DrivingLessonsServiceProxy
+        private _drivingLessonsServiceProxy: DrivingLessonsServiceProxy,
+        private _instructorsOwnDrivingLessonsServiceProxy: InstructorsOwnDrivingLessonsServiceProxy
     ) {
         super(injector);
     }
@@ -73,9 +77,12 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         console.log(items);
     }
 
-    show(drivingLessonId?: number): void {
+    show(drivingLessonId?: number, instructorPersonalLesson: boolean = false): void {
+
+        this.instructorPersonalLesson = instructorPersonalLesson;
 
         if (!drivingLessonId) {
+
             this.drivingLesson = new CreateOrEditDrivingLessonDto();
             this.drivingLesson.id = drivingLessonId;
             this.drivingLesson.startTime = moment().startOf('day');
@@ -92,6 +99,22 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             this.updateInstructors(false);
 
             this.modal.show();
+        } else if (this.instructorPersonalLesson) {
+            this._instructorsOwnDrivingLessonsServiceProxy.getDrivingLessonForEdit(drivingLessonId).subscribe(result => {
+                this.drivingLesson = result.drivingLesson;
+                this.drivingLessonTopic = result.drivingLesson.topic;
+                this.licenseClass = result.drivingLesson.licenseClass;
+                this.studentFirstName = (result.studentFirstName == null) ? "" : result.studentFirstName;
+                this.studentLastName = (result.studentLastName == null) ? "" : result.studentLastName;
+                this.vehicleName = result.vehicleNameBrandModel;
+                this.refreshStudentFullName();
+                this.startTime = result.drivingLesson.startTime.toDate();
+
+                this.active = true;
+                this.updateInstructors(true);
+
+                this.modal.show();
+            });
         } else {
             this._drivingLessonsServiceProxy.getDrivingLessonForEdit(drivingLessonId).subscribe(result => {
                 this.drivingLesson = result.drivingLesson;
@@ -102,47 +125,57 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
                 this.vehicleName = result.vehicleNameBrandModel;
                 this.refreshStudentFullName();
                 this.startTime = result.drivingLesson.startTime.toDate();
-                
+
                 this.active = true;
                 this.updateInstructors(true);
+
                 this.modal.show();
             });
         }
     }
 
     save(): void {
-            this.saving = true;
+        this.saving = true;
 
-            this.drivingLesson.topic = this.drivingLessonTopic;
+        this.drivingLesson.topic = this.drivingLessonTopic;
 
-            this.drivingLesson.instructors = [];
-          
-            //this.drivingLesson.startTime.date(this.startTime.getDay());
-            this.drivingLesson.startTime = moment(this.startTime);
-            this.drivingLesson.startTime.hours(this.startTime.getHours());
-            this.drivingLesson.startTime.minutes(this.startTime.getMinutes());
-            
-            for (var instructor of this.selectedItems)
-            {
-                var i = new InstructorDto();
-                i.id = this.dropdownListIds[instructor.item_id];
-                this.drivingLesson.instructors.push(
-                    i
-                );
-                console.log(i.id);
-            }
-	
+        this.drivingLesson.instructors = [];
+
+        //this.drivingLesson.startTime.date(this.startTime.getDay());
+        this.drivingLesson.startTime = moment(this.startTime);
+        this.drivingLesson.startTime.hours(this.startTime.getHours());
+        this.drivingLesson.startTime.minutes(this.startTime.getMinutes());
+
+        for (var instructor of this.selectedItems) {
+            var i = new InstructorDto();
+            i.id = this.dropdownListIds[instructor.item_id];
+            this.drivingLesson.instructors.push(
+                i
+            );
+            console.log(i.id);
+        }
+
+        if (this.instructorPersonalLesson) {
+            this._instructorsOwnDrivingLessonsServiceProxy.createOrEdit(this.drivingLesson)
+                .pipe(finalize(() => { this.saving = false; }))
+                .subscribe(() => {
+                    this.notify.info(this.l('SavedSuccessfully'));
+                    this.close();
+                    this.modalSave.emit(null);
+                });
+        }
+        else {
             this._drivingLessonsServiceProxy.createOrEdit(this.drivingLesson)
-             .pipe(finalize(() => { this.saving = false;}))
-             .subscribe(() => {
-                this.notify.info(this.l('SavedSuccessfully'));
-                this.close();
-                this.modalSave.emit(null);
-             });
+                .pipe(finalize(() => { this.saving = false; }))
+                .subscribe(() => {
+                    this.notify.info(this.l('SavedSuccessfully'));
+                    this.close();
+                    this.modalSave.emit(null);
+                });
+        }
     }
 
-    updateInstructors(drivingLessonEdit : boolean ) : void
-    {
+    updateInstructors(drivingLessonEdit: boolean): void {
         console.log(this.active);
         if (!this.active) {
             return;
@@ -158,31 +191,28 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
                 console.log("in");
                 // for(var r = 0; r < result.items.length; r++)
                 //     console.log(result.items[r].id);
-    
+
                 this.dropdownList = [];
                 this.dropdownListIds = [];
                 this.selectedItems = [];
 
-                for (var _i = 0; _i < result.items.length; _i++) 
-                {   
+                for (var _i = 0; _i < result.items.length; _i++) {
                     this.dropdownList.push(
-                    {
-                        item_id: _i, 
-                        item_text: result.items[_i].displayName
-                    });
+                        {
+                            item_id: _i,
+                            item_text: result.items[_i].displayName
+                        });
 
                     this.dropdownListIds.push(result.items[_i].id);
                 }
 
-                if(drivingLessonEdit)
-                {
+                if (drivingLessonEdit) {
                     for (var item of this.dropdownList) {
                         console.log(this.drivingLesson.instructors.length);
                         for (var instructor of this.drivingLesson.instructors) {
                             console.log(instructor.id);
                             console.log(this.dropdownListIds[item.item_id]);
-                            if(this.dropdownListIds[item.item_id] == instructor.id)
-                            {
+                            if (this.dropdownListIds[item.item_id] == instructor.id) {
                                 console.log("Add it now" + instructor.id);
                                 this.selectedItems.push(
                                     {
@@ -192,7 +222,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
                                 );
                             }
                         }
-                        
+
                     }
 
                     //console.log(this.selectedItems.length);
@@ -202,12 +232,12 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             });
     }
 
-        openSelectDrivingLessonTopicModal() {
+    openSelectDrivingLessonTopicModal() {
         this.drivingLessonTopicLookupTableModal.id = 0;
         this.drivingLessonTopicLookupTableModal.displayName = this.drivingLessonTopic;
         this.drivingLessonTopicLookupTableModal.show();
     }
-        openSelectLicenseClassModal() {
+    openSelectLicenseClassModal() {
         //this.licenseClassLookupTableModal.id = this.drivingLesson.licenseClass;
         this.licenseClassLookupTableModal.displayName = this.licenseClass;
         this.licenseClassLookupTableModal.show();
@@ -221,14 +251,14 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
     setVehicleNull() {
         this.drivingLesson.vehicleId = null;
-       this.vehicleName = '';
+        this.vehicleName = '';
     }
 
-        setTopicNull() {
+    setTopicNull() {
         this.drivingLesson.topic = null;
         this.drivingLessonTopic = '';
     }
-        setLicenseClassNull() {
+    setLicenseClassNull() {
         this.drivingLesson.licenseClass = null;
         this.licenseClass = '';
     }
@@ -252,18 +282,18 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     getNewStudentId() {
 
         this.drivingLesson.studentId = this.studentLookupTableModal.id;
-        this.studentFirstName =  this.studentLookupTableModal.firstName;
+        this.studentFirstName = this.studentLookupTableModal.firstName;
         this.studentLastName = this.studentLookupTableModal.lastName;
         this.refreshStudentFullName();
     }
 
-        getNewTopic() {
+    getNewTopic() {
 
         this.drivingLesson.topic = this.drivingLessonTopicLookupTableModal.displayName;
         this.drivingLesson.description = this.drivingLessonTopicLookupTableModal.description;
         this.drivingLessonTopic = this.drivingLessonTopicLookupTableModal.displayName;
     }
-        getNewLicenseClass() {
+    getNewLicenseClass() {
         this.drivingLesson.licenseClass = this.licenseClassLookupTableModal.displayName;
         this.licenseClass = this.licenseClassLookupTableModal.displayName;
     }
@@ -273,22 +303,31 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         this.vehicleName = this.vehicleLookupTableModal.name + ' ( ' + this.vehicleLookupTableModal.brand + ' ' + this.vehicleLookupTableModal.model + ')';
     }
 
-    refreshStudentFullName()
-    {
-        this.studentFullName = this.studentFirstName + ' ' + this.studentLastName; 
+    refreshStudentFullName() {
+        this.studentFullName = this.studentFirstName + ' ' + this.studentLastName;
     }
 
-    delete(): void{
+    delete(): void {
         this.message.confirm(
             '',
             (isConfirmed) => {
                 if (isConfirmed) {
-                    this._drivingLessonsServiceProxy.delete(this.drivingLesson.id)
-                        .subscribe(() => {
-                            this.notify.success(this.l('SuccessfullyDeleted'));
-                            this.close();
-                            this.modalSave.emit(null);
-                        });
+
+                    if (this.instructorPersonalLesson) {
+                        this._instructorsOwnDrivingLessonsServiceProxy.delete(this.drivingLesson.id)
+                            .subscribe(() => {
+                                this.notify.success(this.l('SuccessfullyDeleted'));
+                                this.close();
+                                this.modalSave.emit(null);
+                            });
+                    } else {
+                        this._drivingLessonsServiceProxy.delete(this.drivingLesson.id)
+                            .subscribe(() => {
+                                this.notify.success(this.l('SuccessfullyDeleted'));
+                                this.close();
+                                this.modalSave.emit(null);
+                            });
+                    }
                 }
             }
         );

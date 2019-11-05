@@ -6,6 +6,7 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { TimepickerComponent } from 'ngx-bootstrap/timepicker';
 import { SchedulerComponent } from './scheduler.component';
+import { IScheduler } from './scheduler-interface';
 
 @Component({
     selector: 'createEventTypeModal',
@@ -20,7 +21,11 @@ export class CreateEventTypeModalComponent extends AppComponentBase implements O
 
     active :boolean;
 
-    scheduler : SchedulerComponent;
+    scheduler : IScheduler;
+
+    allowCreateDrivingLesson : boolean;
+    allowCreateTheoryLesson : boolean;
+    allowCreateEvent: boolean;
 
     saving : boolean;
 
@@ -35,12 +40,16 @@ export class CreateEventTypeModalComponent extends AppComponentBase implements O
 
     }
 
-    show(scheduler : SchedulerComponent): void 
+    show(scheduler : IScheduler, allowCreateDrivingLesson : boolean, allowCreateTheoryLesson : boolean, allowCreateEvent : boolean): void 
     {
+        this.allowCreateDrivingLesson = allowCreateDrivingLesson;
+        this.allowCreateTheoryLesson = allowCreateTheoryLesson;
+        this.allowCreateEvent = allowCreateEvent;
+
         this.scheduler = scheduler
 
         this.active = true;
-    
+     
         this.modal.show();
 
     }

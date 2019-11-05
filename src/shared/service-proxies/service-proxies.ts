@@ -5172,6 +5172,315 @@ export class InstructorsServiceProxy {
 }
 
 @Injectable()
+export class InstructorsOwnDrivingLessonsServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param maxLengthFilter (optional) 
+     * @param minLengthFilter (optional) 
+     * @param maxStartTimeFilter (optional) 
+     * @param minStartTimeFilter (optional) 
+     * @param completedFilter (optional) 
+     * @param drivingLessonTopicTopicFilter (optional) 
+     * @param licenseClassClassFilter (optional) 
+     * @param instructorFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAll(filter: string | null | undefined, maxLengthFilter: number | null | undefined, minLengthFilter: number | null | undefined, maxStartTimeFilter: moment.Moment | null | undefined, minStartTimeFilter: moment.Moment | null | undefined, completedFilter: number | null | undefined, drivingLessonTopicTopicFilter: string | null | undefined, licenseClassClassFilter: string | null | undefined, instructorFilter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfGetDrivingLessonForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/InstructorsOwnDrivingLessons/GetAll?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (maxLengthFilter !== undefined)
+            url_ += "MaxLengthFilter=" + encodeURIComponent("" + maxLengthFilter) + "&"; 
+        if (minLengthFilter !== undefined)
+            url_ += "MinLengthFilter=" + encodeURIComponent("" + minLengthFilter) + "&"; 
+        if (maxStartTimeFilter !== undefined)
+            url_ += "MaxStartTimeFilter=" + encodeURIComponent(maxStartTimeFilter ? "" + maxStartTimeFilter.toJSON() : "") + "&"; 
+        if (minStartTimeFilter !== undefined)
+            url_ += "MinStartTimeFilter=" + encodeURIComponent(minStartTimeFilter ? "" + minStartTimeFilter.toJSON() : "") + "&"; 
+        if (completedFilter !== undefined)
+            url_ += "CompletedFilter=" + encodeURIComponent("" + completedFilter) + "&"; 
+        if (drivingLessonTopicTopicFilter !== undefined)
+            url_ += "DrivingLessonTopicTopicFilter=" + encodeURIComponent("" + drivingLessonTopicTopicFilter) + "&"; 
+        if (licenseClassClassFilter !== undefined)
+            url_ += "LicenseClassClassFilter=" + encodeURIComponent("" + licenseClassClassFilter) + "&"; 
+        if (instructorFilter !== undefined)
+            url_ += "InstructorFilter=" + encodeURIComponent("" + instructorFilter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfGetDrivingLessonForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfGetDrivingLessonForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PagedResultDtoOfGetDrivingLessonForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfGetDrivingLessonForViewDto.fromJS(resultData200) : new PagedResultDtoOfGetDrivingLessonForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfGetDrivingLessonForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getDrivingLessonForView(id: number | null | undefined): Observable<GetDrivingLessonForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/InstructorsOwnDrivingLessons/GetDrivingLessonForView?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDrivingLessonForView(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDrivingLessonForView(<any>response_);
+                } catch (e) {
+                    return <Observable<GetDrivingLessonForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetDrivingLessonForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDrivingLessonForView(response: HttpResponseBase): Observable<GetDrivingLessonForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetDrivingLessonForViewDto.fromJS(resultData200) : new GetDrivingLessonForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetDrivingLessonForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getDrivingLessonForEdit(id: number | null | undefined): Observable<GetDrivingLessonForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/InstructorsOwnDrivingLessons/GetDrivingLessonForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDrivingLessonForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDrivingLessonForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetDrivingLessonForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetDrivingLessonForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDrivingLessonForEdit(response: HttpResponseBase): Observable<GetDrivingLessonForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetDrivingLessonForEditOutput.fromJS(resultData200) : new GetDrivingLessonForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetDrivingLessonForEditOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    createOrEdit(input: CreateOrEditDrivingLessonDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/InstructorsOwnDrivingLessons/CreateOrEdit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateOrEdit(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    delete(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/InstructorsOwnDrivingLessons/Delete?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class InvoiceServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -8375,23 +8684,23 @@ export class PersonalSchedulerServiceProxy {
     /**
      * @param startTimeFilter (optional) 
      * @param endTimeFilter (optional) 
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
+     * @param returnDrivingLessons (optional) 
+     * @param returnTheoryLessons (optional) 
+     * @param returnOtherEvents (optional) 
      * @return Success
      */
-    getAllAppointmentsOfCurrentPerson(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<AppointmentDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/PersonalScheduler/GetAllAppointmentsOfCurrentPerson?";
+    getAllEventsOfCurrentPerson(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined, returnDrivingLessons: boolean | null | undefined, returnTheoryLessons: boolean | null | undefined, returnOtherEvents: boolean | null | undefined): Observable<SchedulerEventDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/PersonalScheduler/GetAllEventsOfCurrentPerson?";
         if (startTimeFilter !== undefined)
             url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
         if (endTimeFilter !== undefined)
             url_ += "EndTimeFilter=" + encodeURIComponent(endTimeFilter ? "" + endTimeFilter.toJSON() : "") + "&"; 
-        if (sorting !== undefined)
-            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
-        if (skipCount !== undefined)
-            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
-        if (maxResultCount !== undefined)
-            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (returnDrivingLessons !== undefined)
+            url_ += "ReturnDrivingLessons=" + encodeURIComponent("" + returnDrivingLessons) + "&"; 
+        if (returnTheoryLessons !== undefined)
+            url_ += "ReturnTheoryLessons=" + encodeURIComponent("" + returnTheoryLessons) + "&"; 
+        if (returnOtherEvents !== undefined)
+            url_ += "ReturnOtherEvents=" + encodeURIComponent("" + returnOtherEvents) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -8403,20 +8712,20 @@ export class PersonalSchedulerServiceProxy {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllAppointmentsOfCurrentPerson(response_);
+            return this.processGetAllEventsOfCurrentPerson(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAllAppointmentsOfCurrentPerson(<any>response_);
+                    return this.processGetAllEventsOfCurrentPerson(<any>response_);
                 } catch (e) {
-                    return <Observable<AppointmentDto[]>><any>_observableThrow(e);
+                    return <Observable<SchedulerEventDto[]>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<AppointmentDto[]>><any>_observableThrow(response_);
+                return <Observable<SchedulerEventDto[]>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetAllAppointmentsOfCurrentPerson(response: HttpResponseBase): Observable<AppointmentDto[]> {
+    protected processGetAllEventsOfCurrentPerson(response: HttpResponseBase): Observable<SchedulerEventDto[]> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -8430,7 +8739,7 @@ export class PersonalSchedulerServiceProxy {
             if (resultData200 && resultData200.constructor === Array) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(AppointmentDto.fromJS(item));
+                    result200!.push(SchedulerEventDto.fromJS(item));
             }
             return _observableOf(result200);
             }));
@@ -8439,7 +8748,83 @@ export class PersonalSchedulerServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<AppointmentDto[]>(<any>null);
+        return _observableOf<SchedulerEventDto[]>(<any>null);
+    }
+
+    /**
+     * @param startTimeFilter (optional) 
+     * @param endTimeFilter (optional) 
+     * @param studentId (optional) 
+     * @param instructorId (optional) 
+     * @param returnDrivingLessons (optional) 
+     * @param returnTheoryLessons (optional) 
+     * @param returnOtherEvents (optional) 
+     * @return Success
+     */
+    getAllAppointments(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined, studentId: number | null | undefined, instructorId: number | null | undefined, returnDrivingLessons: boolean | null | undefined, returnTheoryLessons: boolean | null | undefined, returnOtherEvents: boolean | null | undefined): Observable<SchedulerEventDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/PersonalScheduler/GetAllAppointments?";
+        if (startTimeFilter !== undefined)
+            url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
+        if (endTimeFilter !== undefined)
+            url_ += "EndTimeFilter=" + encodeURIComponent(endTimeFilter ? "" + endTimeFilter.toJSON() : "") + "&"; 
+        if (studentId !== undefined)
+            url_ += "StudentId=" + encodeURIComponent("" + studentId) + "&"; 
+        if (instructorId !== undefined)
+            url_ += "InstructorId=" + encodeURIComponent("" + instructorId) + "&"; 
+        if (returnDrivingLessons !== undefined)
+            url_ += "ReturnDrivingLessons=" + encodeURIComponent("" + returnDrivingLessons) + "&"; 
+        if (returnTheoryLessons !== undefined)
+            url_ += "ReturnTheoryLessons=" + encodeURIComponent("" + returnTheoryLessons) + "&"; 
+        if (returnOtherEvents !== undefined)
+            url_ += "ReturnOtherEvents=" + encodeURIComponent("" + returnOtherEvents) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllAppointments(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllAppointments(<any>response_);
+                } catch (e) {
+                    return <Observable<SchedulerEventDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<SchedulerEventDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllAppointments(response: HttpResponseBase): Observable<SchedulerEventDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(SchedulerEventDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<SchedulerEventDto[]>(<any>null);
     }
 }
 
@@ -26166,6 +26551,81 @@ export interface IFlatPermissionWithLevelDto {
     isGrantedByDefault: boolean | undefined;
 }
 
+export class SchedulerEventDto implements ISchedulerEventDto {
+    startTime!: moment.Moment | undefined;
+    endTime!: moment.Moment | undefined;
+    appointmentType!: EventType | undefined;
+    subject!: string | undefined;
+    description!: string | undefined;
+    allDay!: boolean | undefined;
+    location!: string | undefined;
+    isBlocked!: boolean | undefined;
+    id!: number | undefined;
+
+    constructor(data?: ISchedulerEventDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
+            this.endTime = data["endTime"] ? moment(data["endTime"].toString()) : <any>undefined;
+            this.appointmentType = data["appointmentType"];
+            this.subject = data["subject"];
+            this.description = data["description"];
+            this.allDay = data["allDay"];
+            this.location = data["location"];
+            this.isBlocked = data["isBlocked"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): SchedulerEventDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SchedulerEventDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
+        data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
+        data["appointmentType"] = this.appointmentType;
+        data["subject"] = this.subject;
+        data["description"] = this.description;
+        data["allDay"] = this.allDay;
+        data["location"] = this.location;
+        data["isBlocked"] = this.isBlocked;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface ISchedulerEventDto {
+    startTime: moment.Moment | undefined;
+    endTime: moment.Moment | undefined;
+    appointmentType: EventType | undefined;
+    subject: string | undefined;
+    description: string | undefined;
+    allDay: boolean | undefined;
+    location: string | undefined;
+    isBlocked: boolean | undefined;
+    id: number | undefined;
+}
+
+export enum EventType {
+    DrivingLesson = 0, 
+    TheoryLesson = 1, 
+    Event = 2, 
+    Holiday = 3, 
+}
+
 export class PagedResultDtoOfGetPricePackageForViewDto implements IPagedResultDtoOfGetPricePackageForViewDto {
     totalCount!: number | undefined;
     items!: GetPricePackageForViewDto[] | undefined;
@@ -27559,81 +28019,6 @@ export class CreateOrUpdateRoleInput implements ICreateOrUpdateRoleInput {
 export interface ICreateOrUpdateRoleInput {
     role: RoleEditDto;
     grantedPermissionNames: string[];
-}
-
-export class SchedulerEventDto implements ISchedulerEventDto {
-    startTime!: moment.Moment | undefined;
-    endTime!: moment.Moment | undefined;
-    appointmentType!: EventType | undefined;
-    subject!: string | undefined;
-    description!: string | undefined;
-    allDay!: boolean | undefined;
-    location!: string | undefined;
-    isBlocked!: boolean | undefined;
-    id!: number | undefined;
-
-    constructor(data?: ISchedulerEventDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
-            this.endTime = data["endTime"] ? moment(data["endTime"].toString()) : <any>undefined;
-            this.appointmentType = data["appointmentType"];
-            this.subject = data["subject"];
-            this.description = data["description"];
-            this.allDay = data["allDay"];
-            this.location = data["location"];
-            this.isBlocked = data["isBlocked"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): SchedulerEventDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new SchedulerEventDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
-        data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
-        data["appointmentType"] = this.appointmentType;
-        data["subject"] = this.subject;
-        data["description"] = this.description;
-        data["allDay"] = this.allDay;
-        data["location"] = this.location;
-        data["isBlocked"] = this.isBlocked;
-        data["id"] = this.id;
-        return data; 
-    }
-}
-
-export interface ISchedulerEventDto {
-    startTime: moment.Moment | undefined;
-    endTime: moment.Moment | undefined;
-    appointmentType: EventType | undefined;
-    subject: string | undefined;
-    description: string | undefined;
-    allDay: boolean | undefined;
-    location: string | undefined;
-    isBlocked: boolean | undefined;
-    id: number | undefined;
-}
-
-export enum EventType {
-    DrivingLesson = 0, 
-    TheoryLesson = 1, 
-    Event = 2, 
-    Holiday = 3, 
 }
 
 export class GetCurrentLoginInformationsOutput implements IGetCurrentLoginInformationsOutput {

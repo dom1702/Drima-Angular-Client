@@ -1,5 +1,5 @@
 <div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-lg" style="vertical-align: middle">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
     
                 <button *ngIf="allowCreateDrivingLesson" [disabled]="saving" type="button" class="btn btn-default" (click)="openDrivingLessonModal()">{{l("DrivingLesson")}}</button>

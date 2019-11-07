@@ -69,6 +69,7 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { SVDrivingLessonsOverviewComponent } from './studentsView/drivingLessonsOverview/sv-drivingLessons-overview.component';
 import { SVBookDrivingLessonComponent } from './studentsView/bookDrivingLesson/sv-book-drivingLesson.component';
 import { PersonalSchedulerComponent } from './personalScheduler/personalScheduler.component';
+import { StudentsOverviewFormsComponent } from './students/students/students-overview-forms.component';
 
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
@@ -132,6 +133,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       StudentsOverviewOverviewComponent,
       StudentsOverviewPricePackageComponent,
       StudentsOverviewInvoicesComponent,
+      StudentsOverviewFormsComponent,
       InstructorLookupTableModalComponent,
       CreateOrEditStudentUserModalComponent,
       SVPlannedDrivingLessonsComponent,

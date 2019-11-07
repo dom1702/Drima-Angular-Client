@@ -43,6 +43,9 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
 
     startTime: Date;
 
+    allowedToSeeOwnAppointments : boolean;
+    allowedToSeeOwnDrivingLessons : boolean;
+
     eventTypeFilter: any = { drivingLessons: true, theoryLessons: true, otherEvents: true };
 
     // public data: object[] = [];
@@ -69,7 +72,10 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
     }
 
     ngOnInit(): void {
-        //this.updateCurrentView();
+        this.allowedToSeeOwnAppointments = this.isGranted('OwnAppointments');
+        this.allowedToSeeOwnDrivingLessons = this.isGranted('Pages.InstructorsOwnDrivingLessons');
+
+        this.updateCurrentView();
     }
 
     onPopupOpen(args: PopupOpenEventArgs): void {
@@ -80,27 +86,38 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
 
     onCellClick(args: CellClickEventArgs): void {
 
-        if(!this.isGranted('Pages.InstructorsOwnDrivingLessons.Create') && !this.isGranted('Pages.TheoryLessons.Create'))
+        if(!this.isGranted('Pages.InstructorsOwnDrivingLessons.Create') 
+        && !this.isGranted('OwnAppointments.Create'))
+            return;
+
+        if(!this.isGranted('Pages.InstructorsOwnDrivingLessons.Create'))
         {
             this.openEventModal();
+        }
+        else if(!this.isGranted('OwnAppointments.Create'))
+        {
+            this.openDrivingLessonModal();
         }
         else
         {
             this.startTime = args.startTime;
-            this.createEventTypeModal.show(this, this.isGranted('Pages.InstructorsOwnDrivingLessons.Create'), this.isGranted('Pages.TheoryLessons.Create'), true); 
+            this.createEventTypeModal.show(this, this.isGranted('Pages.InstructorsOwnDrivingLessons.Create'), false, this.isGranted('OwnAppointments.Create')); 
         }
     }
 
     onEventClick(args: EventClickArgs): void {
-        console.log(args);
-        console.log(args.event["Id"]);
-
         if (args.event["AppointmentType"] == 0)
+        {
+            if(this.isGranted('Pages.InstructorsOwnDrivingLessons.Edit'))
             this.createOrEditDrivingLessonModal.show(args.event["Id"], true);
-        else if (args.event["AppointmentType"] == 1)
-            this.createOrEditTheoryLessonModal.show(args.event["Id"]);
+        }
+        //else if (args.event["AppointmentType"] == 1)
+        //    this.createOrEditTheoryLessonModal.show(args.event["Id"]);
         else if (args.event["AppointmentType"] == 2)
-            this.createOrEditEventModal.show(args.event["Id"]);
+        {
+            if(this.isGranted('OwnAppointments.Edit'))
+                this.createOrEditEventModal.show(args.event["Id"], true);
+        }
     }
 
     Doubleclick(args: EventClickArgs): void {
@@ -175,7 +192,7 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
     openEventModal(): void {
         this.createEventTypeModal.close();
         this.createOrEditEventModal.startTime = this.startTime;
-        this.createOrEditEventModal.show();
+        this.createOrEditEventModal.show(null, true);
     }
 
     updateView(from: Date, to: Date): void {

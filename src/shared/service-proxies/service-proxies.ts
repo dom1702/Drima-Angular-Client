@@ -12875,14 +12875,47 @@ export class StudentsViewServiceProxy {
     /**
      * @param fromDate (optional) 
      * @param toDate (optional) 
+     * @param filter (optional) 
+     * @param maxLengthFilter (optional) 
+     * @param minLengthFilter (optional) 
+     * @param maxStartTimeFilter (optional) 
+     * @param minStartTimeFilter (optional) 
+     * @param drivingLessonTopicTopicFilter (optional) 
+     * @param licenseClassClassFilter (optional) 
+     * @param instructorFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
      * @return Success
      */
-    getPlannedDrivingLessons(fromDate: moment.Moment | null | undefined, toDate: moment.Moment | null | undefined): Observable<SVDrivingLessonsDto> {
+    getPlannedDrivingLessons(fromDate: moment.Moment | null | undefined, toDate: moment.Moment | null | undefined, filter: string | null | undefined, maxLengthFilter: number | null | undefined, minLengthFilter: number | null | undefined, maxStartTimeFilter: moment.Moment | null | undefined, minStartTimeFilter: moment.Moment | null | undefined, drivingLessonTopicTopicFilter: string | null | undefined, licenseClassClassFilter: string | null | undefined, instructorFilter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<SVDrivingLessonsDto> {
         let url_ = this.baseUrl + "/api/services/app/StudentsView/GetPlannedDrivingLessons?";
         if (fromDate !== undefined)
             url_ += "FromDate=" + encodeURIComponent(fromDate ? "" + fromDate.toJSON() : "") + "&"; 
         if (toDate !== undefined)
             url_ += "ToDate=" + encodeURIComponent(toDate ? "" + toDate.toJSON() : "") + "&"; 
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (maxLengthFilter !== undefined)
+            url_ += "MaxLengthFilter=" + encodeURIComponent("" + maxLengthFilter) + "&"; 
+        if (minLengthFilter !== undefined)
+            url_ += "MinLengthFilter=" + encodeURIComponent("" + minLengthFilter) + "&"; 
+        if (maxStartTimeFilter !== undefined)
+            url_ += "MaxStartTimeFilter=" + encodeURIComponent(maxStartTimeFilter ? "" + maxStartTimeFilter.toJSON() : "") + "&"; 
+        if (minStartTimeFilter !== undefined)
+            url_ += "MinStartTimeFilter=" + encodeURIComponent(minStartTimeFilter ? "" + minStartTimeFilter.toJSON() : "") + "&"; 
+        if (drivingLessonTopicTopicFilter !== undefined)
+            url_ += "DrivingLessonTopicTopicFilter=" + encodeURIComponent("" + drivingLessonTopicTopicFilter) + "&"; 
+        if (licenseClassClassFilter !== undefined)
+            url_ += "LicenseClassClassFilter=" + encodeURIComponent("" + licenseClassClassFilter) + "&"; 
+        if (instructorFilter !== undefined)
+            url_ += "InstructorFilter=" + encodeURIComponent("" + instructorFilter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -20085,6 +20118,8 @@ export class DrivingLessonDto implements IDrivingLessonDto {
     licenseClass!: string | undefined;
     studentId!: number | undefined;
     vehicleId!: number | undefined;
+    instructors!: InstructorDto[] | undefined;
+    instructorNames!: string[] | undefined;
     id!: number | undefined;
 
     constructor(data?: IDrivingLessonDto) {
@@ -20105,6 +20140,16 @@ export class DrivingLessonDto implements IDrivingLessonDto {
             this.licenseClass = data["licenseClass"];
             this.studentId = data["studentId"];
             this.vehicleId = data["vehicleId"];
+            if (data["instructors"] && data["instructors"].constructor === Array) {
+                this.instructors = [] as any;
+                for (let item of data["instructors"])
+                    this.instructors!.push(InstructorDto.fromJS(item));
+            }
+            if (data["instructorNames"] && data["instructorNames"].constructor === Array) {
+                this.instructorNames = [] as any;
+                for (let item of data["instructorNames"])
+                    this.instructorNames!.push(item);
+            }
             this.id = data["id"];
         }
     }
@@ -20125,6 +20170,16 @@ export class DrivingLessonDto implements IDrivingLessonDto {
         data["licenseClass"] = this.licenseClass;
         data["studentId"] = this.studentId;
         data["vehicleId"] = this.vehicleId;
+        if (this.instructors && this.instructors.constructor === Array) {
+            data["instructors"] = [];
+            for (let item of this.instructors)
+                data["instructors"].push(item.toJSON());
+        }
+        if (this.instructorNames && this.instructorNames.constructor === Array) {
+            data["instructorNames"] = [];
+            for (let item of this.instructorNames)
+                data["instructorNames"].push(item);
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -20138,6 +20193,8 @@ export interface IDrivingLessonDto {
     licenseClass: string | undefined;
     studentId: number | undefined;
     vehicleId: number | undefined;
+    instructors: InstructorDto[] | undefined;
+    instructorNames: string[] | undefined;
     id: number | undefined;
 }
 

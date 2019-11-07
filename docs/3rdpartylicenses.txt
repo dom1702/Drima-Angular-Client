@@ -1650,6 +1650,8 @@ SOFTWARE.
 
 
 
+ngx-bootstrap/buttons
+
 ngx-bootstrap/chronos
 The MIT License (MIT)
 
@@ -1910,6 +1912,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+
+undefined
 
 rtl-detect
 BSD-3-Clause
@@ -2201,8 +2205,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 For more information, please refer to <http://unlicense.org>
 
-
-undefined
 
 text-mask-core
 Unlicense

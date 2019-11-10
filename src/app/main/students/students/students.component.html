@@ -132,7 +132,7 @@
                                 <tr>
                                     <th style="width: 130px" [hidden]="!isGrantedAny('Pages.Students.Edit', 'Pages.Students.Delete')">{{l('Actions')}}</th>
                                     <th style="width: 150px" pSortableColumn="licenseClassClass">
-                                        {{l('Class')}}
+                                        {{l('LicenseClasses')}}
                                         <p-sortIcon field="licenseClassClass"></p-sortIcon>
                                     </th>
                                     <th style="width: 150px" pSortableColumn="student.firstName">
@@ -144,7 +144,7 @@
                                         <p-sortIcon field="student.lastName"></p-sortIcon>
                                     </th>
                                     <th style="width: 150px" pSortableColumn="student.email">
-                                        {{l('Email')}}
+                                        {{l('EmailAddress')}}
                                         <p-sortIcon field="student.email"></p-sortIcon>
                                     </th>
                                     <th style="width: 150px" pSortableColumn="student.phoneNumber">
@@ -187,7 +187,7 @@
                                         </div>
                                     </td>
                                     <td style="width:150px">
-												<span class="ui-column-title"> {{l('Class')}}</span>
+												<span class="ui-column-title"> {{l('LicenseClasses')}}</span>
 												{{formatClassesString(record.student.licenseClasses)}}
 											</td>
                                     <td style="width:150px">
@@ -199,7 +199,7 @@
 											{{record.student.lastName}}
 										</td>
                                     <td style="width:150px">
-											<span class="ui-column-title"> {{l('Email')}}</span>
+											<span class="ui-column-title"> {{l('EmailAddress')}}</span>
 											{{record.student.email}}
 										</td>
                                     <td style="width:150px">

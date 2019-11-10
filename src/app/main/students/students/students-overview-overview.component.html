@@ -1,4 +1,4 @@
-<h5>General</h5>
+<h5>{{l("General")}}</h5>
 <div class="m--margin-top-20">
     <div *ngIf="student" class="row">
 
@@ -11,7 +11,7 @@
             {{student.lastName}}
         </div>
         <div class="col-6 mb-3">
-            <h6>{{l("Email")}} :</h6>
+            <h6>{{l("EmailAddress")}} :</h6>
             {{student.email}}
         </div>
         <div class="col-6 mb-3">
@@ -25,18 +25,18 @@
         </div>
 
         <div class="col-6 mb-3">
-            <h6>{{l("Classes")}} :</h6>
+            <h6>{{l("LicenseClasses")}} :</h6>
             {{licenseClasses}}
         </div>
 
         <div class="col-6 mb-3">
-                <h6>{{l("ClassesAlreadyOwned")}} :</h6>
+                <h6>{{l("LicenseClassesAlreadyOwned")}} :</h6>
                 {{licenseClassesAlreadyOwned}}
             </div>
     </div>
 </div>
 
-<h5 class="m--margin-top-30">Address</h5>
+<h5 class="m--margin-top-30">{{l("Address")}}</h5>
 
 <div class="m--margin-top-20">
     <div *ngIf="student" class="row">
@@ -59,7 +59,7 @@
     </div>
 </div>
 
-<h5 class="m--margin-top-30">PricePackage</h5>
+<h5 class="m--margin-top-30">{{l("PricePackage")}}</h5>
 
 <div class="m--margin-top-20">
     <div *ngIf="student" class="row">
@@ -69,24 +69,24 @@
             {{pricePackageName}}
         </div>
         <div *ngIf="!pricePackageName" class="col-6 mb-3">
-            <h6 style="color:red">No price package assigned yet!</h6>
+            <h6 style="color:red">{{l("NoPricePackageAssignedYet")}}!</h6>
         </div>
 
     </div>
 </div>
 
-<h5 class="m--margin-top-30">UserAccount</h5>
+<h5 class="m--margin-top-30">{{l("UserAccount")}}</h5>
 
-       <label *ngIf="!student.userId">Student not linked to a user account</label>
-       <br><button *ngIf="!student.userId" type="button" (click)="createUserAccount()" class="btn btn mr-5">Create and assign user account</button>
-       <label *ngIf="student.userId">Username: {{student.userName}} ({{student.userId}})</label>
+       <label *ngIf="!student.userId">{{l("StudentNotLinkedToAUserAccount")}}</label>
+       <br><button *ngIf="!student.userId" type="button" (click)="createUserAccount()" class="btn btn mr-5">{{l("CreateAndAssignUserAccount")}}</button>
+       <label *ngIf="student.userId">{{l("UserName")}}: {{student.userName}} ({{student.userId}})</label>
 
 
 <div class="m--margin-top-30">
     <div class="m--align-right">
 
 
-        <button type="button" (click)="editStudent()" class="btn btn-primary mr-5">Edit student data</button>
+        <button type="button" (click)="editStudent()" class="btn btn-primary mr-5">{{l("EditStudentData")}}</button>
 
 
     </div>

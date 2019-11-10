@@ -85,6 +85,7 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
     }
 
     onCellClick(args: CellClickEventArgs): void {
+        this.startTime = args.startTime;
 
         if(!this.isGranted('Pages.InstructorsOwnDrivingLessons.Create') 
         && !this.isGranted('OwnAppointments.Create'))
@@ -100,7 +101,6 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
         }
         else
         {
-            this.startTime = args.startTime;
             this.createEventTypeModal.show(this, this.isGranted('Pages.InstructorsOwnDrivingLessons.Create'), false, this.isGranted('OwnAppointments.Create')); 
         }
     }

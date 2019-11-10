@@ -29,12 +29,12 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
     dropdownList = [];
     selectedItems = [];
     dropdownSettings = {};
-    placeholder = 'None';
+    placeholder = this.l('Select');
 
     dropdownListLicenseClassesOwned = [];
     selectedItemsLicenseClassesOwned = [];
     dropdownSettingsLicenseClassesOwned = {};
-    placeholderLicenseClassesOwned = 'None';
+    placeholderLicenseClassesOwned = this.l('Select');
 
     pricePackageName = '';
 
@@ -51,18 +51,20 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
             singleSelection: false,
             idField: 'item_id',
             textField: 'item_text',
-            selectAllText: 'Select All',
-            unSelectAllText: 'Unselect All',
-            allowSearchFilter: false
+            selectAllText: this.l('SelectAll'),
+            unSelectAllText: this.l('UnselectAll'),
+            allowSearchFilter: false,
+            noDataAvailablePlaceholderText: this.l('NoData')
         };
 
         this.dropdownSettingsLicenseClassesOwned = {
             singleSelection: false,
             idField: 'item_id',
             textField: 'item_text',
-            selectAllText: 'Select All',
-            unSelectAllText: 'Unselect All',
-            allowSearchFilter: false
+            selectAllText: this.l('SelectAll'),
+            unSelectAllText: this.l('UnselectAll'),
+            allowSearchFilter: false,
+            noDataAvailablePlaceholderText: this.l('NoData')
         };
     }
 

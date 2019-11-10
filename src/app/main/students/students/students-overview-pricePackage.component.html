@@ -14,10 +14,10 @@
                 <p-table [value]="pricePackage.products">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Name</th>
-                            <th>Quantity</th>
-                            <th>ItemVat</th>
-                            <th>PriceAfterVat</th>
+                            <th>{{l("Name")}}</th>
+                            <th>{{l("Qty")}}</th>
+                            <th>{{l("ItemVat")}}</th>
+                            <th>{{l("PriceAfterVat")}}</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-product>
@@ -35,8 +35,7 @@
             <div class="m--align-right">
 
 
-                <button type="button" (click)="editPricePackage()" class="btn btn-primary mr-5">Edit price
-                    package</button>
+                <button type="button" (click)="editPricePackage()" class="btn btn-primary mr-5">{{l("EditPricePackage")}}</button>
 
 
             </div>
@@ -45,7 +44,7 @@
     </div>
 
     <div *ngIf="!pricePackage">
-        <h6 style="color:red">No price package assigned yet!</h6>
+        <h6 style="color:red">{{l("NoPricePackageAssignedYet")}}!</h6>
     </div>
 
 

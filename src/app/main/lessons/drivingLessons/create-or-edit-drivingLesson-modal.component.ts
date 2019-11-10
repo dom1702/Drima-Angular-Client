@@ -47,6 +47,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     dropdownList = [];
     selectedItems = [];
     dropdownSettings = {};
+    placeholder = this.l("Select");
 
     constructor(
         injector: Injector,
@@ -61,9 +62,10 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             singleSelection: false,
             idField: 'item_id',
             textField: 'item_text',
-            selectAllText: 'Select All',
-            unSelectAllText: 'Unselect All',
-            allowSearchFilter: false
+            selectAllText: this.l("SelectAll"),
+            unSelectAllText: this.l("UnselectAll"),
+            allowSearchFilter: false,
+            noDataAvailablePlaceholderText: this.l('NoData')
         };
 
         this.ismeridian = false;

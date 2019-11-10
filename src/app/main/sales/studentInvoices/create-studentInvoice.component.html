@@ -41,7 +41,7 @@
 
                     <div class="form-group">
                         <label for="StudentInvoice_Interest">{{l("Interest")}}</label>
-                        <input type="text" class="form-control"  formControlName="interest"/>
+                        <input type="number" step="0.5" class="form-control"  formControlName="interest"/>
                     </div>
 
                     <div class="form-group">
@@ -95,7 +95,7 @@
                             <!-- <th width='100px'>{{l("Discount")}}</th> -->
                             <th>{{l("PriceAfterVat")}}</th>
                             <th>{{l("Sum")}}</th>
-                            <th>Action</th>
+                            <th>{{l("Action")}}</th>
                         </thead>
                         <tbody formArrayName="items" *ngFor="let group of getFormData.controls; let i=index">
                             <tr [formGroupName]="i">
@@ -106,8 +106,8 @@
                             <td class="form-group">
                                 <!-- <input type="text" class="form-control" formControlName="qty" placeholder="qty"> -->
                                 <ejs-numerictextbox [showSpinButton]='false' locale='de' decimals='2' format='n' formControlName="qty" placeholder="qty"></ejs-numerictextbox>
-                                <span class="text-danger" *ngIf="group.get('qty').touched && group.get('qty')?.hasError('required')">email required</span>
-                                <span class="text-danger" *ngIf="group.get('qty').touched && !group.get('qty').hasError('required') && group.get('qty').hasError('validEmail')">Please enter correct email domain </span>
+                                <!-- <span class="text-danger" *ngIf="group.get('qty').touched && group.get('qty')?.hasError('required')">email required</span>
+                                <span class="text-danger" *ngIf="group.get('qty').touched && !group.get('qty').hasError('required') && group.get('qty').hasError('validEmail')">Please enter correct email domain </span> -->
                             </td>
                             <td class="form-group">
                                 <!-- <input type="text" class="form-control" formControlName="priceBeforeVat" placeholder="priceBeforeVat"> -->
@@ -127,7 +127,7 @@
                                 <label>{{getItemControlLabel(i, 'sum') | currency:'EUR'}}</label>
                             </td>
                             <td>
-                                <button (click)="remove(i)" class="btn btn-primary mr-5">Remove</button>
+                                <button type="button" (click)="remove(i)" class="btn mr-5">{{l("Remove")}}</button>
                             </td>
                             </tr>
                         </tbody>
@@ -136,9 +136,9 @@
 
                     <div class="m--margin-left-20">
                         <div class="row">
-                            <button type="button" (click)="addItem()" class="btn btn-primary mr-5">Add new item manually</button>
-                            <button *ngIf="studentPricePackageId" type="button" (click)="addPricePackage()" class="btn btn-primary mr-5">Add price package</button>
-                            <button type="button" (click)="addProduct()" class="btn btn-primary mr-5">Add product</button>
+                            <button type="button" (click)="addItemManually()" class="btn btn-primary mr-5">{{l("AddNewItemManually")}}</button>
+                            <button *ngIf="studentPricePackageId" type="button" (click)="addPricePackage()" class="btn btn-primary mr-5">{{l("AddPricePackage")}}</button>
+                            <button type="button" (click)="addProduct()" class="btn btn-primary mr-5">{{l("AddProduct")}}</button>
                         </div>
                     </div>
 

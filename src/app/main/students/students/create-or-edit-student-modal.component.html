@@ -73,6 +73,17 @@
 						<label for="Student_Street">{{l("Street")}}</label>
 						<input type="text" id="Student_Street" class="form-control" [(ngModel)]="student.street" name="Street"    />
 					</div>
+
+					<div class="form-group">
+							<label for="Student_BirthCountry">{{l("BirthCountry")}}</label>
+							<select  class="form-control" name="Student_BirthCountry" [(ngModel)]="currentBirthCountry">
+									<option *ngFor="let option of countries" [ngValue]="option.name.common">
+									  {{option.name.common}}
+									</option>
+								  </select>
+
+
+					</div>
 		
 					<div class="form-group">
 						<label for="Student_City">{{l("City")}}</label>

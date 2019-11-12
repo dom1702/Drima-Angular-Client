@@ -1,12 +1,11 @@
 import { Component, ViewChild, Injector, Output, EventEmitter, OnInit} from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
-import { StudentsServiceProxy, CreateOrEditStudentDto, PricePackagesServiceProxy } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, CreateOrEditStudentDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { PricePackageLookupTableModalComponent } from './pricePackage-lookup-table-modal.component';
-
-
+//import countriesJson  from '../../../../assets/countries.json';
 @Component({
     selector: 'createOrEditStudentModal',
     templateUrl: './create-or-edit-student-modal.component.html'
@@ -38,10 +37,12 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
     pricePackageName = '';
 
+    //countries : any = countriesJson;
+    currentBirthCountry : any;
+
     constructor(
         injector: Injector,
-        private _studentsServiceProxy: StudentsServiceProxy,
-        private _pricePackageServiceProxy : PricePackagesServiceProxy
+        private _studentsServiceProxy: StudentsServiceProxy
     ) {
         super(injector);
     }
@@ -66,6 +67,13 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
             allowSearchFilter: false,
             noDataAvailablePlaceholderText: this.l('NoData')
         };
+
+        // var keys = Object.keys(this.countries);
+        // for(var i=0; i<keys.length; i++){
+        //     var key = keys[i];
+        //     if(key == name)
+        //     console.log(key, yourObject[key]);
+        // }
     }
 
     onItemSelect(item: any) {

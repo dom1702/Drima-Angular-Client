@@ -70,6 +70,7 @@ import { SVDrivingLessonsOverviewComponent } from './studentsView/drivingLessons
 import { SVBookDrivingLessonComponent } from './studentsView/bookDrivingLesson/sv-book-drivingLesson.component';
 import { PersonalSchedulerComponent } from './personalScheduler/personalScheduler.component';
 import { StudentsOverviewFormsComponent } from './students/students/students-overview-forms.component';
+import { SVBookDrivingLessonLookupSchedulerModalComponent } from './studentsView/bookDrivingLesson/sv-book-drivingLesson-lookup-scheduler-modal.component';
 
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
@@ -141,7 +142,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       StudentLookupTableModalComponent,
       SVDrivingLessonsOverviewComponent,
       SVBookDrivingLessonComponent,
-      PersonalSchedulerComponent
+      PersonalSchedulerComponent,
+      SVBookDrivingLessonLookupSchedulerModalComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

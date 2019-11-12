@@ -3,10 +3,10 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto col-md-6">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <span>{{l("Book Lessons")}}</span>
+                    <span>Book a driving lesson</span>
                 </h3>
                 <span class="m-section__sub">
-                    {{l("BookADrivingLesson")}}
+                    preplan your next DrivingLesson
                 </span>
             </div>
             <div class="col-md-6 text-right">
@@ -15,7 +15,56 @@
         </div>
     </div>
     <div class="m-content">
-        
-    </div>
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                        
+                <div class="form-group m-form__group">
+                    <label for="Name">{{l("Type")}}</label>
+                    <ng-multiselect-dropdown
+                    [placeholder]="placeholder"
+                    [data]="dropdownListLessonTypes"
+                    [(ngModel)]="selectedType" [ngModelOptions]="{standalone: true}"
+                    [settings]="dropdownSettings"
+                    (onSelect)="onItemSelect($event)"
+                    >
+                    </ng-multiselect-dropdown>
+                </div>
 
+                <div [hidden]="vehicle" class="form-group m-form__group">
+                    <label for="Name">{{l("Vehicle")}}</label>
+                    <ng-multiselect-dropdown
+                    [placeholder]="placeholder"
+                    [data]="dropdownListVehicles"
+                    [(ngModel)]="selectedVehicle" [ngModelOptions]="{standalone: true}"
+                    [settings]="dropdownSettings"
+                    (onSelect)="onItemSelect($event)"
+                    >
+                    </ng-multiselect-dropdown>
+                </div>
+
+                <div class="form-group">
+                    <label for="Length">{{l("Length")}}</label>
+                    <input type="number" id="DrivingLesson_Length" min="1" max="10" class="form-control" name="Length"  />
+                </div>
+
+                <div class="form-group m-form__group">
+                        <label>{{l("Date")}}</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" disabled>     
+                            <div class="input-group-append">
+                                <button (click)="createDate()" class="btn btn-primary blue" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
+                            </div> 
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger" type="button" ><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default">Discharge</button>
+                    <button type="submit" class="btn btn-primary blue" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </div>
+        </div>
+    </div>   
 </div>

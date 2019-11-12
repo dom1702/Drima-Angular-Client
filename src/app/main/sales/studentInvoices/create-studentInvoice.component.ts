@@ -81,7 +81,8 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
       date: [moment().toDate()],
       date_due: [moment().add(abp.setting.get("App.Invoice.DefaultDaysToPay"), 'day').toDate()],
-      interest: ['0'],
+      interest: ['0'
+      ],
       recipientFirstName: [''],
       recipientLastName: [''],
       recipientStreet: [''],
@@ -527,6 +528,12 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
     this.productLookupTableModal.show();
   }
 
+  addItemManually()
+  {
+    this.addItem();
+    this.previousItemForm = _.cloneDeep(this.itemForm);
+  }
+
   getNewProductId() {
 
     if (this.productLookupTableModal.id == -1)
@@ -559,6 +566,8 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
         this.updateTotalVat();
         this.updateTotalAfterVat();
 
+        this.previousItemForm = _.cloneDeep(this.itemForm);
+
         this.primengTableHelper.hideLoadingIndicator();
 
       });
@@ -590,6 +599,8 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
         this.updateTotalBeforeVat();
         this.updateTotalVat();
         this.updateTotalAfterVat();
+
+        this.previousItemForm = _.cloneDeep(this.itemForm);
 
         this.primengTableHelper.hideLoadingIndicator();
 

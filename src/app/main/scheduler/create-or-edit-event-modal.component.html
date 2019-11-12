@@ -20,21 +20,21 @@
                             <div class="col">
                                 <button type="button" name="studentSelection" class="btn btn-default"
                                     (click)="personTypeSelected(0)" [(ngModel)]="studentSelected" btnCheckbox>
-                                    Select Student
+                                    {{l('SelectStudent')}}
                                 </button>
                             </div>
 
                             <div class="col">
                                 <button type="button" name="instructorSelection" class="btn btn-default"
                                     (click)="personTypeSelected(1)" [(ngModel)]="instructorSelected" btnCheckbox>
-                                    Select Instructor
+                                    {{l('SelectInstructor')}}
                                 </button>
                             </div>
 
                             <div class="col">
                                 <button type="button" name="userSelection" class="btn btn-default"
                                     (click)="personTypeSelected(2)" [(ngModel)]="userSelected" btnCheckbox>
-                                    Select User
+                                    {{l('SelectUser')}}
                                 </button>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="Event_StartTime">Start Date</label>
+                            <label for="Event_StartTime">{{l("StartDate")}}</label>
                             <input required class="form-control m-input" type="timepicker" bsDatepicker
                                 [(ngModel)]="startTime" id="Event_StartTime" name="Event_StartTime">
                         </div>
@@ -98,7 +98,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="Event_EndTime">End Date</label>
+                            <label for="Event_EndTime">{{l("EndDate")}}</label>
                             <input required class="form-control m-input" type="timepicker" bsDatepicker
                                 [(ngModel)]="endTime" id="Event_EndTime" name="Event_EndTime">
                         </div>

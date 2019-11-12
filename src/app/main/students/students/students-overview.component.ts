@@ -29,7 +29,7 @@ export class StudentsOverviewComponent extends AppComponentBase {
     overviewTabName : string = this.l("Overview");
     pricePackageTabName : string = this.l("PricePackage");
     studentInvoicesTabName : string = this.l("StudentInvoices");
-    studentFormsTabName : string = this.l("StudentForms");
+    studentFormsTabName : string = this.l("Forms");
 
     student : StudentDto;
     pricePackageName : string;

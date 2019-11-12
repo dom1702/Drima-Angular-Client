@@ -30,7 +30,7 @@
                                 <th>{{l("Qty")}}</th>
                                 <th>{{l("PriceAfterVat")}}</th>
                                 <th>{{l("Sum")}}</th>
-                                <th>Action</th>
+                                <th>{{l("Action")}}</th>
                             </thead>
                             <tbody formArrayName="items" *ngFor="let group of getFormData.controls; let i=index">
                                 <tr [formGroupName]="i">
@@ -52,7 +52,7 @@
                                         <label>{{getItemControlLabel(i, 'sum') | currency:'EUR'}}</label>
                                     </td>
                                     <td>
-                                        <button (click)="remove(i)" class="btn btn-primary mr-5">Remove</button>
+                                        <button type="button" (click)="remove(i)" class="btn btn-primary mr-5">{{l("Remove")}}</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -61,8 +61,7 @@
 
                     <div class="m--margin-left-20">
                         <div class="row">
-                            <button type="button" (click)="openSelectProductModal()" class="btn btn-primary mr-5">Add
-                                product</button>
+                            <button type="button" (click)="openSelectProductModal()" class="btn btn-primary mr-5">{{l("AddProduct")}}</button>
                         </div>
                     </div>
 

@@ -5,11 +5,11 @@
         <p-table [value]="invoices">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Date</th>
-                    <th>DateDue</th>
-                    <th>TotalAfterVat</th>
-                    <th style="width:150px">PdfFileCreated</th>
-                    <th>Action</th>
+                    <th>{{l("Date")}}</th>
+                    <th>{{l("DateDue")}}</th>
+                    <th>{{l("TotalAfterVat")}}</th>
+                    <th style="width:150px">{{l("PdfFileCreated")}}</th>
+                    <th>{{l("Action")}}</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-invoice>
@@ -59,14 +59,13 @@
     </div>
 
     <div *ngIf="invoices && invoices.length == 0" class="form-group">
-        <label>No invoices created yet</label>
+        <label>{{l("NoInvoicesCreatedYet")}}</label>
     </div>
 
     <div class="form-group">
         <div class="m--margin-top-30">
             <div class="m--align-right">
-                <button type="button" (click)="createNewInvoice()" class="btn btn-primary mr-5">Create new
-                    invoice</button>
+                <button type="button" (click)="createNewInvoice()" class="btn btn-primary mr-5">{{l("CreateNewInvoice")}}</button>
             </div>
         </div>
     </div>

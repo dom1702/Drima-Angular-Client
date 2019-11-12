@@ -36,6 +36,7 @@ export class CreateOrEditTheoryLessonModalComponent extends AppComponentBase imp
     dropdownList = [];
     selectedItems = [];
     dropdownSettings = {};
+    placeholder = this.l('Select');
 
     theoryLessonId;
 
@@ -54,9 +55,10 @@ export class CreateOrEditTheoryLessonModalComponent extends AppComponentBase imp
             singleSelection: false,
             idField: 'item_id',
             textField: 'item_text',
-            selectAllText: 'Select All',
-            unSelectAllText: 'Unselect All',
-            allowSearchFilter: false
+            selectAllText: this.l('SelectAll'),
+            unSelectAllText: this.l('UnselectAll'),
+            allowSearchFilter: false,
+            noDataAvailablePlaceholderText: this.l('NoData')
         };
     }
 

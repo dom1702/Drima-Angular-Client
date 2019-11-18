@@ -25,7 +25,8 @@ export class AppNavigationService {
             new AppMenuItem('Scheduler', 'Pages.Scheduler', 'flaticon-line-graph', '/app/main/scheduler'),
 
             new AppMenuItem("PlannedDrivingLessons", 'StudentView', "flaticon-book", "/app/main/studentsView/plannedDrivingLessons"),    
-            new AppMenuItem("BookDrivingLesson", 'StudentView', "flaticon-book", "/app/main/studentsView/bookDrivingLesson"),    
+            new AppMenuItem("BookDrivingLesson", 'StudentView', "flaticon-book", "/app/main/studentsView/bookDrivingLesson"), 
+            new AppMenuItem("FAQ", null, "flaticon-search-1", "/app/main/studentsView/frequentlyAskedQuestions"),   
             new AppMenuItem("PlannedInstructorDL", 'InstructorView', "flaticon-book", "/app/main/studentsView/plannedDrivingLessons"),
 
             new AppMenuItem('Tenants', 'Pages.Tenants', 'flaticon-list-3', '/app/admin/tenants'),

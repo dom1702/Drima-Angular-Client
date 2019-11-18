@@ -12,6 +12,7 @@ import { SVPlannedDrivingLessonsComponent } from './studentsView/plannedDrivingL
 import { SVDrivingLessonsOverviewComponent } from './studentsView/drivingLessonsOverview/sv-drivingLessons-overview.component';
 import { SVBookDrivingLessonComponent } from './studentsView/bookDrivingLesson/sv-book-drivingLesson.component';
 import { PersonalSchedulerComponent } from './personalScheduler/personalScheduler.component';
+import { SVFrequentlyAskedQuestionsComponent } from './studentsView/frequentlyAskedQuestions/sv-frequently-asked-questions.component';
 
 @NgModule({
     imports: [
@@ -30,7 +31,8 @@ import { PersonalSchedulerComponent } from './personalScheduler/personalSchedule
                     { path: 'students/students/students-overview', component: StudentsOverviewComponent },
                     { path: 'studentsView/plannedDrivingLessons', component: SVPlannedDrivingLessonsComponent, data: { permission: 'StudentView' } },
                     { path: 'studentsView/drivingLessonsOverview', component: SVDrivingLessonsOverviewComponent, data: { permission: 'StudentView' }},
-                    { path: 'studentsView/bookDrivingLesson', component: SVBookDrivingLessonComponent, data: { permission: 'StudentView' }}
+                    { path: 'studentsView/bookDrivingLesson', component: SVBookDrivingLessonComponent, data: { permission: 'StudentView' }},
+                    { path: 'studentsView/frequentlyAskedQuestions', component: SVFrequentlyAskedQuestionsComponent, data: { permission: 'StudentView' }}
                 ]
             }
         ])

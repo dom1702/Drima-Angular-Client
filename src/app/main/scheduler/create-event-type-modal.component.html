@@ -3,6 +3,7 @@
         <div class="modal-content">
     
                 <button *ngIf="allowCreateDrivingLesson" [disabled]="saving" type="button" class="btn btn-default" (click)="openDrivingLessonModal()">{{l("DrivingLesson")}}</button>
+                <button *ngIf="allowCreateSimulatorLesson" [disabled]="saving" type="button" class="btn btn-default" (click)="openSimulatorLessonModal()">{{l("SimulatorLesson")}}</button>
                 <button *ngIf="allowCreateTheoryLesson" [disabled]="saving" type="button" class="btn btn-default" (click)="openTheoryLessonModal()">{{l("TheoryLesson")}}</button>
                 <button *ngIf="allowCreateEvent" [disabled]="saving" type="button" class="btn btn-default" (click)="openEventModal()">{{l("Event")}}</button>
                 <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>

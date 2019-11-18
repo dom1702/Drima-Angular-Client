@@ -9,11 +9,13 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { FileDownloadService } from '@shared/utils/file-download.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { CreateOrEditStudentModalComponent } from './create-or-edit-student-modal.component';
 import { StudentsOverviewComponent } from './students-overview.component';
 import { StudentsOverviewPricePackageComponent } from './students-overview-pricePackage.component';
 import { CreateOrEditStudentUserModalComponent } from './create-or-edit-student-user-modal.component';
+import { CountriesService } from '@app/shared/common/services/countries.service';
+import { LanguagesService } from '@app/shared/common/services/languages.service';
 
 @Component({
     selector: 'students-overview-overview',
@@ -30,8 +32,11 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     @Input() pricePackageName : string;
     @Input() parentOverview : StudentsOverviewComponent;
 
-    licenseClasses = 'None';
-    licenseClassesAlreadyOwned = 'None';
+    licenseClasses = '-';
+    licenseClassesAlreadyOwned = '-';
+
+    birthCountry = '';
+    nativeLanguage = '';
 
     constructor(
         injector: Injector,
@@ -39,7 +44,9 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
         private _notifyService: NotifyService,
         private _tokenAuth: TokenAuthServiceProxy,
         private _activatedRoute: ActivatedRoute,
-        private _fileDownloadService: FileDownloadService
+        private _fileDownloadService: FileDownloadService,
+        private _countriesService: CountriesService,
+        private _languagesService: LanguagesService
     ) {
         super(injector);
     }
@@ -48,6 +55,8 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
 
         this.updateLicenseClass();
         this.updateLicenseClassesAlreadyOwned();
+        this.updateBirthCountry();
+        this.updateNativeLanguage();
     }
 
     updateLicenseClass() : void 
@@ -78,11 +87,27 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
         }
     }
 
+    updateBirthCountry() : void{
+        this.birthCountry = this._countriesService.getName(this.student.birthCountry);
+    }
+
+    updateNativeLanguage() : void{
+        this.nativeLanguage = this._languagesService.getName(this.student.nativeLanguage);
+    }
+
     updateStudent()
     {
-        this.parentOverview.UpdateStudentView();
-        this.updateLicenseClass();
-        this.updateLicenseClassesAlreadyOwned();
+        this.parentOverview.UpdateStudentView().subscribe((any) => {
+
+            // At this point we need to wait a short time because Input variable student is not yet refreshed
+             setTimeout(() => {
+                this.updateLicenseClass();
+                this.updateLicenseClassesAlreadyOwned();
+                this.updateBirthCountry();
+                this.updateNativeLanguage();
+            }, 10);
+         
+        });
     }
 
     editStudent(): void {
@@ -95,6 +120,6 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
 
     userAccountCreated()
     {
-        this.parentOverview.UpdateStudentView();
+        this.updateStudent();
     }
 }

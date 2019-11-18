@@ -2,7 +2,7 @@ import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
-import { StudentsServiceProxy, StudentDto  } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, StudentDto } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -10,7 +10,7 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { FileDownloadService } from '@shared/utils/file-download.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable, Observer } from 'rxjs';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { StudentsOverviewPricePackageComponent } from './students-overview-pricePackage.component';
 
@@ -23,16 +23,16 @@ export class StudentsOverviewComponent extends AppComponentBase {
 
     @ViewChild(StudentsOverviewPricePackageComponent) pricePackageView: StudentsOverviewPricePackageComponent;
 
-    subscription : Subscription;
+    subscription: Subscription;
 
-    overallActive : boolean = false;
-    overviewTabName : string = this.l("Overview");
-    pricePackageTabName : string = this.l("PricePackage");
-    studentInvoicesTabName : string = this.l("StudentInvoices");
-    studentFormsTabName : string = this.l("Forms");
+    overallActive: boolean = false;
+    overviewTabName: string = this.l("Overview");
+    pricePackageTabName: string = this.l("PricePackage");
+    studentInvoicesTabName: string = this.l("StudentInvoices");
+    studentFormsTabName: string = this.l("Forms");
 
-    student : StudentDto;
-    pricePackageName : string;
+    student: StudentDto;
+    pricePackageName: string;
 
     constructor(
         injector: Injector,
@@ -47,13 +47,13 @@ export class StudentsOverviewComponent extends AppComponentBase {
     }
 
     ngOnInit(): void {
-      
+
         this.subscription = this._activatedRoute.params.subscribe(params => {
-            
+
             const id = params['id'] || '';
 
             this._studentsServiceProxy.getStudentForView(id).subscribe(result => {
-                
+
                 this.student = result.student;
 
                 this.pricePackageName = result.pricePackageName;
@@ -63,20 +63,36 @@ export class StudentsOverviewComponent extends AppComponentBase {
         });
     }
 
-    public UpdateStudentView() {
+    // public UpdateStudentView() {
+    //     this._studentsServiceProxy.getStudentForView(this.student.id).subscribe(result => {
 
-        this._studentsServiceProxy.getStudentForView(this.student.id).subscribe(result => {
-        
-            this.student = result.student;
-            this.pricePackageName = result.pricePackageName;
+    //         this.student = result.student;
+    //         this.pricePackageName = result.pricePackageName;
 
-            console.log(this.pricePackageView);
-            this.pricePackageView.updatePricePackage(result.student.pricePackageId);
+    //         console.log(this.pricePackageView);
+    //         this.pricePackageView.updatePricePackage(result.student.pricePackageId);
+    //     });
+    // }
+
+
+    public UpdateStudentView(): Observable<any> {
+
+        return Observable.create((observer: Observer<any>) => {
+            this._studentsServiceProxy.getStudentForView(this.student.id).subscribe(result => {
+
+                this.student = result.student;
+                this.pricePackageName = result.pricePackageName;
+
+                this.pricePackageView.updatePricePackage(result.student.pricePackageId);
+
+                observer.next(null)
+                observer.complete()
+            });
+
         });
     }
 
-    goBack()
-    {
+    goBack() {
         this.location.back();
     }
 }

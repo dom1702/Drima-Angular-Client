@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { SimulatorLessonsComponent } from './lessons/simulatorLessons/simulatorLessons.component';
 import { StudentInvoicesComponent } from './sales/studentInvoices/studentInvoices.component';
 import { DrivingLessonsComponent } from './lessons/drivingLessons/drivingLessons.component';
 import { StudentsComponent } from './students/students/students.component';
@@ -19,6 +20,7 @@ import { PersonalSchedulerComponent } from './personalScheduler/personalSchedule
             {
                 path: '',
                 children: [
+                    { path: 'lessons/simulatorLessons', component: SimulatorLessonsComponent, data: { permission: 'Pages.SimulatorLessons' }  },
                     { path: 'sales/studentInvoices', component: StudentInvoicesComponent, data: { permission: 'Pages.StudentInvoices' }  },
                     { path: 'lessons/drivingLessons', component: DrivingLessonsComponent, data: { permission: 'Pages.DrivingLessons' }  },
                     { path: 'students/students', component: StudentsComponent, data: { permission: 'Pages.Students' }  },

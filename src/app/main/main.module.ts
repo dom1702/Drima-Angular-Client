@@ -1,6 +1,13 @@
 
 
+
 import { CommonModule } from '@angular/common';
+import { SimulatorLessonsComponent } from './lessons/simulatorLessons/simulatorLessons.component';
+import { ViewSimulatorLessonModalComponent } from './lessons/simulatorLessons/view-simulatorLesson-modal.component';
+import { CreateOrEditSimulatorLessonModalComponent } from './lessons/simulatorLessons/create-or-edit-simulatorLesson-modal.component';
+import { SimulatorLessonPersonLookupTableModalComponent } from './lessons/simulatorLessons/simulatorLesson-person-lookup-table-modal.component';
+import { SimulatorLessonSimulatorLookupTableModalComponent } from './lessons/simulatorLessons/simulatorLesson-simulator-lookup-table-modal.component';
+
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StudentInvoicesComponent } from './sales/studentInvoices/studentInvoices.component';
@@ -143,7 +150,12 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       SVDrivingLessonsOverviewComponent,
       SVBookDrivingLessonComponent,
       PersonalSchedulerComponent,
-      SVBookDrivingLessonLookupSchedulerModalComponent
+      SVBookDrivingLessonLookupSchedulerModalComponent,
+      SimulatorLessonsComponent,
+      ViewSimulatorLessonModalComponent,		
+      CreateOrEditSimulatorLessonModalComponent,
+      SimulatorLessonPersonLookupTableModalComponent,
+      SimulatorLessonSimulatorLookupTableModalComponent,
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

@@ -4,13 +4,15 @@ import { AppSessionService } from '@shared/common/session/app-session.service';
 import { Injectable } from '@angular/core';
 import { AppMenu } from './app-menu';
 import { AppMenuItem } from './app-menu-item';
+import { FeatureCheckerService } from 'abp-ng2-module/dist/src/features/feature-checker.service';
 
 @Injectable()
 export class AppNavigationService {
 
     constructor(
         private _permissionCheckerService: PermissionCheckerService,
-        private _appSessionService: AppSessionService
+        private _appSessionService: AppSessionService,
+        private _featureCheckerService : FeatureCheckerService
     ) {
 
     }
@@ -39,6 +41,11 @@ export class AppNavigationService {
             
             
             new AppMenuItem('StudentInvoices', 'Pages.StudentInvoices', 'flaticon-more', '/app/main/sales/studentInvoices'),
+            
+            new AppMenuItem('SimulatorLessons', 'Pages.SimulatorLessons', 'flaticon-more', '/app/main/lessons/simulatorLessons',
+                undefined, undefined, undefined,  () => {
+                    return this._featureCheckerService.isEnabled('App.Simulator')}),
+
              new AppMenuItem('Administration', '', 'flaticon-interface-8', '', [
                 new AppMenuItem('OrganizationUnits', 'Pages.Administration.OrganizationUnits', 'flaticon-map', '/app/admin/organization-units'),
                 new AppMenuItem('Roles', 'Pages.Administration.Roles', 'flaticon-suitcase', '/app/admin/roles'),

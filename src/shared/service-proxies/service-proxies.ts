@@ -8916,9 +8916,10 @@ export class PersonalSchedulerServiceProxy {
      * @param returnDrivingLessons (optional) 
      * @param returnTheoryLessons (optional) 
      * @param returnOtherEvents (optional) 
+     * @param returnSimulatorLessons (optional) 
      * @return Success
      */
-    getAllAppointments(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined, studentId: number | null | undefined, instructorId: number | null | undefined, returnDrivingLessons: boolean | null | undefined, returnTheoryLessons: boolean | null | undefined, returnOtherEvents: boolean | null | undefined): Observable<SchedulerEventDto[]> {
+    getAllAppointments(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined, studentId: number | null | undefined, instructorId: number | null | undefined, returnDrivingLessons: boolean | null | undefined, returnTheoryLessons: boolean | null | undefined, returnOtherEvents: boolean | null | undefined, returnSimulatorLessons: boolean | null | undefined): Observable<SchedulerEventDto[]> {
         let url_ = this.baseUrl + "/api/services/app/PersonalScheduler/GetAllAppointments?";
         if (startTimeFilter !== undefined)
             url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
@@ -8934,6 +8935,8 @@ export class PersonalSchedulerServiceProxy {
             url_ += "ReturnTheoryLessons=" + encodeURIComponent("" + returnTheoryLessons) + "&"; 
         if (returnOtherEvents !== undefined)
             url_ += "ReturnOtherEvents=" + encodeURIComponent("" + returnOtherEvents) + "&"; 
+        if (returnSimulatorLessons !== undefined)
+            url_ += "ReturnSimulatorLessons=" + encodeURIComponent("" + returnSimulatorLessons) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -10764,9 +10767,10 @@ export class SchedulerServiceProxy {
      * @param returnDrivingLessons (optional) 
      * @param returnTheoryLessons (optional) 
      * @param returnOtherEvents (optional) 
+     * @param returnSimulatorLessons (optional) 
      * @return Success
      */
-    getAllAppointments(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined, studentId: number | null | undefined, instructorId: number | null | undefined, returnDrivingLessons: boolean | null | undefined, returnTheoryLessons: boolean | null | undefined, returnOtherEvents: boolean | null | undefined): Observable<SchedulerEventDto[]> {
+    getAllAppointments(startTimeFilter: moment.Moment | null | undefined, endTimeFilter: moment.Moment | null | undefined, studentId: number | null | undefined, instructorId: number | null | undefined, returnDrivingLessons: boolean | null | undefined, returnTheoryLessons: boolean | null | undefined, returnOtherEvents: boolean | null | undefined, returnSimulatorLessons: boolean | null | undefined): Observable<SchedulerEventDto[]> {
         let url_ = this.baseUrl + "/api/services/app/Scheduler/GetAllAppointments?";
         if (startTimeFilter !== undefined)
             url_ += "StartTimeFilter=" + encodeURIComponent(startTimeFilter ? "" + startTimeFilter.toJSON() : "") + "&"; 
@@ -10782,6 +10786,8 @@ export class SchedulerServiceProxy {
             url_ += "ReturnTheoryLessons=" + encodeURIComponent("" + returnTheoryLessons) + "&"; 
         if (returnOtherEvents !== undefined)
             url_ += "ReturnOtherEvents=" + encodeURIComponent("" + returnOtherEvents) + "&"; 
+        if (returnSimulatorLessons !== undefined)
+            url_ += "ReturnSimulatorLessons=" + encodeURIComponent("" + returnSimulatorLessons) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -10944,6 +10950,435 @@ export class SessionServiceProxy {
             }));
         }
         return _observableOf<UpdateUserSignInTokenOutput>(<any>null);
+    }
+}
+
+@Injectable()
+export class SimulatorLessonsServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param maxStartTimeFilter (optional) 
+     * @param minStartTimeFilter (optional) 
+     * @param completedFilter (optional) 
+     * @param topicFilter (optional) 
+     * @param personLastNameFilter (optional) 
+     * @param simulatorNameFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAll(filter: string | null | undefined, maxStartTimeFilter: moment.Moment | null | undefined, minStartTimeFilter: moment.Moment | null | undefined, completedFilter: number | null | undefined, topicFilter: string | null | undefined, personLastNameFilter: string | null | undefined, simulatorNameFilter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfGetSimulatorLessonForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorLessons/GetAll?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (maxStartTimeFilter !== undefined)
+            url_ += "MaxStartTimeFilter=" + encodeURIComponent(maxStartTimeFilter ? "" + maxStartTimeFilter.toJSON() : "") + "&"; 
+        if (minStartTimeFilter !== undefined)
+            url_ += "MinStartTimeFilter=" + encodeURIComponent(minStartTimeFilter ? "" + minStartTimeFilter.toJSON() : "") + "&"; 
+        if (completedFilter !== undefined)
+            url_ += "CompletedFilter=" + encodeURIComponent("" + completedFilter) + "&"; 
+        if (topicFilter !== undefined)
+            url_ += "TopicFilter=" + encodeURIComponent("" + topicFilter) + "&"; 
+        if (personLastNameFilter !== undefined)
+            url_ += "PersonLastNameFilter=" + encodeURIComponent("" + personLastNameFilter) + "&"; 
+        if (simulatorNameFilter !== undefined)
+            url_ += "SimulatorNameFilter=" + encodeURIComponent("" + simulatorNameFilter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfGetSimulatorLessonForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfGetSimulatorLessonForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PagedResultDtoOfGetSimulatorLessonForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfGetSimulatorLessonForViewDto.fromJS(resultData200) : new PagedResultDtoOfGetSimulatorLessonForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfGetSimulatorLessonForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getSimulatorLessonForView(id: number | null | undefined): Observable<GetSimulatorLessonForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorLessons/GetSimulatorLessonForView?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetSimulatorLessonForView(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetSimulatorLessonForView(<any>response_);
+                } catch (e) {
+                    return <Observable<GetSimulatorLessonForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetSimulatorLessonForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetSimulatorLessonForView(response: HttpResponseBase): Observable<GetSimulatorLessonForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetSimulatorLessonForViewDto.fromJS(resultData200) : new GetSimulatorLessonForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetSimulatorLessonForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getSimulatorLessonForEdit(id: number | null | undefined): Observable<GetSimulatorLessonForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorLessons/GetSimulatorLessonForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetSimulatorLessonForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetSimulatorLessonForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetSimulatorLessonForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetSimulatorLessonForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetSimulatorLessonForEdit(response: HttpResponseBase): Observable<GetSimulatorLessonForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetSimulatorLessonForEditOutput.fromJS(resultData200) : new GetSimulatorLessonForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetSimulatorLessonForEditOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    createOrEdit(input: CreateOrEditSimulatorLessonDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorLessons/CreateOrEdit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateOrEdit(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    delete(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorLessons/Delete?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllPersonForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfSimulatorLessonPersonLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorLessons/GetAllPersonForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllPersonForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllPersonForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfSimulatorLessonPersonLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfSimulatorLessonPersonLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllPersonForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfSimulatorLessonPersonLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfSimulatorLessonPersonLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfSimulatorLessonPersonLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfSimulatorLessonPersonLookupTableDto>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllSimulatorForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorLessons/GetAllSimulatorForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllSimulatorForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllSimulatorForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllSimulatorForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto>(<any>null);
     }
 }
 
@@ -26852,6 +27287,7 @@ export enum EventType {
     TheoryLesson = 1, 
     Event = 2, 
     Holiday = 3, 
+    SimulatorLesson = 4, 
 }
 
 export class PagedResultDtoOfGetPricePackageForViewDto implements IPagedResultDtoOfGetPricePackageForViewDto {
@@ -28919,6 +29355,446 @@ export interface IUpdateUserSignInTokenOutput {
     encodedTenantId: string | undefined;
 }
 
+export class PagedResultDtoOfGetSimulatorLessonForViewDto implements IPagedResultDtoOfGetSimulatorLessonForViewDto {
+    totalCount!: number | undefined;
+    items!: GetSimulatorLessonForViewDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfGetSimulatorLessonForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(GetSimulatorLessonForViewDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfGetSimulatorLessonForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfGetSimulatorLessonForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfGetSimulatorLessonForViewDto {
+    totalCount: number | undefined;
+    items: GetSimulatorLessonForViewDto[] | undefined;
+}
+
+export class GetSimulatorLessonForViewDto implements IGetSimulatorLessonForViewDto {
+    simulatorLesson!: SimulatorLessonDto | undefined;
+    personLastName!: string | undefined;
+    simulatorName!: string | undefined;
+
+    constructor(data?: IGetSimulatorLessonForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.simulatorLesson = data["simulatorLesson"] ? SimulatorLessonDto.fromJS(data["simulatorLesson"]) : <any>undefined;
+            this.personLastName = data["personLastName"];
+            this.simulatorName = data["simulatorName"];
+        }
+    }
+
+    static fromJS(data: any): GetSimulatorLessonForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetSimulatorLessonForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["simulatorLesson"] = this.simulatorLesson ? this.simulatorLesson.toJSON() : <any>undefined;
+        data["personLastName"] = this.personLastName;
+        data["simulatorName"] = this.simulatorName;
+        return data; 
+    }
+}
+
+export interface IGetSimulatorLessonForViewDto {
+    simulatorLesson: SimulatorLessonDto | undefined;
+    personLastName: string | undefined;
+    simulatorName: string | undefined;
+}
+
+export class SimulatorLessonDto implements ISimulatorLessonDto {
+    startTime!: moment.Moment | undefined;
+    description!: string | undefined;
+    completed!: boolean | undefined;
+    topic!: string | undefined;
+    length!: number | undefined;
+    studentId!: number | undefined;
+    simulatorId!: number | undefined;
+    id!: number | undefined;
+
+    constructor(data?: ISimulatorLessonDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
+            this.description = data["description"];
+            this.completed = data["completed"];
+            this.topic = data["topic"];
+            this.length = data["length"];
+            this.studentId = data["studentId"];
+            this.simulatorId = data["simulatorId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): SimulatorLessonDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SimulatorLessonDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
+        data["description"] = this.description;
+        data["completed"] = this.completed;
+        data["topic"] = this.topic;
+        data["length"] = this.length;
+        data["studentId"] = this.studentId;
+        data["simulatorId"] = this.simulatorId;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface ISimulatorLessonDto {
+    startTime: moment.Moment | undefined;
+    description: string | undefined;
+    completed: boolean | undefined;
+    topic: string | undefined;
+    length: number | undefined;
+    studentId: number | undefined;
+    simulatorId: number | undefined;
+    id: number | undefined;
+}
+
+export class GetSimulatorLessonForEditOutput implements IGetSimulatorLessonForEditOutput {
+    simulatorLesson!: CreateOrEditSimulatorLessonDto | undefined;
+    personLastName!: string | undefined;
+    simulatorName!: string | undefined;
+
+    constructor(data?: IGetSimulatorLessonForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.simulatorLesson = data["simulatorLesson"] ? CreateOrEditSimulatorLessonDto.fromJS(data["simulatorLesson"]) : <any>undefined;
+            this.personLastName = data["personLastName"];
+            this.simulatorName = data["simulatorName"];
+        }
+    }
+
+    static fromJS(data: any): GetSimulatorLessonForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetSimulatorLessonForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["simulatorLesson"] = this.simulatorLesson ? this.simulatorLesson.toJSON() : <any>undefined;
+        data["personLastName"] = this.personLastName;
+        data["simulatorName"] = this.simulatorName;
+        return data; 
+    }
+}
+
+export interface IGetSimulatorLessonForEditOutput {
+    simulatorLesson: CreateOrEditSimulatorLessonDto | undefined;
+    personLastName: string | undefined;
+    simulatorName: string | undefined;
+}
+
+export class CreateOrEditSimulatorLessonDto implements ICreateOrEditSimulatorLessonDto {
+    startTime!: moment.Moment | undefined;
+    description!: string | undefined;
+    completed!: boolean | undefined;
+    topic!: string | undefined;
+    length!: number | undefined;
+    studentId!: number | undefined;
+    simulatorId!: number | undefined;
+    id!: number | undefined;
+
+    constructor(data?: ICreateOrEditSimulatorLessonDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
+            this.description = data["description"];
+            this.completed = data["completed"];
+            this.topic = data["topic"];
+            this.length = data["length"];
+            this.studentId = data["studentId"];
+            this.simulatorId = data["simulatorId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): CreateOrEditSimulatorLessonDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrEditSimulatorLessonDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
+        data["description"] = this.description;
+        data["completed"] = this.completed;
+        data["topic"] = this.topic;
+        data["length"] = this.length;
+        data["studentId"] = this.studentId;
+        data["simulatorId"] = this.simulatorId;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface ICreateOrEditSimulatorLessonDto {
+    startTime: moment.Moment | undefined;
+    description: string | undefined;
+    completed: boolean | undefined;
+    topic: string | undefined;
+    length: number | undefined;
+    studentId: number | undefined;
+    simulatorId: number | undefined;
+    id: number | undefined;
+}
+
+export class PagedResultDtoOfSimulatorLessonPersonLookupTableDto implements IPagedResultDtoOfSimulatorLessonPersonLookupTableDto {
+    totalCount!: number | undefined;
+    items!: SimulatorLessonPersonLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfSimulatorLessonPersonLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(SimulatorLessonPersonLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfSimulatorLessonPersonLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfSimulatorLessonPersonLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfSimulatorLessonPersonLookupTableDto {
+    totalCount: number | undefined;
+    items: SimulatorLessonPersonLookupTableDto[] | undefined;
+}
+
+export class SimulatorLessonPersonLookupTableDto implements ISimulatorLessonPersonLookupTableDto {
+    id!: number | undefined;
+    displayName!: string | undefined;
+
+    constructor(data?: ISimulatorLessonPersonLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.displayName = data["displayName"];
+        }
+    }
+
+    static fromJS(data: any): SimulatorLessonPersonLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SimulatorLessonPersonLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["displayName"] = this.displayName;
+        return data; 
+    }
+}
+
+export interface ISimulatorLessonPersonLookupTableDto {
+    id: number | undefined;
+    displayName: string | undefined;
+}
+
+export class PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto implements IPagedResultDtoOfSimulatorLessonSimulatorLookupTableDto {
+    totalCount!: number | undefined;
+    items!: SimulatorLessonSimulatorLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfSimulatorLessonSimulatorLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(SimulatorLessonSimulatorLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfSimulatorLessonSimulatorLookupTableDto {
+    totalCount: number | undefined;
+    items: SimulatorLessonSimulatorLookupTableDto[] | undefined;
+}
+
+export class SimulatorLessonSimulatorLookupTableDto implements ISimulatorLessonSimulatorLookupTableDto {
+    id!: number | undefined;
+    displayName!: string | undefined;
+
+    constructor(data?: ISimulatorLessonSimulatorLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.displayName = data["displayName"];
+        }
+    }
+
+    static fromJS(data: any): SimulatorLessonSimulatorLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SimulatorLessonSimulatorLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["displayName"] = this.displayName;
+        return data; 
+    }
+}
+
+export interface ISimulatorLessonSimulatorLookupTableDto {
+    id: number | undefined;
+    displayName: string | undefined;
+}
+
 export class PagedResultDtoOfGetSimulatorForViewDto implements IPagedResultDtoOfGetSimulatorForViewDto {
     totalCount!: number | undefined;
     items!: GetSimulatorForViewDto[] | undefined;
@@ -30237,6 +31113,8 @@ export class StudentDto implements IStudentDto {
     email!: string | undefined;
     phoneNumber!: string | undefined;
     dateOfBirth!: moment.Moment | undefined;
+    birthCountry!: string | undefined;
+    nativeLanguage!: string | undefined;
     street!: string | undefined;
     city!: string | undefined;
     zipCode!: string | undefined;
@@ -30266,6 +31144,8 @@ export class StudentDto implements IStudentDto {
             this.email = data["email"];
             this.phoneNumber = data["phoneNumber"];
             this.dateOfBirth = data["dateOfBirth"] ? moment(data["dateOfBirth"].toString()) : <any>undefined;
+            this.birthCountry = data["birthCountry"];
+            this.nativeLanguage = data["nativeLanguage"];
             this.street = data["street"];
             this.city = data["city"];
             this.zipCode = data["zipCode"];
@@ -30303,6 +31183,8 @@ export class StudentDto implements IStudentDto {
         data["email"] = this.email;
         data["phoneNumber"] = this.phoneNumber;
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["birthCountry"] = this.birthCountry;
+        data["nativeLanguage"] = this.nativeLanguage;
         data["street"] = this.street;
         data["city"] = this.city;
         data["zipCode"] = this.zipCode;
@@ -30333,6 +31215,8 @@ export interface IStudentDto {
     email: string | undefined;
     phoneNumber: string | undefined;
     dateOfBirth: moment.Moment | undefined;
+    birthCountry: string | undefined;
+    nativeLanguage: string | undefined;
     street: string | undefined;
     city: string | undefined;
     zipCode: string | undefined;
@@ -30393,6 +31277,8 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
     email!: string | undefined;
     phoneNumber!: string | undefined;
     dateOfBirth!: moment.Moment | undefined;
+    birthCountry!: string | undefined;
+    nativeLanguage!: string | undefined;
     street!: string | undefined;
     city!: string | undefined;
     zipCode!: string | undefined;
@@ -30420,6 +31306,8 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
             this.email = data["email"];
             this.phoneNumber = data["phoneNumber"];
             this.dateOfBirth = data["dateOfBirth"] ? moment(data["dateOfBirth"].toString()) : <any>undefined;
+            this.birthCountry = data["birthCountry"];
+            this.nativeLanguage = data["nativeLanguage"];
             this.street = data["street"];
             this.city = data["city"];
             this.zipCode = data["zipCode"];
@@ -30455,6 +31343,8 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
         data["email"] = this.email;
         data["phoneNumber"] = this.phoneNumber;
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["birthCountry"] = this.birthCountry;
+        data["nativeLanguage"] = this.nativeLanguage;
         data["street"] = this.street;
         data["city"] = this.city;
         data["zipCode"] = this.zipCode;
@@ -30483,6 +31373,8 @@ export interface ICreateOrEditStudentDto {
     email: string | undefined;
     phoneNumber: string | undefined;
     dateOfBirth: moment.Moment | undefined;
+    birthCountry: string | undefined;
+    nativeLanguage: string | undefined;
     street: string | undefined;
     city: string | undefined;
     zipCode: string | undefined;

@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <div class="m-subheader">
         <div class="d-flex align-items-center">
-            <div class="mr-auto col-md-6">
+            <div class="mr-auto col-md-12">
                 <h3 class="m-subheader__title m-subheader__title--separator">
                     <span>{{l("PersonalScheduler")}}</span>
                 </h3>
@@ -13,8 +13,8 @@
     </div>
     <div class="m-content">
         <div class="m-portlet m-portlet--mobile">
-            <div class="m-portlet__body">
-                <div *ngIf="allowedToSeeOwnDrivingLessons && allowedToSeeOwnAppointments">
+            <div *ngIf="allowedToSeeOwnDrivingLessons && allowedToSeeOwnAppointments" class="m-portlet__body">
+                <div >
                 <h5 class="m--margin-top-30">{{l("Filter")}}</h5>
                 <div class="m--margin-top-20">
                     <!-- <div class="row">

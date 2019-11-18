@@ -86,7 +86,7 @@
                         <div class="row align-items-center m--margin-bottom-10">
                             
                         </div>
-						 <div class="row m--margin-bottom-10" [hidden]="!advancedFiltersAreShown">
+						 <div class="row m--margin-bottom-10">
 						 	<div class="col-md-12">
 						         <div class="m-separator m-separator--dashed"></div>
 						     </div>
@@ -115,14 +115,6 @@
 									</div>
                                 </div>
                             </div>	
-							<div class="col-md-3">
-								<label for="CompletedFilterSelect">{{l("Completed")}}</label>
-								<select class="form-control" name="CompletedFilter" id="CompletedFilterSelect" [(ngModel)]="completedFilter">
-								<option value="-1">{{l("All")}}</option>
-								<option value="0">{{l("False")}}</option>
-								<option value="1">{{l("True")}}</option>
-								</select>
-                            </div>
 							<div class="col-md-3">
 								<div class="form-group">
 									<label for="DrivingLessonTopicTopicFilter">{{l("DrivingLessonTopic")}}</label>

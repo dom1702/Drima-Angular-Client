@@ -1,0 +1,163 @@
+<div [@routerTransition]>
+    <div class="m-subheader">
+        <div class="row align-items-center">
+            <div class="mr-auto col-auto">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>Frequently Asked Questions</span>
+                </h3>                
+            </div>
+
+        </div>
+    </div>
+
+    <div class="m-content">
+        <div class="m-portlet">
+            <div class="m-portlet__body">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                Ask any Question
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-8"> 
+                        
+                        <div class="row">                           
+                            <div class="col-sm-2">
+                            </div>
+                                                       
+                            <div class="col-sm-10" *ngIf='asked'>
+                                <div class="m-portlet">                                           
+                                    <div class="m-portlet__body">
+                                        {{queryQuestion}}
+                                    </div>
+                                </div>
+
+                                <div class="m-portlet">                                           
+                                    <div class="m-portlet__body">
+                                        {{foundDescription}}
+                                    </div>
+                                </div>
+                           
+                            </div>
+                        </div>                                                                                                                                                              
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-caption">
+                                <div class="m-portlet__head-title">
+                                    <h3 class="m-portlet__head-text">
+                                            Frequently asked
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m--space-10"></div>
+                        <span class="m-widget24__desc">
+                            <a href="#"> Question 1</a>                            
+                        </span>
+                        <hr class="ng-tns-c19-1">
+                        <span class="m-widget24__desc">
+                            <a href="#"> Question 2</a>
+                        </span>
+                        <hr class="ng-tns-c19-1">
+                        <span class="m-widget24__desc">
+                            <a href="#"> Question 3</a>
+                        </span>
+                        <div class="m--space-10"></div>
+
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <input name="filterText" [(ngModel)]='inputQuestion' autoFocus class="form-control m-input" placeholder="ask" type="text">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit" (click)='getAnswer()'><i>Ask Question</i></button>
+                    </span>
+                </div>
+            </div>
+        </div>      
+    </div>
+
+    
+    <div class="m-subheader">
+        <div class="row align-items-center">
+            <div class="mr-auto col-auto">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>Main Features of Drima</span>
+                </h3>                
+            </div>   
+        </div>
+    </div>
+
+    <div class="m-content">
+            <div class="m-portlet">
+                <div class="m-portlet__body">
+               
+                        <div class="row">           
+                                <div class="col-sm-4">
+                                    <div class="m-portlet m-portlet--full-height">
+                                        <div class="m-portlet__head">
+                                            <div class="m-portlet__head-caption">
+                                                <div class="m-portlet__head-title">
+                                                        <i class="flaticon-suitcase"></i>
+                                                    <h3 class="m-portlet__head-text">
+                                                        First Task
+                                                    </h3>                                           
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-portlet__body">
+                                            Very important task, give navigation to functionalities
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <div class="col-sm-4 ">
+                                        <div class="m-portlet m-portlet--full-height">
+                                            <div class="m-portlet__head">
+                                                <div class="m-portlet__head-caption">
+                                                    <div class="m-portlet__head-title">
+                                                        <i class="flaticon-home-2"></i>
+                                                        <h3 class="m-portlet__head-text">
+                                                            Second Task
+                                                        </h3>                                                  
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-portlet__body">
+                                                MORE important task, explain every task in detail
+                                            </div>
+                                        </div>
+                                </div>
+                    
+                                <div class="col-sm-4">
+                                    <div class="m-portlet m-portlet--full-height">
+                                        <div class="m-portlet__head">
+                                            <div class="m-portlet__head-caption">
+                                                <div class="m-portlet__head-title">
+                                                    <i class="flaticon-tea-cup"></i>
+                                                    <h3 class="m-portlet__head-text">
+                                                            &emsp; Third Task
+                                                    </h3>                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-portlet__body">
+                                            Fu**** IMPORTANT TASK
+                                        </div>
+                                    </div>
+                                </div>
+                           
+                        </div> 
+
+                </div>
+            </div>
+    </div>
+
+</div>

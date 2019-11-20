@@ -3,17 +3,15 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto col-md-9">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    {{l("Students View Planned Driving Lessons")}}
+                    Driving Lessons Overview
                 </h3>
                 <span class="m-section__sub">
-                    See your upcoming driving lessons
+                    review your planned and past driving lessons
                 </span>
-            </div>
-            <div class="col-md-3 text-right">                 
-                {{studentFirstName}} {{studentLastName}}
-            </div>
+            </div>            
         </div>
     </div>
+
     <div class="m-content">
         <div class="m-portlet m-portlet--mobile">
             <div class="m-portlet__body">
@@ -22,130 +20,58 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
-                                Lesson Type
+                                Period
                                 <small>
-                                    select lessons to be inspected
+                                    choose the target space of tme
                                 </small>
                             </h3>
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <div class="btn-group btn-group-devided" data-toggle="buttons" (click)="getPlannedDrivingLessons($event)">
-                            <label class="btn m-btn--pill btn-secondary" >
+                        <div class="btn-group btn-group-devided" data-toggle="buttons" >
+                            <label class="btn m-btn--pill btn-secondary blue"(click)="getPlannedDrivingLessons($event)" >
                                 <input type="radio"
                                        name="LessonProgressState"
                                        class="toggle"
                                        [value]="primengTableHelper.records"
                                        checked>
-                                Driving
+                                Upcoming
                             </label>
-                            <label class="btn m-btn--pill btn-secondary" (click)="getCompletedDrivingLessons($event)">
+                            <label class="btn m-btn--pill btn-secondary blue" (click)="getCompletedDrivingLessons($event)">
                                 <input type="radio"
                                        name="LessonProgressState"
                                        class="toggle"
                                        [value]="primengTableHelper.records">
-                                Theory
+                                Past
                             </label>                      
                         </div>
                     </div>                  
                 </div>
 
-                <div class="m-form m-form--label-align-right">                   
-                    <div class="m-widget14">
-                        <div class="row align-items-center">
-                            <div class="m-portlet__head-title">
-                                    <h5 class="m-portlet__head-text">
-                                        Learning Progress                           
-                                    </h5>
-                            </div>
-                            <div class="col" style="height: 190px;">
-                                <ngx-charts-pie-chart [results]="drivingLessonsPieChart.chartData" [doughnut]="true" [legend]="false" [labels]="false" [scheme]="drivingLessonsPieChart.scheme" [animations]="false" [tooltipDisabled]="true"></ngx-charts-pie-chart>
-                            </div>
-                            <div class="col">
-                                <div class="m-widget14__legends" *ngIf="drivingLessonsPieChart.chartData.length">
-                                    <div class="m-widget14__legend">
-                                        <span class="m-widget14__legend-bullet m--bg-accent"></span>
-                                        <span class="m-widget14__legend-text">
-                                            {{drivingLessonsPieChart.chartData[0].value}}% Completed
-                                        </span>
-                                    </div>
-                                    <div class="m-widget14__legend">
-                                        <span class="m-widget14__legend-bullet m--bg-warning"></span>
-                                        <span class="m-widget14__legend-text">
-                                            {{drivingLessonsPieChart.chartData[1].value}}% Open
-                                        </span>
-                                    </div>                                  
-                                </div>
-                            </div>
-                        </div>
+                <div class="m-portlet__body">
+                    <div class="m-portlet__head-title">
+                        <h5 class="m-portlet__head-text">
+                            Learning Progress                           
+                        </h5>
                     </div>
+                    
+                    <div class="row">
+                        <ngx-charts-pie-chart 
+                        [results]="lessonsPieChart.chartData" 
+                        [legend]= "true"
+                        [doughnut]="true" 
+                        [legendPosition]="right"
+                        [labels]="false" 
+                        [scheme]="lessonsPieChart.drivingScheme" 
+                        [animations]="false" 
+                        [tooltipDisabled]="false"
+                        
+                        >
+                        </ngx-charts-pie-chart>
+                    </div>
+
                 </div>
-
-				<form class="horizontal-form" autocomplete="off">
-                    <div class="m-form m-form--label-align-right">
-                        <div class="row align-items-center m--margin-bottom-10">
-                            
-                        </div>
-						 <div class="row m--margin-bottom-10" [hidden]="!advancedFiltersAreShown">
-						 	<div class="col-md-12">
-						         <div class="m-separator m-separator--dashed"></div>
-						     </div>
-
-                             <div class="col-md-3">
-								<div class="form-group">
-									<label for="InstructorFilter">{{l("Instructor")}}</label>
-									<input type="text" class="form-control" id="InstructorFilter" name="instructorFilter" [(ngModel)]="instructorFilter">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-									<label for="MinLengthFilter">{{l("MinMax")}} {{l("Length")}}</label>
-									<div class="input-group">
-                                        <input type="number" class="form-control" id="MinLengthFilter" [(ngModel)]="minLengthFilter" placeholder="{{l('MinValue')}}" name="minLengthFilter" />
-                                        <input type="number" class="form-control" [(ngModel)]="maxLengthFilter" placeholder="{{l('MaxValue')}}" name="maxLengthFilter" />
-									</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-									<label  for="MinStartTimeFilter">{{l("MinMax")}} {{l("StartTime")}}</label>
-									<div class="input-group">
-                                        <input class="form-control m-input" id="MinStartTimeFilter" name="MinStartTimeFilter" type="datetime" bsDatepicker  placeholder="{{l('MinValue')}}" [(ngModel)]="minStartTimeFilter">
-                                        <input class="form-control m-input" id="MaxStartTimeFilter" name="MaxStartTimeFilter" type="datetime" bsDatepicker  placeholder="{{l('MaxValue')}}" [(ngModel)]="maxStartTimeFilter">
-									</div>
-                                </div>
-                            </div>	
-							<div class="col-md-3">
-								<label for="CompletedFilterSelect">{{l("Completed")}}</label>
-								<select class="form-control" name="CompletedFilter" id="CompletedFilterSelect" [(ngModel)]="completedFilter">
-								<option value="-1">{{l("All")}}</option>
-								<option value="0">{{l("False")}}</option>
-								<option value="1">{{l("True")}}</option>
-								</select>
-                            </div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="DrivingLessonTopicTopicFilter">{{l("DrivingLessonTopic")}}</label>
-									<input type="text" class="form-control" id="DrivingLessonTopicTopicFilter" name="drivingLessonTopicTopicFilter" [(ngModel)]="drivingLessonTopicTopicFilter">
-                                </div>
-                            </div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="LicenseClassClassFilter">{{l("LicenseClass")}}</label>
-									<input type="text" class="form-control" id="LicenseClassClassFilter" name="licenseClassClassFilter" [(ngModel)]="licenseClassClassFilter">
-                                </div>
-                            </div>
-
-                        </div>
-                        <!--div class="row margin-bottom-10">
-                            <div class="col-sm-12">
-                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}</span>
-                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}</span>
-                            </div>
-                        </div-->
-                    </div>
-                </form>
-
+                			
                 <div class="row align-items-center">
                     <!--<Primeng-Datatable-Start>-->                    
                     <div class="primeng-datatable-container"
@@ -241,11 +167,13 @@
                         </div>
                         <div class="primeng-paging-container">
                             <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
-                                         #paginator
-                                         (onPageChange)="getPlannedDrivingLessons($event)"
-                                         [totalRecords]="primengTableHelper.totalRecordsCount"
-                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                                #paginator
+                                (onPageChange)="getPlannedDrivingLessons($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                [alwaysShow]="false">
                             </p-paginator>
+                            <div class="m--space-10"></div>
                             <span class="total-records-count">
                                 {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
                             </span>

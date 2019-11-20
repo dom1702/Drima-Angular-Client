@@ -6,9 +6,13 @@
                     <h4 class="modal-title">
                         <span> Look for your preferred period </span>               
                     </h4>
+<<<<<<< HEAD
                     <button type="button" class="close" (click)="close()" aria-label="Close">
+=======
+                    <!-- <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+>>>>>>> 69d54db70795efc65211048611b804525479ac44
                         <span aria-hidden="true">&times;</span>
-                    </button>
+                    </button> -->
                 </div>
                 <div class="modal-body">
                  
@@ -23,11 +27,17 @@
                     </ejs-schedule>
 					
                 </div>
+<<<<<<< HEAD
                 <div class="modal-footer">                   
                     <button type="submit" class="btn btn-primary blue">
                         <i class="fa fa-save"></i> <span>{{l("Save")}}</span>
                     </button>
                 </div>
+=======
+                <!-- <div class="modal-footer">                   
+                    <button type="submit" class="btn btn-primary blue" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div> -->
+>>>>>>> 69d54db70795efc65211048611b804525479ac44
             </form>
         </div>
     </div>

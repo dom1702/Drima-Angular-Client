@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <div class="m-subheader">
         <div class="d-flex align-items-center">
-            <div class="mr-auto col-md-6">
+            <div class="mr-auto col-md-12">
                 <h3 class="m-subheader__title m-subheader__title--separator">
                     <span>{{l("Scheduler")}}</span>
                 </h3>
@@ -80,6 +80,9 @@
                         <label class="btn btn-primary" [(ngModel)]="eventTypeFilter.drivingLessons"
                             (click)="updateCurrentView()" btnCheckbox tabindex="0"
                             role="button">{{l("DrivingLessons")}}</label>
+                            <label class="btn btn-primary" [(ngModel)]="eventTypeFilter.simulatorLessons"
+                            (click)="updateCurrentView()" btnCheckbox tabindex="0"
+                            role="button">{{l("SimulatorLessons")}}</label>
                         <label class="btn btn-primary" [(ngModel)]="eventTypeFilter.theoryLessons"
                             (click)="updateCurrentView()" btnCheckbox tabindex="0"
                             role="button">{{l("TheoryLessons")}}</label>
@@ -104,6 +107,8 @@
     <createEventTypeModal #createEventTypeModal></createEventTypeModal>
     <createOrEditTheoryLessonModal #createOrEditTheoryLessonModal (modalSave)="updateCurrentView()">
     </createOrEditTheoryLessonModal>
+    <createOrEditSimulatorLessonModal #createOrEditSimulatorLessonModal (modalSave)="updateCurrentView()">
+    </createOrEditSimulatorLessonModal>
     <createOrEditEventModal #createOrEditEventModal (modalSave)="updateCurrentView()"></createOrEditEventModal>
     <instructorLookupTableModal #instructorLookupTableModal (modalSave)="getNewInstructorId()">
     </instructorLookupTableModal>

@@ -11,6 +11,7 @@ import { CreateOrEditEventModalComponent } from './create-or-edit-event-modal.co
 import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
 import { StudentLookupTableModalComponent } from '@app/shared/common/lookup/student-lookup-table-modal.component';
 import { IScheduler } from './scheduler-interface';
+import { CreateOrEditSimulatorLessonModalComponent } from '../lessons/simulatorLessons/create-or-edit-simulatorLesson-modal.component';
 
 
 @Component({
@@ -32,6 +33,9 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
     @ViewChild('createOrEditEventModal')
     createOrEditEventModal: CreateOrEditEventModalComponent;
 
+    @ViewChild('createOrEditSimulatorLessonModal')
+    createOrEditSimulatorLessonModal: CreateOrEditSimulatorLessonModalComponent;
+
     @ViewChild('createEventTypeModal')
     createEventTypeModal: CreateEventTypeModalComponent;
 
@@ -51,7 +55,7 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
 
     startTime: Date;
 
-    eventTypeFilter: any = { drivingLessons: true, theoryLessons: true, otherEvents: true };
+    eventTypeFilter: any = { drivingLessons: true, simulatorLessons: false, theoryLessons: true, otherEvents: true };
 
     // public data: object[] = [];
     public data: object[] = [{
@@ -87,14 +91,15 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
     }
 
     onCellClick(args: CellClickEventArgs): void {
-        console.log(args);
+    //    console.log(args);
         this.startTime = args.startTime;
-        this.createEventTypeModal.show(this, this.isGranted('Pages.DrivingLessons.Create'), this.isGranted('Pages.DrivingLessons.Create'), true); 
+        this.createEventTypeModal.show(this, this.isGranted('Pages.DrivingLessons.Create'), this.isGranted('Pages.DrivingLessons.Create'), true,
+        this.isGranted('Pages.SimulatorLessons.Create')); 
     }
 
     onEventClick(args: EventClickArgs): void {
-        console.log(args);
-        console.log(args.event["Id"]);
+        //console.log(args.event["AppointmentType"]);
+        //console.log(args.event["Id"]);
 
         if (args.event["AppointmentType"] == 0)
             this.createOrEditDrivingLessonModal.show(args.event["Id"]);
@@ -102,6 +107,8 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
             this.createOrEditTheoryLessonModal.show(args.event["Id"]);
         else if (args.event["AppointmentType"] == 2)
             this.createOrEditEventModal.show(args.event["Id"]);
+        else if (args.event["AppointmentType"] == 4)
+            this.createOrEditSimulatorLessonModal.show(args.event["Id"]);
     }
 
     Doubleclick(args: EventClickArgs): void {
@@ -178,6 +185,12 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
         this.createOrEditEventModal.startTime = this.startTime;
         this.createOrEditEventModal.show();
     }
+    
+    openSimulatorLessonModal(): void {
+        this.createEventTypeModal.close();
+        this.createOrEditSimulatorLessonModal.startTime = this.startTime;
+        this.createOrEditSimulatorLessonModal.show();
+    }
 
     updateView(from: Date, to: Date): void {
 
@@ -201,7 +214,8 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
             (this.instructorId == null) ? -1 : this.instructorId,
             this.eventTypeFilter.drivingLessons,
             this.eventTypeFilter.theoryLessons,
-            this.eventTypeFilter.otherEvents).subscribe(result => {
+            this.eventTypeFilter.otherEvents,
+            this.eventTypeFilter.simulatorLessons).subscribe(result => {
 
                 //console.log(result);
 
@@ -234,14 +248,14 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
         if (dates == null || dates.length == 0)
             return;
 
-        console.log(dates);
+        //console.log(dates);
 
         var fromDate: Date = new Date(dates[0].toString());
         var toDate = new Date(dates[dates.length - 1].toString());
         toDate.setDate(toDate.getDate() + 1);
 
-        console.log(fromDate);
-        console.log(toDate);
+        //console.log(fromDate);
+        //console.log(toDate);
 
         this.updateView(fromDate, toDate);
     }

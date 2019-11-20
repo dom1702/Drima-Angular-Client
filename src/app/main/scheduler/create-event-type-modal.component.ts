@@ -26,6 +26,7 @@ export class CreateEventTypeModalComponent extends AppComponentBase implements O
     allowCreateDrivingLesson : boolean;
     allowCreateTheoryLesson : boolean;
     allowCreateEvent: boolean;
+    allowCreateSimulatorLesson : boolean;
 
     saving : boolean;
 
@@ -40,11 +41,12 @@ export class CreateEventTypeModalComponent extends AppComponentBase implements O
 
     }
 
-    show(scheduler : IScheduler, allowCreateDrivingLesson : boolean, allowCreateTheoryLesson : boolean, allowCreateEvent : boolean): void 
+    show(scheduler : IScheduler, allowCreateDrivingLesson : boolean, allowCreateTheoryLesson : boolean, allowCreateEvent : boolean, allowCreateSimulatorLesson : boolean): void 
     {
         this.allowCreateDrivingLesson = allowCreateDrivingLesson;
         this.allowCreateTheoryLesson = allowCreateTheoryLesson;
         this.allowCreateEvent = allowCreateEvent;
+        this.allowCreateSimulatorLesson = allowCreateSimulatorLesson;
 
         this.scheduler = scheduler
 
@@ -67,6 +69,11 @@ export class CreateEventTypeModalComponent extends AppComponentBase implements O
     openEventModal(): void
     {
         this.scheduler.openEventModal();
+    }
+
+    openSimulatorLessonModal(): void
+    {
+        this.scheduler.openSimulatorLessonModal();
     }
 
     close(): void {

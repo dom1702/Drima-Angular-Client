@@ -54,6 +54,7 @@
                             Learning Progress                           
                         </h5>
                     </div>
+<<<<<<< HEAD
                     
                     <div class="row">
                         <ngx-charts-pie-chart 
@@ -68,6 +69,64 @@
                         
                         >
                         </ngx-charts-pie-chart>
+=======
+                </div>
+
+				<form class="horizontal-form" autocomplete="off">
+                    <div class="m-form m-form--label-align-right">
+                        <div class="row align-items-center m--margin-bottom-10">
+                            
+                        </div>
+						 <div class="row m--margin-bottom-10">
+						 	<div class="col-md-12">
+						         <div class="m-separator m-separator--dashed"></div>
+						     </div>
+
+                             <div class="col-md-3">
+								<div class="form-group">
+									<label for="InstructorFilter">{{l("Instructor")}}</label>
+									<input type="text" class="form-control" id="InstructorFilter" name="instructorFilter" [(ngModel)]="instructorFilter">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label for="MinLengthFilter">{{l("MinMax")}} {{l("Length")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinLengthFilter" [(ngModel)]="minLengthFilter" placeholder="{{l('MinValue')}}" name="minLengthFilter" />
+                                        <input type="number" class="form-control" [(ngModel)]="maxLengthFilter" placeholder="{{l('MaxValue')}}" name="maxLengthFilter" />
+									</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label  for="MinStartTimeFilter">{{l("MinMax")}} {{l("StartTime")}}</label>
+									<div class="input-group">
+                                        <input class="form-control m-input" id="MinStartTimeFilter" name="MinStartTimeFilter" type="datetime" bsDatepicker  placeholder="{{l('MinValue')}}" [(ngModel)]="minStartTimeFilter">
+                                        <input class="form-control m-input" id="MaxStartTimeFilter" name="MaxStartTimeFilter" type="datetime" bsDatepicker  placeholder="{{l('MaxValue')}}" [(ngModel)]="maxStartTimeFilter">
+									</div>
+                                </div>
+                            </div>	
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="DrivingLessonTopicTopicFilter">{{l("DrivingLessonTopic")}}</label>
+									<input type="text" class="form-control" id="DrivingLessonTopicTopicFilter" name="drivingLessonTopicTopicFilter" [(ngModel)]="drivingLessonTopicTopicFilter">
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="LicenseClassClassFilter">{{l("LicenseClass")}}</label>
+									<input type="text" class="form-control" id="LicenseClassClassFilter" name="licenseClassClassFilter" [(ngModel)]="licenseClassClassFilter">
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--div class="row margin-bottom-10">
+                            <div class="col-sm-12">
+                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}</span>
+                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}</span>
+                            </div>
+                        </div-->
+>>>>>>> 69d54db70795efc65211048611b804525479ac44
                     </div>
 
                 </div>

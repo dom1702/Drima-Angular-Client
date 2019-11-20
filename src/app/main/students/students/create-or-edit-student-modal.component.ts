@@ -1,11 +1,13 @@
-import { Component, ViewChild, Injector, Output, EventEmitter, OnInit} from '@angular/core';
+import { Component, ViewChild, Injector, Output, EventEmitter, OnInit } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
 import { StudentsServiceProxy, CreateOrEditStudentDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { PricePackageLookupTableModalComponent } from './pricePackage-lookup-table-modal.component';
-//import countriesJson  from '../../../../assets/countries.json';
+import { Country, CountriesService } from '@app/shared/common/services/countries.service';
+import { Language, LanguagesService } from '@app/shared/common/services/languages.service';
+
 @Component({
     selector: 'createOrEditStudentModal',
     templateUrl: './create-or-edit-student-modal.component.html'
@@ -37,17 +39,42 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
     pricePackageName = '';
 
-    //countries : any = countriesJson;
-    currentBirthCountry : any;
+    currentBirthCountry: string;
+    countries: Country[];
+
+    currentNativeLanguage: string;
+    languages: Language[];
 
     constructor(
         injector: Injector,
-        private _studentsServiceProxy: StudentsServiceProxy
+        private _studentsServiceProxy: StudentsServiceProxy,
+        private _countriesService: CountriesService,
+        private _languagesService: LanguagesService
     ) {
         super(injector);
     }
 
     ngOnInit() {
+
+        this._countriesService.loadData().subscribe(result => {
+            this.countries = result;
+
+            for (var i = 0; i < this.countries.length; i++) {
+                if (this.countries[i].name == 'Finland')
+                    this.currentBirthCountry = this.countries[i].name;
+            }
+
+        });
+
+        this._languagesService.loadData().subscribe(result => {
+            this.languages = result;
+
+            for (var i = 0; i < this.languages.length; i++) {
+                if (this.languages[i].name == 'Finnish')
+                    this.currentNativeLanguage = this.languages[i].name;
+            }
+        });
+
         this.dropdownSettings = {
             singleSelection: false,
             idField: 'item_id',
@@ -93,6 +120,16 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
             this.student = new CreateOrEditStudentDto();
             this.pricePackageName = '';
 
+            for (var i = 0; i < this.countries.length; i++) {
+                if (this.countries[i].name == 'Finland')
+                    this.currentBirthCountry = this.countries[i].name;
+            }
+
+            for (var i = 0; i < this.languages.length; i++) {
+                if (this.languages[i].name == 'Finnish')
+                    this.currentNativeLanguage = this.languages[i].name;
+            }
+
             this.active = true;
             this.updateLicenseClass(false);
             this.updateLicenseClassesOwned(false);
@@ -103,8 +140,13 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
                 this.student.id = studentId;
 
                 if (this.student.dateOfBirth) {
-					this.dateOfBirth = this.student.dateOfBirth.toDate();
+                    this.dateOfBirth = this.student.dateOfBirth.toDate();
                 }
+
+                if (this.student.birthCountry != null)
+                    this.currentBirthCountry = this._countriesService.getName(this.student.birthCountry);
+                if (this.student.nativeLanguage != null)
+                    this.currentNativeLanguage = this._languagesService.getName(this.student.nativeLanguage);
 
                 this.pricePackageName = result.pricePackageName;
 
@@ -116,8 +158,7 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
         }
     }
 
-    updateLicenseClass(studentAvailable : boolean ) : void
-    {
+    updateLicenseClass(studentAvailable: boolean): void {
         if (!this.active) {
             return;
         }
@@ -132,27 +173,24 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
                 // for(var r = 0; r < result.items.length; r++)
                 //     console.log(result.items[r].id);
-    
+
                 this.dropdownList = [];
                 this.selectedItems = [];
 
-                for (var _i = 0; _i < result.items.length; _i++) 
-                {   
+                for (var _i = 0; _i < result.items.length; _i++) {
                     this.dropdownList.push(
-                    {
-                        item_id: _i, 
-                        item_text: result.items[_i].displayName
-                    });
+                        {
+                            item_id: _i,
+                            item_text: result.items[_i].displayName
+                        });
                 }
 
-                if(studentAvailable)
-                {
+                if (studentAvailable) {
                     for (var item of this.dropdownList) {
                         for (var studentClasses of this.student.licenseClasses) {
                             //console.log(item.item_text);
                             //console.log(studentClasses);
-                            if(item.item_text == studentClasses)
-                            {
+                            if (item.item_text == studentClasses) {
                                 //console.log("Add it now");
                                 this.selectedItems.push(
                                     {
@@ -162,7 +200,7 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
                                 );
                             }
                         }
-                        
+
                     }
 
                     //console.log(this.selectedItems.length);
@@ -172,8 +210,7 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
             });
     }
 
-    updateLicenseClassesOwned(studentAvailable : boolean ) : void
-    {
+    updateLicenseClassesOwned(studentAvailable: boolean): void {
         if (!this.active) {
             return;
         }
@@ -188,27 +225,24 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
                 // for(var r = 0; r < result.items.length; r++)
                 //     console.log(result.items[r].id);
-    
+
                 this.dropdownListLicenseClassesOwned = [];
                 this.selectedItemsLicenseClassesOwned = [];
 
-                for (var _i = 0; _i < result.items.length; _i++) 
-                {   
+                for (var _i = 0; _i < result.items.length; _i++) {
                     this.dropdownListLicenseClassesOwned.push(
-                    {
-                        item_id: _i, 
-                        item_text: result.items[_i].displayName
-                    });
+                        {
+                            item_id: _i,
+                            item_text: result.items[_i].displayName
+                        });
                 }
 
-                if(studentAvailable)
-                {
+                if (studentAvailable) {
                     for (var item of this.dropdownListLicenseClassesOwned) {
                         for (var studentClasses of this.student.licenseClassesAlreadyOwned) {
                             //console.log(item.item_text);
                             //console.log(studentClasses);
-                            if(item.item_text == studentClasses)
-                            {
+                            if (item.item_text == studentClasses) {
                                 //console.log("Add it now");
                                 this.selectedItemsLicenseClassesOwned.push(
                                     {
@@ -218,7 +252,7 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
                                 );
                             }
                         }
-                        
+
                     }
 
                     //console.log(this.selectedItems.length);
@@ -229,25 +263,23 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
     }
 
     save(): void {
-            this.saving = true;
+        this.saving = true;
 
         this.student.licenseClasses = [];
         this.student.licenseClassesAlreadyOwned = [];
 
-        for (var licenseClass of this.selectedItems)
-        {
+        for (var licenseClass of this.selectedItems) {
             this.student.licenseClasses.push(
                 licenseClass.item_text
             );
         }
 
-        for (var licenseClass of this.selectedItemsLicenseClassesOwned)
-        {
+        for (var licenseClass of this.selectedItemsLicenseClassesOwned) {
             this.student.licenseClassesAlreadyOwned.push(
                 licenseClass.item_text
             );
         }
-			
+
         if (this.dateOfBirth) {
             if (!this.student.dateOfBirth) {
                 this.student.dateOfBirth = moment(this.dateOfBirth).startOf('day');
@@ -259,18 +291,25 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
         else {
             this.student.dateOfBirth = null;
         }
-        
+       
+        if (this.currentBirthCountry != null)
+        {
+            this.student.birthCountry = this._countriesService.getCode(this.currentBirthCountry);
+        }
+        if (this.currentNativeLanguage != null)
+            this.student.nativeLanguage = this._languagesService.getCode(this.currentNativeLanguage);
+       
+
         this._studentsServiceProxy.createOrEdit(this.student)
-            .pipe(finalize(() => { this.saving = false;}))
+            .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
-            this.notify.info(this.l('SavedSuccessfully'));
-            this.close();
-            this.modalSave.emit(null);
+                this.notify.info(this.l('SavedSuccessfully'));
+                this.close();
+                this.modalSave.emit(null);
             });
     }
 
     setPricePackageIdNull() {
-        console.log("Set to null");
         this.student.pricePackageId = null;
         this.pricePackageName = '';
     }

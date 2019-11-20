@@ -9,6 +9,7 @@ import { CreateEventTypeModalComponent } from '../scheduler/create-event-type-mo
 import { CreateOrEditTheoryLessonModalComponent } from '../lessons/theoryLessons/create-or-edit-theoryLesson-modal.component';
 import { CreateOrEditEventModalComponent } from '../scheduler/create-or-edit-event-modal.component';
 import { IScheduler } from '../scheduler/scheduler-interface';
+import { CreateOrEditSimulatorLessonModalComponent } from '../lessons/simulatorLessons/create-or-edit-simulatorLesson-modal.component';
 
 
 @Component({
@@ -26,6 +27,9 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
 
     @ViewChild('createOrEditTheoryLessonModal')
     createOrEditTheoryLessonModal: CreateOrEditTheoryLessonModalComponent;
+
+    @ViewChild('createOrEditSimulatorLessonModal')
+    createOrEditSimulatorLessonModal: CreateOrEditSimulatorLessonModalComponent;
 
     @ViewChild('createOrEditEventModal')
     createOrEditEventModal: CreateOrEditEventModalComponent;
@@ -101,7 +105,8 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
         }
         else
         {
-            this.createEventTypeModal.show(this, this.isGranted('Pages.InstructorsOwnDrivingLessons.Create'), false, this.isGranted('OwnAppointments.Create')); 
+            this.createEventTypeModal.show(this, this.isGranted('Pages.InstructorsOwnDrivingLessons.Create'), false, 
+                this.isGranted('OwnAppointments.Create'), false); 
         }
     }
 
@@ -193,6 +198,12 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
         this.createEventTypeModal.close();
         this.createOrEditEventModal.startTime = this.startTime;
         this.createOrEditEventModal.show(null, true);
+    }
+
+    openSimulatorLessonModal(): void {
+        this.createEventTypeModal.close();
+        this.createOrEditSimulatorLessonModal.startTime = this.startTime;
+        this.createOrEditSimulatorLessonModal.show();
     }
 
     updateView(from: Date, to: Date): void {

@@ -18,29 +18,23 @@
         <div class="m-portlet m-portlet--mobile">
             <div class="m-portlet__body">
                         
-                <!-- <div class="form-group m-form__group">
+                 <div class="form-group m-form__group">
                     <label for="Name">{{l("Type")}}</label>
                     <ng-multiselect-dropdown
-                    [placeholder]="placeholder"
                     [data]="dropdownListLessonTypes"
                     [(ngModel)]="selectedType" [ngModelOptions]="{standalone: true}"
-                    [settings]="dropdownSettings"
-                    (onSelect)="onItemSelect($event)"
-                    >
+                    [settings]="dropdownSettings">
                     </ng-multiselect-dropdown>
                 </div>
 
                 <div class="form-group m-form__group">
                     <label for="Name">{{l("Vehicle")}}</label>
                     <ng-multiselect-dropdown
-                    [placeholder]="placeholder"
                     [data]="dropdownListVehicles"
                     [(ngModel)]="selectedVehicle" [ngModelOptions]="{standalone: true}"
-                    [settings]="dropdownSettings"
-                    (onSelect)="onItemSelect($event)"
-                    >
+                    [settings]="dropdownSettings">
                     </ng-multiselect-dropdown>
-                </div> -->
+                </div>
 
                 <div class="form-group">
                     <label for="Length">{{l("Length")}}</label>
@@ -62,11 +56,7 @@
                 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default">Discharge</button>
-<<<<<<< HEAD
                     <button type="submit" class="btn btn-primary blue"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
-=======
-                <!-- <button type="submit" class="btn btn-primary blue" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button> -->
->>>>>>> 69d54db70795efc65211048611b804525479ac44
                 </div>
             </div>
         </div>

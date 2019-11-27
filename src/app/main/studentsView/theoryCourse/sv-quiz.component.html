@@ -1,0 +1,83 @@
+<div [@routerTransition]>
+    <div class="m-subheader">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-md-9">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    Quiz
+                </h3>
+                <span class="m-section__sub">
+                    Quizname
+                </span>
+            </div>            
+        </div>
+    </div>
+
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+
+                <div class="row">
+                    <div class="col-sm-12"> 
+                        <tabset [justified]="true" #quizTabs>
+                            <tab id="start" (selectTab)="onSelect($event)">
+                                <ng-template tabHeading >
+                                        <span class="flaticon-buildings">Start</span>
+                                </ng-template> 
+                            </tab>
+                            <tab *ngFor="let tab of tabsData"                               
+                                [disabled]="tab.disabled"
+                                [id]= "tab.id"
+                                [active]="tab.active"> 
+
+                                <span>{{tab.mandatoryTime}} </span>
+                                <h3 class="m-portlet__head-text">
+                                    {{tab.title}}
+                                </h3>
+                                <hr class="ng-tns-c19-1">
+
+                                <div *ngIf="tab.content.length == 1; then thenBlock else elseBlock"></div>
+                                    <ng-template #thenBlock>
+                                        <ng-template tabHeading>
+                                            <span class="flaticon-medical">{{tab.heading}}</span>
+                                        </ng-template>
+                                        
+                                        <div>
+                                            <!---<iframe width="420" height="315"
+                                                src={{tab.content[0]}}>
+                                            </iframe> -->
+                                        </div> 
+                                    </ng-template>
+
+                                    <ng-template #elseBlock>
+                                        <ng-template tabHeading>
+                                            <span class="flaticon-edit">{{tab.heading}}</span>
+                                        </ng-template>
+            
+                                        <question *ngFor="let question of tab.content" 
+                                            [quest]="question.quest" 
+                                            [nr]="question.nr"
+                                            [answerOptions]="question.answerOptions"
+                                            [correctAnswer]="question.correctAnswer"
+                                            [pictureUrl]="question.picture">
+                                        </question>
+                                    </ng-template>
+                                        
+                                    <button pButton type="button" label="Submit" (click)="submitQuestion()" class="ui-button-raised ui-button-rounded"></button>                       
+                            </tab>  
+                            
+                            <tab id="cancel" (selectTab)="onSelect($event)">
+                                <ng-template tabHeading >
+                                        <span class="flaticon-logout">Home</span>
+                                </ng-template> 
+                                <homeTab></homeTab>
+                            </tab>
+
+                        </tabset>
+                    </div>                 
+                </div>
+                
+            </div>            
+        </div>
+    </div>
+
+</div>

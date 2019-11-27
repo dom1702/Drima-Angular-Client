@@ -14,6 +14,8 @@ import { SVDrivingLessonsOverviewComponent } from './studentsView/drivingLessons
 import { SVBookDrivingLessonComponent } from './studentsView/bookDrivingLesson/sv-book-drivingLesson.component';
 import { PersonalSchedulerComponent } from './personalScheduler/personalScheduler.component';
 import { SVFrequentlyAskedQuestionsComponent } from './studentsView/frequentlyAskedQuestions/sv-frequently-asked-questions.component';
+import { SVTheoryCourseComponent } from './studentsView/theoryCourse/sv-theory-course.component';
+import { SVQuizComponent } from './studentsView/theoryCourse/sv-quiz.component';
 
 @NgModule({
     imports: [
@@ -34,7 +36,9 @@ import { SVFrequentlyAskedQuestionsComponent } from './studentsView/frequentlyAs
                     { path: 'studentsView/plannedDrivingLessons', component: SVPlannedDrivingLessonsComponent, data: { permission: 'StudentView' } },
                     { path: 'studentsView/drivingLessonsOverview', component: SVDrivingLessonsOverviewComponent, data: { permission: 'StudentView' }},
                     { path: 'studentsView/bookDrivingLesson', component: SVBookDrivingLessonComponent, data: { permission: 'StudentView' }},
-                    { path: 'studentsView/frequentlyAskedQuestions', component: SVFrequentlyAskedQuestionsComponent, data: { permission: 'StudentView' }}
+                    { path: 'studentsView/frequentlyAskedQuestions', component: SVFrequentlyAskedQuestionsComponent, data: { permission: 'StudentView' }},
+                    { path: 'studentsView/theoryCourse', component: SVTheoryCourseComponent, data: { permission: 'StudentView' }},
+                    { path: 'studentsView/theoryCourse/quiz', component: SVQuizComponent, data: { permission: 'StudentView' }}
                 ]
             }
         ])

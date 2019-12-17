@@ -81,7 +81,9 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
     }
 
     ngOnInit(): void {
-        //this.updateCurrentView();
+        this.eventTypeFilter.drivingLessons = true;
+        
+        this.updateCurrentView();
     }
 
     onPopupOpen(args: PopupOpenEventArgs): void {

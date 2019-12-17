@@ -39,13 +39,13 @@ export class AppNavigationService {
             new AppMenuItem('Students', 'Pages.Students', 'flaticon-users', '/app/main/students/students'),
             new AppMenuItem('TheoryLessons', 'Pages.TheoryLessons', 'flaticon-presentation', '/app/main/lessons/theoryLessons'),
             new AppMenuItem('DrivingLessons', 'Pages.DrivingLessons', 'flaticon-car', '/app/main/lessons/drivingLessons'),
-            
+            new AppMenuItem('SimulatorLessons', 'Pages.SimulatorLessons', 'flaticon-more', '/app/main/lessons/simulatorLessons',
+            undefined, undefined, undefined,  () => {
+                return this._featureCheckerService.isEnabled('App.Simulator')}),
             
             new AppMenuItem('StudentInvoices', 'Pages.StudentInvoices', 'flaticon-more', '/app/main/sales/studentInvoices'),
             
-            new AppMenuItem('SimulatorLessons', 'Pages.SimulatorLessons', 'flaticon-more', '/app/main/lessons/simulatorLessons',
-                undefined, undefined, undefined,  () => {
-                    return this._featureCheckerService.isEnabled('App.Simulator')}),
+         
 
              new AppMenuItem('Administration', '', 'flaticon-interface-8', '', [
                 new AppMenuItem('OrganizationUnits', 'Pages.Administration.OrganizationUnits', 'flaticon-map', '/app/admin/organization-units'),

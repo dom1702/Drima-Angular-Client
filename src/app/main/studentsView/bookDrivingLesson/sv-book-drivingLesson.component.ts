@@ -24,6 +24,7 @@ export class SVBookDrivingLessonComponent extends AppComponentBase implements On
     dropdownList = [];
     selectedVehicle;
     selectedType;
+    placeholder;
 
     ismeridian = false;  
     dropdownListVehicles = [];
@@ -64,6 +65,10 @@ export class SVBookDrivingLessonComponent extends AppComponentBase implements On
                 item_id: 3, item_text: "Simulator"
             }
         ];
+    }
+
+    onItemSelect(item: any) {
+        console.log(item);
     }
 
     createDate(): void {

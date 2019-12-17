@@ -1,6 +1,6 @@
 import { Component, Injector, ViewEncapsulation, ViewChild, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { StudentsServiceProxy, StudentDto, StudentsViewServiceProxy, TenantDashboardServiceProxy  } from '@shared/service-proxies/service-proxies';
+import { Router } from '@angular/router';
+import { StudentsViewServiceProxy, TenantDashboardServiceProxy  } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { FileDownloadService } from '@shared/utils/file-download.service';
@@ -11,16 +11,27 @@ import { Paginator, LazyLoadEvent } from 'primeng/primeng';
 import { Table } from 'primeng/table';
 
 class LessonsPieChart{
-
-    chartData: any[] = [];
-    scheme: any = {
+  
+    drivingScheme: any = {
         name: 'custom',
         selectable: true,
         group: 'Ordinal',
         domain: [
-            '#00c5dc', '#ffb822', '#716aca'
+            'green', 'grey'
         ]
     };
+
+    theoryScheme: any = {
+        name: 'custom',
+        selectable: true,
+        group: 'Ordinal',
+        domain: [
+            'yellow', 'grey'
+        ]
+    };
+
+    scheme: any;
+    chartData: any[] = [];
 
     constructor(private _dashboardService: TenantDashboardServiceProxy) {
     }
@@ -56,8 +67,15 @@ class LessonsPieChart{
     encapsulation: ViewEncapsulation.None,
     animations: [appModuleAnimation()]
 })
+
 export class SVPlannedDrivingLessonsComponent extends AppComponentBase implements OnInit {
-    drivingLessonsPieChart: LessonsPieChart;
+       
+    dummyTheoryLessonsCurr = 17;
+    dummyTheoryLessonsNeeded = 28;
+    dummyExerciseLessonsCurr = 10;
+    dummyExerciseLessonsNeeded = 36;
+
+    lessonsPieChart: LessonsPieChart;
 
     @ViewChild('paginator') paginator: Paginator;
     @ViewChild('dataTable') dataTable: Table;
@@ -80,12 +98,10 @@ export class SVPlannedDrivingLessonsComponent extends AppComponentBase implement
     constructor(
         injector: Injector,
         private _studentViewServiceProxy: StudentsViewServiceProxy,
-        private _fileDownloadService: FileDownloadService,
-        private _router: Router,
         private _dashboardService: TenantDashboardServiceProxy
     ) {
         super(injector);
-        this.drivingLessonsPieChart = new LessonsPieChart(this._dashboardService)
+        this.lessonsPieChart = new LessonsPieChart(this._dashboardService);
     }
 
     ngOnInit(): void {
@@ -93,9 +109,15 @@ export class SVPlannedDrivingLessonsComponent extends AppComponentBase implement
             this.studentFirstName  = result.firstName;
             this.studentLastName = result.lastName;
         });
-        
-        let testValues : number[] = [20, 80];
-        this.drivingLessonsPieChart.init(testValues);
+               
+        this.lessonsPieChart.init(this.getChartDataPercent(this.dummyExerciseLessonsCurr, this.dummyExerciseLessonsNeeded));
+        this.lessonsPieChart.scheme = this.lessonsPieChart.drivingScheme;       
+    }
+
+    getChartDataPercent(current : number, needed : number ) : number[]{
+        let neededPercOnne = (100 / needed);
+        let currPerc = current * neededPercOnne;
+        return  [currPerc, 100-currPerc];
     }
 
     getDrivingLessonsByProgress() {

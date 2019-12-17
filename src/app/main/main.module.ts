@@ -31,7 +31,7 @@ import { CreateOrEditDrivingLessonModalComponent } from './lessons/drivingLesson
 import { CreateEventTypeModalComponent } from './scheduler/create-event-type-modal.component';
 
 
-import { AutoCompleteModule } from 'primeng/primeng';
+import { AutoCompleteModule, TabViewModule, AccordionModule} from 'primeng/primeng';
 import { PaginatorModule } from 'primeng/primeng';
 import { EditorModule } from 'primeng/primeng';
 import { InputMaskModule } from 'primeng/primeng';import { FileUploadModule } from 'primeng/primeng';
@@ -43,6 +43,7 @@ import { ModalModule, TabsModule, TooltipModule, BsDropdownModule, PopoverModule
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MainRoutingModule } from './main-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { RadioButtonModule} from 'primeng/radiobutton';
 
 import { BsDatepickerModule, BsDatepickerConfig, BsDaterangepickerConfig, BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { NgxBootstrapDatePickerConfigService } from 'assets/ngx-bootstrap/ngx-bootstrap-datepicker-config.service';
@@ -79,6 +80,11 @@ import { PersonalSchedulerComponent } from './personalScheduler/personalSchedule
 import { StudentsOverviewFormsComponent } from './students/students/students-overview-forms.component';
 import { SVBookDrivingLessonLookupSchedulerModalComponent } from './studentsView/bookDrivingLesson/sv-book-drivingLesson-lookup-scheduler-modal.component';
 import { SVFrequentlyAskedQuestionsComponent } from './studentsView/frequentlyAskedQuestions/sv-frequently-asked-questions.component';
+import { SVTheoryCourseComponent } from './studentsView/theoryCourse/sv-theory-course.component';
+import { SVQuizComponent } from './studentsView/theoryCourse/sv-quiz.component';
+import { SVQuizFinishedTabComponent } from './studentsView/theoryCourse/customTabs/sv-quiz-finishedTab.component';
+import { SVQuestionComponent } from './studentsView/theoryCourse/sv-question.component';
+import { SVQuizClosedTabComponent } from './studentsView/theoryCourse/customTabs/sv-quiz-closedTab.component';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -109,7 +115,10 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       ScheduleAllModule,
       NumericTextBoxModule,
       TimepickerModule.forRoot(),
-      ButtonsModule.forRoot()
+      ButtonsModule.forRoot(),
+      TabViewModule,
+      AccordionModule,
+      RadioButtonModule
     ],
     declarations: 
     [
@@ -156,7 +165,12 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       CreateOrEditSimulatorLessonModalComponent,
       SimulatorLessonPersonLookupTableModalComponent,
       SimulatorLessonSimulatorLookupTableModalComponent,
-      SVFrequentlyAskedQuestionsComponent
+      SVFrequentlyAskedQuestionsComponent,
+      SVTheoryCourseComponent,
+      SVQuizComponent,
+      SVQuizFinishedTabComponent,
+      SVQuizClosedTabComponent,
+      SVQuestionComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

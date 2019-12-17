@@ -1,6 +1,7 @@
 import { appModuleAnimation } from "@shared/animations/routerTransition";
 import { AppComponentBase } from "@shared/common/app-component-base";
-import { OnInit, ViewEncapsulation, Component, Injector, Input } from "@angular/core";
+import { OnInit, ViewEncapsulation, Component, Injector, Input, ViewChild } from "@angular/core";
+import { TabPanel} from 'primeng/tabview';
 
 @Component({
     templateUrl: './sv-frequently-asked-questions.component.html',
@@ -10,6 +11,8 @@ import { OnInit, ViewEncapsulation, Component, Injector, Input } from "@angular/
 
 export class SVFrequentlyAskedQuestionsComponent extends AppComponentBase implements OnInit {
        
+    @ViewChild('tabView') tabView: TabPanel;
+      
     foundDescription : string = "";    
     queryQuestion : string = "";
 
@@ -36,8 +39,7 @@ export class SVFrequentlyAskedQuestionsComponent extends AppComponentBase implem
             tags: ['exam', 'course', 'theory', 'lesson'],
         },
     ];
-
-    
+   
     constructor(injector: Injector) {
         super(injector);
     }

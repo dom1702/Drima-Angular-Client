@@ -2,7 +2,7 @@ import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
-import { StudentsServiceProxy, StudentDto } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, StudentDto, StudentCourseDto } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -34,6 +34,9 @@ export class StudentsOverviewComponent extends AppComponentBase {
     student: StudentDto;
     pricePackageName: string;
 
+    selectedStudentCourse: StudentCourseDto;
+    studentCourses: StudentCourseDto[];
+
     constructor(
         injector: Injector,
         private _studentsServiceProxy: StudentsServiceProxy,
@@ -59,21 +62,19 @@ export class StudentsOverviewComponent extends AppComponentBase {
                 this.pricePackageName = result.pricePackageName;
 
                 this.overallActive = true;
+
+                this._studentsServiceProxy.getAllCourses(this.student.id).subscribe(result => {
+                    this.studentCourses = result
+
+                    if(this.studentCourses.length > 0)
+                    {
+                        console.log(this.studentCourses[0]);
+                        this.selectedStudentCourse = this.studentCourses[0];
+                    }
+                });
             });
         });
     }
-
-    // public UpdateStudentView() {
-    //     this._studentsServiceProxy.getStudentForView(this.student.id).subscribe(result => {
-
-    //         this.student = result.student;
-    //         this.pricePackageName = result.pricePackageName;
-
-    //         console.log(this.pricePackageView);
-    //         this.pricePackageView.updatePricePackage(result.student.pricePackageId);
-    //     });
-    // }
-
 
     public UpdateStudentView(): Observable<any> {
 

@@ -1,10 +1,15 @@
-
+﻿
 
 
 import { CommonModule } from '@angular/common';
 import { SimulatorLessonsComponent } from './lessons/simulatorLessons/simulatorLessons.component';
 import { ViewSimulatorLessonModalComponent } from './lessons/simulatorLessons/view-simulatorLesson-modal.component';
 import { CreateOrEditSimulatorLessonModalComponent } from './lessons/simulatorLessons/create-or-edit-simulatorLesson-modal.component';
+import { CoursesComponent } from './courses/courses/courses.component';
+import { ViewCourseModalComponent } from './courses/courses/view-course-modal.component';
+import { CreateOrEditCourseModalComponent } from './courses/courses/create-or-edit-course-modal.component';
+import { OfficeLookupTableModalComponent } from '../shared/common/lookup/office-lookup-table-modal.component';
+
 import { SimulatorLessonPersonLookupTableModalComponent } from './lessons/simulatorLessons/simulatorLesson-person-lookup-table-modal.component';
 import { SimulatorLessonSimulatorLookupTableModalComponent } from './lessons/simulatorLessons/simulatorLesson-simulator-lookup-table-modal.component';
 
@@ -85,6 +90,7 @@ import { SVQuizComponent } from './studentsView/theoryCourse/sv-quiz.component';
 import { SVQuizFinishedTabComponent } from './studentsView/theoryCourse/customTabs/sv-quiz-finishedTab.component';
 import { SVQuestionComponent } from './studentsView/theoryCourse/sv-question.component';
 import { SVQuizClosedTabComponent } from './studentsView/theoryCourse/customTabs/sv-quiz-closedTab.component';
+import { MultiSelectModule } from '@syncfusion/ej2-angular-dropdowns';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -118,7 +124,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       ButtonsModule.forRoot(),
       TabViewModule,
       AccordionModule,
-      RadioButtonModule
+      RadioButtonModule,
+      MultiSelectModule
     ],
     declarations: 
     [
@@ -170,7 +177,11 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       SVQuizComponent,
       SVQuizFinishedTabComponent,
       SVQuizClosedTabComponent,
-      SVQuestionComponent
+      SVQuestionComponent,
+      CoursesComponent,
+      ViewCourseModalComponent,		
+      CreateOrEditCourseModalComponent,
+      OfficeLookupTableModalComponent,
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

@@ -1,4 +1,4 @@
-import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
+﻿import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 
 import { Injectable } from '@angular/core';
@@ -48,10 +48,14 @@ export class AppNavigationService {
             
          
 
+            
+            new AppMenuItem('Courses', 'Pages.Courses', 'flaticon-more', '/app/main/courses/courses'),
              new AppMenuItem('Administration', '', 'flaticon-interface-8', '', [
                 new AppMenuItem('OrganizationUnits', 'Pages.Administration.OrganizationUnits', 'flaticon-map', '/app/admin/organization-units'),
                 new AppMenuItem('Roles', 'Pages.Administration.Roles', 'flaticon-suitcase', '/app/admin/roles'),
                 new AppMenuItem('Users', 'Pages.Administration.Users', 'flaticon-users', '/app/admin/users'),
+            new AppMenuItem('PredefinedDrivingLessons', 'Pages.Administration.PredefinedDrivingLessons', 'flaticon-more', '/app/admin/lessons/predefinedDrivingLessons'),
+            
             new AppMenuItem('Forms', 'Pages.Administration.Forms', 'flaticon-more', '/app/admin/forms/forms'),
             
             new AppMenuItem('PricePackages', 'Pages.Administration.PricePackages', 'flaticon-more', '/app/admin/sales/pricePackages'),

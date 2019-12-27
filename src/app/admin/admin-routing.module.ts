@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
+﻿import { NgModule } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { PredefinedDrivingLessonsComponent } from './lessons/predefinedDrivingLessons/predefinedDrivingLessons.component';
 import { FormsComponent } from './forms/forms/forms.component';
 import { PricePackagesComponent } from './sales/pricePackages/pricePackages.component';
 import { ProductsComponent } from './sales/products/products.component';
@@ -34,6 +35,7 @@ import { UsersComponent } from './users/users.component';
             {
                 path: '',
                 children: [
+                    { path: 'lessons/predefinedDrivingLessons', component: PredefinedDrivingLessonsComponent, data: { permission: 'Pages.Administration.PredefinedDrivingLessons' }  },
                     { path: 'forms/forms', component: FormsComponent, data: { permission: 'Pages.Administration.Forms' }  },
                     { path: 'sales/pricePackages', component: PricePackagesComponent, data: { permission: 'Pages.Administration.PricePackages' }  },
                     { path: 'sales/products', component: ProductsComponent, data: { permission: 'Pages.Administration.Products' }  },

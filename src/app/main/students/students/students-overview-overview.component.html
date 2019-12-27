@@ -1,4 +1,4 @@
-<h5>{{l("General")}}</h5>
+<!-- <h5>{{l("General")}}</h5>
 <div class="m--margin-top-20">
     <div *ngIf="student" class="row">
 
@@ -68,7 +68,92 @@
             {{student.country}}
         </div>
     </div>
+</div> -->
+
+<h5>{{l("General")}}</h5>
+<div class="m--margin-top-20">
+    <div *ngIf="student" class="row">
+
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("FirstName")}} :</h6>
+            {{student.firstName}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("LastName")}} :</h6>
+            {{student.lastName}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("EmailAddress")}} :</h6>
+            {{student.email}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("PhoneNumber")}} :</h6>
+            {{student.phoneNumber}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("BirthCountry")}} :</h6>
+            {{l(birthCountry)}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("NativeLanguage")}} :</h6>
+            {{l(nativeLanguage)}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("SSN")}} :</h6>
+            {{student.ssn}}
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("LicenseClasses")}} :</h6>
+            {{licenseClasses}}
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+                <h6>{{l("LicenseClassesAlreadyOwned")}} :</h6>
+                {{licenseClassesAlreadyOwned}}
+            </div>
+    </div>
 </div>
+
+<h5 class="m--margin-top-30">{{l("Address")}}</h5>
+
+<div class="m--margin-top-20">
+    <div *ngIf="student" class="row">
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("Street")}} :</h6>
+            {{student.street}}
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("ZipCode")}} :</h6>
+            {{student.zipCode}}
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("City")}} :</h6>
+            {{student.city}}
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("Country")}} :</h6>
+            {{student.country}}
+        </div>
+    </div>
+</div>
+
+<h5 class="m--margin-top-30">{{l("CourseInfo")}}</h5>
+
+<div class="m--margin-top-20">
+    <div *ngIf="parentOverview.selectedStudentCourse" class="row">
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("CourseName")}} :</h6>
+            {{parentOverview.selectedStudentCourse.course.name}}
+        </div>
+    </div>
+    <div *ngIf="!parentOverview.selectedStudentCourse" >
+        <h6 style="color:red">{{l("NoCourseSelected")}}!</h6>
+    </div>
 
 <h5 class="m--margin-top-30">{{l("PricePackage")}}</h5>
 

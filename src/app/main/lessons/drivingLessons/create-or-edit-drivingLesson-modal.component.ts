@@ -1,7 +1,7 @@
 import { Component, ViewChild, Injector, Output, EventEmitter, OnInit } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
-import { DrivingLessonsServiceProxy, CreateOrEditDrivingLessonDto, InstructorDto, InstructorsOwnDrivingLessonsServiceProxy } from '@shared/service-proxies/service-proxies';
+import { DrivingLessonsServiceProxy, CreateOrEditDrivingLessonDto, InstructorDto, InstructorsOwnDrivingLessonsServiceProxy, CourseDto, PredefinedDrivingLessonDto, StudentCourseDto, StudentsServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { DrivingLessonTopicLookupTableModalComponent } from './drivingLessonTopic-lookup-table-modal.component';
@@ -9,6 +9,7 @@ import { DLLicenseClassLookupTableModalComponent } from '../../../shared/common/
 import { DLStudentLookupTableModalComponent } from './drivingLesson-student-lookup-table-modal.component';
 import { TimepickerComponent } from 'ngx-bootstrap/timepicker';
 import { VehicleLookupTableModalComponent } from '@app/shared/common/lookup/vehicle-lookup-table-modal.component';
+import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'createOrEditDrivingLessonModal',
@@ -37,22 +38,28 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     studentFirstName = '';
     studentLastName = '';
     studentFullName = '';
-
     vehicleName = '';
-
-    instructorPersonalLesson: boolean;
-    instructorId?: number;
-
     dropdownListIds = [];
     dropdownList = [];
     selectedItems = [];
     dropdownSettings = {};
     placeholder = this.l("Select");
+  
+    instructorPersonalLesson: boolean;
+    instructorId?: number;
+    studentSelected = false;
+
+    selectedStudentCourse: StudentCourseDto;
+    studentCourses: StudentCourseDto[];
+
+    selectedPdl;
+
 
     constructor(
         injector: Injector,
         private _drivingLessonsServiceProxy: DrivingLessonsServiceProxy,
-        private _instructorsOwnDrivingLessonsServiceProxy: InstructorsOwnDrivingLessonsServiceProxy
+        private _instructorsOwnDrivingLessonsServiceProxy: InstructorsOwnDrivingLessonsServiceProxy,
+        private _studentsServiceProxy: StudentsServiceProxy,
     ) {
         super(injector);
     }
@@ -82,6 +89,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     show(drivingLessonId?: number, instructorPersonalLesson: boolean = false): void {
 
         this.instructorPersonalLesson = instructorPersonalLesson;
+        this.selectedPdl = null;
 
         if (!drivingLessonId) {
 
@@ -154,7 +162,15 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             this.drivingLesson.instructors.push(
                 i
             );
-            console.log(i.id);
+        }
+
+        if(this.selectedPdl)
+        {
+            console.log(this.selectedPdl.id);
+            this.drivingLesson.predefinedDrivingLessonId = this.selectedPdl.id;
+
+            console.log(this.selectedStudentCourse.course.id);
+            this.drivingLesson.courseId = this.selectedStudentCourse.course.id;
         }
 
         if (this.instructorPersonalLesson) {
@@ -234,6 +250,11 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             });
     }
 
+    updateCheck()
+    {
+        console.log(this.selectedPdl);
+    }
+
     openSelectDrivingLessonTopicModal() {
         this.drivingLessonTopicLookupTableModal.id = 0;
         this.drivingLessonTopicLookupTableModal.displayName = this.drivingLessonTopic;
@@ -270,6 +291,8 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         this.studentFirstName = '';
         this.studentLastName = '';
         this.refreshStudentFullName();
+        this.studentSelected = false;
+        this.selectedPdl = undefined;
     }
 
     openSelectStudentModal() {
@@ -287,6 +310,17 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         this.studentFirstName = this.studentLookupTableModal.firstName;
         this.studentLastName = this.studentLookupTableModal.lastName;
         this.refreshStudentFullName();
+        this.studentSelected = true;
+
+        this._studentsServiceProxy.getAllCourses(this.drivingLesson.studentId, false).subscribe(result => {
+            this.studentCourses = result
+
+            if(this.studentCourses.length > 0)
+            {
+                console.log(this.studentCourses[0]);
+                this.selectedStudentCourse = this.studentCourses[0];
+            }
+        });
     }
 
     getNewTopic() {
@@ -338,5 +372,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     close(): void {
         this.active = false;
         this.modal.hide();
+
+        this.studentSelected = null;
     }
 }

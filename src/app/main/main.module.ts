@@ -92,6 +92,9 @@ import { SVQuestionComponent } from './studentsView/theoryCourse/sv-question.com
 import { SVQuizClosedTabComponent } from './studentsView/theoryCourse/customTabs/sv-quiz-closedTab.component';
 import { MultiSelectModule } from '@syncfusion/ej2-angular-dropdowns';
 
+import { AlertModule } from 'ngx-bootstrap/alert';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
+
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
 @NgModule({
@@ -125,7 +128,9 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       TabViewModule,
       AccordionModule,
       RadioButtonModule,
-      MultiSelectModule
+      MultiSelectModule,
+      AlertModule.forRoot(),
+      ProgressbarModule.forRoot()
     ],
     declarations: 
     [

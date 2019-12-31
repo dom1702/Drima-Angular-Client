@@ -122,4 +122,23 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     {
         this.updateStudent();
     }
+
+    getAddressString()
+    {
+        if(this.student == null)
+            return '';
+
+        return this.student.street + ", " + this.student.zipCode + ", " + this.student.city;
+    }
+
+    nextPlanned(pdlId : number) : string
+    {
+        for(var i = 0; i < this.parentOverview.selectedStudentCourse.predefinedDrivingLessons.length; i++)
+        {
+            if(this.parentOverview.selectedStudentCourse.predefinedDrivingLessons[i].predefinedDrivingLessonId == pdlId && !this.parentOverview.selectedStudentCourse.predefinedDrivingLessons[i].isDone)
+                return "(Planned on " + this.parentOverview.selectedStudentCourse.predefinedDrivingLessons[i].date.format('MMMM Do YYYY, h:mm:ss a') + ")";
+        }
+
+        return "(Not yet planned)";
+    }
 }

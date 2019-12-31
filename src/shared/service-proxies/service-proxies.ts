@@ -14317,12 +14317,15 @@ export class StudentsServiceProxy {
 
     /**
      * @param id (optional) 
+     * @param includeLessons (optional) 
      * @return Success
      */
-    getAllCourses(id: number | null | undefined): Observable<StudentCourseDto[]> {
+    getAllCourses(id: number | null | undefined, includeLessons: boolean | null | undefined): Observable<StudentCourseDto[]> {
         let url_ = this.baseUrl + "/api/services/app/Students/GetAllCourses?";
         if (id !== undefined)
             url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        if (includeLessons !== undefined)
+            url_ += "includeLessons=" + encodeURIComponent("" + includeLessons) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -22177,6 +22180,8 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
     studentId!: number | undefined;
     vehicleId!: number | undefined;
     instructors!: InstructorDto[] | undefined;
+    courseId!: number | undefined;
+    predefinedDrivingLessonId!: number | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditDrivingLessonDto) {
@@ -22205,6 +22210,8 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
                 for (let item of data["instructors"])
                     this.instructors!.push(InstructorDto.fromJS(item));
             }
+            this.courseId = data["courseId"];
+            this.predefinedDrivingLessonId = data["predefinedDrivingLessonId"];
             this.id = data["id"];
         }
     }
@@ -22233,6 +22240,8 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
             for (let item of this.instructors)
                 data["instructors"].push(item.toJSON());
         }
+        data["courseId"] = this.courseId;
+        data["predefinedDrivingLessonId"] = this.predefinedDrivingLessonId;
         data["id"] = this.id;
         return data; 
     }
@@ -22250,6 +22259,8 @@ export interface ICreateOrEditDrivingLessonDto {
     studentId: number | undefined;
     vehicleId: number | undefined;
     instructors: InstructorDto[] | undefined;
+    courseId: number | undefined;
+    predefinedDrivingLessonId: number | undefined;
     id: number | undefined;
 }
 
@@ -33266,7 +33277,8 @@ export interface IAssignToCourseInput {
 
 export class StudentCourseDto implements IStudentCourseDto {
     course!: CourseDto | undefined;
-    relevantLessons!: StudentCourseLessonDto[] | undefined;
+    predefinedDrivingLessons!: StudentCoursePredefinedDrivingLessonDto[] | undefined;
+    predefinedDrivingLessonsProgress!: PredefinedDrivingLessonProgressDto[] | undefined;
 
     constructor(data?: IStudentCourseDto) {
         if (data) {
@@ -33280,10 +33292,15 @@ export class StudentCourseDto implements IStudentCourseDto {
     init(data?: any) {
         if (data) {
             this.course = data["course"] ? CourseDto.fromJS(data["course"]) : <any>undefined;
-            if (data["relevantLessons"] && data["relevantLessons"].constructor === Array) {
-                this.relevantLessons = [] as any;
-                for (let item of data["relevantLessons"])
-                    this.relevantLessons!.push(StudentCourseLessonDto.fromJS(item));
+            if (data["predefinedDrivingLessons"] && data["predefinedDrivingLessons"].constructor === Array) {
+                this.predefinedDrivingLessons = [] as any;
+                for (let item of data["predefinedDrivingLessons"])
+                    this.predefinedDrivingLessons!.push(StudentCoursePredefinedDrivingLessonDto.fromJS(item));
+            }
+            if (data["predefinedDrivingLessonsProgress"] && data["predefinedDrivingLessonsProgress"].constructor === Array) {
+                this.predefinedDrivingLessonsProgress = [] as any;
+                for (let item of data["predefinedDrivingLessonsProgress"])
+                    this.predefinedDrivingLessonsProgress!.push(PredefinedDrivingLessonProgressDto.fromJS(item));
             }
         }
     }
@@ -33298,10 +33315,15 @@ export class StudentCourseDto implements IStudentCourseDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["course"] = this.course ? this.course.toJSON() : <any>undefined;
-        if (this.relevantLessons && this.relevantLessons.constructor === Array) {
-            data["relevantLessons"] = [];
-            for (let item of this.relevantLessons)
-                data["relevantLessons"].push(item.toJSON());
+        if (this.predefinedDrivingLessons && this.predefinedDrivingLessons.constructor === Array) {
+            data["predefinedDrivingLessons"] = [];
+            for (let item of this.predefinedDrivingLessons)
+                data["predefinedDrivingLessons"].push(item.toJSON());
+        }
+        if (this.predefinedDrivingLessonsProgress && this.predefinedDrivingLessonsProgress.constructor === Array) {
+            data["predefinedDrivingLessonsProgress"] = [];
+            for (let item of this.predefinedDrivingLessonsProgress)
+                data["predefinedDrivingLessonsProgress"].push(item.toJSON());
         }
         return data; 
     }
@@ -33309,15 +33331,17 @@ export class StudentCourseDto implements IStudentCourseDto {
 
 export interface IStudentCourseDto {
     course: CourseDto | undefined;
-    relevantLessons: StudentCourseLessonDto[] | undefined;
+    predefinedDrivingLessons: StudentCoursePredefinedDrivingLessonDto[] | undefined;
+    predefinedDrivingLessonsProgress: PredefinedDrivingLessonProgressDto[] | undefined;
 }
 
-export class StudentCourseLessonDto implements IStudentCourseLessonDto {
-    lessonName!: string | undefined;
-    lessonCountDone!: number | undefined;
-    lessonCountRequired!: number | undefined;
+export class StudentCoursePredefinedDrivingLessonDto implements IStudentCoursePredefinedDrivingLessonDto {
+    predefinedDrivingLessonId!: number | undefined;
+    length!: number | undefined;
+    isDone!: boolean | undefined;
+    date!: moment.Moment | undefined;
 
-    constructor(data?: IStudentCourseLessonDto) {
+    constructor(data?: IStudentCoursePredefinedDrivingLessonDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -33328,32 +33352,87 @@ export class StudentCourseLessonDto implements IStudentCourseLessonDto {
 
     init(data?: any) {
         if (data) {
-            this.lessonName = data["lessonName"];
-            this.lessonCountDone = data["lessonCountDone"];
-            this.lessonCountRequired = data["lessonCountRequired"];
+            this.predefinedDrivingLessonId = data["predefinedDrivingLessonId"];
+            this.length = data["length"];
+            this.isDone = data["isDone"];
+            this.date = data["date"] ? moment(data["date"].toString()) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): StudentCourseLessonDto {
+    static fromJS(data: any): StudentCoursePredefinedDrivingLessonDto {
         data = typeof data === 'object' ? data : {};
-        let result = new StudentCourseLessonDto();
+        let result = new StudentCoursePredefinedDrivingLessonDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["lessonName"] = this.lessonName;
-        data["lessonCountDone"] = this.lessonCountDone;
-        data["lessonCountRequired"] = this.lessonCountRequired;
+        data["predefinedDrivingLessonId"] = this.predefinedDrivingLessonId;
+        data["length"] = this.length;
+        data["isDone"] = this.isDone;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         return data; 
     }
 }
 
-export interface IStudentCourseLessonDto {
-    lessonName: string | undefined;
-    lessonCountDone: number | undefined;
-    lessonCountRequired: number | undefined;
+export interface IStudentCoursePredefinedDrivingLessonDto {
+    predefinedDrivingLessonId: number | undefined;
+    length: number | undefined;
+    isDone: boolean | undefined;
+    date: moment.Moment | undefined;
+}
+
+export class PredefinedDrivingLessonProgressDto implements IPredefinedDrivingLessonProgressDto {
+    predefinedDrivingLessonId!: number | undefined;
+    name!: string | undefined;
+    countRequired!: number | undefined;
+    countDone!: number | undefined;
+    countPlanned!: number | undefined;
+
+    constructor(data?: IPredefinedDrivingLessonProgressDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.predefinedDrivingLessonId = data["predefinedDrivingLessonId"];
+            this.name = data["name"];
+            this.countRequired = data["countRequired"];
+            this.countDone = data["countDone"];
+            this.countPlanned = data["countPlanned"];
+        }
+    }
+
+    static fromJS(data: any): PredefinedDrivingLessonProgressDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PredefinedDrivingLessonProgressDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["predefinedDrivingLessonId"] = this.predefinedDrivingLessonId;
+        data["name"] = this.name;
+        data["countRequired"] = this.countRequired;
+        data["countDone"] = this.countDone;
+        data["countPlanned"] = this.countPlanned;
+        return data; 
+    }
+}
+
+export interface IPredefinedDrivingLessonProgressDto {
+    predefinedDrivingLessonId: number | undefined;
+    name: string | undefined;
+    countRequired: number | undefined;
+    countDone: number | undefined;
+    countPlanned: number | undefined;
 }
 
 export class SVPersonalDataDto implements ISVPersonalDataDto {

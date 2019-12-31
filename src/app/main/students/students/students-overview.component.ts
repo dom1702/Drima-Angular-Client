@@ -63,7 +63,7 @@ export class StudentsOverviewComponent extends AppComponentBase {
 
                 this.overallActive = true;
 
-                this._studentsServiceProxy.getAllCourses(this.student.id).subscribe(result => {
+                this._studentsServiceProxy.getAllCourses(this.student.id, true).subscribe(result => {
                     this.studentCourses = result
 
                     if(this.studentCourses.length > 0)

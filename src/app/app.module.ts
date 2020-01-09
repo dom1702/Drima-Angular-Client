@@ -76,6 +76,7 @@ import { LayoutRefService } from '@metronic/app/core/services/layout/layout-ref.
 
 import localeDe from '@angular/common/locales/de'
 import { registerLocaleData } from '@angular/common';
+import {ConvertToSaveUrlPipe } from './main/studentsView/theoryCourse/convert-to-saveUrl.pipe';
 
 registerLocaleData(localeDe);
 

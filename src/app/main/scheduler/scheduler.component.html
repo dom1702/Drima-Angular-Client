@@ -76,7 +76,7 @@
                             </label>
                         </div>
                     </div> -->
-                    <div class="btn-group">
+                    <!-- <div class="btn-group">
                         <label class="btn btn-primary" [(ngModel)]="eventTypeFilter.drivingLessons"
                             (click)="updateCurrentView()" btnCheckbox tabindex="0"
                             role="button">{{l("DrivingLessons")}}</label>
@@ -89,9 +89,61 @@
                         <label class="btn btn-primary" [(ngModel)]="eventTypeFilter.otherEvents"
                             (click)="updateCurrentView()" btnCheckbox tabindex="0"
                             role="button">{{l("Appointments")}}</label>
+                    </div> -->
+                    <div class="form-group">
+                            <div class="row">
+                        <div class="col-md-auto">
+                            <!-- <button type="button" class="btn btn-info active" (click)="updateCurrentView()"
+                                [(ngModel)]="eventTypeFilter.drivingLessons" btnCheckbox btnCheckboxTrue="true"
+                                btnCheckboxFalse="false">
+                                {{l("DrivingLessons")}}
+                            </button> -->
+             
+                            <label class="m-checkbox">
+                                <input type="checkbox" name="showDrivingLessons" [(ngModel)]="eventTypeFilter.drivingLessons" (change)="updateCurrentView()"> 
+                                    {{l("DrivingLessons")}}
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="col-md-auto">
+                            <!-- <button type="button" class="btn btn-info active" (click)="updateCurrentView()"
+                                [(ngModel)]="eventTypeFilter.simulatorLessons" btnCheckbox btnCheckboxTrue="true"
+                                btnCheckboxFalse="false">
+                                {{l("SimulatorLessons")}}
+                            </button> -->
+                            <label class="m-checkbox">
+                                <input type="checkbox" name="showSimulatorLessons"  [(ngModel)]="eventTypeFilter.simulatorLessons" (change)="updateCurrentView()"> 
+                                    {{l("SimulatorLessons")}}
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="col-md-auto">
+                            <!-- <button type="button" class="btn btn-info active" (click)="updateCurrentView()"
+                                [(ngModel)]="eventTypeFilter.theoryLessons" btnCheckbox btnCheckboxTrue="true"
+                                btnCheckboxFalse="false">
+                                {{l("TheoryLessons")}}
+                            </button> -->
+                            <label class="m-checkbox">
+                                    <input type="checkbox" name="showTheoryLessons" [(ngModel)]="eventTypeFilter.theoryLessons" (change)="updateCurrentView()"> 
+                                        {{l("TheoryLessons")}}
+                                    <span></span>
+                                </label>
+                        </div>
+                        <div class="col-md-auto">
+                            <!-- <button type="button" class="btn btn-info active" (click)="updateCurrentView()"
+                                [(ngModel)]="eventTypeFilter.otherEvents" btnCheckbox btnCheckboxTrue="true"
+                                btnCheckboxFalse="false">
+                                {{l("Appointments")}}
+                            </button> -->
+                            <label class="m-checkbox"  >
+                                    <input  [(ngModel)]="eventTypeFilter.otherEvents" type="checkbox" name="showOther" (change)="updateCurrentView()"> 
+                                        {{l("Appointments")}}
+                                    <span></span>
+                                </label>
+                        </div>
+                    </div>
                     </div>
                 </div>
-
             </div>
         </div>
 

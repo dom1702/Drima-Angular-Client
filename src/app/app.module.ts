@@ -62,6 +62,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TextMaskModule } from 'angular2-text-mask';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
+
+
 // Metronic
 import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -150,7 +152,8 @@ registerLocaleData(localeDe);
         CoreModule,
         NgxChartsModule,
         TextMaskModule,
-        ImageCropperModule
+        ImageCropperModule,
+
     ],
     providers: [
         ImpersonationService,

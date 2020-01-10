@@ -1,4 +1,4 @@
-<h5>{{l("General")}}</h5>
+<!-- <h5>{{l("General")}}</h5>
 <div class="m--margin-top-20">
     <div *ngIf="student" class="row">
 
@@ -68,9 +68,117 @@
             {{student.country}}
         </div>
     </div>
+</div> -->
+
+<h4>{{l("General")}}</h4>
+<div class="m--margin-top-20">
+    <div *ngIf="student" class="row">
+
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("Name")}} :</h6>
+            {{student.firstName}} {{student.lastName}}
+        </div>
+        <!-- <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("LastName")}} :</h6>
+            {{student.lastName}}
+        </div> -->
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("EmailAddress")}} :</h6>
+            {{student.email}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("PhoneNumber")}} :</h6>
+            {{student.phoneNumber}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("Address")}} :</h6>
+            {{getAddressString()}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("BirthCountry")}} :</h6>
+            {{l(birthCountry)}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("NativeLanguage")}} :</h6>
+            {{l(nativeLanguage)}}
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <h6>{{l("SSN")}} :</h6>
+            {{student.ssn}}
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("LicenseClasses")}} :</h6>
+            {{licenseClasses}}
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("LicenseClassesAlreadyOwned")}} :</h6>
+            {{licenseClassesAlreadyOwned}}
+        </div>
+    </div>
 </div>
 
-<h5 class="m--margin-top-30">{{l("PricePackage")}}</h5>
+<!-- <h5 class="m--margin-top-30">{{l("Address")}}</h5>
+
+<div class="m--margin-top-20">
+    <div *ngIf="student" class="row border-bottom">
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("Street")}} :</h6>
+            {{student.street}}
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("ZipCode")}} :</h6>
+            {{student.zipCode}}
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("City")}} :</h6>
+            {{student.city}}
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <h6>{{l("Country")}} :</h6>
+            {{student.country}}
+        </div>
+    </div>
+</div> -->
+
+<h4 class="m--margin-top-30">{{l("CourseInfo")}}</h4>
+
+<div class="m--margin-top-20">
+    <div *ngIf="parentOverview.selectedStudentCourse">
+        <h6>{{l("CourseName")}}:</h6> <label>{{parentOverview.selectedStudentCourse.course.name}}</label>
+        <div>
+            <label>{{l("BasicLessons")}} </label>
+                <progressbar [animate]="true" [max]="12" [value]="5" [type]="success">
+                    5 / 12
+                </progressbar>
+                <!-- <div class="progress m-progress">
+                    <div class="progress-bar m--bg-info" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="12"></div>
+                </div> -->
+        </div>
+        <div class="row m--margin-top-10">
+            
+            <div class="col-md-3 col-sm-6" *ngFor="let progress of parentOverview.selectedStudentCourse.predefinedDrivingLessonsProgress">
+               
+                    <label>{{progress.name}} </label>
+                    <progressbar [animate]="true" [max]="progress.countRequired" [value]="progress.countDone" [type]="success">
+                        <!-- <label *ngIf="progress.countDone > 0">{{progress.countDone}} / {{progress.countRequired}}</label> -->
+                        <span *ngIf="progress.countDone > 0" class="text-nowrap">{{progress.countDone}} / {{progress.countRequired}}</span>
+                    </progressbar>
+                    <label class="m--margin-top-10" *ngIf="progress.countDone != progress.countRequired">{{nextPlanned(progress.predefinedDrivingLessonId)}}</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!parentOverview.selectedStudentCourse">
+    <h6 style="color:red">{{l("NoCourseSelected")}}!</h6>
+</div>
+
+<h4 class="m--margin-top-30">{{l("PricePackage")}}</h4>
 
 <div class="m--margin-top-20">
     <div *ngIf="student" class="row">
@@ -80,17 +188,21 @@
             {{pricePackageName}}
         </div>
         <div *ngIf="!pricePackageName" class="col-6 mb-3">
-            <h6 style="color:red">{{l("NoPricePackageAssignedYet")}}!</h6>
+            <!-- <h6 style="color:red">{{l("NoPricePackageAssignedYet")}}!</h6> -->
+            <alert type="warning">
+                <strong>Warning!</strong> {{l("NoPricePackageAssignedYet")}}!
+            </alert>
         </div>
 
     </div>
 </div>
 
-<h5 class="m--margin-top-30">{{l("UserAccount")}}</h5>
+<h4 class="m--margin-top-30">{{l("UserAccount")}}</h4>
 
-       <label *ngIf="!student.userId">{{l("StudentNotLinkedToAUserAccount")}}</label>
-       <br><button *ngIf="!student.userId" type="button" (click)="createUserAccount()" class="btn btn mr-5">{{l("CreateAndAssignUserAccount")}}</button>
-       <label *ngIf="student.userId">{{l("UserName")}}: {{student.userName}} ({{student.userId}})</label>
+<label *ngIf="!student.userId">{{l("StudentNotLinkedToAUserAccount")}}</label>
+<br><button *ngIf="!student.userId" type="button" (click)="createUserAccount()"
+    class="btn btn mr-5">{{l("CreateAndAssignUserAccount")}}</button>
+<label *ngIf="student.userId">{{l("UserName")}}: {{student.userName}} ({{student.userId}})</label>
 
 
 <div class="m--margin-top-30">
@@ -104,4 +216,5 @@
 </div>
 
 <createOrEditStudentModal #createOrEditStudentModal (modalSave)="updateStudent()"></createOrEditStudentModal>
-<createOrEditStudentUserModal #createOrEditStudentUserModal (modalSave)="userAccountCreated()"></createOrEditStudentUserModal>
+<createOrEditStudentUserModal #createOrEditStudentUserModal (modalSave)="userAccountCreated()">
+</createOrEditStudentUserModal>

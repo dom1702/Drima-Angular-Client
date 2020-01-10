@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
+﻿import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CoursesComponent } from './courses/courses/courses.component';
 import { SimulatorLessonsComponent } from './lessons/simulatorLessons/simulatorLessons.component';
 import { StudentInvoicesComponent } from './sales/studentInvoices/studentInvoices.component';
 import { DrivingLessonsComponent } from './lessons/drivingLessons/drivingLessons.component';
@@ -24,6 +25,7 @@ import { SVQuizGuard } from './studentsView/theoryCourse/sv-quiz.guard';
             {
                 path: '',
                 children: [
+                    { path: 'courses/courses', component: CoursesComponent, data: { permission: 'Pages.Courses' }  },
                     { path: 'lessons/simulatorLessons', component: SimulatorLessonsComponent, data: { permission: 'Pages.SimulatorLessons' }  },
                     { path: 'sales/studentInvoices', component: StudentInvoicesComponent, data: { permission: 'Pages.StudentInvoices' }  },
                     { path: 'lessons/drivingLessons', component: DrivingLessonsComponent, data: { permission: 'Pages.DrivingLessons' }  },

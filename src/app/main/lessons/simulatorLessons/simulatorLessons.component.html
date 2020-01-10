@@ -117,17 +117,17 @@
                                     <th style="width: 130px"
                                         [hidden]="!isGrantedAny('Pages.SimulatorLessons.Edit', 'Pages.SimulatorLessons.Delete')">
                                         {{l('Actions')}}</th>
-                                    <th style="width: 150px" pSortableColumn="studentFk.lastName">
-                                        {{l('LastName')}}
-                                        <p-sortIcon field="personLastName"></p-sortIcon>
-                                    </th>
-                                    <th style="width: 150px" pSortableColumn="simulatorFk.name">
-                                        {{l('Name')}}
-                                        <p-sortIcon field="simulatorName"></p-sortIcon>
-                                    </th>
                                     <th style="width: 150px" pSortableColumn="startTime">
                                         {{l('StartTime')}}
                                         <p-sortIcon field="simulatorLesson.startTime"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="studentFk.lastName">
+                                        {{l('Student')}}
+                                        <p-sortIcon field="personLastName"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="simulatorFk.name">
+                                        {{l('Simulator')}}
+                                        <p-sortIcon field="simulatorName"></p-sortIcon>
                                     </th>
                                     <th style="width: 150px" pSortableColumn="length">
                                         {{l('Length')}}
@@ -168,6 +168,13 @@
                                         </div>
                                     </td>
                                     <td style="width:150px">
+                                        <span class="ui-column-title"> {{l('StartTime')}}</span>
+                                        <span *ngIf="record.simulatorLesson.startTime">
+                                            {{record.simulatorLesson.startTime | momentFormat:'llll'}}
+                                        </span>
+                                        <span *ngIf="!record.simulatorLesson.startTime">-</span>
+                                    </td>
+                                    <td style="width:150px">
                                         <span class="ui-column-title"> {{l('LastName')}}</span>
                                         {{record.personLastName}}
                                     </td>
@@ -175,13 +182,7 @@
                                         <span class="ui-column-title"> {{l('Name')}}</span>
                                         {{record.simulatorName}}
                                     </td>
-                                    <td style="width:150px">
-                                        <span class="ui-column-title"> {{l('StartTime')}}</span>
-                                        <span *ngIf="record.simulatorLesson.startTime">
-                                            {{record.simulatorLesson.startTime | momentFormat:'L'}}
-                                        </span>
-                                        <span *ngIf="!record.simulatorLesson.startTime">-</span>
-                                    </td>
+                                  
                                     <td style="width:150px">
                                         <span class="ui-column-title"> {{l('Length')}}</span>
                                         {{record.simulatorLesson.length}}

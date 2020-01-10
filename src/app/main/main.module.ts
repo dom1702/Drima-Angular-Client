@@ -1,10 +1,15 @@
-
+﻿
 
 
 import { CommonModule } from '@angular/common';
 import { SimulatorLessonsComponent } from './lessons/simulatorLessons/simulatorLessons.component';
 import { ViewSimulatorLessonModalComponent } from './lessons/simulatorLessons/view-simulatorLesson-modal.component';
 import { CreateOrEditSimulatorLessonModalComponent } from './lessons/simulatorLessons/create-or-edit-simulatorLesson-modal.component';
+import { CoursesComponent } from './courses/courses/courses.component';
+import { ViewCourseModalComponent } from './courses/courses/view-course-modal.component';
+import { CreateOrEditCourseModalComponent } from './courses/courses/create-or-edit-course-modal.component';
+import { OfficeLookupTableModalComponent } from '../shared/common/lookup/office-lookup-table-modal.component';
+
 import { SimulatorLessonPersonLookupTableModalComponent } from './lessons/simulatorLessons/simulatorLesson-person-lookup-table-modal.component';
 import { SimulatorLessonSimulatorLookupTableModalComponent } from './lessons/simulatorLessons/simulatorLesson-simulator-lookup-table-modal.component';
 
@@ -86,6 +91,10 @@ import { SVQuizFinishedTabComponent } from './studentsView/theoryCourse/customTa
 import { SVQuestionComponent } from './studentsView/theoryCourse/sv-question.component';
 import { SVQuizClosedTabComponent } from './studentsView/theoryCourse/customTabs/sv-quiz-closedTab.component';
 import { ConvertToSaveUrlPipe } from './studentsView/theoryCourse/convert-to-saveUrl.pipe';
+import { MultiSelectModule } from '@syncfusion/ej2-angular-dropdowns';
+
+import { AlertModule } from 'ngx-bootstrap/alert';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -122,7 +131,10 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       RadioButtonModule,
       MessageModule,
       MessagesModule,
-      CheckboxModule
+      CheckboxModule,
+      MultiSelectModule,
+      AlertModule.forRoot(),
+      ProgressbarModule.forRoot()
     ],
     declarations: 
     [
@@ -175,7 +187,11 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       SVQuizFinishedTabComponent,
       SVQuizClosedTabComponent,
       SVQuestionComponent,
-      ConvertToSaveUrlPipe
+      ConvertToSaveUrlPipe,
+      CoursesComponent,
+      ViewCourseModalComponent,		
+      CreateOrEditCourseModalComponent,
+      OfficeLookupTableModalComponent,
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

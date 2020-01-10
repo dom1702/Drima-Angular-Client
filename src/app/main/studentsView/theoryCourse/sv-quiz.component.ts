@@ -64,7 +64,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
             id: 0,
             title: 'Test Video 1',
             mandatoryTime: 2,
-            videoId: "https://vimeo.com/video/8537555",
+            videoId: "https://player.vimeo.com/video/692568",
             questions: null,
             completed : false
         },
@@ -106,7 +106,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
             id: 2,
             title: 'Test Video 2',
             mandatoryTime: 2,
-            videoId: "https://vimeo.com/video/8537555",
+            videoId: "https://player.vimeo.com/video/692568",
             questions: null,
             completed: false
         },
@@ -114,7 +114,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
             id: 3,
             title: 'Test Video NEXT',
             mandatoryTime: 2,
-            videoId: "https://vimeo.com/video/8537555",
+            videoId: "https://player.vimeo.com/video/692568",
             questions: null,
             completed: false
         },
@@ -122,7 +122,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
             id: 4,
             title: 'Test Vid ULTRA',
             mandatoryTime: 2,
-            videoId: "https://vimeo.com/video/8537555",
+            videoId: "https://player.vimeo.com/video/692568",
             questions: null,
             completed: false
         }

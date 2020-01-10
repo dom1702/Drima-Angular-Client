@@ -72,10 +72,6 @@ export class StudentsOverviewComponent extends AppComponentBase {
                         this.selectedStudentCourse = this.studentCourses[0];
                     }
                 });
-
-                this._studentsServiceProxy.getFreeCoursesForStudent(this.student.id).subscribe(result => {
-                    console.log(result);
-                });
             });
         });
     }

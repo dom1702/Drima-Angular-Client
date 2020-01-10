@@ -92,15 +92,19 @@
                                                 </closedTab>                                               
                                             </ng-template>
                                             <ng-template #quizBlock>
-                                                <div class="col-md-6 center">
+                                                
+                            
                                                     <div class="embed-responsive embed-responsive-16by9">
                                                         <iframe class="embed-responsive-item"
-                                                            src="https://vimeo.com/video/8537555"
+                                                            [src]="tab.video | safeUrl"
                                                             frameborder='0'
                                                             allowfullscreen>
-                                                        </iframe>                                                                                                               
+                                                        </iframe>      
+                                                        
+                                                        <!-- <iframe src="https://player.vimeo.com/video/692568" frameborder="0" 
+                                                        webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>            -->
                                                     </div>
-                                                </div>                                            
+                                                                                      
                                             </ng-template>                  
                                         </ng-template>
 

@@ -94,6 +94,7 @@ import { MultiSelectModule } from '@syncfusion/ej2-angular-dropdowns';
 
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
+import { AssignStudentToCourseModalComponent } from './students/students/assign-student-to-course-modal.component';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -187,6 +188,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       ViewCourseModalComponent,		
       CreateOrEditCourseModalComponent,
       OfficeLookupTableModalComponent,
+      AssignStudentToCourseModalComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

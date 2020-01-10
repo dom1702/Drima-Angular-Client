@@ -10247,6 +10247,61 @@ export class PricePackagesServiceProxy {
         }
         return _observableOf<FileDto>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    getAllForLookup(): Observable<PricePackageDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/PricePackages/GetAllForLookup";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllForLookup(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllForLookup(<any>response_);
+                } catch (e) {
+                    return <Observable<PricePackageDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PricePackageDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllForLookup(response: HttpResponseBase): Observable<PricePackageDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(PricePackageDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PricePackageDto[]>(<any>null);
+    }
 }
 
 @Injectable()
@@ -14261,6 +14316,64 @@ export class StudentsServiceProxy {
             }));
         }
         return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getFreeCoursesForStudent(id: number | null | undefined): Observable<GetFreeCoursesForStudentDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Students/GetFreeCoursesForStudent?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFreeCoursesForStudent(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFreeCoursesForStudent(<any>response_);
+                } catch (e) {
+                    return <Observable<GetFreeCoursesForStudentDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetFreeCoursesForStudentDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetFreeCoursesForStudent(response: HttpResponseBase): Observable<GetFreeCoursesForStudentDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(GetFreeCoursesForStudentDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetFreeCoursesForStudentDto[]>(<any>null);
     }
 
     /**
@@ -21481,6 +21594,7 @@ export class CourseDto implements ICourseDto {
     enrollmentAvailable!: boolean | undefined;
     officeId!: number | undefined;
     predefinedDrivingLessons!: PredefinedDrivingLessonDto[] | undefined;
+    pricePackages!: PricePackageDto[] | undefined;
     id!: number | undefined;
 
     constructor(data?: ICourseDto) {
@@ -21505,6 +21619,11 @@ export class CourseDto implements ICourseDto {
                 this.predefinedDrivingLessons = [] as any;
                 for (let item of data["predefinedDrivingLessons"])
                     this.predefinedDrivingLessons!.push(PredefinedDrivingLessonDto.fromJS(item));
+            }
+            if (data["pricePackages"] && data["pricePackages"].constructor === Array) {
+                this.pricePackages = [] as any;
+                for (let item of data["pricePackages"])
+                    this.pricePackages!.push(PricePackageDto.fromJS(item));
             }
             this.id = data["id"];
         }
@@ -21531,6 +21650,11 @@ export class CourseDto implements ICourseDto {
             for (let item of this.predefinedDrivingLessons)
                 data["predefinedDrivingLessons"].push(item.toJSON());
         }
+        if (this.pricePackages && this.pricePackages.constructor === Array) {
+            data["pricePackages"] = [];
+            for (let item of this.pricePackages)
+                data["pricePackages"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -21545,6 +21669,7 @@ export interface ICourseDto {
     enrollmentAvailable: boolean | undefined;
     officeId: number | undefined;
     predefinedDrivingLessons: PredefinedDrivingLessonDto[] | undefined;
+    pricePackages: PricePackageDto[] | undefined;
     id: number | undefined;
 }
 
@@ -21608,6 +21733,114 @@ export interface IPredefinedDrivingLessonDto {
     id: number | undefined;
 }
 
+export class PricePackageDto implements IPricePackageDto {
+    name!: string | undefined;
+    products!: PricePackageItemDto[] | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IPricePackageDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            if (data["products"] && data["products"].constructor === Array) {
+                this.products = [] as any;
+                for (let item of data["products"])
+                    this.products!.push(PricePackageItemDto.fromJS(item));
+            }
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): PricePackageDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PricePackageDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        if (this.products && this.products.constructor === Array) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IPricePackageDto {
+    name: string | undefined;
+    products: PricePackageItemDto[] | undefined;
+    id: number | undefined;
+}
+
+export class PricePackageItemDto implements IPricePackageItemDto {
+    productId!: number | undefined;
+    productName!: string | undefined;
+    quantity!: number | undefined;
+    itemVat!: number | undefined;
+    priceAfterVat!: number | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IPricePackageItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.productId = data["productId"];
+            this.productName = data["productName"];
+            this.quantity = data["quantity"];
+            this.itemVat = data["itemVat"];
+            this.priceAfterVat = data["priceAfterVat"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): PricePackageItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PricePackageItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["productId"] = this.productId;
+        data["productName"] = this.productName;
+        data["quantity"] = this.quantity;
+        data["itemVat"] = this.itemVat;
+        data["priceAfterVat"] = this.priceAfterVat;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IPricePackageItemDto {
+    productId: number | undefined;
+    productName: string | undefined;
+    quantity: number | undefined;
+    itemVat: number | undefined;
+    priceAfterVat: number | undefined;
+    id: number | undefined;
+}
+
 export class GetCourseForEditOutput implements IGetCourseForEditOutput {
     course!: CreateOrEditCourseDto | undefined;
     officeName!: string | undefined;
@@ -21659,6 +21892,7 @@ export class CreateOrEditCourseDto implements ICreateOrEditCourseDto {
     enrollmentAvailable!: boolean | undefined;
     officeId!: number | undefined;
     predefinedDrivingLessons!: PredefinedDrivingLessonDto[] | undefined;
+    pricePackages!: PricePackageDto[] | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditCourseDto) {
@@ -21685,6 +21919,11 @@ export class CreateOrEditCourseDto implements ICreateOrEditCourseDto {
                 this.predefinedDrivingLessons = [] as any;
                 for (let item of data["predefinedDrivingLessons"])
                     this.predefinedDrivingLessons!.push(PredefinedDrivingLessonDto.fromJS(item));
+            }
+            if (data["pricePackages"] && data["pricePackages"].constructor === Array) {
+                this.pricePackages = [] as any;
+                for (let item of data["pricePackages"])
+                    this.pricePackages!.push(PricePackageDto.fromJS(item));
             }
             this.id = data["id"];
         }
@@ -21713,6 +21952,11 @@ export class CreateOrEditCourseDto implements ICreateOrEditCourseDto {
             for (let item of this.predefinedDrivingLessons)
                 data["predefinedDrivingLessons"].push(item.toJSON());
         }
+        if (this.pricePackages && this.pricePackages.constructor === Array) {
+            data["pricePackages"] = [];
+            for (let item of this.pricePackages)
+                data["pricePackages"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -21729,6 +21973,7 @@ export interface ICreateOrEditCourseDto {
     enrollmentAvailable: boolean | undefined;
     officeId: number | undefined;
     predefinedDrivingLessons: PredefinedDrivingLessonDto[] | undefined;
+    pricePackages: PricePackageDto[] | undefined;
     id: number | undefined;
 }
 
@@ -28898,114 +29143,6 @@ export interface IGetPricePackageForViewDto {
     pricePackage: PricePackageDto | undefined;
 }
 
-export class PricePackageDto implements IPricePackageDto {
-    name!: string | undefined;
-    products!: PricePackageItemDto[] | undefined;
-    id!: number | undefined;
-
-    constructor(data?: IPricePackageDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.name = data["name"];
-            if (data["products"] && data["products"].constructor === Array) {
-                this.products = [] as any;
-                for (let item of data["products"])
-                    this.products!.push(PricePackageItemDto.fromJS(item));
-            }
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): PricePackageDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PricePackageDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        if (this.products && this.products.constructor === Array) {
-            data["products"] = [];
-            for (let item of this.products)
-                data["products"].push(item.toJSON());
-        }
-        data["id"] = this.id;
-        return data; 
-    }
-}
-
-export interface IPricePackageDto {
-    name: string | undefined;
-    products: PricePackageItemDto[] | undefined;
-    id: number | undefined;
-}
-
-export class PricePackageItemDto implements IPricePackageItemDto {
-    productId!: number | undefined;
-    productName!: string | undefined;
-    quantity!: number | undefined;
-    itemVat!: number | undefined;
-    priceAfterVat!: number | undefined;
-    id!: number | undefined;
-
-    constructor(data?: IPricePackageItemDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.productId = data["productId"];
-            this.productName = data["productName"];
-            this.quantity = data["quantity"];
-            this.itemVat = data["itemVat"];
-            this.priceAfterVat = data["priceAfterVat"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): PricePackageItemDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PricePackageItemDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["productId"] = this.productId;
-        data["productName"] = this.productName;
-        data["quantity"] = this.quantity;
-        data["itemVat"] = this.itemVat;
-        data["priceAfterVat"] = this.priceAfterVat;
-        data["id"] = this.id;
-        return data; 
-    }
-}
-
-export interface IPricePackageItemDto {
-    productId: number | undefined;
-    productName: string | undefined;
-    quantity: number | undefined;
-    itemVat: number | undefined;
-    priceAfterVat: number | undefined;
-    id: number | undefined;
-}
-
 export class GetPricePackageForEditOutput implements IGetPricePackageForEditOutput {
     pricePackage!: CreateOrEditPricePackageDto | undefined;
 
@@ -33231,9 +33368,66 @@ export interface ICreateStudentUserInput {
     setRandomPassword: boolean | undefined;
 }
 
+export class GetFreeCoursesForStudentDto implements IGetFreeCoursesForStudentDto {
+    courseId!: number | undefined;
+    courseName!: string | undefined;
+    licenseClass!: string | undefined;
+    availablePricePackages!: PricePackageDto[] | undefined;
+
+    constructor(data?: IGetFreeCoursesForStudentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.courseId = data["courseId"];
+            this.courseName = data["courseName"];
+            this.licenseClass = data["licenseClass"];
+            if (data["availablePricePackages"] && data["availablePricePackages"].constructor === Array) {
+                this.availablePricePackages = [] as any;
+                for (let item of data["availablePricePackages"])
+                    this.availablePricePackages!.push(PricePackageDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetFreeCoursesForStudentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetFreeCoursesForStudentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["courseId"] = this.courseId;
+        data["courseName"] = this.courseName;
+        data["licenseClass"] = this.licenseClass;
+        if (this.availablePricePackages && this.availablePricePackages.constructor === Array) {
+            data["availablePricePackages"] = [];
+            for (let item of this.availablePricePackages)
+                data["availablePricePackages"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IGetFreeCoursesForStudentDto {
+    courseId: number | undefined;
+    courseName: string | undefined;
+    licenseClass: string | undefined;
+    availablePricePackages: PricePackageDto[] | undefined;
+}
+
 export class AssignToCourseInput implements IAssignToCourseInput {
     studentId!: number | undefined;
     courseId!: number | undefined;
+    pricePackage!: PricePackageDto | undefined;
     sendEnrollmentEmail!: boolean | undefined;
 
     constructor(data?: IAssignToCourseInput) {
@@ -33249,6 +33443,7 @@ export class AssignToCourseInput implements IAssignToCourseInput {
         if (data) {
             this.studentId = data["studentId"];
             this.courseId = data["courseId"];
+            this.pricePackage = data["pricePackage"] ? PricePackageDto.fromJS(data["pricePackage"]) : <any>undefined;
             this.sendEnrollmentEmail = data["sendEnrollmentEmail"];
         }
     }
@@ -33264,6 +33459,7 @@ export class AssignToCourseInput implements IAssignToCourseInput {
         data = typeof data === 'object' ? data : {};
         data["studentId"] = this.studentId;
         data["courseId"] = this.courseId;
+        data["pricePackage"] = this.pricePackage ? this.pricePackage.toJSON() : <any>undefined;
         data["sendEnrollmentEmail"] = this.sendEnrollmentEmail;
         return data; 
     }
@@ -33272,6 +33468,7 @@ export class AssignToCourseInput implements IAssignToCourseInput {
 export interface IAssignToCourseInput {
     studentId: number | undefined;
     courseId: number | undefined;
+    pricePackage: PricePackageDto | undefined;
     sendEnrollmentEmail: boolean | undefined;
 }
 

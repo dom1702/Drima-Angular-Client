@@ -172,6 +172,8 @@
                     <label class="m--margin-top-10" *ngIf="progress.countDone != progress.countRequired">{{nextPlanned(progress.predefinedDrivingLessonId)}}</label>
             </div>
         </div>
+
+        
     </div>
 </div>
 <div *ngIf="!parentOverview.selectedStudentCourse">
@@ -208,7 +210,7 @@
 <div class="m--margin-top-30">
     <div class="m--align-right">
 
-
+        <button type="button" (click)="openAssignToCourseModal()" class="btn btn-primary mr-5">{{l("AssignToCourse")}}</button>
         <button type="button" (click)="editStudent()" class="btn btn-primary mr-5">{{l("EditStudentData")}}</button>
 
 
@@ -216,5 +218,5 @@
 </div>
 
 <createOrEditStudentModal #createOrEditStudentModal (modalSave)="updateStudent()"></createOrEditStudentModal>
-<createOrEditStudentUserModal #createOrEditStudentUserModal (modalSave)="userAccountCreated()">
-</createOrEditStudentUserModal>
+<createOrEditStudentUserModal #createOrEditStudentUserModal (modalSave)="userAccountCreated()"></createOrEditStudentUserModal>
+<assignStudentToCourseModal #assignStudentToCourseModal (modalSave)="assignToCourse()"></assignStudentToCourseModal>

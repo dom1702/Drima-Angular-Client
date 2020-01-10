@@ -16,6 +16,7 @@ import { StudentsOverviewPricePackageComponent } from './students-overview-price
 import { CreateOrEditStudentUserModalComponent } from './create-or-edit-student-user-modal.component';
 import { CountriesService } from '@app/shared/common/services/countries.service';
 import { LanguagesService } from '@app/shared/common/services/languages.service';
+import { AssignStudentToCourseModalComponent } from './assign-student-to-course-modal.component';
 
 @Component({
     selector: 'students-overview-overview',
@@ -27,6 +28,7 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
 
     @ViewChild('createOrEditStudentModal') createOrEditStudentModal: CreateOrEditStudentModalComponent;
     @ViewChild('createOrEditStudentUserModal') createOrEditStudentUserModal: CreateOrEditStudentUserModalComponent;
+    @ViewChild('assignStudentToCourseModal') assignStudentToCourseModal: AssignStudentToCourseModalComponent;
     
     @Input() student : StudentDto;
     @Input() pricePackageName : string;
@@ -116,6 +118,14 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
 
     createUserAccount(): void {
         this.createOrEditStudentUserModal.show(this.student.lastName, this.student.firstName, this.student.email, this.student);
+    }
+
+    openAssignToCourseModal() : void{
+        this.assignStudentToCourseModal.show(this.student);
+    }
+
+    assignToCourse() : void{
+
     }
 
     userAccountCreated()

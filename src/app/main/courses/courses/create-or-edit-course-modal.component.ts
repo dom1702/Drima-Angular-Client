@@ -1,7 +1,7 @@
 ﻿import { Component, ViewChild, Injector, Output, EventEmitter, QueryList, ViewChildren } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
-import { CoursesServiceProxy, CreateOrEditCourseDto, PredefinedDrivingLessonDto, PredefinedDrivingLessonsServiceProxy } from '@shared/service-proxies/service-proxies';
+import { CoursesServiceProxy, CreateOrEditCourseDto, PredefinedDrivingLessonDto, PredefinedDrivingLessonsServiceProxy, PricePackagesServiceProxy, PricePackageDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { OfficeLookupTableModalComponent } from '../../../shared/common/lookup/office-lookup-table-modal.component';
@@ -17,6 +17,7 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('officeLookupTableModal') courseOfficeLookupTableModal: OfficeLookupTableModalComponent;
     @ViewChildren('pdl_multiselect') predefinedDL_Multiselect: QueryList<MultiSelectComponent>;
+    @ViewChildren('pp_multiselect') pricePackage_Multiselect: QueryList<MultiSelectComponent>;
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
 
@@ -28,21 +29,26 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
     officeName = '';
 
     predefinedDrivingLessons: Object[];
-    fields: Object = { text: 'dl', value: 'id' };
-    placeholder: string = 'Select predefined driving lessons';
+    pricePackages: Object[];
 
-    private multiselectSubscription: Subscription;
+    fields: Object = { text: 'dl', value: 'id' };
+    placeholderPdlSelection: string = 'Select predefined driving lessons';
+    placeholderPricePackageSelection: string = 'Select price packages';
+
+    private pdlMultiselectSubscription: Subscription;
+    private pricePackageMultiselectSubscription: Subscription;
 
     constructor(
         injector: Injector,
         private _coursesServiceProxy: CoursesServiceProxy,
-        private _predefinedDrivingLessonsServiceProxy: PredefinedDrivingLessonsServiceProxy
+        private _predefinedDrivingLessonsServiceProxy: PredefinedDrivingLessonsServiceProxy,
+        private _pricePackagesServiceProxy: PricePackagesServiceProxy
     ) {
         super(injector);
     }
 
     UpdateMultiSelect() {
-        this.multiselectSubscription = this.predefinedDL_Multiselect.changes.subscribe((comps: QueryList<MultiSelectComponent>) => {
+        this.pdlMultiselectSubscription = this.predefinedDL_Multiselect.changes.subscribe((comps: QueryList<MultiSelectComponent>) => {
             var selected: number[] = [];
 
             if (this.course.predefinedDrivingLessons != null) {
@@ -54,7 +60,22 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
                 this.predefinedDL_Multiselect.first.value = selected;
             }
 
-            this.multiselectSubscription.unsubscribe();
+            this.pdlMultiselectSubscription.unsubscribe();
+        });
+
+        this.pricePackageMultiselectSubscription = this.pricePackage_Multiselect.changes.subscribe((comps: QueryList<MultiSelectComponent>) => {
+            var selected: number[] = [];
+
+            if (this.course.pricePackages != null) {
+
+                for (var i = 0; i < this.course.pricePackages.length; i++) {
+                    selected.push(this.course.pricePackages[i].id);
+                }
+
+                this.pricePackage_Multiselect.first.value = selected;
+            }
+
+            this.pricePackageMultiselectSubscription.unsubscribe();
         });
     }
 
@@ -74,31 +95,48 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
                     }
                 );
             }
+        
+        });
 
-            if (!courseId) {
-                this.course = new CreateOrEditCourseDto();
-                this.course.id = courseId;
-                this.course.startDate = moment().startOf('day');
-                this.course.lastEnrollmentDate = moment().startOf('day');
-                this.officeName = '';
+        this._pricePackagesServiceProxy.getAllForLookup().subscribe(result => {
+
+            this.pricePackages = [];
+
+            for (var i = 0; i < result.length; i++) {
+                this.pricePackages.push(
+                    {
+                        id: result[i].id,
+                        dl: result[i].name
+                    }
+                );
+            }
+        
+        });
+
+        if (!courseId) {
+            this.course = new CreateOrEditCourseDto();
+            this.course.id = courseId;
+            this.course.startDate = moment().startOf('day');
+            this.course.lastEnrollmentDate = moment().startOf('day');
+            this.officeName = '';
+
+            this.active = true;
+            this.modal.show();
+        } else {
+            this._coursesServiceProxy.getCourseForEdit(courseId).subscribe(result => {
+                this.course = result.course;
+
+                this.officeName = result.officeName;
 
                 this.active = true;
                 this.modal.show();
-            } else {
-                this._coursesServiceProxy.getCourseForEdit(courseId).subscribe(result => {
-                    this.course = result.course;
-
-                    this.officeName = result.officeName;
-
-                    this.active = true;
-                    this.modal.show();
 
 
-                });
-            }
+            });
+        }
 
 
-        });
+      
     }
 
     save(): void {
@@ -110,6 +148,15 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
                 var pddl: PredefinedDrivingLessonDto = new PredefinedDrivingLessonDto()
                 pddl.id = Number(this.predefinedDL_Multiselect.first.value[i]);
                 this.course.predefinedDrivingLessons.push(pddl);
+            }
+        }
+
+        if (this.pricePackage_Multiselect.first.value != null) {
+            this.course.pricePackages = [];
+            for (var i = 0; i < this.pricePackage_Multiselect.first.value.length; i++) {
+                var pp: PricePackageDto = new PricePackageDto()
+                pp.id = Number(this.pricePackage_Multiselect.first.value[i]);
+                this.course.pricePackages.push(pp);
             }
         }
 

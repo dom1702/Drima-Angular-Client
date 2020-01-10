@@ -8,10 +8,11 @@
         </div>                                                                                  
         
         <div *ngFor="let answer of answerOptions"> 
-            <p-radioButton name={{quest}}  label={{answer}} (click)="onClick(answer)"></p-radioButton>
+            <p-radioButton name="quest" value={{answer}}  label={{answer}} (click)="onClick(answer)" [(ngModel)]="selectedValue"></p-radioButton>
         </div>
         <p-messages [(value)]="messages" [closable]="false"></p-messages>
     </div>
+    <div class="col-sm-4"></div>
 </div>
-<div class="col-sm-4"></div>
 <hr class="ng-tns-c19-1">
+

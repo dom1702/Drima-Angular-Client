@@ -1,8 +1,7 @@
-import { Component, ViewEncapsulation, Injector, Input, Output, EventEmitter } from "@angular/core";
+import { Component, ViewEncapsulation, Injector, Input, Output, EventEmitter, OnInit, AfterContentInit, DoCheck, OnDestroy } from "@angular/core";
 import { appModuleAnimation } from "@shared/animations/routerTransition";
 import { AppComponentBase } from "@shared/common/app-component-base";
 import {Message} from 'primeng//api';
-import { RadioButton } from "primeng/primeng";
 
 
 @Component({
@@ -12,10 +11,10 @@ import { RadioButton } from "primeng/primeng";
     selector: 'question'
 })
 
-export class SVQuestionComponent extends AppComponentBase{
+export class SVQuestionComponent extends AppComponentBase {
 
     @Output()
-    valueSelected : EventEmitter<string> = new EventEmitter<string>();
+    valueSelected : EventEmitter<any> = new EventEmitter<any>();
     
     @Input()
     quest : string;
@@ -34,7 +33,10 @@ export class SVQuestionComponent extends AppComponentBase{
 
     messages: Message[] = [];
     _selected : string;
-
+    answerAttempts: number = 0;
+    solved : boolean = false;
+    selectedValue: string = null;
+ 
     get selected(): string {
         return this._selected;
     }
@@ -48,8 +50,13 @@ export class SVQuestionComponent extends AppComponentBase{
             this.showMessage("success", "Right!");
         }
         
+        this.answerAttempts++;
         this._selected = value;
-        this.valueSelected.emit(value);
+        this.valueSelected.emit({
+           answer: value,
+           att: this.answerAttempts,
+           qNr : this.nr
+        });
     }
            
     constructor(injector: Injector) 
@@ -61,7 +68,7 @@ export class SVQuestionComponent extends AppComponentBase{
         this.selected = answer;
     }
 
-    public getAnswerResult() : string {
+    getAnswerResult() : string {
        if(this.answerOptions != null) 
        {      
             return this.answerOptions[this.correctAnswer].toString();
@@ -72,6 +79,11 @@ export class SVQuestionComponent extends AppComponentBase{
     showMessage(_severity: string, _summary: string, _details?: string) {
        this.messages = [];
        this.messages.push({severity: _severity, summary: _summary, detail: _details})
+    }
+
+    reset() {
+        this.messages = [];
+        this.selectedValue = null;
     }
 
 }

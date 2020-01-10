@@ -17,6 +17,7 @@ import { PersonalSchedulerComponent } from './personalScheduler/personalSchedule
 import { SVFrequentlyAskedQuestionsComponent } from './studentsView/frequentlyAskedQuestions/sv-frequently-asked-questions.component';
 import { SVTheoryCourseComponent } from './studentsView/theoryCourse/sv-theory-course.component';
 import { SVQuizComponent } from './studentsView/theoryCourse/sv-quiz.component';
+import { SVQuizGuard } from './studentsView/theoryCourse/sv-quiz.guard';
 
 @NgModule({
     imports: [
@@ -40,7 +41,12 @@ import { SVQuizComponent } from './studentsView/theoryCourse/sv-quiz.component';
                     { path: 'studentsView/bookDrivingLesson', component: SVBookDrivingLessonComponent, data: { permission: 'StudentView' }},
                     { path: 'studentsView/frequentlyAskedQuestions', component: SVFrequentlyAskedQuestionsComponent, data: { permission: 'StudentView' }},
                     { path: 'studentsView/theoryCourse', component: SVTheoryCourseComponent, data: { permission: 'StudentView' }},
-                    { path: 'studentsView/theoryCourse/quiz', component: SVQuizComponent, data: { permission: 'StudentView' }}
+                    { 
+                        path: 'studentsView/theoryCourse/quiz', 
+                        canDeactivate: [SVQuizGuard],
+                        component: SVQuizComponent, 
+                        data: { permission: 'StudentView' }
+                    }
                 ]
             }
         ])

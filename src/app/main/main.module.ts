@@ -36,7 +36,7 @@ import { CreateOrEditDrivingLessonModalComponent } from './lessons/drivingLesson
 import { CreateEventTypeModalComponent } from './scheduler/create-event-type-modal.component';
 
 
-import { AutoCompleteModule, TabViewModule, AccordionModule} from 'primeng/primeng';
+import { AutoCompleteModule, TabViewModule, AccordionModule, MessageModule, MessagesModule, CheckboxModule} from 'primeng/primeng';
 import { PaginatorModule } from 'primeng/primeng';
 import { EditorModule } from 'primeng/primeng';
 import { InputMaskModule } from 'primeng/primeng';import { FileUploadModule } from 'primeng/primeng';
@@ -90,6 +90,7 @@ import { SVQuizComponent } from './studentsView/theoryCourse/sv-quiz.component';
 import { SVQuizFinishedTabComponent } from './studentsView/theoryCourse/customTabs/sv-quiz-finishedTab.component';
 import { SVQuestionComponent } from './studentsView/theoryCourse/sv-question.component';
 import { SVQuizClosedTabComponent } from './studentsView/theoryCourse/customTabs/sv-quiz-closedTab.component';
+import { ConvertToSaveUrlPipe } from './studentsView/theoryCourse/convert-to-saveUrl.pipe';
 import { MultiSelectModule } from '@syncfusion/ej2-angular-dropdowns';
 
 import { AlertModule } from 'ngx-bootstrap/alert';
@@ -129,6 +130,9 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       TabViewModule,
       AccordionModule,
       RadioButtonModule,
+      MessageModule,
+      MessagesModule,
+      CheckboxModule,
       MultiSelectModule,
       AlertModule.forRoot(),
       ProgressbarModule.forRoot()
@@ -184,6 +188,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       SVQuizFinishedTabComponent,
       SVQuizClosedTabComponent,
       SVQuestionComponent,
+      ConvertToSaveUrlPipe,
       CoursesComponent,
       ViewCourseModalComponent,		
       CreateOrEditCourseModalComponent,
@@ -193,7 +198,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },
         { provide: BsDaterangepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDaterangepickerConfig },
-        { provide: BsLocaleService, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerLocale }
+        { provide: BsLocaleService, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerLocale }       
     ]
 })
 export class MainModule { }

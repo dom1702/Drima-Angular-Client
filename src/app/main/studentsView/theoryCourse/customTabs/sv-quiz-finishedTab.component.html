@@ -1,3 +1,26 @@
-<p>Home Tab (finished)</p>
-<button pButton type="button" label="Continue" class="ui-button-raised ui-button-rounded"></button>                       
-<button pButton type="button" label="Back to Drima" class="ui-button-raised ui-button-rounded"></button>                       
+<div class="row justify-content-center">
+    <div class="col col-sm-2"></div>  
+    <div class="col-sm-8">
+        <h1>Congratulations!</h1>
+        <h4>You have passed the lesson: {{currentLesson}} </h4>
+        <div class="row">
+            <div class="col-sm-5">
+                <button pButton type="button" label="Return to course overview" 
+                class="ui-button-raised" 
+                routerLink="/app/main/studentsView/theoryCourse/">
+                </button> 
+            </div>
+            <div class="col-sm-2">           
+            </div>
+            <div class="col-sm-5">
+                <button pButton type="button" 
+                label="Move to the next eLesson" 
+                class="ui-button-raised"
+                (click)="continueLesson()">
+                </button>  
+            </div>
+        </div>         
+    </div>
+    <div class="col col-sm-2"></div>        
+</div>
+                    

@@ -1,5 +1,6 @@
 
 <div class="row justify-content-center">
+    <p-toast [style]="{marginTop: '80px'}" styleClass="custom-toast" key="toast" position="bottom-right"></p-toast>
     <div class="col col-sm-2"></div>  
     <div class="col-sm-8">
         <p-messages  severity="error" [value]="abortedMessage" [closable]="false"></p-messages>
@@ -10,7 +11,7 @@
         <div class="m--space-10"></div>
 
         <span>You have to do all lesson parts in order. If you want, you can go back to watch videos again if you want to check your answers. 
-            Duration of this eLesson is at least 45 minutes and has X Parts. These parts consists of videos, tasks and questionnaires. If you 
+            Duration of this eLesson is at least 45 minutes and has {{quizParts}} Parts. These parts consists of videos, tasks and questionnaires. If you 
             cancel the eLesson, it has to be done again from the start. Short internet connection breaks won't cancel the lesson.
         </span>
 
@@ -22,20 +23,43 @@
         
         <div class="m--space-10"></div>
 
-        <h6> Webauto control room is open: Mon, Tue, Wed, Thu 14:00 - 21:00</h6>
+        <h6> Drima control room is open: Mon, Tue, Wed, Thu 14:00 - 21:00</h6>
        
         <div *ngIf="!closed">
+            
             <span>   
-                <p-message severity="info" text="eLesson requirements">               
-                </p-message>   
+                <p-messages severity="info" [value]="requirementMessage" [closable]="false">               
+                </p-messages>                                               
+            </span>   
+                 
+            <div class="ui-inputgroup">
+                <button pButton type="button" label="Phone:" disabled="true"></button>
+                <span class="ui-inputgroup-addon">+</span>
+                <input type="text" pInputText id="studentPhoneNumberParsed" [(ngModel)]="studentPhoneNumberParsed"><br>         
+                <button pButton type="button" label="{{videoTestButtonName}}" (click)="toggleVideoTestBlock()" ></button>
+            </div> 
+            <br>
+
+            <div *ngIf="showVideoTest">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item"
+                        [src]="videoUrl | safeUrl"
+                        frameborder='0'
+                        allowfullscreen>
+                    </iframe>      
+                </div> 
+            </div>
+            
+            <div>
                 <span>
-                   requirements
-                </span>         
-                Phone: <input type="text" value="+54736457483"><br>               
-                <p-checkbox name="phoneNumber" binary="true" [(ngModel)]="checked" label="I have checked the phone number, it has the WhatsApp installed and running and I have tested the video">             
-                </p-checkbox>                                  
-            </span>                    
+                    <p-checkbox name="phoneNumber" binary="true" [(ngModel)]="checked">             
+                    </p-checkbox> 
+                    I have checked the phone number, it has the WhatsApp installed and running and I have tested the video.                                                
+                </span>
+            </div>                            
         </div>
+
+       
         <div class="m--space-10"></div>
 
         <div class="row">
@@ -43,15 +67,15 @@
             <div class="col-sm-3">
                 <button pButton type="button"
                     label="Start eLesson" 
-                    [disabled]="!(closed == false && checked == true)"
+                    [disabled]="closed == true || closed == false && checked == false"
                     (click)="disableAborted()"
-                    class="ui-button-raised ui-button-rounded">
+                    class="ui-button-raised">
                 </button>
             </div>
             <div class="col-sm-3">
                 <button pButton type="button"           
                     label="Cancel"             
-                    class="ui-button-raised ui-button-rounded"
+                    class="ui-button-raised"
                     routerLink="/app/main/studentsView/theoryCourse">                   
                 </button>
             </div>

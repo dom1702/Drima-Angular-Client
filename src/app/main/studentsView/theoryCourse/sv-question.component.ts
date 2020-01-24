@@ -32,17 +32,17 @@ export class SVQuestionComponent extends AppComponentBase {
     correctAnswer : number;
 
     messages: Message[] = [];
-    _selected : string;
+    _selected : number;
     answerAttempts: number = 0;
     solved : boolean = false;
-    selectedValue: string = null;
+    selectedValue: number = -1;
  
-    get selected(): string {
+    get selected(): number {
         return this._selected;
     }
-    set selected(value: string)  {
+    set selected(value: number)  {
         
-        if(this.getAnswerResult() != value)
+        if(this.correctAnswer != value)
         {           
             this.showMessage("error", "Wrong!", "Try again");
         }
@@ -64,7 +64,7 @@ export class SVQuestionComponent extends AppComponentBase {
         super(injector);
     }
 
-    onClick(answer : string) : void {
+    onClick(answer : number) : void {
         this.selected = answer;
     }
 
@@ -83,7 +83,8 @@ export class SVQuestionComponent extends AppComponentBase {
 
     reset() {
         this.messages = [];
-        this.selectedValue = null;
+        this.selectedValue = -1;
+        this.answerAttempts = 0;
     }
 
 }

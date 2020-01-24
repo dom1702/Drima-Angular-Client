@@ -1,4 +1,4 @@
-import { Component, ViewChild, Injector, OnInit, ViewEncapsulation, AfterViewInit, Output, OnChanges, Sanitizer, SecurityContext, Pipe, PipeTransform, ViewChildren, QueryList } from "@angular/core";
+import { Component, ViewChild, Injector, OnInit, ViewEncapsulation, AfterViewInit, Output, OnChanges, Sanitizer, SecurityContext, Pipe, PipeTransform, ViewChildren, QueryList, OnDestroy } from "@angular/core";
 import { AppComponentBase } from "@shared/common/app-component-base";
 import { appModuleAnimation } from "@shared/animations/routerTransition";
 import { TabsetComponent, TabDirective } from "ngx-bootstrap";
@@ -27,7 +27,7 @@ class Question {
     pictureUrl? : string;
     answerOptions : string[];
     correctAnswer : number;
-    selectedAnswer : string;
+    selectedAnswer : number;
     answerAttempts: number;
 }
 
@@ -54,7 +54,7 @@ class QuizSession {
     selector: 'quiz'
 })
 
-export class SVQuizComponent extends AppComponentBase implements OnInit, AfterViewInit, ICanComponentDeactivate {
+export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestroy, ICanComponentDeactivate {
                
     dummyData : Quiz = {
         quizTitle: 'TestQuiz 1',
@@ -155,9 +155,9 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
     navigateAwaySelection: Subject<boolean> = new Subject<boolean>();
 
     homeTab : TabDirective;
-    startTab : TabDirective;
+    //startTab : TabDirective;
 
-    tabsData : any[] = []; // read data from dummyData into a sturct that can be red by the template
+    tabsData : any[] = []; // read data from dummyData into a struct that can be red by the template
     messages: Message[] = [];
 
     currentSession : QuizSession = null;
@@ -165,6 +165,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
     closingTime : moment.Moment;
     openingTime: moment.Moment;
     quizAborted : boolean;
+    quizFinished : boolean = false;
 
     get isClosed(): boolean {
         let x = moment().isBetween(this.openingTime, this.closingTime);
@@ -180,24 +181,29 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         this.createQuiz(); 
         this.closingTime = moment().locale(moment.defaultFormat);
         this.openingTime = moment().locale(moment.defaultFormat);
-        this.closingTime.set("hour", 21);
+        this.closingTime.set("hour", 13);
         this.closingTime.set("second", 0);
         this.closingTime.set("minute", 0);
         this.openingTime.set("hour", 8);
         this.openingTime.set("second", 0);
         this.openingTime.set("minute", 0);
-        console.debug("current time: " + moment().format() + 
-            "| closing: " + this.closingTime.format()  + 
-            "| opening: " + this.openingTime.format() );
-       
+        //console.debug("current time: " + moment().format() + 
+        //    "| closing: " + this.closingTime.format()  + 
+        //    "| opening: " + this.openingTime.format() );  
         this.quizAborted = true; 
+        this.quizFinished = false;
     }
 
-    ngAfterViewInit(): void {   
-        this.homeTab = this.quizTabs.tabs[1];
-        this.startTab = this.quizTabs.tabs[0];
-        this.quizTabs.tabs.splice(1,1);
-        this.quizTabs.tabs.push(this.homeTab);         
+    // ngAfterViewInit(): void {
+    //     this.homeTab = this.quizTabs.tabs[0]; 
+    //     // this.startTab = this.quizTabs.tabs[0];  
+    //     this.quizTabs.tabs.splice(0,1);
+    //     this.quizTabs.tabs.push(this.homeTab);               
+    // }
+
+    ngOnDestroy() : void {
+        console.log("call on destroy");
+        this.closeQuiz();
     }
 
     onSelect(data : TabDirective) : void {        
@@ -205,17 +211,23 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         if(tabNumber != NaN)
         {
             if(tabNumber < this.currentSession.progress)
-            {                  
-                //let shiftBack = tabNumber - this.currentSession.progress;                            
-                this.previousTabSelected(tabNumber);       
-                //console.log("selected previous tab! switch back! " + tabNumber );     
+            {                                                             
+                this.previousTabSelected(tabNumber);          
             }
         }       
     }
 
     onAbortedChanged(value : boolean) {
-        this.quizAborted = value;
-        this.enableQuizPart(0);
+        this.quizAborted = value;   
+        if(this.quizAborted == false) 
+        {      
+            this.enableQuizPart(0);
+        }
+    }
+
+    onContinueLesson() {
+       console.log("continue with next quiz");
+       this.closeQuiz();      
     }
 
     startTabSelected() {
@@ -231,6 +243,10 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
     }
 
     previousTabSelected(tabNumber: number) {
+        if(this.quizFinished) {
+            this.enableQuizPart(tabNumber);  
+        }
+        else {
         this.message.confirm('Do you really want to skip back?', "Solved questions wont be saved.",
             (isConfirmed) => {
                 if (isConfirmed) {                                    
@@ -240,6 +256,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
                     this.quizTabs.tabs[this.currentSession.progress+1].active = true; 
                 }                  
             });
+        }
     }
 
     cancelTabSelected() {
@@ -247,7 +264,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         {
             this.message.confirm('Do you really want to end?', "Progress will be lost.",
             (isConfirmed) => {
-                if (isConfirmed) {            
+                if (isConfirmed) {           
                     this.closeQuiz(); 
                 }                 
             });
@@ -265,7 +282,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
     }
 
     canDeactivate(): Observable<boolean> | boolean {            
-        if(this.isClosed || this.quizAborted)
+        if(this.isClosed || this.quizAborted || this.quizFinished)
         {
             return true;
         }
@@ -285,16 +302,9 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         }
     }
     
-    closeQuiz() : void {   
-        this.currentSession.endTime = moment().locale(moment.defaultFormat);
-        let x = moment.duration(this.currentSession.endTime.diff(this.currentSession.startTime)); 
-        this.currentSession.duration = x.get("seconds");
-        //send information to server...
-        this.messages = [];
-        this.quizAborted = true;
-        
-        //this.debugSavedQuizData();
-        
+    closeQuiz() : void {  
+        this.saveQuiz();
+
         for (let index = 0; index < this.currentSession.quiz.sheets.length; index++) {
             this.deleteQuizData(index);           
         }
@@ -302,11 +312,14 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         
         for (let index = 1; index < this.tabsData.length; index++) {                      
             this.tabsData[index].disabled = true;
-            this.updateTabStyle(index, "closedTab", false);                            
+            this.changeTabState(index, "closedTab", false);                            
         }
                     
         this.tabsData[0].active = true;
-        this.updateTabStyle(0, "selected", false);
+        this.changeTabState(0, "selected", false);
+        this.messages = [];
+        this.quizAborted = true;
+        this.quizFinished = false;
     }
 
     updateQuiz() : void {
@@ -332,7 +345,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         if(sheet.questions != null)
         {
             for (let index = 0; index < sheet.questions.length; index++) {
-                if(sheet.questions[index].selectedAnswer == null)
+                if(sheet.questions[index].selectedAnswer != sheet.questions[index].correctAnswer)
                     return false;
             }
             return true;
@@ -340,22 +353,31 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         return false;      
     }
 
+    saveQuiz() {
+        this.currentSession.endTime = moment().locale(moment.defaultFormat);
+        let x = moment.duration(this.currentSession.endTime.diff(this.currentSession.startTime)); 
+        this.currentSession.duration = x.get("seconds");
+        //send information to server...
+        this.debugSavedQuizData();
+    }
+
     enableQuizPart(numberOfTab : number) {       
-        //console.log("quiz newProgress " + numberOfTab + " | currProgress: " + this.currentSession.progress);
+        //console.log("quiz newProgress " + numberOfTab + " | currProgress: " + this.currentSession.progress + "   tD.length: " + this.tabsData.length) ;
         let progress = numberOfTab;
 
         if(progress > this.currentSession.progress)
         {
             if(progress > 0)
             {
-                this.updateTabStyle(this.currentSession.progress, "finishedTab", true);
+                this.changeTabState(this.currentSession.progress, "finishedTab", true);
                 this.currentSession.quiz.sheets[this.currentSession.progress].completed = true;
                 this.tabsData[this.currentSession.progress].active = false;              
             }  
 
             if(progress > this.tabsData.length-1) // end reached
-            {                                
-                this.closeQuiz();
+            {                                           
+                this.tabsData[this.currentSession.progress].active = true; 
+                this.quizFinished = true;
                 return;
             }                                              
         }
@@ -364,7 +386,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
                 this.deleteQuizData(index);                
                 this.currentSession.quiz.sheets[index].completed = false;
                 this.tabsData[index].disabled = true;
-                this.updateTabStyle(index, "closedTab", false);  
+                this.changeTabState(index, "closedTab", false);  
                 this.questions.forEach(element => {
                     element.reset();
                 });               
@@ -373,11 +395,10 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         
         this.tabsData[progress].disabled = false;
         this.tabsData[progress].active = true;   
-        this.updateTabStyle(progress, "selectedTab", false)  
+        this.changeTabState(progress, "selectedTab", false)  
         this.startTimer(this.currentSession.quiz.sheets[progress].mandatoryTime);               
         this.currentSession.progress = progress;      
-        this.messages = [];      
-        //console.debug("nr of questions: " + this.questions.length);       
+        this.messages = [];             
     }
 
     addTabData(tabHeading: string, isDisabled : boolean, isActive, identifier: string, 
@@ -397,8 +418,8 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         });           
     }
 
-    updateTabStyle(targetTab: number, styling: string, isFinished: boolean) {
-        if(targetTab >= 0 && targetTab < this.tabsData.length-1)
+    changeTabState(targetTab: number, styling: string, isFinished: boolean) {
+        if(targetTab >= 0 && targetTab < this.tabsData.length)
         {
             this.tabsData[targetTab].stylingClass = styling;
             this.tabsData[targetTab].finished = isFinished;
@@ -414,12 +435,13 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         return n.toFixed(0).toString() + (n > 1 ? " minutes" : " minute");
     }
 
-    startTimer(timerValue : number) {
+    startTimer(timerValue : number) {        
         this.currentTimer = timerValue;
         let intervalId = setInterval(() => {
             this.currentTimer = this.currentTimer - 1;
             if(this.currentTimer === 0) clearInterval(intervalId)           
         }, 1000)
+        //console.log("start timer... " + intervalId);
     }
 
     showMessage(_summary: string, _details?: string) {
@@ -440,9 +462,9 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         this.currentSession = quiz;
 
         for (let index = 0; index < this.currentSession.quiz.sheets.length; index++) {
-            this.addTabData(" Part " + (index + 1) + " ", 
-                true,
-                false,
+            this.addTabData(" " + (index + 1) + " ", 
+                index == 0 ? false : true,
+                index == 0 ? true : false,
                 this.currentSession.quiz.sheets[index].id.toString(),
                 this.currentSession.quiz.sheets[index].title, 
                 this.currentSession.quiz.sheets[index].mandatoryTime,
@@ -460,7 +482,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
                 if(this.currentSession.quiz.sheets[tabNumber].questions[index].answerAttempts != null)
                     this.currentSession.quiz.sheets[tabNumber].questions[index].answerAttempts = 0;
                 if(this.currentSession.quiz.sheets[tabNumber].questions[index].selectedAnswer != null)
-                    this.currentSession.quiz.sheets[tabNumber].questions[index].selectedAnswer = "";
+                    this.currentSession.quiz.sheets[tabNumber].questions[index].selectedAnswer = -1;
             }
         }
     }
@@ -471,11 +493,11 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
         console.log("start time: " + this.currentSession.startTime.format("HH.mm.ss") + "   endTime: " + this.currentSession.endTime.format("HH.mm.ss") );
         console.log("sheets: ");
         for (let index = 0; index < this.currentSession.quiz.sheets.length; index++) {
-            console.log("completed: " + this.currentSession.quiz.sheets[index].completed);
+            console.log(" sheet nr: " + index +"  completed: " + this.currentSession.quiz.sheets[index].completed);
 
             if(this.currentSession.quiz.sheets[index].questions != null)
             {
-                console.log("sheet nr: " + index + "questions");
+                console.log("questions");
                 for (let j = 0; j < this.currentSession.quiz.sheets[index].questions.length; j++) {
                     console.log("question: " + this.currentSession.quiz.sheets[index].questions[j].quest);
                     console.log("answer: " + this.currentSession.quiz.sheets[index].questions[j].selectedAnswer);
@@ -483,7 +505,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, AfterVi
                 }              
             }
             else {
-                console.log("sheet nr: " + index + "video");
+                console.log("video");
                 console.log("name: " + this.currentSession.quiz.sheets[index].title);
             }
         }

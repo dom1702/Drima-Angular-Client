@@ -41,6 +41,7 @@ import { PaginatorModule } from 'primeng/primeng';
 import { EditorModule } from 'primeng/primeng';
 import { InputMaskModule } from 'primeng/primeng';import { FileUploadModule } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
+import {ToastModule} from 'primeng/toast';
 
 import { UtilsModule } from '@shared/utils/utils.module';
 import { CountoModule } from 'angular2-counto';
@@ -135,7 +136,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       CheckboxModule,
       MultiSelectModule,
       AlertModule.forRoot(),
-      ProgressbarModule.forRoot()
+      ProgressbarModule.forRoot(),
+      ToastModule
     ],
     declarations: 
     [

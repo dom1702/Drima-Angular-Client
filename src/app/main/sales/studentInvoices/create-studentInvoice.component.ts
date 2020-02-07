@@ -642,7 +642,8 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
     this._studentsServiceProxy.getStudentForView(this.studentInvoice.studentId)
       .subscribe(result => {
 
-        this.studentPricePackageId = result.student.pricePackageId;
+        // TODO !!!!!!!!!!!!!!!!!
+        //this.studentPricePackageId = result.student.pricePackageId;
         this.studentFirstName = result.student.firstName;
         this.studentLastName = result.student.lastName;
         this.refreshStudentFullName();

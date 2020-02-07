@@ -125,7 +125,7 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     }
 
     assignToCourse() : void{
-
+        this.parentOverview.UpdateStudentView().subscribe();
     }
 
     userAccountCreated()

@@ -1,4 +1,4 @@
-import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, Injector, ViewEncapsulation, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
@@ -21,7 +21,7 @@ import { StudentsOverviewPricePackageComponent } from './students-overview-price
 })
 export class StudentsOverviewComponent extends AppComponentBase {
 
-    @ViewChild(StudentsOverviewPricePackageComponent) pricePackageView: StudentsOverviewPricePackageComponent;
+    //@ViewChild(StudentsOverviewPricePackageComponent) pricePackageView: StudentsOverviewPricePackageComponent;
 
     subscription: Subscription;
 
@@ -36,6 +36,8 @@ export class StudentsOverviewComponent extends AppComponentBase {
 
     selectedStudentCourse: StudentCourseDto;
     studentCourses: StudentCourseDto[];
+
+    @Output() courseChanged = new EventEmitter();
 
     constructor(
         injector: Injector,
@@ -59,17 +61,29 @@ export class StudentsOverviewComponent extends AppComponentBase {
 
                 this.student = result.student;
 
-                this.pricePackageName = result.pricePackageName;
-
                 this.overallActive = true;
 
                 this._studentsServiceProxy.getAllCourses(this.student.id, true).subscribe(result => {
+
+                    if(this.studentCourses != null)
+                    {
+                    for(var i = 0; i < this.studentCourses.length; i++)
+                        console.log(this.studentCourses[i]);
+                    }
+
                     this.studentCourses = result
+
+                    for(var i = 0; i < this.studentCourses.length; i++)
+                    console.log(this.studentCourses[i]);
 
                     if(this.studentCourses.length > 0)
                     {
-                        console.log(this.studentCourses[0]);
                         this.selectedStudentCourse = this.studentCourses[0];
+                        
+                        this.pricePackageName = this.selectedStudentCourse.pricePackageName;
+
+                        if(this.selectedStudentCourse.pricePackageModified)
+                            this.pricePackageName = this.pricePackageName + " (modified for this particular student)";
                     }
                 });
             });
@@ -77,20 +91,59 @@ export class StudentsOverviewComponent extends AppComponentBase {
     }
 
     public UpdateStudentView(): Observable<any> {
-
+    
         return Observable.create((observer: Observer<any>) => {
             this._studentsServiceProxy.getStudentForView(this.student.id).subscribe(result => {
 
                 this.student = result.student;
-                this.pricePackageName = result.pricePackageName;
 
-                this.pricePackageView.updatePricePackage(result.student.pricePackageId);
+                this._studentsServiceProxy.getAllCourses(this.student.id, true).subscribe(result => {
+                    this.studentCourses = result
+                    console.log(this.studentCourses.length);
+                    if(this.studentCourses.length > 0)
+                    {
+                        console.log(this.studentCourses[0]);
+                        this.selectedStudentCourse = this.studentCourses[0];
+                        
+                        if(this.selectedStudentCourse != null)
+                        {
+                            this.pricePackageName = this.selectedStudentCourse.pricePackageName;
+        
+                            if(this.selectedStudentCourse.pricePackageModified)
+                                this.pricePackageName = this.pricePackageName + " (modified for this particular student)";
+                        }
+                        else
+                            this.pricePackageName = "";
+                    }
+                    else
+                    {
+                        this.selectedStudentCourse = null;
+                        this.pricePackageName = "";
+                    }
 
-                observer.next(null)
-                observer.complete()
+                    observer.next(null)
+                    observer.complete()
+                });
+
+              
             });
 
         });
+    }
+
+    removeFromSelectedCourse() : void{
+        this.message.confirm(
+            'Do you really want to remove this student from the currently selected course?',
+            (isConfirmed) => {
+                if (isConfirmed) {
+                    this._studentsServiceProxy.removeFromCourse(this.student.id, this.selectedStudentCourse.course.id, true).subscribe(() => {
+                        this.notify.success(this.l('SuccessfullyRemoved'));
+                        this.UpdateStudentView().subscribe();
+                    })
+                }
+            }
+        );
+       
     }
 
     goBack() {

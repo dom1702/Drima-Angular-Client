@@ -44,12 +44,14 @@ export class AssignStudentToCourseModalComponent extends AppComponentBase implem
 
         this.student = student;
 
-        this.selectedCourse = null;
-        this.selectedPricePackage = null;
-        this.sendEnrollmentMail = false;
+        
 
         this._studentsServiceProxy.getFreeCoursesForStudent(this.student.id).subscribe(result => {
             this.availableCourses = result
+
+            this.selectedCourse = null;
+        this.selectedPricePackage = null;
+        this.sendEnrollmentMail = false;
         });
 
         this.active = true;
@@ -59,9 +61,6 @@ export class AssignStudentToCourseModalComponent extends AppComponentBase implem
 
     save(): void {
         this.saving = true;
-
-        console.log(this.selectedCourse);
-        console.log(this.selectedPricePackage);
 
         var input : AssignToCourseInput = new AssignToCourseInput();
 

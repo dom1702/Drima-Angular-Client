@@ -37,8 +37,6 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
     dropdownSettingsLicenseClassesOwned = {};
     placeholderLicenseClassesOwned = this.l('Select');
 
-    pricePackageName = '';
-
     currentBirthCountry: string;
     countries: Country[];
 
@@ -118,7 +116,6 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
         if (!studentId) {
             this.student = new CreateOrEditStudentDto();
-            this.pricePackageName = '';
 
             for (var i = 0; i < this.countries.length; i++) {
                 if (this.countries[i].name == 'Finland')
@@ -147,8 +144,6 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
                     this.currentBirthCountry = this._countriesService.getName(this.student.birthCountry);
                 if (this.student.nativeLanguage != null)
                     this.currentNativeLanguage = this._languagesService.getName(this.student.nativeLanguage);
-
-                this.pricePackageName = result.pricePackageName;
 
                 this.active = true;
                 this.updateLicenseClass(true);
@@ -308,26 +303,6 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
                 this.modalSave.emit(null);
             });
     }
-
-    setPricePackageIdNull() {
-        this.student.pricePackageId = null;
-        this.pricePackageName = '';
-    }
-
-    openSelectPricePackageModal() {
-
-        this.pricePackageLookupTableModal.id = this.student.pricePackageId;
-        this.pricePackageLookupTableModal.displayName = this.pricePackageName;
-
-        this.pricePackageLookupTableModal.show();
-    }
-
-    getNewPricePackageId() {
-
-        this.student.pricePackageId = this.pricePackageLookupTableModal.id;
-        this.pricePackageName = this.pricePackageLookupTableModal.displayName;
-    }
-
 
     close(): void {
 

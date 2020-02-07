@@ -14429,6 +14429,62 @@ export class StudentsServiceProxy {
     }
 
     /**
+     * @param studentId (optional) 
+     * @param courseId (optional) 
+     * @param sendNotificationEmail (optional) 
+     * @return Success
+     */
+    removeFromCourse(studentId: number | null | undefined, courseId: number | null | undefined, sendNotificationEmail: boolean | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Students/RemoveFromCourse?";
+        if (studentId !== undefined)
+            url_ += "StudentId=" + encodeURIComponent("" + studentId) + "&"; 
+        if (courseId !== undefined)
+            url_ += "CourseId=" + encodeURIComponent("" + courseId) + "&"; 
+        if (sendNotificationEmail !== undefined)
+            url_ += "SendNotificationEmail=" + encodeURIComponent("" + sendNotificationEmail) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRemoveFromCourse(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRemoveFromCourse(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRemoveFromCourse(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
      * @param id (optional) 
      * @param includeLessons (optional) 
      * @return Success
@@ -32719,7 +32775,6 @@ export interface IPagedResultDtoOfGetStudentForViewDto {
 export class GetStudentForViewDto implements IGetStudentForViewDto {
     student!: StudentDto | undefined;
     licenseClasses!: string[] | undefined;
-    pricePackageName!: string | undefined;
 
     constructor(data?: IGetStudentForViewDto) {
         if (data) {
@@ -32738,7 +32793,6 @@ export class GetStudentForViewDto implements IGetStudentForViewDto {
                 for (let item of data["licenseClasses"])
                     this.licenseClasses!.push(item);
             }
-            this.pricePackageName = data["pricePackageName"];
         }
     }
 
@@ -32757,7 +32811,6 @@ export class GetStudentForViewDto implements IGetStudentForViewDto {
             for (let item of this.licenseClasses)
                 data["licenseClasses"].push(item);
         }
-        data["pricePackageName"] = this.pricePackageName;
         return data; 
     }
 }
@@ -32765,7 +32818,6 @@ export class GetStudentForViewDto implements IGetStudentForViewDto {
 export interface IGetStudentForViewDto {
     student: StudentDto | undefined;
     licenseClasses: string[] | undefined;
-    pricePackageName: string | undefined;
 }
 
 export class StudentDto implements IStudentDto {
@@ -32783,7 +32835,6 @@ export class StudentDto implements IStudentDto {
     country!: string | undefined;
     licenseClasses!: string[] | undefined;
     licenseClassesAlreadyOwned!: string[] | undefined;
-    pricePackageId!: number | undefined;
     userId!: number | undefined;
     userName!: string | undefined;
     ssn!: string | undefined;
@@ -32822,7 +32873,6 @@ export class StudentDto implements IStudentDto {
                 for (let item of data["licenseClassesAlreadyOwned"])
                     this.licenseClassesAlreadyOwned!.push(item);
             }
-            this.pricePackageId = data["pricePackageId"];
             this.userId = data["userId"];
             this.userName = data["userName"];
             this.ssn = data["ssn"];
@@ -32861,7 +32911,6 @@ export class StudentDto implements IStudentDto {
             for (let item of this.licenseClassesAlreadyOwned)
                 data["licenseClassesAlreadyOwned"].push(item);
         }
-        data["pricePackageId"] = this.pricePackageId;
         data["userId"] = this.userId;
         data["userName"] = this.userName;
         data["ssn"] = this.ssn;
@@ -32885,7 +32934,6 @@ export interface IStudentDto {
     country: string | undefined;
     licenseClasses: string[] | undefined;
     licenseClassesAlreadyOwned: string[] | undefined;
-    pricePackageId: number | undefined;
     userId: number | undefined;
     userName: string | undefined;
     ssn: string | undefined;
@@ -32894,7 +32942,6 @@ export interface IStudentDto {
 
 export class GetStudentForEditOutput implements IGetStudentForEditOutput {
     student!: CreateOrEditStudentDto | undefined;
-    pricePackageName!: string | undefined;
 
     constructor(data?: IGetStudentForEditOutput) {
         if (data) {
@@ -32908,7 +32955,6 @@ export class GetStudentForEditOutput implements IGetStudentForEditOutput {
     init(data?: any) {
         if (data) {
             this.student = data["student"] ? CreateOrEditStudentDto.fromJS(data["student"]) : <any>undefined;
-            this.pricePackageName = data["pricePackageName"];
         }
     }
 
@@ -32922,14 +32968,12 @@ export class GetStudentForEditOutput implements IGetStudentForEditOutput {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["student"] = this.student ? this.student.toJSON() : <any>undefined;
-        data["pricePackageName"] = this.pricePackageName;
         return data; 
     }
 }
 
 export interface IGetStudentForEditOutput {
     student: CreateOrEditStudentDto | undefined;
-    pricePackageName: string | undefined;
 }
 
 export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
@@ -32947,7 +32991,6 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
     country!: string | undefined;
     licenseClasses!: string[] | undefined;
     licenseClassesAlreadyOwned!: string[] | undefined;
-    pricePackageId!: number | undefined;
     ssn!: string | undefined;
     id!: number | undefined;
 
@@ -32984,7 +33027,6 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
                 for (let item of data["licenseClassesAlreadyOwned"])
                     this.licenseClassesAlreadyOwned!.push(item);
             }
-            this.pricePackageId = data["pricePackageId"];
             this.ssn = data["ssn"];
             this.id = data["id"];
         }
@@ -33021,7 +33063,6 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
             for (let item of this.licenseClassesAlreadyOwned)
                 data["licenseClassesAlreadyOwned"].push(item);
         }
-        data["pricePackageId"] = this.pricePackageId;
         data["ssn"] = this.ssn;
         data["id"] = this.id;
         return data; 
@@ -33043,7 +33084,6 @@ export interface ICreateOrEditStudentDto {
     country: string | undefined;
     licenseClasses: string[] | undefined;
     licenseClassesAlreadyOwned: string[] | undefined;
-    pricePackageId: number | undefined;
     ssn: string | undefined;
     id: number | undefined;
 }
@@ -33474,6 +33514,9 @@ export interface IAssignToCourseInput {
 
 export class StudentCourseDto implements IStudentCourseDto {
     course!: CourseDto | undefined;
+    pricePackageId!: number | undefined;
+    pricePackageName!: string | undefined;
+    pricePackageModified!: boolean | undefined;
     predefinedDrivingLessons!: StudentCoursePredefinedDrivingLessonDto[] | undefined;
     predefinedDrivingLessonsProgress!: PredefinedDrivingLessonProgressDto[] | undefined;
 
@@ -33489,6 +33532,9 @@ export class StudentCourseDto implements IStudentCourseDto {
     init(data?: any) {
         if (data) {
             this.course = data["course"] ? CourseDto.fromJS(data["course"]) : <any>undefined;
+            this.pricePackageId = data["pricePackageId"];
+            this.pricePackageName = data["pricePackageName"];
+            this.pricePackageModified = data["pricePackageModified"];
             if (data["predefinedDrivingLessons"] && data["predefinedDrivingLessons"].constructor === Array) {
                 this.predefinedDrivingLessons = [] as any;
                 for (let item of data["predefinedDrivingLessons"])
@@ -33512,6 +33558,9 @@ export class StudentCourseDto implements IStudentCourseDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["course"] = this.course ? this.course.toJSON() : <any>undefined;
+        data["pricePackageId"] = this.pricePackageId;
+        data["pricePackageName"] = this.pricePackageName;
+        data["pricePackageModified"] = this.pricePackageModified;
         if (this.predefinedDrivingLessons && this.predefinedDrivingLessons.constructor === Array) {
             data["predefinedDrivingLessons"] = [];
             for (let item of this.predefinedDrivingLessons)
@@ -33528,6 +33577,9 @@ export class StudentCourseDto implements IStudentCourseDto {
 
 export interface IStudentCourseDto {
     course: CourseDto | undefined;
+    pricePackageId: number | undefined;
+    pricePackageName: string | undefined;
+    pricePackageModified: boolean | undefined;
     predefinedDrivingLessons: StudentCoursePredefinedDrivingLessonDto[] | undefined;
     predefinedDrivingLessonsProgress: PredefinedDrivingLessonProgressDto[] | undefined;
 }

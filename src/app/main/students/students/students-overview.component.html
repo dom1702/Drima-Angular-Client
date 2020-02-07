@@ -15,7 +15,7 @@
             <div class="col-3">
               
                     <label>Course: </label><br>
-                    <select class="form-control" [(ngModel)]="selectedStudentCourse">
+                    <select class="form-control" [(ngModel)]="selectedStudentCourse" (ngModelChange)="courseChanged.next()">
                         <option *ngFor="let course of studentCourses" [ngValue]="course">
                           {{course.course.name}}
                         </option>
@@ -35,7 +35,9 @@
                     </tab>
 
                     <tab heading={{pricePackageTabName}}>
-                        <students-overview-pricePackage [student]="student"></students-overview-pricePackage>
+                        
+                            <students-overview-pricePackage  *ngIf="selectedStudentCourse" [parentOverview]="this" [student]="student" [selectedStudentCourse]="selectedStudentCourse"></students-overview-pricePackage>
+                       
                     </tab>
                     <tab heading={{studentInvoicesTabName}}>
                         <students-overview-invoices [student]="student"></students-overview-invoices>

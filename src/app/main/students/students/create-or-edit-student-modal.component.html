@@ -121,24 +121,7 @@
 						<input type="text" class="form-control" [(ngModel)]="student.ssn" name="SSN" />
 					</div>
 
-					<div class="form-group m-form__group">
-						<label for="PricePackage">{{l("PricePackage")}}</label>
-						<div class="input-group">
-							<input class="form-control" id="pricePackageName" name="pricePackageName"
-								[(ngModel)]="pricePackageName" type="text" disabled>
-							<div class="input-group-append">
-								<button class="btn btn-primary blue" (click)="openSelectPricePackageModal()"
-									type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
-							</div>
-							<div class="input-group-prepend">
-								<button class="btn btn-danger btn-icon" type="button"
-									(click)="setPricePackageIdNull()"><i class="fa fa-times"></i></button>
-							</div>
-						</div>
-					</div>
-					<input class="form-control" name="student.pricePackageId" [(ngModel)]="student.pricePackageId"
-						type="text" hidden>
-
+				
 				</div>
 				<div class="modal-footer">
 					<button [disabled]="saving" type="button" class="btn btn-default"

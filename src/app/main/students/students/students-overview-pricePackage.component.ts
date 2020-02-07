@@ -1,7 +1,7 @@
 import { Component, Injector, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
-import { StudentsServiceProxy, StudentDto, PricePackagesServiceProxy, PricePackageDto } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, StudentDto, PricePackagesServiceProxy, PricePackageDto, StudentCourseDto } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { PricePackageLookupTableModalComponent } from './pricePackage-lookup-table-modal.component';
 import { TableModule } from 'primeng/table';
 import { CreateOrEditPricePackageModalComponent } from '@app/shared/common/sales/pricePackages/create-or-edit-pricePackage-modal.component';
+import { StudentsOverviewComponent } from './students-overview.component';
 
 @Component({
     selector: 'students-overview-pricePackage',
@@ -27,6 +28,8 @@ export class StudentsOverviewPricePackageComponent extends AppComponentBase {
     @ViewChild('createOrEditPricePackageModal') createOrEditPricePackageModal: CreateOrEditPricePackageModalComponent;
 
     @Input() student: StudentDto;
+    @Input() selectedStudentCourse: StudentCourseDto;
+    @Input() parentOverview : StudentsOverviewComponent;
 
     pricePackage: PricePackageDto;
 
@@ -45,8 +48,22 @@ export class StudentsOverviewPricePackageComponent extends AppComponentBase {
     }
 
     ngOnInit(): void {
-        if (this.student.pricePackageId != null) {
-            this._pricePackageServiceProxy.getPricePackageForView(this.student.pricePackageId).subscribe(result => {
+       this.refresh();
+
+       this.parentOverview.courseChanged.subscribe(() => {
+
+        // At this point we need to wait a short time because Input variable student is not yet refreshed
+         setTimeout(() => {
+            this.refresh();
+        }, 100);
+     
+        });
+    }
+
+    refresh() : void{
+        console.log("refresh");
+        if (this.selectedStudentCourse.pricePackageId != null) {
+            this._pricePackageServiceProxy.getPricePackageForView(this.selectedStudentCourse.pricePackageId).subscribe(result => {
 
                 this.pricePackage = result.pricePackage;
                 this.pricePackageName = result.pricePackage.name;
@@ -55,32 +72,40 @@ export class StudentsOverviewPricePackageComponent extends AppComponentBase {
     }
 
     updatePricePackage(pricePackageId?: number) {
-        if (pricePackageId != null) {
-            this._pricePackageServiceProxy.getPricePackageForView(pricePackageId).subscribe(result => {
+        // if (pricePackageId != null) {
+        //     this._pricePackageServiceProxy.getPricePackageForView(pricePackageId).subscribe(result => {
 
-                this.pricePackage = result.pricePackage;
-                this.pricePackageName = result.pricePackage.name;
-            });
-        }
-        else
-        {
-            this.pricePackage = null;
-            this.pricePackageName = null;
-        }
+        //         this.pricePackage = result.pricePackage;
+        //         this.pricePackageName = result.pricePackage.name;
+        //     });
+        // }
+        // else
+        // {
+        //     this.pricePackage = null;
+        //     this.pricePackageName = null;
+        // }
+        console.log("update");
+        this._pricePackageServiceProxy.getPricePackageForView(this.selectedStudentCourse.pricePackageId).subscribe(result => {
+
+            this.pricePackage = result.pricePackage;
+            this.pricePackageName = result.pricePackage.name;
+        });
+
+        this.parentOverview.UpdateStudentView();
     }
 
     editPricePackage() {
-        this.createOrEditPricePackageModal.show(this.student.pricePackageId, true, false);
+        this.createOrEditPricePackageModal.show(this.selectedStudentCourse.pricePackageId, true, false);
     }
 
     setPricePackageIdNull() {
-        this.student.pricePackageId = null;
+        this.selectedStudentCourse.pricePackageId = null;
         this.pricePackageName = '';
     }
 
     openSelectPricePackageModal() {
 
-        this.pricePackageLookupTableModal.id = this.student.pricePackageId;
+        this.pricePackageLookupTableModal.id = this.selectedStudentCourse.pricePackageId;
         this.pricePackageLookupTableModal.displayName = this.pricePackageName;
 
         this.pricePackageLookupTableModal.show();
@@ -88,7 +113,7 @@ export class StudentsOverviewPricePackageComponent extends AppComponentBase {
 
     getNewPricePackageId() {
 
-        this.student.pricePackageId = this.pricePackageLookupTableModal.id;
+        this.selectedStudentCourse.pricePackageId = this.pricePackageLookupTableModal.id;
         this.pricePackageName = this.pricePackageLookupTableModal.displayName;
     }
 }

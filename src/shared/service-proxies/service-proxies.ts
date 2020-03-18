@@ -9776,6 +9776,355 @@ export class PredefinedDrivingLessonsServiceProxy {
 }
 
 @Injectable()
+export class PredefinedTheoryLessonsServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param nameFilter (optional) 
+     * @param maxLengthFilter (optional) 
+     * @param minLengthFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAll(filter: string | null | undefined, nameFilter: string | null | undefined, maxLengthFilter: number | null | undefined, minLengthFilter: number | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfGetPredefinedTheoryLessonForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/PredefinedTheoryLessons/GetAll?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (nameFilter !== undefined)
+            url_ += "NameFilter=" + encodeURIComponent("" + nameFilter) + "&"; 
+        if (maxLengthFilter !== undefined)
+            url_ += "MaxLengthFilter=" + encodeURIComponent("" + maxLengthFilter) + "&"; 
+        if (minLengthFilter !== undefined)
+            url_ += "MinLengthFilter=" + encodeURIComponent("" + minLengthFilter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfGetPredefinedTheoryLessonForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfGetPredefinedTheoryLessonForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PagedResultDtoOfGetPredefinedTheoryLessonForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfGetPredefinedTheoryLessonForViewDto.fromJS(resultData200) : new PagedResultDtoOfGetPredefinedTheoryLessonForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfGetPredefinedTheoryLessonForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getPredefinedTheoryLessonForView(id: number | null | undefined): Observable<GetPredefinedTheoryLessonForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/PredefinedTheoryLessons/GetPredefinedTheoryLessonForView?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPredefinedTheoryLessonForView(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPredefinedTheoryLessonForView(<any>response_);
+                } catch (e) {
+                    return <Observable<GetPredefinedTheoryLessonForViewDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetPredefinedTheoryLessonForViewDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPredefinedTheoryLessonForView(response: HttpResponseBase): Observable<GetPredefinedTheoryLessonForViewDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetPredefinedTheoryLessonForViewDto.fromJS(resultData200) : new GetPredefinedTheoryLessonForViewDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetPredefinedTheoryLessonForViewDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getPredefinedTheoryLessonForEdit(id: number | null | undefined): Observable<GetPredefinedTheoryLessonForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/PredefinedTheoryLessons/GetPredefinedTheoryLessonForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPredefinedTheoryLessonForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPredefinedTheoryLessonForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetPredefinedTheoryLessonForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetPredefinedTheoryLessonForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPredefinedTheoryLessonForEdit(response: HttpResponseBase): Observable<GetPredefinedTheoryLessonForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetPredefinedTheoryLessonForEditOutput.fromJS(resultData200) : new GetPredefinedTheoryLessonForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetPredefinedTheoryLessonForEditOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    createOrEdit(input: CreateOrEditPredefinedTheoryLessonDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/PredefinedTheoryLessons/CreateOrEdit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateOrEdit(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    delete(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/PredefinedTheoryLessons/Delete?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllForLookup(): Observable<PredefinedTheoryLessonDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/PredefinedTheoryLessons/GetAllForLookup";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllForLookup(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllForLookup(<any>response_);
+                } catch (e) {
+                    return <Observable<PredefinedTheoryLessonDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PredefinedTheoryLessonDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllForLookup(response: HttpResponseBase): Observable<PredefinedTheoryLessonDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(PredefinedTheoryLessonDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PredefinedTheoryLessonDto[]>(<any>null);
+    }
+}
+
+@Injectable()
 export class PricePackagesServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -21650,6 +21999,7 @@ export class CourseDto implements ICourseDto {
     enrollmentAvailable!: boolean | undefined;
     officeId!: number | undefined;
     predefinedDrivingLessons!: PredefinedDrivingLessonDto[] | undefined;
+    predefinedTheoryLessons!: PredefinedTheoryLessonDto[] | undefined;
     pricePackages!: PricePackageDto[] | undefined;
     id!: number | undefined;
 
@@ -21675,6 +22025,11 @@ export class CourseDto implements ICourseDto {
                 this.predefinedDrivingLessons = [] as any;
                 for (let item of data["predefinedDrivingLessons"])
                     this.predefinedDrivingLessons!.push(PredefinedDrivingLessonDto.fromJS(item));
+            }
+            if (data["predefinedTheoryLessons"] && data["predefinedTheoryLessons"].constructor === Array) {
+                this.predefinedTheoryLessons = [] as any;
+                for (let item of data["predefinedTheoryLessons"])
+                    this.predefinedTheoryLessons!.push(PredefinedTheoryLessonDto.fromJS(item));
             }
             if (data["pricePackages"] && data["pricePackages"].constructor === Array) {
                 this.pricePackages = [] as any;
@@ -21706,6 +22061,11 @@ export class CourseDto implements ICourseDto {
             for (let item of this.predefinedDrivingLessons)
                 data["predefinedDrivingLessons"].push(item.toJSON());
         }
+        if (this.predefinedTheoryLessons && this.predefinedTheoryLessons.constructor === Array) {
+            data["predefinedTheoryLessons"] = [];
+            for (let item of this.predefinedTheoryLessons)
+                data["predefinedTheoryLessons"].push(item.toJSON());
+        }
         if (this.pricePackages && this.pricePackages.constructor === Array) {
             data["pricePackages"] = [];
             for (let item of this.pricePackages)
@@ -21725,6 +22085,7 @@ export interface ICourseDto {
     enrollmentAvailable: boolean | undefined;
     officeId: number | undefined;
     predefinedDrivingLessons: PredefinedDrivingLessonDto[] | undefined;
+    predefinedTheoryLessons: PredefinedTheoryLessonDto[] | undefined;
     pricePackages: PricePackageDto[] | undefined;
     id: number | undefined;
 }
@@ -21782,6 +22143,66 @@ export class PredefinedDrivingLessonDto implements IPredefinedDrivingLessonDto {
 export interface IPredefinedDrivingLessonDto {
     name: string | undefined;
     number: number | undefined;
+    lessonIdString: string | undefined;
+    length: number | undefined;
+    requiredForClasses: string | undefined;
+    notRequiredIfClasses: string | undefined;
+    id: number | undefined;
+}
+
+export class PredefinedTheoryLessonDto implements IPredefinedTheoryLessonDto {
+    name!: string | undefined;
+    number!: string | undefined;
+    lessonIdString!: string | undefined;
+    length!: number | undefined;
+    requiredForClasses!: string | undefined;
+    notRequiredIfClasses!: string | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IPredefinedTheoryLessonDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.number = data["number"];
+            this.lessonIdString = data["lessonIdString"];
+            this.length = data["length"];
+            this.requiredForClasses = data["requiredForClasses"];
+            this.notRequiredIfClasses = data["notRequiredIfClasses"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): PredefinedTheoryLessonDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PredefinedTheoryLessonDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["number"] = this.number;
+        data["lessonIdString"] = this.lessonIdString;
+        data["length"] = this.length;
+        data["requiredForClasses"] = this.requiredForClasses;
+        data["notRequiredIfClasses"] = this.notRequiredIfClasses;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IPredefinedTheoryLessonDto {
+    name: string | undefined;
+    number: string | undefined;
     lessonIdString: string | undefined;
     length: number | undefined;
     requiredForClasses: string | undefined;
@@ -21948,6 +22369,7 @@ export class CreateOrEditCourseDto implements ICreateOrEditCourseDto {
     enrollmentAvailable!: boolean | undefined;
     officeId!: number | undefined;
     predefinedDrivingLessons!: PredefinedDrivingLessonDto[] | undefined;
+    predefinedTheoryLessons!: PredefinedTheoryLessonDto[] | undefined;
     pricePackages!: PricePackageDto[] | undefined;
     id!: number | undefined;
 
@@ -21975,6 +22397,11 @@ export class CreateOrEditCourseDto implements ICreateOrEditCourseDto {
                 this.predefinedDrivingLessons = [] as any;
                 for (let item of data["predefinedDrivingLessons"])
                     this.predefinedDrivingLessons!.push(PredefinedDrivingLessonDto.fromJS(item));
+            }
+            if (data["predefinedTheoryLessons"] && data["predefinedTheoryLessons"].constructor === Array) {
+                this.predefinedTheoryLessons = [] as any;
+                for (let item of data["predefinedTheoryLessons"])
+                    this.predefinedTheoryLessons!.push(PredefinedTheoryLessonDto.fromJS(item));
             }
             if (data["pricePackages"] && data["pricePackages"].constructor === Array) {
                 this.pricePackages = [] as any;
@@ -22008,6 +22435,11 @@ export class CreateOrEditCourseDto implements ICreateOrEditCourseDto {
             for (let item of this.predefinedDrivingLessons)
                 data["predefinedDrivingLessons"].push(item.toJSON());
         }
+        if (this.predefinedTheoryLessons && this.predefinedTheoryLessons.constructor === Array) {
+            data["predefinedTheoryLessons"] = [];
+            for (let item of this.predefinedTheoryLessons)
+                data["predefinedTheoryLessons"].push(item.toJSON());
+        }
         if (this.pricePackages && this.pricePackages.constructor === Array) {
             data["pricePackages"] = [];
             for (let item of this.pricePackages)
@@ -22029,6 +22461,7 @@ export interface ICreateOrEditCourseDto {
     enrollmentAvailable: boolean | undefined;
     officeId: number | undefined;
     predefinedDrivingLessons: PredefinedDrivingLessonDto[] | undefined;
+    predefinedTheoryLessons: PredefinedTheoryLessonDto[] | undefined;
     pricePackages: PricePackageDto[] | undefined;
     id: number | undefined;
 }
@@ -29115,6 +29548,186 @@ export interface ICreateOrEditPredefinedDrivingLessonDto {
     id: number | undefined;
 }
 
+export class PagedResultDtoOfGetPredefinedTheoryLessonForViewDto implements IPagedResultDtoOfGetPredefinedTheoryLessonForViewDto {
+    totalCount!: number | undefined;
+    items!: GetPredefinedTheoryLessonForViewDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfGetPredefinedTheoryLessonForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(GetPredefinedTheoryLessonForViewDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfGetPredefinedTheoryLessonForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfGetPredefinedTheoryLessonForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfGetPredefinedTheoryLessonForViewDto {
+    totalCount: number | undefined;
+    items: GetPredefinedTheoryLessonForViewDto[] | undefined;
+}
+
+export class GetPredefinedTheoryLessonForViewDto implements IGetPredefinedTheoryLessonForViewDto {
+    predefinedTheoryLesson!: PredefinedTheoryLessonDto | undefined;
+
+    constructor(data?: IGetPredefinedTheoryLessonForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.predefinedTheoryLesson = data["predefinedTheoryLesson"] ? PredefinedTheoryLessonDto.fromJS(data["predefinedTheoryLesson"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPredefinedTheoryLessonForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPredefinedTheoryLessonForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["predefinedTheoryLesson"] = this.predefinedTheoryLesson ? this.predefinedTheoryLesson.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IGetPredefinedTheoryLessonForViewDto {
+    predefinedTheoryLesson: PredefinedTheoryLessonDto | undefined;
+}
+
+export class GetPredefinedTheoryLessonForEditOutput implements IGetPredefinedTheoryLessonForEditOutput {
+    predefinedTheoryLesson!: CreateOrEditPredefinedTheoryLessonDto | undefined;
+
+    constructor(data?: IGetPredefinedTheoryLessonForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.predefinedTheoryLesson = data["predefinedTheoryLesson"] ? CreateOrEditPredefinedTheoryLessonDto.fromJS(data["predefinedTheoryLesson"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPredefinedTheoryLessonForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPredefinedTheoryLessonForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["predefinedTheoryLesson"] = this.predefinedTheoryLesson ? this.predefinedTheoryLesson.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IGetPredefinedTheoryLessonForEditOutput {
+    predefinedTheoryLesson: CreateOrEditPredefinedTheoryLessonDto | undefined;
+}
+
+export class CreateOrEditPredefinedTheoryLessonDto implements ICreateOrEditPredefinedTheoryLessonDto {
+    name!: string;
+    number!: string | undefined;
+    lessonIdString!: string;
+    length!: number | undefined;
+    requiredForClasses!: string | undefined;
+    notRequiredIfClasses!: string | undefined;
+    id!: number | undefined;
+
+    constructor(data?: ICreateOrEditPredefinedTheoryLessonDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.number = data["number"];
+            this.lessonIdString = data["lessonIdString"];
+            this.length = data["length"];
+            this.requiredForClasses = data["requiredForClasses"];
+            this.notRequiredIfClasses = data["notRequiredIfClasses"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): CreateOrEditPredefinedTheoryLessonDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrEditPredefinedTheoryLessonDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["number"] = this.number;
+        data["lessonIdString"] = this.lessonIdString;
+        data["length"] = this.length;
+        data["requiredForClasses"] = this.requiredForClasses;
+        data["notRequiredIfClasses"] = this.notRequiredIfClasses;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface ICreateOrEditPredefinedTheoryLessonDto {
+    name: string;
+    number: string | undefined;
+    lessonIdString: string;
+    length: number | undefined;
+    requiredForClasses: string | undefined;
+    notRequiredIfClasses: string | undefined;
+    id: number | undefined;
+}
+
 export class PagedResultDtoOfGetPricePackageForViewDto implements IPagedResultDtoOfGetPricePackageForViewDto {
     totalCount!: number | undefined;
     items!: GetPricePackageForViewDto[] | undefined;
@@ -33519,6 +34132,8 @@ export class StudentCourseDto implements IStudentCourseDto {
     pricePackageModified!: boolean | undefined;
     predefinedDrivingLessons!: StudentCoursePredefinedDrivingLessonDto[] | undefined;
     predefinedDrivingLessonsProgress!: PredefinedDrivingLessonProgressDto[] | undefined;
+    predefinedTheoryLessons!: StudentCoursePredefinedTheoryLessonDto[] | undefined;
+    predefinedTheoryLessonsProgress!: PredefinedTheoryLessonProgressDto[] | undefined;
 
     constructor(data?: IStudentCourseDto) {
         if (data) {
@@ -33544,6 +34159,16 @@ export class StudentCourseDto implements IStudentCourseDto {
                 this.predefinedDrivingLessonsProgress = [] as any;
                 for (let item of data["predefinedDrivingLessonsProgress"])
                     this.predefinedDrivingLessonsProgress!.push(PredefinedDrivingLessonProgressDto.fromJS(item));
+            }
+            if (data["predefinedTheoryLessons"] && data["predefinedTheoryLessons"].constructor === Array) {
+                this.predefinedTheoryLessons = [] as any;
+                for (let item of data["predefinedTheoryLessons"])
+                    this.predefinedTheoryLessons!.push(StudentCoursePredefinedTheoryLessonDto.fromJS(item));
+            }
+            if (data["predefinedTheoryLessonsProgress"] && data["predefinedTheoryLessonsProgress"].constructor === Array) {
+                this.predefinedTheoryLessonsProgress = [] as any;
+                for (let item of data["predefinedTheoryLessonsProgress"])
+                    this.predefinedTheoryLessonsProgress!.push(PredefinedTheoryLessonProgressDto.fromJS(item));
             }
         }
     }
@@ -33571,6 +34196,16 @@ export class StudentCourseDto implements IStudentCourseDto {
             for (let item of this.predefinedDrivingLessonsProgress)
                 data["predefinedDrivingLessonsProgress"].push(item.toJSON());
         }
+        if (this.predefinedTheoryLessons && this.predefinedTheoryLessons.constructor === Array) {
+            data["predefinedTheoryLessons"] = [];
+            for (let item of this.predefinedTheoryLessons)
+                data["predefinedTheoryLessons"].push(item.toJSON());
+        }
+        if (this.predefinedTheoryLessonsProgress && this.predefinedTheoryLessonsProgress.constructor === Array) {
+            data["predefinedTheoryLessonsProgress"] = [];
+            for (let item of this.predefinedTheoryLessonsProgress)
+                data["predefinedTheoryLessonsProgress"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -33582,6 +34217,8 @@ export interface IStudentCourseDto {
     pricePackageModified: boolean | undefined;
     predefinedDrivingLessons: StudentCoursePredefinedDrivingLessonDto[] | undefined;
     predefinedDrivingLessonsProgress: PredefinedDrivingLessonProgressDto[] | undefined;
+    predefinedTheoryLessons: StudentCoursePredefinedTheoryLessonDto[] | undefined;
+    predefinedTheoryLessonsProgress: PredefinedTheoryLessonProgressDto[] | undefined;
 }
 
 export class StudentCoursePredefinedDrivingLessonDto implements IStudentCoursePredefinedDrivingLessonDto {
@@ -33678,6 +34315,106 @@ export class PredefinedDrivingLessonProgressDto implements IPredefinedDrivingLes
 
 export interface IPredefinedDrivingLessonProgressDto {
     predefinedDrivingLessonId: number | undefined;
+    name: string | undefined;
+    countRequired: number | undefined;
+    countDone: number | undefined;
+    countPlanned: number | undefined;
+}
+
+export class StudentCoursePredefinedTheoryLessonDto implements IStudentCoursePredefinedTheoryLessonDto {
+    predefinedTheoryLessonId!: number | undefined;
+    length!: number | undefined;
+    isDone!: boolean | undefined;
+    date!: moment.Moment | undefined;
+
+    constructor(data?: IStudentCoursePredefinedTheoryLessonDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.predefinedTheoryLessonId = data["predefinedTheoryLessonId"];
+            this.length = data["length"];
+            this.isDone = data["isDone"];
+            this.date = data["date"] ? moment(data["date"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): StudentCoursePredefinedTheoryLessonDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentCoursePredefinedTheoryLessonDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["predefinedTheoryLessonId"] = this.predefinedTheoryLessonId;
+        data["length"] = this.length;
+        data["isDone"] = this.isDone;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IStudentCoursePredefinedTheoryLessonDto {
+    predefinedTheoryLessonId: number | undefined;
+    length: number | undefined;
+    isDone: boolean | undefined;
+    date: moment.Moment | undefined;
+}
+
+export class PredefinedTheoryLessonProgressDto implements IPredefinedTheoryLessonProgressDto {
+    predefinedTheoryLessonId!: number | undefined;
+    name!: string | undefined;
+    countRequired!: number | undefined;
+    countDone!: number | undefined;
+    countPlanned!: number | undefined;
+
+    constructor(data?: IPredefinedTheoryLessonProgressDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.predefinedTheoryLessonId = data["predefinedTheoryLessonId"];
+            this.name = data["name"];
+            this.countRequired = data["countRequired"];
+            this.countDone = data["countDone"];
+            this.countPlanned = data["countPlanned"];
+        }
+    }
+
+    static fromJS(data: any): PredefinedTheoryLessonProgressDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PredefinedTheoryLessonProgressDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["predefinedTheoryLessonId"] = this.predefinedTheoryLessonId;
+        data["name"] = this.name;
+        data["countRequired"] = this.countRequired;
+        data["countDone"] = this.countDone;
+        data["countPlanned"] = this.countPlanned;
+        return data; 
+    }
+}
+
+export interface IPredefinedTheoryLessonProgressDto {
+    predefinedTheoryLessonId: number | undefined;
     name: string | undefined;
     countRequired: number | undefined;
     countDone: number | undefined;

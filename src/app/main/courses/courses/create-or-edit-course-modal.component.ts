@@ -1,7 +1,7 @@
 ﻿import { Component, ViewChild, Injector, Output, EventEmitter, QueryList, ViewChildren } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
-import { CoursesServiceProxy, CreateOrEditCourseDto, PredefinedDrivingLessonDto, PredefinedDrivingLessonsServiceProxy, PricePackagesServiceProxy, PricePackageDto } from '@shared/service-proxies/service-proxies';
+import { CoursesServiceProxy, CreateOrEditCourseDto, PredefinedDrivingLessonDto, PredefinedDrivingLessonsServiceProxy, PricePackagesServiceProxy, PricePackageDto, PredefinedTheoryLessonDto, PredefinedTheoryLessonsServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { OfficeLookupTableModalComponent } from '../../../shared/common/lookup/office-lookup-table-modal.component';
@@ -17,6 +17,7 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('officeLookupTableModal') courseOfficeLookupTableModal: OfficeLookupTableModalComponent;
     @ViewChildren('pdl_multiselect') predefinedDL_Multiselect: QueryList<MultiSelectComponent>;
+    @ViewChildren('ptl_multiselect') predefinedTL_Multiselect: QueryList<MultiSelectComponent>;
     @ViewChildren('pp_multiselect') pricePackage_Multiselect: QueryList<MultiSelectComponent>;
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
@@ -29,19 +30,26 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
     officeName = '';
 
     predefinedDrivingLessons: Object[];
+    predefinedTheoryLessons: Object[];
     pricePackages: Object[];
 
     fields: Object = { text: 'dl', value: 'id' };
     placeholderPdlSelection: string = 'Select predefined driving lessons';
+
+    ptlFields: Object = { text: 'tl', value: 'id' };
+    placeholderPtlSelection: string = 'Select predefined theory lessons';
+
     placeholderPricePackageSelection: string = 'Select price packages';
 
     private pdlMultiselectSubscription: Subscription;
+    private ptlMultiselectSubscription: Subscription;
     private pricePackageMultiselectSubscription: Subscription;
 
     constructor(
         injector: Injector,
         private _coursesServiceProxy: CoursesServiceProxy,
         private _predefinedDrivingLessonsServiceProxy: PredefinedDrivingLessonsServiceProxy,
+        private _predefinedTheoryLessonsServiceProxy: PredefinedTheoryLessonsServiceProxy,
         private _pricePackagesServiceProxy: PricePackagesServiceProxy
     ) {
         super(injector);
@@ -61,6 +69,21 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
             }
 
             this.pdlMultiselectSubscription.unsubscribe();
+        });
+
+        this.ptlMultiselectSubscription = this.predefinedTL_Multiselect.changes.subscribe((comps: QueryList<MultiSelectComponent>) => {
+            var selected: number[] = [];
+
+            if (this.course.predefinedTheoryLessons != null) {
+
+                for (var i = 0; i < this.course.predefinedTheoryLessons.length; i++) {
+                    selected.push(this.course.predefinedTheoryLessons[i].id);
+                }
+
+                this.predefinedTL_Multiselect.first.value = selected;
+            }
+
+            this.ptlMultiselectSubscription.unsubscribe();
         });
 
         this.pricePackageMultiselectSubscription = this.pricePackage_Multiselect.changes.subscribe((comps: QueryList<MultiSelectComponent>) => {
@@ -95,7 +118,20 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
                     }
                 );
             }
-        
+        });
+
+        this._predefinedTheoryLessonsServiceProxy.getAllForLookup().subscribe(result => {
+
+            this.predefinedTheoryLessons = [];
+
+            for (var i = 0; i < result.length; i++) {
+                this.predefinedTheoryLessons.push(
+                    {
+                        id: result[i].id,
+                        tl: result[i].name
+                    }
+                );
+            }
         });
 
         this._pricePackagesServiceProxy.getAllForLookup().subscribe(result => {
@@ -148,6 +184,15 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
                 var pddl: PredefinedDrivingLessonDto = new PredefinedDrivingLessonDto()
                 pddl.id = Number(this.predefinedDL_Multiselect.first.value[i]);
                 this.course.predefinedDrivingLessons.push(pddl);
+            }
+        }
+
+        if (this.predefinedTL_Multiselect.first.value != null) {
+            this.course.predefinedTheoryLessons = [];
+            for (var i = 0; i < this.predefinedTL_Multiselect.first.value.length; i++) {
+                var pttl: PredefinedTheoryLessonDto = new PredefinedTheoryLessonDto()
+                pttl.id = Number(this.predefinedTL_Multiselect.first.value[i]);
+                this.course.predefinedTheoryLessons.push(pttl);
             }
         }
 

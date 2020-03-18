@@ -85,6 +85,13 @@
 							[placeholder]='placeholderPdlSelection'></ejs-multiselect>
 
 					</div>
+					<div class="form-group">
+						<label>{{l("PredefinedTheoryLessons")}}</label>
+						<ejs-multiselect #ptl_multiselect id='multiselectelement'
+							[dataSource]='predefinedTheoryLessons' [fields]='ptlFields'
+							[placeholder]='placeholderPtlSelection'></ejs-multiselect>
+
+					</div>
 					<br />
 					<h4>{{l("Privacy")}}</h4>
 					<div class="m-checkbox-list">

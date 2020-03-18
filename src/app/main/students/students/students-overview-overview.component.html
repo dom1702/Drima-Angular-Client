@@ -150,30 +150,57 @@
 
 <div class="m--margin-top-20">
     <div *ngIf="parentOverview.selectedStudentCourse">
-        <h6>{{l("CourseName")}}:</h6> <label>{{parentOverview.selectedStudentCourse.course.name}}</label>
-        <div>
-            <label>{{l("BasicLessons")}} </label>
-                <progressbar [animate]="true" [max]="12" [value]="5" [type]="success">
-                    5 / 12
-                </progressbar>
-                <!-- <div class="progress m-progress">
+        <!-- <h6>{{l("CourseName")}}:</h6> <label>{{parentOverview.selectedStudentCourse.course.name}}</label> -->
+
+
+
+        <!-- <div class="progress m-progress">
                     <div class="progress-bar m--bg-info" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="12"></div>
                 </div> -->
-        </div>
-        <div class="row m--margin-top-10">
-            
-            <div class="col-md-3 col-sm-6" *ngFor="let progress of parentOverview.selectedStudentCourse.predefinedDrivingLessonsProgress">
-               
-                    <label>{{progress.name}} </label>
-                    <progressbar [animate]="true" [max]="progress.countRequired" [value]="progress.countDone" [type]="success">
-                        <!-- <label *ngIf="progress.countDone > 0">{{progress.countDone}} / {{progress.countRequired}}</label> -->
-                        <span *ngIf="progress.countDone > 0" class="text-nowrap">{{progress.countDone}} / {{progress.countRequired}}</span>
+
+        <div class="row">
+
+            <div class="col-md-6 col-sm-12">
+                <h5 class="text-md-center">{{l("DrivingLessons")}} </h5>
+                <div class="m--margin-top-10">
+                   
+                    <label>{{l("BasicLessons")}} </label>
+                    <progressbar [animate]="true" [max]="12" [value]="5" [type]="success">
+                        5 / 12
                     </progressbar>
-                    <label class="m--margin-top-10" *ngIf="progress.countDone != progress.countRequired">{{nextPlanned(progress.predefinedDrivingLessonId)}}</label>
+                </div>
+                <div class="m--margin-top-10"
+                    *ngFor="let progress of parentOverview.selectedStudentCourse.predefinedDrivingLessonsProgress">
+                    <label>{{progress.name}} </label>
+                    <progressbar [animate]="true" [max]="progress.countRequired" [value]="progress.countDone"
+                        [type]="success">
+                        <!-- <label *ngIf="progress.countDone > 0">{{progress.countDone}} / {{progress.countRequired}}</label> -->
+                        <span *ngIf="progress.countDone > 0" class="text-nowrap">{{progress.countDone}} /
+                            {{progress.countRequired}}</span>
+                    </progressbar>
+                    <label class="m--margin-top-10"
+                        *ngIf="progress.countDone != progress.countRequired">{{nextPlanned(progress.predefinedDrivingLessonId)}}</label>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                <h5 class="text-md-center">{{l("TheoryLessons")}} </h5>
+                <div class="m--margin-top-10"
+                    *ngFor="let progress of parentOverview.selectedStudentCourse.predefinedTheoryLessonsProgress">
+                    <label>{{progress.name}} </label>
+                    <progressbar [animate]="true" [max]="progress.countRequired" [value]="progress.countDone"
+                        [type]="success">
+                        <!-- <label *ngIf="progress.countDone > 0">{{progress.countDone}} / {{progress.countRequired}}</label> -->
+                        <span *ngIf="progress.countDone > 0" class="text-nowrap">{{progress.countDone}} /
+                            {{progress.countRequired}}</span>
+                    </progressbar>
+                    <label class="m--margin-top-10"
+                        *ngIf="progress.countDone != progress.countRequired">{{nextPlanned(progress.predefinedTheoryLessonId)}}</label>
+                </div>
             </div>
         </div>
 
-        
+
     </div>
 </div>
 <div *ngIf="!parentOverview.selectedStudentCourse">
@@ -210,13 +237,17 @@
 <div class="m--margin-top-30">
     <div class="m--align-right">
 
-        <button type="button" (click)="openAssignToCourseModal()" class="btn btn-primary mr-5">{{l("AssignToCourse")}}</button>
+        <button type="button" (click)="openAssignToCourseModal()"
+            class="btn btn-primary mr-5">{{l("AssignToCourse")}}</button>
         <button type="button" (click)="editStudent()" class="btn btn-primary mr-5">{{l("EditStudentData")}}</button>
-        <button type="button" (click)="this.parentOverview.removeFromSelectedCourse()" class="btn btn-primary mr-5">{{l("RemoveFromSelectedCourse")}}</button>
+        <button *ngIf="this.parentOverview.selectedStudentCourse != null" type="button"
+            (click)="this.parentOverview.removeFromSelectedCourse()"
+            class="btn btn-primary mr-5">{{l("RemoveFromSelectedCourse")}}</button>
 
     </div>
 </div>
 
 <createOrEditStudentModal #createOrEditStudentModal (modalSave)="updateStudent()"></createOrEditStudentModal>
-<createOrEditStudentUserModal #createOrEditStudentUserModal (modalSave)="userAccountCreated()"></createOrEditStudentUserModal>
+<createOrEditStudentUserModal #createOrEditStudentUserModal (modalSave)="userAccountCreated()">
+</createOrEditStudentUserModal>
 <assignStudentToCourseModal #assignStudentToCourseModal (modalSave)="assignToCourse()"></assignStudentToCourseModal>

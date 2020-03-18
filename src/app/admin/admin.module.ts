@@ -2,6 +2,10 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
+import { PredefinedTheoryLessonsComponent } from './lessons/predefinedTheoryLessons/predefinedTheoryLessons.component';
+import { ViewPredefinedTheoryLessonModalComponent } from './lessons/predefinedTheoryLessons/view-predefinedTheoryLesson-modal.component';
+import { CreateOrEditPredefinedTheoryLessonModalComponent } from './lessons/predefinedTheoryLessons/create-or-edit-predefinedTheoryLesson-modal.component';
+
 import { PredefinedDrivingLessonsComponent } from './lessons/predefinedDrivingLessons/predefinedDrivingLessons.component';
 import { ViewPredefinedDrivingLessonModalComponent } from './lessons/predefinedDrivingLessons/view-predefinedDrivingLesson-modal.component';
 import { CreateOrEditPredefinedDrivingLessonModalComponent } from './lessons/predefinedDrivingLessons/create-or-edit-predefinedDrivingLesson-modal.component';
@@ -158,6 +162,8 @@ import { CreateOrEditInstructorUserModalComponent } from './instructors/instruct
         NumericTextBoxModule
     ],
     declarations: [
+		PredefinedTheoryLessonsComponent,
+		ViewPredefinedTheoryLessonModalComponent,		CreateOrEditPredefinedTheoryLessonModalComponent,
 		PredefinedDrivingLessonsComponent,
 		ViewPredefinedDrivingLessonModalComponent,		CreateOrEditPredefinedDrivingLessonModalComponent,
 		FormsComponent,

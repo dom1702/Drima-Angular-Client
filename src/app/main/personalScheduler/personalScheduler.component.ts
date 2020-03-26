@@ -223,7 +223,8 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
             moment(to),
             this.eventTypeFilter.drivingLessons,
             this.eventTypeFilter.theoryLessons,
-            this.eventTypeFilter.otherEvents).subscribe(result => {
+            this.eventTypeFilter.otherEvents,
+            false).subscribe(result => {
 
                 //console.log(result);
 

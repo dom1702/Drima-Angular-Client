@@ -32,7 +32,7 @@ export class StudentsOverviewComponent extends AppComponentBase {
     studentFormsTabName: string = this.l("Forms");
 
     student: StudentDto;
-    pricePackageName: string;
+    pricePackageName: string = "";
 
     selectedStudentCourse: StudentCourseDto;
     studentCourses: StudentCourseDto[];
@@ -63,7 +63,7 @@ export class StudentsOverviewComponent extends AppComponentBase {
 
                 this.overallActive = true;
 
-                this._studentsServiceProxy.getAllCourses(this.student.id, true).subscribe(result => {
+                this._studentsServiceProxy.getAllCourses(this.student.id).subscribe(result => {
 
                     if(this.studentCourses != null)
                     {
@@ -79,6 +79,9 @@ export class StudentsOverviewComponent extends AppComponentBase {
                     if(this.studentCourses.length > 0)
                     {
                         this.selectedStudentCourse = this.studentCourses[0];
+
+                        // Emit manually once on start
+                        this.courseChanged.emit();
                         
                         this.pricePackageName = this.selectedStudentCourse.pricePackageName;
 
@@ -97,7 +100,7 @@ export class StudentsOverviewComponent extends AppComponentBase {
 
                 this.student = result.student;
 
-                this._studentsServiceProxy.getAllCourses(this.student.id, true).subscribe(result => {
+                this._studentsServiceProxy.getAllCourses(this.student.id).subscribe(result => {
                     this.studentCourses = result
                     console.log(this.studentCourses.length);
                     if(this.studentCourses.length > 0)

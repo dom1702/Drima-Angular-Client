@@ -7,17 +7,19 @@ import { DrivingLessonsComponent } from './lessons/drivingLessons/drivingLessons
 import { StudentsComponent } from './students/students/students.component';
 import { TheoryLessonsComponent } from './lessons/theoryLessons/theoryLessons.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import {SchedulerComponent } from './scheduler/scheduler.component';
+import { SchedulerComponent } from './scheduler/scheduler.component';
 import { CreateStudentInvoiceComponent } from './sales/studentInvoices/create-studentInvoice.component';
 import { StudentsOverviewComponent } from './students/students/students-overview.component';
-import { SVPlannedDrivingLessonsComponent } from './studentsView/plannedDrivingLessons/sv-planned-drivingLessons.component';
-import { SVDrivingLessonsOverviewComponent } from './studentsView/drivingLessonsOverview/sv-drivingLessons-overview.component';
-import { SVBookDrivingLessonComponent } from './studentsView/bookDrivingLesson/sv-book-drivingLesson.component';
+import { SVTheoryLessonsComponent } from './studentsView/theoryLessons/sv-theoryLessons.component';
+import { SVDrivingLessonComponent } from './studentsView/drivingLessons/sv-drivingLesson.component';
 import { PersonalSchedulerComponent } from './personalScheduler/personalScheduler.component';
 import { SVFrequentlyAskedQuestionsComponent } from './studentsView/frequentlyAskedQuestions/sv-frequently-asked-questions.component';
 import { SVTheoryCourseComponent } from './studentsView/theoryCourse/sv-theory-course.component';
 import { SVQuizComponent } from './studentsView/theoryCourse/sv-quiz.component';
 import { SVQuizGuard } from './studentsView/theoryCourse/sv-quiz.guard';
+import { SVTheoryPracticeComponent } from './studentsView/theoryPractice/sv-theoryPractice.component';
+import { SVInvoicesComponent } from './studentsView/invoices/sv-invoices.component';
+import { SVOverviewComponent } from './studentsView/overview/sv-overview.component';
 
 @NgModule({
     imports: [
@@ -36,11 +38,13 @@ import { SVQuizGuard } from './studentsView/theoryCourse/sv-quiz.guard';
                     { path: 'personalScheduler', component: PersonalSchedulerComponent, data: { permission: 'Pages.PersonalScheduler' } },
                     { path: 'sales/studentInvoices/create-studentInvoice', component: CreateStudentInvoiceComponent, data: { permission: 'Pages.StudentInvoices.Create' }},
                     { path: 'students/students/students-overview', component: StudentsOverviewComponent },
-                    { path: 'studentsView/plannedDrivingLessons', component: SVPlannedDrivingLessonsComponent, data: { permission: 'StudentView' } },
-                    { path: 'studentsView/drivingLessonsOverview', component: SVDrivingLessonsOverviewComponent, data: { permission: 'StudentView' }},
-                    { path: 'studentsView/bookDrivingLesson', component: SVBookDrivingLessonComponent, data: { permission: 'StudentView' }},
+                    { path: 'studentsView/overview', component: SVOverviewComponent, data: { permission: 'StudentView' } },
+                    { path: 'studentsView/theoryLessons', component: SVTheoryLessonsComponent, data: { permission: 'StudentView' } },
+                    { path: 'studentsView/drivingLessons', component: SVDrivingLessonComponent, data: { permission: 'StudentView' }},
                     { path: 'studentsView/frequentlyAskedQuestions', component: SVFrequentlyAskedQuestionsComponent, data: { permission: 'StudentView' }},
                     { path: 'studentsView/theoryCourse', component: SVTheoryCourseComponent, data: { permission: 'StudentView' }},
+                    { path: 'studentsView/theoryPractice', component: SVTheoryPracticeComponent, data: { permission: 'StudentView' }},
+                    { path: 'studentsView/invoices', component: SVInvoicesComponent, data: { permission: 'StudentView' }},
                     { 
                         path: 'studentsView/theoryCourse/quiz', 
                         canDeactivate: [SVQuizGuard],

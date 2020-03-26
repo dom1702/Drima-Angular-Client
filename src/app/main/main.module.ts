@@ -75,16 +75,15 @@ import { StudentsOverviewInvoicesComponent } from './students/students/students-
 
 import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
 import { CreateOrEditStudentUserModalComponent } from './students/students/create-or-edit-student-user-modal.component';
-import { SVPlannedDrivingLessonsComponent } from './studentsView/plannedDrivingLessons/sv-planned-drivingLessons.component';
+import { SVTheoryLessonsComponent } from './studentsView/theoryLessons/sv-theoryLessons.component';
 import { VehicleLookupTableModalComponent } from '@app/shared/common/lookup/vehicle-lookup-table-modal.component';
 import { StudentLookupTableModalComponent } from '@app/shared/common/lookup/student-lookup-table-modal.component';
 
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
-import { SVDrivingLessonsOverviewComponent } from './studentsView/drivingLessonsOverview/sv-drivingLessons-overview.component';
-import { SVBookDrivingLessonComponent } from './studentsView/bookDrivingLesson/sv-book-drivingLesson.component';
+import { SVDrivingLessonComponent } from './studentsView/drivingLessons/sv-drivingLesson.component';
 import { PersonalSchedulerComponent } from './personalScheduler/personalScheduler.component';
 import { StudentsOverviewFormsComponent } from './students/students/students-overview-forms.component';
-import { SVBookDrivingLessonLookupSchedulerModalComponent } from './studentsView/bookDrivingLesson/sv-book-drivingLesson-lookup-scheduler-modal.component';
+import { SVBookDrivingLessonLookupSchedulerModalComponent } from './studentsView/drivingLessons/sv-book-drivingLesson-lookup-scheduler-modal.component';
 import { SVFrequentlyAskedQuestionsComponent } from './studentsView/frequentlyAskedQuestions/sv-frequently-asked-questions.component';
 import { SVTheoryCourseComponent } from './studentsView/theoryCourse/sv-theory-course.component';
 import { SVQuizComponent } from './studentsView/theoryCourse/sv-quiz.component';
@@ -97,6 +96,9 @@ import { MultiSelectModule } from '@syncfusion/ej2-angular-dropdowns';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { AssignStudentToCourseModalComponent } from './students/students/assign-student-to-course-modal.component';
+import { SVTheoryPracticeComponent } from './studentsView/theoryPractice/sv-theoryPractice.component';
+import { SVInvoicesComponent } from './studentsView/invoices/sv-invoices.component';
+import { SVOverviewComponent } from './studentsView/overview/sv-overview.component';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -172,11 +174,13 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       StudentsOverviewFormsComponent,
       InstructorLookupTableModalComponent,
       CreateOrEditStudentUserModalComponent,
-      SVPlannedDrivingLessonsComponent,
+      SVOverviewComponent,
+      SVTheoryLessonsComponent,
+      SVTheoryPracticeComponent,
+      SVInvoicesComponent,
       VehicleLookupTableModalComponent,
       StudentLookupTableModalComponent,
-      SVDrivingLessonsOverviewComponent,
-      SVBookDrivingLessonComponent,
+      SVDrivingLessonComponent,
       PersonalSchedulerComponent,
       SVBookDrivingLessonLookupSchedulerModalComponent,
       SimulatorLessonsComponent,

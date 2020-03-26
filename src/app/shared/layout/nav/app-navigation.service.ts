@@ -26,10 +26,13 @@ export class AppNavigationService {
             //new AppMenuItem('Dashboard', 'Pages.Tenant.Dashboard', 'flaticon-line-graph', '/app/main/dashboard'),
             new AppMenuItem('Scheduler', 'Pages.Scheduler', 'flaticon-line-graph', '/app/main/scheduler'),
 
-            new AppMenuItem("PlannedDrivingLessons", 'StudentView', "flaticon-book", "/app/main/studentsView/plannedDrivingLessons"),    
-            new AppMenuItem("BookDrivingLesson", 'StudentView', "flaticon-book", "/app/main/studentsView/bookDrivingLesson"), 
-            new AppMenuItem("FAQ", null, "flaticon-search-1", "/app/main/studentsView/frequentlyAskedQuestions"), 
-            new AppMenuItem("Course", null, "flaticon-list", "/app/main/studentsView/theoryCourse"),  
+            new AppMenuItem("Overview", 'StudentView', "flaticon-book", "/app/main/studentsView/overview"),    
+            new AppMenuItem("TheoryLessons", 'StudentView', "flaticon-book", "/app/main/studentsView/theoryLessons"),    
+            new AppMenuItem("DrivingLessons", 'StudentView', "flaticon-book", "/app/main/studentsView/drivingLessons"), 
+            new AppMenuItem("TheoryPractice", 'StudentView', "flaticon-book", "/app/main/studentsView/theoryPractice"), 
+            new AppMenuItem("Invoices", 'StudentView', "flaticon-book", "/app/main/studentsView/invoices"), 
+            new AppMenuItem("FAQ", 'StudentView', "flaticon-search-1", "/app/main/studentsView/frequentlyAskedQuestions"), 
+            new AppMenuItem("Course", 'StudentView', "flaticon-list", "/app/main/studentsView/theoryCourse"),  
             new AppMenuItem("PlannedInstructorDL", 'InstructorView', "flaticon-book", "/app/main/studentsView/plannedDrivingLessons"),
 
             new AppMenuItem('Tenants', 'Pages.Tenants', 'flaticon-list-3', '/app/admin/tenants'),

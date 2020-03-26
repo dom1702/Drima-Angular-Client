@@ -63,12 +63,12 @@ class LessonsPieChart{
 }
 
 @Component({
-    templateUrl: './sv-planned-drivingLessons.component.html',
+    templateUrl: './sv-theoryLessons.component.html',
     encapsulation: ViewEncapsulation.None,
     animations: [appModuleAnimation()]
 })
 
-export class SVPlannedDrivingLessonsComponent extends AppComponentBase implements OnInit {
+export class SVTheoryLessonsComponent extends AppComponentBase implements OnInit {
        
     dummyTheoryLessonsCurr = 17;
     dummyTheoryLessonsNeeded = 28;

@@ -157,45 +157,48 @@
         <!-- <div class="progress m-progress">
                     <div class="progress-bar m--bg-info" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="12"></div>
                 </div> -->
+        <div class="container">
+            <div class="row">
 
-        <div class="row">
+                <div *ngIf="drivingLessons != null" class="col-md-6 col-sm-12">
+                    <h5 class="text-md-center">{{l("DrivingLessons")}} </h5>
+                    <div class="m--margin-top-10">
 
-            <div class="col-md-6 col-sm-12">
-                <h5 class="text-md-center">{{l("DrivingLessons")}} </h5>
-                <div class="m--margin-top-10">
-                   
-                    <label>{{l("BasicLessons")}} </label>
-                    <progressbar [animate]="true" [max]="12" [value]="5" [type]="success">
-                        5 / 12
-                    </progressbar>
+                        <label>{{l("BasicLessons")}} </label>
+                        <progressbar [animate]="true" [max]="12" [value]="drivingLessons.basicLessonsCompletedCount" [type]="success">
+                            {{drivingLessons.basicLessonsCompletedCount}} / 12
+                        </progressbar>
+                    </div>
+                    <div class="row m--margin-top-20">
+                        <div class="col-6" *ngFor="let pdl of drivingLessons.predefinedDrivingLessons; index as i">
+                            <div *ngIf="pdl.isDone" class="text-center"><i class="fa fa-check-circle m--font-success"
+                                    title="True"></i><label>&nbsp;{{pdl.name}}</label></div>
+                            <div *ngIf="!pdl.isDone && !pdl.isRunning" class="text-center"><i
+                                    class="fa fa-times-circle m--font-danger"
+                                    title="False"></i><label>&nbsp;{{pdl.name}}</label></div>
+                            <div *ngIf="!pdl.isDone && pdl.isRunning " class="text-center"><i
+                                    class="fa fa-spinner m--font-info"
+                                    title="False"></i><label>&nbsp;{{pdl.name}}</label></div>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="m--margin-top-10"
-                    *ngFor="let progress of parentOverview.selectedStudentCourse.predefinedDrivingLessonsProgress">
-                    <label>{{progress.name}} </label>
-                    <progressbar [animate]="true" [max]="progress.countRequired" [value]="progress.countDone"
-                        [type]="success">
-                        <!-- <label *ngIf="progress.countDone > 0">{{progress.countDone}} / {{progress.countRequired}}</label> -->
-                        <span *ngIf="progress.countDone > 0" class="text-nowrap">{{progress.countDone}} /
-                            {{progress.countRequired}}</span>
-                    </progressbar>
-                    <label class="m--margin-top-10"
-                        *ngIf="progress.countDone != progress.countRequired">{{nextPlanned(progress.predefinedDrivingLessonId)}}</label>
-                </div>
-            </div>
 
-            <div class="col-md-6 col-sm-12">
-                <h5 class="text-md-center">{{l("TheoryLessons")}} </h5>
-                <div class="m--margin-top-10"
-                    *ngFor="let progress of parentOverview.selectedStudentCourse.predefinedTheoryLessonsProgress">
-                    <label>{{progress.name}} </label>
-                    <progressbar [animate]="true" [max]="progress.countRequired" [value]="progress.countDone"
-                        [type]="success">
-                        <!-- <label *ngIf="progress.countDone > 0">{{progress.countDone}} / {{progress.countRequired}}</label> -->
-                        <span *ngIf="progress.countDone > 0" class="text-nowrap">{{progress.countDone}} /
-                            {{progress.countRequired}}</span>
-                    </progressbar>
-                    <label class="m--margin-top-10"
-                        *ngIf="progress.countDone != progress.countRequired">{{nextPlanned(progress.predefinedTheoryLessonId)}}</label>
+                <div class="col-md-6 col-sm-12">
+                    <h5 class="text-md-center">{{l("TheoryLessons")}} </h5>
+                    <div class="row">
+                        <div class="col-6" *ngFor="let ptl of theoryLessons; index as i">
+                            <div *ngIf="ptl.isDone" class="text-center"><i class="fa fa-check-circle m--font-success"
+                                    title="True"></i><label>&nbsp;{{ptl.name}}</label></div>
+                            <div *ngIf="!ptl.isDone && !ptl.isRunning" class="text-center"><i
+                                    class="fa fa-times-circle m--font-danger"
+                                    title="False"></i><label>&nbsp;{{ptl.name}}</label></div>
+                            <div *ngIf="!ptl.isDone && ptl.isRunning " class="text-center"><i
+                                    class="fa fa-spinner m--font-info"
+                                    title="False"></i><label>&nbsp;{{ptl.name}}</label></div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>

@@ -9,12 +9,12 @@ import * as _ from 'lodash';
 import { SVBookDrivingLessonLookupSchedulerModalComponent } from './sv-book-drivingLesson-lookup-scheduler-modal.component';
 
 @Component({
-    templateUrl: './sv-book-drivingLesson.component.html',
+    templateUrl: './sv-drivingLesson.component.html',
     encapsulation: ViewEncapsulation.None,   
     animations: [appModuleAnimation()]
 })
 
-export class SVBookDrivingLessonComponent extends AppComponentBase implements OnInit {
+export class SVDrivingLessonComponent extends AppComponentBase implements OnInit {
 
     @ViewChild('schedulerModal') 
     schedulerModal : SVBookDrivingLessonLookupSchedulerModalComponent;

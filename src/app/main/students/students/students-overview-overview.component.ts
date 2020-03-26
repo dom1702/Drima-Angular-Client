@@ -1,7 +1,7 @@
 import { Component, Injector, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
-import { StudentsServiceProxy, StudentDto  } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, StudentDto, StudentCoursePredefinedTheoryLessonDto, OnlineTheoryServiceProxy, StartNextOnlineTheoryLessonInput, FinishOnlineTheoryLessonInput, StudentCoursePredefinedDrivingLessonsDto } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -29,16 +29,19 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     @ViewChild('createOrEditStudentModal') createOrEditStudentModal: CreateOrEditStudentModalComponent;
     @ViewChild('createOrEditStudentUserModal') createOrEditStudentUserModal: CreateOrEditStudentUserModalComponent;
     @ViewChild('assignStudentToCourseModal') assignStudentToCourseModal: AssignStudentToCourseModalComponent;
-    
-    @Input() student : StudentDto;
-    @Input() pricePackageName : string;
-    @Input() parentOverview : StudentsOverviewComponent;
+
+    @Input() student: StudentDto;
+    @Input() pricePackageName: string;
+    @Input() parentOverview: StudentsOverviewComponent;
 
     licenseClasses = '-';
     licenseClassesAlreadyOwned = '-';
 
     birthCountry = '';
     nativeLanguage = '';
+
+    theoryLessons: StudentCoursePredefinedTheoryLessonDto[];
+    drivingLessons: StudentCoursePredefinedDrivingLessonsDto;
 
     constructor(
         injector: Injector,
@@ -48,7 +51,9 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
         private _activatedRoute: ActivatedRoute,
         private _fileDownloadService: FileDownloadService,
         private _countriesService: CountriesService,
-        private _languagesService: LanguagesService
+        private _languagesService: LanguagesService,
+
+        private _onlineTheory : OnlineTheoryServiceProxy
     ) {
         super(injector);
     }
@@ -59,56 +64,64 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
         this.updateLicenseClassesAlreadyOwned();
         this.updateBirthCountry();
         this.updateNativeLanguage();
+
+        this.parentOverview.courseChanged.subscribe(() => {
+            this._studentsServiceProxy.getPredefinedTheoryLessonsOfCourse(this.parentOverview.selectedStudentCourse.course.id, this.student.id).subscribe(result => {
+                this.theoryLessons = result;
+            });
+        });
+
+        this.parentOverview.courseChanged.subscribe(() => {
+            this._studentsServiceProxy.getPredefinedDrivingLessonsOfCourse(this.parentOverview.selectedStudentCourse.course.id, this.student.id).subscribe(result => {
+                this.drivingLessons = result;
+                console.log(result);
+            });
+        });
     }
 
-    updateLicenseClass() : void 
-    {
-        if(this.student.licenseClasses == null)
+    updateLicenseClass(): void {
+        if (this.student.licenseClasses == null)
             return;
 
-        for(var i = 0; i < this.student.licenseClasses.length; i++)
-        {
-            if(i == 0)
+        for (var i = 0; i < this.student.licenseClasses.length; i++) {
+            if (i == 0)
                 this.licenseClasses = this.student.licenseClasses[i];
             else
                 this.licenseClasses += ', ' + this.student.licenseClasses[i];
         }
     }
 
-    updateLicenseClassesAlreadyOwned() : void 
-    {
-        if(this.student.licenseClassesAlreadyOwned == null)
+    updateLicenseClassesAlreadyOwned(): void {
+        if (this.student.licenseClassesAlreadyOwned == null)
             return;
 
-        for(var i = 0; i < this.student.licenseClassesAlreadyOwned.length; i++)
-        {
-            if(i == 0)
+        for (var i = 0; i < this.student.licenseClassesAlreadyOwned.length; i++) {
+            if (i == 0)
                 this.licenseClassesAlreadyOwned = this.student.licenseClassesAlreadyOwned[i];
             else
                 this.licenseClassesAlreadyOwned += ', ' + this.student.licenseClassesAlreadyOwned[i];
         }
     }
 
-    updateBirthCountry() : void{
+    updateBirthCountry(): void {
         this.birthCountry = this._countriesService.getName(this.student.birthCountry);
     }
 
-    updateNativeLanguage() : void{
+    updateNativeLanguage(): void {
         this.nativeLanguage = this._languagesService.getName(this.student.nativeLanguage);
     }
 
-    updateStudent()
-    {
+    updateStudent() {
         this.parentOverview.UpdateStudentView().subscribe((any) => {
 
             // At this point we need to wait a short time because Input variable student is not yet refreshed
-             setTimeout(() => {
+            setTimeout(() => {
                 this.updateLicenseClass();
                 this.updateLicenseClassesAlreadyOwned();
                 this.updateBirthCountry();
                 this.updateNativeLanguage();
             }, 10);
-         
+
         });
     }
 
@@ -118,37 +131,40 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
 
     createUserAccount(): void {
         this.createOrEditStudentUserModal.show(this.student.lastName, this.student.firstName, this.student.email, this.student);
+
+        // this._onlineTheory.finishOnlineTheoryLesson(new FinishOnlineTheoryLessonInput(
+        // {
+        //     predefinedTheoryLessonIdString: "C-1"
+        // })).subscribe((result) => {
+        //     console.log(result);
+        // })
     }
 
-    openAssignToCourseModal() : void{
+    openAssignToCourseModal(): void {
         this.assignStudentToCourseModal.show(this.student);
+
+        // var snotli : StartNextOnlineTheoryLessonInput = new StartNextOnlineTheoryLessonInput();
+        // snotli.courseId = 1003;
+        // this._onlineTheory.startNextOnlineTheoryLesson(snotli).subscribe((result) => {
+        //     if(result.predefinedTheoryLessonIdString == "")
+        //     console.log("everything completed");
+        //     else
+        //     console.log(result);
+        // })
     }
 
-    assignToCourse() : void{
+    assignToCourse(): void {
         this.parentOverview.UpdateStudentView().subscribe();
     }
 
-    userAccountCreated()
-    {
+    userAccountCreated() {
         this.updateStudent();
     }
 
-    getAddressString()
-    {
-        if(this.student == null)
+    getAddressString() {
+        if (this.student == null)
             return '';
 
         return this.student.street + ", " + this.student.zipCode + ", " + this.student.city;
-    }
-
-    nextPlanned(pdlId : number) : string
-    {
-        for(var i = 0; i < this.parentOverview.selectedStudentCourse.predefinedDrivingLessons.length; i++)
-        {
-            if(this.parentOverview.selectedStudentCourse.predefinedDrivingLessons[i].predefinedDrivingLessonId == pdlId && !this.parentOverview.selectedStudentCourse.predefinedDrivingLessons[i].isDone)
-                return "(Planned on " + this.parentOverview.selectedStudentCourse.predefinedDrivingLessons[i].date.format('MMMM Do YYYY, h:mm:ss a') + ")";
-        }
-
-        return "(Not yet planned)";
     }
 }

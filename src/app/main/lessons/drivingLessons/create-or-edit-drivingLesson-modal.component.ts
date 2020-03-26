@@ -312,7 +312,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         this.refreshStudentFullName();
         this.studentSelected = true;
 
-        this._studentsServiceProxy.getAllCourses(this.drivingLesson.studentId, false).subscribe(result => {
+        this._studentsServiceProxy.getAllCourses(this.drivingLesson.studentId).subscribe(result => {
             this.studentCourses = result
 
             if(this.studentCourses.length > 0)

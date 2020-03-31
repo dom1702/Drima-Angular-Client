@@ -23,8 +23,22 @@
         
         <div class="m--space-10"></div>
 
-        <h6> Drima control room is open: Mon, Tue, Wed, Thu 14:00 - 21:00</h6>
-       
+        
+        <h6> Drima control room is open:</h6>
+        <div *ngIf="upcomingOpeningHours"></div>
+        <ul>
+
+            <li *ngFor="let temp of upcomingOpeningHours">
+                <div *ngIf="temp.closed; then thenBlock else elseBlock"></div>                                  
+                <ng-template #thenBlock>
+                    {{temp.Opening}} - {{temp.Closing}}  
+                </ng-template>
+                <ng-template #elseBlock>
+                    Closed
+                </ng-template>
+            </li>   
+        </ul>
+        
         <div *ngIf="!closed">
             
             <span>   

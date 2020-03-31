@@ -34,8 +34,19 @@
 
                     <div *ngIf="studentSelected">
                         <div class="m--margin-top-40">
-                            <div class="row">
+                   
 
+                                <label>Course Specific: </label><br>
+                                    <div class="form-group">
+
+                                        <select class="form-control" name="studentCourse"
+                                            [(ngModel)]="selectedStudentCourse">
+                                            <option *ngFor="let course of studentCourses" [ngValue]="course">
+                                                {{course.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="row">
                                 <div class="col-6 border-right">
                                     <div class="form-group">
                                         <label class="m-radio">
@@ -47,22 +58,9 @@
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <label>Course Specific: </label><br>
-                                    <div class="form-group">
-
-                                        <select class="form-control" name="studentCourse"
-                                            [(ngModel)]="selectedStudentCourse">
-                                            <option *ngFor="let course of studentCourses" [ngValue]="course">
-                                                {{course.course.name}}
-                                            </option>
-                                        </select>
-                                    </div>
-
                                     <div *ngIf="selectedStudentCourse">
-
-
                                         <div class="col-md-auto"
-                                            *ngFor="let pdl of selectedStudentCourse.course.predefinedDrivingLessons">
+                                            *ngFor="let pdl of selectedStudentCourse.predefinedDrivingLessons">
                                             <label class="m-radio">
                                                 <input type="radio" name="pdl_option" [value]="pdl"
                                                     [(ngModel)]="selectedPdl" (change)='updateCheck()'>

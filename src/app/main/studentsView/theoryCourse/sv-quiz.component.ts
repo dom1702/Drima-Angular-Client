@@ -3,7 +3,7 @@ import { AppComponentBase } from "@shared/common/app-component-base";
 import { appModuleAnimation } from "@shared/animations/routerTransition";
 import { TabsetComponent, TabDirective } from "ngx-bootstrap";
 import { Observable, Subject } from "rxjs";
-import { UserLoginInfoDto } from "@shared/service-proxies/service-proxies";
+import { UserLoginInfoDto, OnlineTheoryServiceProxy, PrepareOnlineTheoryLessonDto, OnlineTheoryOpeningHoursDto } from "@shared/service-proxies/service-proxies";
 import * as moment from 'moment';
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Message } from "primeng/api";
@@ -11,6 +11,7 @@ import { Router} from "@angular/router";
 import { ICanComponentDeactivate } from "./sv-quiz.guard";
 import { SVQuestionComponent } from "./sv-question.component";
 import { debug } from "util";
+import { List } from "lodash";
 
 class QuizContent {
     id : number;
@@ -172,13 +173,15 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
         return !x;      
     }
 
-    constructor(injector: Injector, private sanitizer : DomSanitizer, private router : Router) 
+    constructor(injector: Injector, private sanitizer : DomSanitizer, private router : Router, private _onlineTheoryService : OnlineTheoryServiceProxy) 
     {
         super(injector);
     }
 
-    ngOnInit(): void {          
-        this.createQuiz(); 
+    ngOnInit(): void {     
+        this.quizAborted = true; 
+        this.quizFinished = false;    
+        /*this.createQuiz(); 
         this.closingTime = moment().locale(moment.defaultFormat);
         this.openingTime = moment().locale(moment.defaultFormat);
         this.closingTime.set("hour", 13);
@@ -189,9 +192,9 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
         this.openingTime.set("minute", 0);
         //console.debug("current time: " + moment().format() + 
         //    "| closing: " + this.closingTime.format()  + 
-        //    "| opening: " + this.openingTime.format() );  
-        this.quizAborted = true; 
-        this.quizFinished = false;
+        //    "| opening: " + this.openingTime.format() );
+        */  
+       
     }
 
     // ngAfterViewInit(): void {

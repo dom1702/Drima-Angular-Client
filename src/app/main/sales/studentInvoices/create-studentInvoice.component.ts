@@ -1,7 +1,7 @@
 import { Component, ViewChild, Injector, Output, EventEmitter, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { Location } from '@angular/common';
-import { StudentInvoicesServiceProxy, CreateOrEditStudentInvoiceDto, StudentsServiceProxy, ProductsServiceProxy, StudentInvoiceItemDto, PricePackagesServiceProxy } from '@shared/service-proxies/service-proxies';
+import { StudentInvoicesServiceProxy, CreateOrEditStudentInvoiceDto, StudentsServiceProxy, ProductsServiceProxy, StudentInvoiceItemDto, PricePackagesServiceProxy, GetEmptyStudentInvoiceForViewDtoCourseDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
@@ -38,6 +38,9 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
   studentFullName = '';
   studentFirstName = '';
   studentLastName = '';
+
+  courses : GetEmptyStudentInvoiceForViewDtoCourseDto[];
+  selectedCourse : GetEmptyStudentInvoiceForViewDtoCourseDto;
 
   studentId: number;
   studentPricePackageId: number;
@@ -160,20 +163,23 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
     this.subscription = this._route.params.subscribe(params => {
       const id = params['id'] || '';
       const studentId = params['studentId'] || '';
+      const courseId = params['courseId'] || '';
 
       if (studentId != '') {
         this.studentInvoice = new CreateOrEditStudentInvoiceDto();
         this.header = this.l('CreateNewStudentInvoice');
         this.studentSetBefore = true;
 
-        this.insertStudentData(studentId);
+        this.insertStudentData(studentId, courseId);
       }
+      // NOTE: In this case course Id must be set by the user first !!! 
+      // Therefore Create new invoice over the big list is currently disabled
       else if (id == '') {
         this.studentInvoice = new CreateOrEditStudentInvoiceDto();
         this.studentSet = false;
         this.header = this.l('CreateNewStudentInvoice');
       }
-      else {
+      else { 
         this.form.get('createPdfOnSave').setValue(false);
 
         this._studentInvoicesServiceProxy.getStudentInvoiceForEdit(id).subscribe(result => {
@@ -190,7 +196,8 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
           this.studentId = this.studentInvoice.studentId;
 
-          console.log(result.studentInvoice.date);
+          this.setCourses(result.courses);
+          this.selectedCourse = this.courses.find(i => i.courseId == this.studentInvoice.courseId);
 
           this.form.get('date').setValue(moment(result.studentInvoice.date).toDate());
           this.form.get('date_due').setValue(moment(result.studentInvoice.dateDue).toDate());
@@ -520,6 +527,7 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
     input.items = items;
 
     input.studentId = this.studentId;
+    input.courseId = this.selectedCourse != null ? this.selectedCourse.courseId : null;
 
     return input;
   }
@@ -626,10 +634,10 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
   getNewStudentId() {
 
-    this.insertStudentData(this.studentLookupTableModal.id);
+    this.insertStudentData(this.studentLookupTableModal.id, null);
   }
 
-  insertStudentData(studentId : number)
+  insertStudentData(studentId : number, courseId : number)
   {
     this.studentSet = true;
     //console.log(this.studentSet);
@@ -639,20 +647,25 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
     this.primengTableHelper.showLoadingIndicator();
 
-    this._studentsServiceProxy.getStudentForView(this.studentInvoice.studentId)
+    this._studentInvoicesServiceProxy.getEmptyStudentInvoiceForView(this.studentInvoice.studentId)
       .subscribe(result => {
 
         // TODO !!!!!!!!!!!!!!!!!
         //this.studentPricePackageId = result.student.pricePackageId;
-        this.studentFirstName = result.student.firstName;
-        this.studentLastName = result.student.lastName;
+        this.studentFirstName = result.firstName;
+        this.studentLastName = result.lastName;
         this.refreshStudentFullName();
 
-        this.form.get('recipientFirstName').setValue(result.student.firstName);
-        this.form.get('recipientLastName').setValue(result.student.lastName);
-        this.form.get('recipientStreet').setValue(result.student.street);
-        this.form.get('recipientZipCode').setValue(result.student.zipCode);
-        this.form.get('recipientCity').setValue(result.student.city);
+        this.setCourses(result.courses);
+
+        if(courseId != null)
+          this.selectedCourse = this.courses.find(i => i.courseId == courseId);
+
+        this.form.get('recipientFirstName').setValue(result.firstName);
+        this.form.get('recipientLastName').setValue(result.lastName);
+        this.form.get('recipientStreet').setValue(result.street);
+        this.form.get('recipientZipCode').setValue(result.zipCode);
+        this.form.get('recipientCity').setValue(result.city);
 
         this.form.get('interest').setValue(abp.setting.get("App.Invoice.DefaultInterest"));
         this.form.get('text1').setValue(abp.setting.get("App.Invoice.DefaultStartText"));
@@ -666,6 +679,20 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
   refreshStudentFullName() {
     this.studentFullName = this.studentFirstName + ' ' + this.studentLastName;
+  }
+
+  updateCourse()
+  {
+    console.log("new selected course: " + this.selectedCourse);
+    // Update price package or something so the button add price package adds the pp of the newly selected course
+  }
+
+  setCourses(courses : GetEmptyStudentInvoiceForViewDtoCourseDto[])
+  {
+    this.courses = courses;
+    this.courses.push(new GetEmptyStudentInvoiceForViewDtoCourseDto(
+      {courseId: null, courseName: this.l("NotCourseRelated")}
+      ));
   }
 }
 

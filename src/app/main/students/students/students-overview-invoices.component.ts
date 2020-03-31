@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { PricePackageLookupTableModalComponent } from './pricePackage-lookup-table-modal.component';
+import { StudentsOverviewComponent } from './students-overview.component';
 
 @Component({
     selector: 'students-overview-invoices',
@@ -21,8 +22,11 @@ import { PricePackageLookupTableModalComponent } from './pricePackage-lookup-tab
 export class StudentsOverviewInvoicesComponent extends AppComponentBase {
 
     @Input() student: StudentDto;
+    @Input() parentOverview : StudentsOverviewComponent;
 
     invoices: StudentInvoiceDto[];
+
+    showInvoicesOfAllCourses : boolean;
 
     constructor(
         injector: Injector,
@@ -39,15 +43,19 @@ export class StudentsOverviewInvoicesComponent extends AppComponentBase {
     }
 
     ngOnInit(): void {
-        this._studentInvoicesServiceProxy.getAllInvoicesByStudentId(this.student.id).subscribe(result => {
 
-            this.invoices = result;
-
+        this.parentOverview.courseChanged.subscribe(() => {
+            this._studentInvoicesServiceProxy.getAllInvoicesByStudentId(this.student.id, 
+                (this.showInvoicesOfAllCourses) ? undefined : this.parentOverview.selectedStudentCourse.course.id).subscribe(result => {
+                this.invoices = result;
+            });
         });
+       
     }
 
     createNewInvoice(): void {
-        this._router.navigate(['app/main/sales/studentInvoices/create-studentInvoice', { studentId: this.student.id }]);
+        this._router.navigate(['app/main/sales/studentInvoices/create-studentInvoice', { studentId: this.student.id, 
+            courseId: this.parentOverview.selectedStudentCourse.course.id }]);
     }
 
     editInvoice(invoiceId: number): void {
@@ -64,7 +72,8 @@ export class StudentsOverviewInvoicesComponent extends AppComponentBase {
 
                             this.notify.success(this.l('SuccessfullyDeleted'));
 
-                            this._studentInvoicesServiceProxy.getAllInvoicesByStudentId(this.student.id).subscribe(result => {
+                            this._studentInvoicesServiceProxy.getAllInvoicesByStudentId(this.student.id, 
+                                (this.showInvoicesOfAllCourses) ? undefined : this.parentOverview.selectedStudentCourse.course.id).subscribe(result => {
 
                                 this.invoices = result;
 
@@ -80,13 +89,22 @@ export class StudentsOverviewInvoicesComponent extends AppComponentBase {
         .subscribe((result) => {
 
             
-            this._studentInvoicesServiceProxy.getAllInvoicesByStudentId(this.student.id).subscribe(result => {
+            this._studentInvoicesServiceProxy.getAllInvoicesByStudentId(this.student.id, 
+                (this.showInvoicesOfAllCourses) ? undefined : this.parentOverview.selectedStudentCourse.course.id).subscribe(result => {
 
                 this.invoices = result;
 
             });
            
             this._fileDownloadService.downloadTempFile(result);
+        });
+    }
+
+    updateInvoices()
+    {
+        this._studentInvoicesServiceProxy.getAllInvoicesByStudentId(this.student.id, 
+            (this.showInvoicesOfAllCourses) ? undefined : this.parentOverview.selectedStudentCourse.course.id).subscribe(result => {
+            this.invoices = result;
         });
     }
 }

@@ -1,7 +1,7 @@
 import { Component, Injector, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
-import { StudentsServiceProxy, StudentDto, StudentCoursePredefinedTheoryLessonDto, OnlineTheoryServiceProxy, StartNextOnlineTheoryLessonInput, FinishOnlineTheoryLessonInput, StudentCoursePredefinedDrivingLessonsDto } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, StudentDto, StudentCoursePredefinedTheoryLessonDto, OnlineTheoryServiceProxy, StartNextOnlineTheoryLessonInput, FinishOnlineTheoryLessonInput, StudentCourseDrivingLessonsDto } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -41,7 +41,7 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     nativeLanguage = '';
 
     theoryLessons: StudentCoursePredefinedTheoryLessonDto[];
-    drivingLessons: StudentCoursePredefinedDrivingLessonsDto;
+    drivingLessons: StudentCourseDrivingLessonsDto;
 
     constructor(
         injector: Injector,

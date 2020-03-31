@@ -3,14 +3,24 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto col-md-6">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <span>Book a driving lesson</span>
+                    <span>{{l('DrivingLessons')}}</span>
                 </h3>
                 <span class="m-section__sub">
-                    preplan your next DrivingLesson
+                    Review your past and upcoming driving lessons
                 </span>
             </div>
-            <div class="col-md-6 text-right">
-			
+            <div class="col-3">
+
+            </div>
+            <div class="col-3">
+
+                <label>Course: </label><br>
+                <select class="form-control" [(ngModel)]="selectedStudentCourse" (ngModelChange)="courseChanged()">
+                    <option *ngFor="let course of studentCourses" [ngValue]="course">
+                        {{course.name}}
+                    </option>
+                </select>
+
             </div>
         </div>
     </div>
@@ -18,46 +28,64 @@
         <div class="m-portlet m-portlet--mobile">
             <div class="m-portlet__body">
                         
-                 <div class="form-group m-form__group">
-                    <label for="Name">{{l("Type")}}</label>
-                    <ng-multiselect-dropdown
-                    [data]="dropdownListLessonTypes"
-                    [(ngModel)]="selectedType" [ngModelOptions]="{standalone: true}"
-                    [settings]="dropdownSettings">
-                    </ng-multiselect-dropdown>
-                </div>
+                <div *ngIf="drivingLessons != null">
+                    <h5 class="text-md-center">{{l("DrivingLessons")}} </h5>
+                    <div class="m--margin-top-10">
 
-                <div class="form-group m-form__group">
-                    <label for="Name">{{l("Vehicle")}}</label>
-                    <ng-multiselect-dropdown
-                    [data]="dropdownListVehicles"
-                    [(ngModel)]="selectedVehicle" [ngModelOptions]="{standalone: true}"
-                    [settings]="dropdownSettings">
-                    </ng-multiselect-dropdown>
-                </div>
-
-                <div class="form-group">
-                    <label for="Length">{{l("Length")}}</label>
-                    <input type="number" id="DrivingLesson_Length" min="1" max="10" class="form-control" name="Length"  />
-                </div>
-
-                <div class="form-group m-form__group">
-                        <label>{{l("Date")}}</label>
-                        <div class="input-group">
-                            <input class="form-control" type="text" disabled>     
-                            <div class="input-group-append">
-                                <button class="btn btn-primary blue" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button> <!--(click)="createDate()"-->
-                            </div> 
-                            <div class="input-group-prepend">
-                                <button class="btn btn-danger" type="button" ><i class="fa fa-times"></i></button>
-                            </div>
+                        <label>{{l("BasicLessons")}} </label>
+                        <progressbar [animate]="true" [max]="12" [value]="drivingLessons.basicLessonsCompletedCount" [type]="success">
+                            {{drivingLessons.basicLessonsCompletedCount}} / 12
+                        </progressbar>
+                    </div>
+                    <div class="row m--margin-top-20">
+                        <div class="col-6" *ngFor="let pdl of drivingLessons.predefinedDrivingLessons; index as i">
+                            <div *ngIf="pdl.isDone" class="text-center"><i class="fa fa-check-circle m--font-success"
+                                    title="True"></i><label>&nbsp;{{pdl.name}}</label></div>
+                            <div *ngIf="!pdl.isDone && !pdl.isRunning" class="text-center"><i
+                                    class="fa fa-times-circle m--font-danger"
+                                    title="False"></i><label>&nbsp;{{pdl.name}}</label></div>
+                            <div *ngIf="!pdl.isDone && pdl.isRunning " class="text-center"><i
+                                    class="fa fa-spinner m--font-info"
+                                    title="False"></i><label>&nbsp;{{pdl.name}}</label></div>
                         </div>
+
+                    </div>
                 </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default">Discharge</button>
-                    <button type="submit" class="btn btn-primary blue"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+
+                <div class="m--margin-top-50">
+                <h5 class="text-md-center">{{l("Details")}} </h5>
                 </div>
+                <div class="m--margin-top-20">
+                    <p-table [value]="drivingLessonsList">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>{{l("StartTime")}}</th>
+                                <th>{{l("LessonLength")}}</th>
+                                <th>{{l("LicenseClass")}}</th>
+                                <th>{{l("Topic")}}</th>
+                                <th>{{l("Vehicle")}}</th>
+                                <th>{{l("Instructor")}}</th>
+                                <th>{{l("Completed")}}</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-lesson>
+                            <tr>
+                                <td>{{lesson.startTime}}</td>
+                                <td>{{lesson.LessonLength}}</td>
+                                <td>{{lesson.licenseClass}}</td>
+                                <td>{{lesson.topic}}</td>
+                                <td>{{lesson.vehicle}}</td>
+                                <td>{{lesson.instructorNames}}</td>
+                                <td >
+                                    <div *ngIf="lesson.completed" class="text-center"><i class="fa fa-check-circle m--font-success" title="True"></i></div>
+                                    <div *ngIf="!lesson.completed" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
+                                </td>
+                            
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+              
             </div>
         </div>
     </div>   

@@ -49,8 +49,8 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     instructorId?: number;
     studentSelected = false;
 
-    selectedStudentCourse: StudentCourseDto;
-    studentCourses: StudentCourseDto[];
+    selectedStudentCourse: CourseDto;
+    studentCourses: CourseDto[];
 
     selectedPdl;
 
@@ -168,10 +168,9 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         {
             console.log(this.selectedPdl.id);
             this.drivingLesson.predefinedDrivingLessonId = this.selectedPdl.id;
-
-            console.log(this.selectedStudentCourse.course.id);
-            this.drivingLesson.courseId = this.selectedStudentCourse.course.id;
         }
+
+        this.drivingLesson.courseId = this.selectedStudentCourse.id;
 
         if (this.instructorPersonalLesson) {
             this._instructorsOwnDrivingLessonsServiceProxy.createOrEdit(this.drivingLesson)
@@ -312,15 +311,25 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         this.refreshStudentFullName();
         this.studentSelected = true;
 
-        this._studentsServiceProxy.getAllCourses(this.drivingLesson.studentId).subscribe(result => {
-            this.studentCourses = result
+        // this._studentsServiceProxy.getAllCourses(this.drivingLesson.studentId).subscribe(result => {
+        //     this.studentCourses = result
+
+        //     if(this.studentCourses.length > 0)
+        //     {
+        //         console.log(this.studentCourses[0]);
+        //         this.selectedStudentCourse = this.studentCourses[0];
+        //     }
+        // });
+
+        this._drivingLessonsServiceProxy.getCoursesForCreateOrEdit(this.drivingLesson.studentId).subscribe(result => {
+            this.studentCourses = result.courses
 
             if(this.studentCourses.length > 0)
             {
                 console.log(this.studentCourses[0]);
                 this.selectedStudentCourse = this.studentCourses[0];
             }
-        });
+        })
     }
 
     getNewTopic() {

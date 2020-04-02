@@ -42,7 +42,6 @@ import { SVOverviewComponent } from './studentsView/overview/sv-overview.compone
                     { path: 'studentsView/theoryLessons', component: SVTheoryLessonsComponent, data: { permission: 'StudentView' } },
                     { path: 'studentsView/drivingLessons', component: SVDrivingLessonComponent, data: { permission: 'StudentView' }},
                     { path: 'studentsView/frequentlyAskedQuestions', component: SVFrequentlyAskedQuestionsComponent, data: { permission: 'StudentView' }},
-                    { path: 'studentsView/theoryCourse', component: SVTheoryCourseComponent, data: { permission: 'StudentView' }},
                     { path: 'studentsView/theoryPractice', component: SVTheoryPracticeComponent, data: { permission: 'StudentView' }},
                     { path: 'studentsView/invoices', component: SVInvoicesComponent, data: { permission: 'StudentView' }},
                     { 

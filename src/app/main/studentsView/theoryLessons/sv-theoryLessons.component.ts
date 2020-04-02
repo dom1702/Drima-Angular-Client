@@ -43,7 +43,7 @@ export class SVTheoryLessonsComponent extends AppComponentBase implements OnInit
     loadData()
     {
         this.loadCourseSelection();
-       this.loadTheoryLessons();
+        this.loadTheoryLessons();
     }
 
     loadCourseSelection()
@@ -76,7 +76,6 @@ export class SVTheoryLessonsComponent extends AppComponentBase implements OnInit
 
     courseChanged() : void{
         this._helper.setSelectedStudentCourse(this.selectedStudentCourse);
-
         this.loadTheoryLessons();
     }
 }

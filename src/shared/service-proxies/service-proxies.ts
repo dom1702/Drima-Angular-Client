@@ -29009,6 +29009,7 @@ export interface IOnlineTheoryLessonDto {
 
 export class SectionDto implements ISectionDto {
     name!: string;
+    mandatoryTimeInMinutes!: number | undefined;
     content!: ContentDto[] | undefined;
     id!: number | undefined;
 
@@ -29024,6 +29025,7 @@ export class SectionDto implements ISectionDto {
     init(data?: any) {
         if (data) {
             this.name = data["name"];
+            this.mandatoryTimeInMinutes = data["mandatoryTimeInMinutes"];
             if (data["content"] && data["content"].constructor === Array) {
                 this.content = [] as any;
                 for (let item of data["content"])
@@ -29043,6 +29045,7 @@ export class SectionDto implements ISectionDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["mandatoryTimeInMinutes"] = this.mandatoryTimeInMinutes;
         if (this.content && this.content.constructor === Array) {
             data["content"] = [];
             for (let item of this.content)
@@ -29055,13 +29058,13 @@ export class SectionDto implements ISectionDto {
 
 export interface ISectionDto {
     name: string;
+    mandatoryTimeInMinutes: number | undefined;
     content: ContentDto[] | undefined;
     id: number | undefined;
 }
 
 export class ContentDto implements IContentDto {
     title!: string | undefined;
-    mandatoryTimeInMinutes!: number | undefined;
     singleChoice!: OTSingleChoiceDto | undefined;
     videoOnly!: OTVideoOnlyDto | undefined;
     id!: number | undefined;
@@ -29078,7 +29081,6 @@ export class ContentDto implements IContentDto {
     init(data?: any) {
         if (data) {
             this.title = data["title"];
-            this.mandatoryTimeInMinutes = data["mandatoryTimeInMinutes"];
             this.singleChoice = data["singleChoice"] ? OTSingleChoiceDto.fromJS(data["singleChoice"]) : <any>undefined;
             this.videoOnly = data["videoOnly"] ? OTVideoOnlyDto.fromJS(data["videoOnly"]) : <any>undefined;
             this.id = data["id"];
@@ -29095,7 +29097,6 @@ export class ContentDto implements IContentDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
-        data["mandatoryTimeInMinutes"] = this.mandatoryTimeInMinutes;
         data["singleChoice"] = this.singleChoice ? this.singleChoice.toJSON() : <any>undefined;
         data["videoOnly"] = this.videoOnly ? this.videoOnly.toJSON() : <any>undefined;
         data["id"] = this.id;
@@ -29105,7 +29106,6 @@ export class ContentDto implements IContentDto {
 
 export interface IContentDto {
     title: string | undefined;
-    mandatoryTimeInMinutes: number | undefined;
     singleChoice: OTSingleChoiceDto | undefined;
     videoOnly: OTVideoOnlyDto | undefined;
     id: number | undefined;
@@ -29118,6 +29118,7 @@ export class OTSingleChoiceDto implements IOTSingleChoiceDto {
     answer3!: string;
     answer4!: string;
     correctAnswer!: number;
+    imageURL!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: IOTSingleChoiceDto) {
@@ -29137,6 +29138,7 @@ export class OTSingleChoiceDto implements IOTSingleChoiceDto {
             this.answer3 = data["answer3"];
             this.answer4 = data["answer4"];
             this.correctAnswer = data["correctAnswer"];
+            this.imageURL = data["imageURL"];
             this.id = data["id"];
         }
     }
@@ -29156,6 +29158,7 @@ export class OTSingleChoiceDto implements IOTSingleChoiceDto {
         data["answer3"] = this.answer3;
         data["answer4"] = this.answer4;
         data["correctAnswer"] = this.correctAnswer;
+        data["imageURL"] = this.imageURL;
         data["id"] = this.id;
         return data; 
     }
@@ -29168,6 +29171,7 @@ export interface IOTSingleChoiceDto {
     answer3: string;
     answer4: string;
     correctAnswer: number;
+    imageURL: string | undefined;
     id: number | undefined;
 }
 

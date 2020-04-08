@@ -32,7 +32,6 @@ export class AppNavigationService {
             new AppMenuItem("TheoryPractice", 'StudentView', "flaticon-book", "/app/main/studentsView/theoryPractice"), 
             new AppMenuItem("Invoices", 'StudentView', "flaticon-book", "/app/main/studentsView/invoices"), 
             new AppMenuItem("FAQ", 'StudentView', "flaticon-search-1", "/app/main/studentsView/frequentlyAskedQuestions"), 
-            new AppMenuItem("Course", 'StudentView', "flaticon-list", "/app/main/studentsView/theoryCourse"),  
             new AppMenuItem("PlannedInstructorDL", 'InstructorView', "flaticon-book", "/app/main/studentsView/plannedDrivingLessons"),
 
             new AppMenuItem('Tenants', 'Pages.Tenants', 'flaticon-list-3', '/app/admin/tenants'),

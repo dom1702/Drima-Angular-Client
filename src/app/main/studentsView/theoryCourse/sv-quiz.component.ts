@@ -3,7 +3,7 @@ import { AppComponentBase } from "@shared/common/app-component-base";
 import { appModuleAnimation } from "@shared/animations/routerTransition";
 import { TabsetComponent, TabDirective } from "ngx-bootstrap";
 import { Observable, Subject } from "rxjs";
-import { UserLoginInfoDto, OnlineTheoryServiceProxy, PrepareOnlineTheoryLessonDto, OnlineTheoryOpeningHoursDto } from "@shared/service-proxies/service-proxies";
+import { UserLoginInfoDto, OnlineTheoryServiceProxy, PrepareOnlineTheoryLessonDto, OnlineTheoryOpeningHoursDto, StartNextOnlineTheoryLessonInput, CourseDto, OnlineTheoryLessonDto, OTSingleChoiceDto } from "@shared/service-proxies/service-proxies";
 import * as moment from 'moment';
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Message } from "primeng/api";
@@ -12,6 +12,8 @@ import { ICanComponentDeactivate } from "./sv-quiz.guard";
 import { SVQuestionComponent } from "./sv-question.component";
 import { debug } from "util";
 import { List } from "lodash";
+import { template } from "@angular/core/src/render3";
+import { StudentViewHelper } from "../studentViewHelper.component";
 
 class QuizContent {
     id : number;
@@ -56,7 +58,21 @@ class QuizSession {
 })
 
 export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestroy, ICanComponentDeactivate {
-               
+     
+    get nextOnlineLesson() : OnlineTheoryLessonDto {
+        return this._nextOnlineLesson;
+    }
+    set nextOnlineLesson(value : OnlineTheoryLessonDto) {
+        if(value != null)
+        {
+            this._nextOnlineLesson = value;
+            this.createQuiz();
+            this.enableQuizPart(0);
+        }
+    }
+
+    _nextOnlineLesson: OnlineTheoryLessonDto;
+    
     dummyData : Quiz = {
         quizTitle: 'TestQuiz 1',
         pages: 3,
@@ -167,20 +183,30 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     openingTime: moment.Moment;
     quizAborted : boolean;
     quizFinished : boolean = false;
-
+    
     get isClosed(): boolean {
         let x = moment().isBetween(this.openingTime, this.closingTime);
         return !x;      
     }
 
-    constructor(injector: Injector, private sanitizer : DomSanitizer, private router : Router, private _onlineTheoryService : OnlineTheoryServiceProxy) 
+    get sheetNumber() : number {
+        if(this.currentSession != null)
+            return this.currentSession.quiz.sheets.length;
+        else
+            return 0;
+    }
+
+    constructor(injector: Injector,          
+        private router : Router, 
+        private _onlineTheoryService : OnlineTheoryServiceProxy,
+        private _helper : StudentViewHelper) 
     {
         super(injector);
     }
 
     ngOnInit(): void {     
         this.quizAborted = true; 
-        this.quizFinished = false;    
+        this.quizFinished = false;   
         /*this.createQuiz(); 
         this.closingTime = moment().locale(moment.defaultFormat);
         this.openingTime = moment().locale(moment.defaultFormat);
@@ -220,11 +246,17 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
         }       
     }
 
-    onAbortedChanged(value : boolean) {
-        this.quizAborted = value;   
+    onAbortedChanged(value : any) {
+        console.debug("aborted changed ");
+        this.quizAborted = value[0];   
         if(this.quizAborted == false) 
-        {      
-            this.enableQuizPart(0);
+        {
+            var input : StartNextOnlineTheoryLessonInput= new StartNextOnlineTheoryLessonInput();
+            input.courseId = this._helper.selectedCourse.course.id;
+            input.studentPhoneNumber = value[1];
+            console.debug("CourseID: " + input.courseId + "phn: " + input.studentPhoneNumber);
+            this.startNextOnlineTheoryLesson(input);      
+            //this.enableQuizPart(0);
         }
     }
 
@@ -273,7 +305,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             });
         }
         else { //homeTab selected
-            this.router.navigateByUrl("/app/main/studentsView/theoryCourse/quiz");
+            this.router.navigateByUrl("/app/main/studentsView/theoryLessons");
         }             
     }
 
@@ -304,22 +336,35 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             return this.navigateAwaySelection;
         }
     }
-    
-    closeQuiz() : void {  
-        this.saveQuiz();
 
-        for (let index = 0; index < this.currentSession.quiz.sheets.length; index++) {
-            this.deleteQuizData(index);           
+    startNextOnlineTheoryLesson(input: StartNextOnlineTheoryLessonInput)
+    {    
+        this._onlineTheoryService.startNextOnlineTheoryLesson(input).subscribe((result) => {
+            //this.finishId = "";
+            console.log(result);
+            this.nextOnlineLesson = result;
+        });
+    }
+    
+    closeQuiz() : void {
+        if(this.currentSession != null)  
+        {
+            this.saveQuiz();
+
+            for (let index = 0; index < this.currentSession.quiz.sheets.length; index++) {
+                this.deleteQuizData(index);           
+            }
+            this.currentSession.progress = 0; 
+            
+            for (let index = 1; index < this.tabsData.length; index++) {                      
+                this.tabsData[index].disabled = true;
+                this.changeTabState(index, "closedTab", false);                            
+            }
+                        
+            this.tabsData[0].active = true;
+            this.changeTabState(0, "selected", false);           
         }
-        this.currentSession.progress = 0; 
-        
-        for (let index = 1; index < this.tabsData.length; index++) {                      
-            this.tabsData[index].disabled = true;
-            this.changeTabState(index, "closedTab", false);                            
-        }
-                    
-        this.tabsData[0].active = true;
-        this.changeTabState(0, "selected", false);
+
         this.messages = [];
         this.quizAborted = true;
         this.quizFinished = false;
@@ -455,16 +500,43 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     createQuiz() : void {
         let quiz : QuizSession =  {
             user: this.appSession.user,
-            quiz : this.dummyData,
+            quiz : null,
             duration : 0,
             startTime: moment().locale(moment.defaultFormat),
             endTime: null,
             progress: 0
         };
 
-        this.currentSession = quiz;
+        let temp : QuizContent[] = new QuizContent[this.nextOnlineLesson.sections.length];
+        for(let index = 0; index < temp.length; index++)
+        {
+            temp[index].completed = false;
+            temp[index].id = index + 1;
+            temp[index].mandatoryTime = this.nextOnlineLesson.sections[index].content[0].mandatoryTimeInMinutes;
+            temp[index].title = this.nextOnlineLesson.sections[index].name;
 
-        for (let index = 0; index < this.currentSession.quiz.sheets.length; index++) {
+            let isVideoContent = this.nextOnlineLesson.sections[index].content.length == 1 && this.nextOnlineLesson.sections[index].content[0].videoOnly != null 
+            if(isVideoContent) // create video content
+            {               
+                temp[index].videoId = this.nextOnlineLesson.sections[index].content[0].videoOnly.videoUrl;              
+            }
+            else { //create questions content
+                temp[index].questions = new Question[this.nextOnlineLesson.sections[index].content.length];
+                for (let j = 0; j < temp[index].questions.length; j++) {
+                    temp[index].questions[j] = this.convertToQuestion(this.nextOnlineLesson.sections[index].content[j].singleChoice); 
+                }
+            }
+        }
+
+        let q : Quiz = {
+            quizTitle : this.nextOnlineLesson.predefinedTheoryLessonIdString, 
+            pages : this.nextOnlineLesson.sections.length,
+            sheets : temp
+        };
+
+        this.currentSession.quiz = q;
+
+        for (let index = 0; index < this.nextOnlineLesson.sections.length; index++) {
             this.addTabData(" " + (index + 1) + " ", 
                 index == 0 ? false : true,
                 index == 0 ? true : false,
@@ -475,6 +547,37 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
                 this.currentSession.quiz.sheets[index].videoId
             );         
         }     
+    }
+
+    convertToQuestion(question : OTSingleChoiceDto) : Question {
+        let temp : Question;
+        temp.answerAttempts = 0;
+        temp.correctAnswer = question.correctAnswer;
+        temp.pictureUrl = null; //question.
+        temp.quest = question.question;
+        let answersLength = this.getNumberOfAnswers(question);
+        temp.answerOptions.length = new String[answersLength];
+        for (let index = 0; index < answersLength; index++) {
+            if(index == 0)
+                temp.answerOptions[index] = question.answer1;
+            if(index == 1)
+                temp.answerOptions[index] = question.answer2;
+            if(index == 2)
+                temp.answerOptions[index] = question.answer3;
+            if(index == 3)
+                temp.answerOptions[index] = question.answer4;          
+        }
+        return temp;
+    }
+
+    getNumberOfAnswers(question : OTSingleChoiceDto) {
+        if(question.answer2 == null)
+            return 1;
+        else if(question.answer3 == null)
+            return 2;
+        else if(question.answer4 == null)
+            return 3;
+        else return 4;
     }
 
     deleteQuizData(tabNumber: number) {

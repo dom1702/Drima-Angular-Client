@@ -11,11 +11,11 @@
         <div class="m--space-10"></div>
 
         <span>You have to do all lesson parts in order. If you want, you can go back to watch videos again if you want to check your answers. 
-            Duration of this eLesson is at least 45 minutes and has some Parts. These parts consists of videos, tasks and questionnaires. If you 
+            Duration of this eLesson is at least 45 minutes. The parts consists of videos, tasks and questionnaires. If you 
             cancel the eLesson, it has to be done again from the start. Short internet connection breaks won't cancel the lesson.
         </span>
 
-        <p-messages severity="error" [value]="closedMessage" [closable]="false">trs</p-messages>      
+        <p-messages severity="error" [value]="closedMessage" [closable]="false"></p-messages>      
     
         <div class="m--space-10"></div>
 
@@ -55,7 +55,7 @@
             <div *ngIf="showVideoTest">
                 <div class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item"
-                        [src]="videoUrl | safeUrl"
+                        [src]="testVideoUrl | safeUrl"
                         frameborder='0'
                         allowfullscreen>
                     </iframe>      
@@ -77,18 +77,18 @@
             <div class="row">
                 <div class="col-sm-3"></div>
                 <div class="col-sm-3">
-                    <button pButton type="button"
-                        label="Start eLesson" 
+                    <button type="button"
+                        class="btn btn-primary mr-5"                       
                         [disabled]="todayOpeningHours.closed || !todayOpeningHours.closed && checked == false"
-                        (click)="disableAborted()"
-                        class="ui-button-raised">
+                        (click)="disableAborted()">
+                        Start eLesson
                     </button>
                 </div>
                 <div class="col-sm-3">
-                    <button pButton type="button"           
-                        label="Cancel"             
-                        class="ui-button-raised"
-                        routerLink="/app/main/studentsView/theoryCourse">                   
+                    <button type="button"                                          
+                        class="btn btn-primary mr-5"   
+                        routerLink="/app/main/studentsView/theoryCourse">  
+                        Cancel                 
                     </button>
                 </div>
                 <div class="col-sm-3"></div>

@@ -11,7 +11,8 @@ import { AppComponentBase } from "@shared/common/app-component-base";
 
 export class SVQuizFinishedTabComponent extends AppComponentBase {
 
-    currentLesson : string = "dummy Lesson";
+    @Input()
+    currentLesson : string;
  
     @Output() 
     loadQuiz = new EventEmitter();

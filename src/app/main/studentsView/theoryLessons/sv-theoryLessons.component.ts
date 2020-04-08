@@ -71,6 +71,7 @@ export class SVTheoryLessonsComponent extends AppComponentBase implements OnInit
         {
             abp.ui.clearBusy();
             this.theoryLessonsList = result;
+            console.log(result);
         });
     }
 

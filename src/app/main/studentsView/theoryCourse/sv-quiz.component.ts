@@ -1,9 +1,9 @@
-import { Component, ViewChild, Injector, OnInit, ViewEncapsulation, AfterViewInit, Output, OnChanges, Sanitizer, SecurityContext, Pipe, PipeTransform, ViewChildren, QueryList, OnDestroy } from "@angular/core";
+import { Component, ViewChild, Injector, OnInit, ViewEncapsulation, AfterViewInit, Output, OnChanges, Sanitizer, SecurityContext, Pipe, PipeTransform, ViewChildren, QueryList, OnDestroy, Input } from "@angular/core";
 import { AppComponentBase } from "@shared/common/app-component-base";
 import { appModuleAnimation } from "@shared/animations/routerTransition";
 import { TabsetComponent, TabDirective } from "ngx-bootstrap";
 import { Observable, Subject } from "rxjs";
-import { UserLoginInfoDto, OnlineTheoryServiceProxy, PrepareOnlineTheoryLessonDto, OnlineTheoryOpeningHoursDto, StartNextOnlineTheoryLessonInput, CourseDto, OnlineTheoryLessonDto, OTSingleChoiceDto } from "@shared/service-proxies/service-proxies";
+import { UserLoginInfoDto, OnlineTheoryServiceProxy, PrepareOnlineTheoryLessonDto, OnlineTheoryOpeningHoursDto, StartNextOnlineTheoryLessonInput, CourseDto, OnlineTheoryLessonDto, OTSingleChoiceDto, FinishOnlineTheoryLessonInput } from "@shared/service-proxies/service-proxies";
 import * as moment from 'moment';
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Message } from "primeng/api";
@@ -14,11 +14,12 @@ import { debug } from "util";
 import { List } from "lodash";
 import { template } from "@angular/core/src/render3";
 import { StudentViewHelper } from "../studentViewHelper.component";
+import { controlNameBinding } from "@angular/forms/src/directives/reactive_directives/form_control_name";
 
 class QuizContent {
     id : number;
     title: string;
-    mandatoryTime: number;
+    mandatoryTime: number; //in minutes
     videoId? : string;
     questions? : Question[];
     completed: boolean = false;
@@ -47,6 +48,7 @@ class QuizSession {
     progress: number;
     startTime: moment.Moment;
     endTime: moment.Moment;
+    predefindedQuizId : string;
 }
 
 @Component({
@@ -72,115 +74,26 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     }
 
     _nextOnlineLesson: OnlineTheoryLessonDto;
-    
-    dummyData : Quiz = {
-        quizTitle: 'TestQuiz 1',
-        pages: 3,
-        sheets: [
-        {
-            id: 0,
-            title: 'Test Video 1',
-            mandatoryTime: 2,
-            videoId: "https://player.vimeo.com/video/692568",
-            questions: null,
-            completed : false
-        },
-        {
-            id: 1,
-            title: 'Test Questions 1',
-            mandatoryTime: 2,
-            videoId: null,
-            questions : [{
-                quest: 'Complete the row: ABC',
-                nr : 0,
-                answerOptions : ['F', 'X', 'D'] ,
-                correctAnswer : 2,
-                selectedAnswer : null,
-                answerAttempts : 0        
-            },
-            {              
-                quest: 'Add 2 to 16',
-                nr : 1,
-                answerOptions : ['14', '18', '216'],
-                correctAnswer : 1,
-                selectedAnswer : null,
-                answerAttempts : 0 
-            },
-            {               
-                quest: 'the glas is.. ',
-                nr : 2,
-                pictureUrl : "http://www.dadsonline.com.au/wp-content/uploads/glass-half-full.jpeg",
-                answerOptions : ['Half-full', 'Half-empty', 'either or!'],
-                correctAnswer : 2  ,
-                selectedAnswer : null,
-                answerAttempts : 0       
-            }
-            ], 
-            completed: false 
-              
-        },
-        {
-            id: 2,
-            title: 'Test Video 2',
-            mandatoryTime: 2,
-            videoId: "https://player.vimeo.com/video/692568",
-            questions: null,
-            completed: false
-        },
-        {
-            id: 3,
-            title: 'Test Video NEXT',
-            mandatoryTime: 2,
-            videoId: "https://player.vimeo.com/video/692568",
-            questions: null,
-            completed: false
-        },
-        {
-            id: 4,
-            title: 'Test Vid ULTRA',
-            mandatoryTime: 2,
-            videoId: "https://player.vimeo.com/video/692568",
-            questions: null,
-            completed: false
-        }
-        ]
-    };
-
-    dummyOpeningHours : number[] = [
-        9,
-        10,
-        11, 
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18
-    ]
-    
-    dummyOpeningDays : number[] = [
-       1,2,3,4,5
-    ]
-                      
+                
     @ViewChild('quizTabs')
     quizTabs : TabsetComponent;
 
     @ViewChildren('questions')
     questions : QueryList<SVQuestionComponent>;
-   
+
+    todayOpeningHours : PrepareOnlineTheoryLessonDto;
+    closingTime : moment.Moment;
+    openingTime: moment.Moment; 
     navigateAwaySelection: Subject<boolean> = new Subject<boolean>();
 
     homeTab : TabDirective;
-    //startTab : TabDirective;
 
     tabsData : any[] = []; // read data from dummyData into a struct that can be red by the template
     messages: Message[] = [];
 
     currentSession : QuizSession = null;
     currentTimer : number = Number.MAX_VALUE;
-    closingTime : moment.Moment;
-    openingTime: moment.Moment;
+
     quizAborted : boolean;
     quizFinished : boolean = false;
     
@@ -206,36 +119,17 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
 
     ngOnInit(): void {     
         this.quizAborted = true; 
-        this.quizFinished = false;   
-        /*this.createQuiz(); 
-        this.closingTime = moment().locale(moment.defaultFormat);
+        this.quizFinished = false;        
+        /*this.closingTime = moment().locale(moment.defaultFormat);
         this.openingTime = moment().locale(moment.defaultFormat);
-        this.closingTime.set("hour", 13);
-        this.closingTime.set("second", 0);
-        this.closingTime.set("minute", 0);
-        this.openingTime.set("hour", 8);
-        this.openingTime.set("second", 0);
-        this.openingTime.set("minute", 0);
-        //console.debug("current time: " + moment().format() + 
-        //    "| closing: " + this.closingTime.format()  + 
-        //    "| opening: " + this.openingTime.format() );
-        */  
-       
+        this.closingTime.set("hour", 13);*/      
     }
-
-    // ngAfterViewInit(): void {
-    //     this.homeTab = this.quizTabs.tabs[0]; 
-    //     // this.startTab = this.quizTabs.tabs[0];  
-    //     this.quizTabs.tabs.splice(0,1);
-    //     this.quizTabs.tabs.push(this.homeTab);               
-    // }
 
     ngOnDestroy() : void {
-        console.log("call on destroy");
-        this.closeQuiz();
+        this.resetQuizData();
     }
 
-    onSelect(data : TabDirective) : void {        
+    onSelect(data : TabDirective) : void {       
         var tabNumber = parseInt(data.id);
         if(tabNumber != NaN)
         {
@@ -246,23 +140,22 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
         }       
     }
 
-    onAbortedChanged(value : any) {
-        console.debug("aborted changed ");
-        this.quizAborted = value[0];   
+    onQuizStart(value : any) {       
+        this.quizAborted = value[0];  
+        this.closingTime = value[2];
+        this.openingTime = value[3] 
+        
         if(this.quizAborted == false) 
         {
             var input : StartNextOnlineTheoryLessonInput= new StartNextOnlineTheoryLessonInput();
             input.courseId = this._helper.selectedCourse.course.id;
-            input.studentPhoneNumber = value[1];
-            console.debug("CourseID: " + input.courseId + "phn: " + input.studentPhoneNumber);
-            this.startNextOnlineTheoryLesson(input);      
-            //this.enableQuizPart(0);
+            input.studentPhoneNumber = value[1];           
+            this.startNextOnlineTheoryLesson(input);
         }
     }
 
-    onContinueLesson() {
-       console.log("continue with next quiz");
-       this.closeQuiz();      
+    onContinueLesson() {       
+        this.resetQuizData();      
     }
 
     startTabSelected() {
@@ -299,17 +192,19 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
         {
             this.message.confirm('Do you really want to end?', "Progress will be lost.",
             (isConfirmed) => {
-                if (isConfirmed) {           
-                    this.closeQuiz(); 
+                if (isConfirmed) {  
+                    this.finishQuiz(true);         
+                    this.resetQuizData();                    
                 }                 
             });
         }
-        else { //homeTab selected
+        else { //homeTab selected          
             this.router.navigateByUrl("/app/main/studentsView/theoryLessons");
         }             
     }
 
-    onValueSelected(questionParam : any) : void{       
+    onValueSelected(questionParam : any) : void{         
+        //console.log("hit answer: " + questionParam.qNr + " answer: " + questionParam.answer);    
         this.currentSession.quiz.sheets[this.currentSession.progress].
             questions[questionParam.qNr].selectedAnswer = questionParam.answer;
         this.currentSession.quiz.sheets[this.currentSession.progress].
@@ -325,8 +220,9 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             this.message.confirm('Discard answers from this sheet?',
                 (isConfirmed) => {
                     if (isConfirmed) {
-                        this.navigateAwaySelection.next(isConfirmed);
-                        this.closeQuiz(); 
+                        this.finishQuiz(true);
+                        this.resetQuizData(); 
+                        this.navigateAwaySelection.next(isConfirmed);                       
                     }
                     else {
                         this.homeTab.active = false;
@@ -340,21 +236,86 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     startNextOnlineTheoryLesson(input: StartNextOnlineTheoryLessonInput)
     {    
         this._onlineTheoryService.startNextOnlineTheoryLesson(input).subscribe((result) => {
-            //this.finishId = "";
-            console.log(result);
+            console.log("get result from server: " + result);
             this.nextOnlineLesson = result;
         });
     }
-    
-    closeQuiz() : void {
-        if(this.currentSession != null)  
-        {
-            this.saveQuiz();
 
+    finishOnlineTheoryLesson(input : FinishOnlineTheoryLessonInput)
+    {        
+        this._onlineTheoryService.finishOnlineTheoryLesson(input).subscribe(() => {          
+        });
+    }
+
+    createQuiz() : void {
+        let newSession : QuizSession =  {
+            user: this.appSession.user,
+            quiz : null,
+            duration : 0,
+            startTime: moment().locale(moment.defaultFormat),
+            endTime: null,
+            progress: 0,
+            predefindedQuizId : null
+        };
+
+        this.currentSession = newSession;
+
+        let temp : QuizContent[] = [];       
+        for(let i = 0; i < this.nextOnlineLesson.sections.length; i++)
+        {
+            let content : QuizContent = new QuizContent();                   
+            content.completed = false;
+            content.id = i;
+            content.mandatoryTime = this.nextOnlineLesson.sections[i].mandatoryTimeInMinutes;
+            content.title = this.nextOnlineLesson.sections[i].name;
+
+            let isVideoContent = this.nextOnlineLesson.sections[i].content.length == 1 && this.nextOnlineLesson.sections[i].content[0].videoOnly != null 
+            if(isVideoContent) // create video content
+            {               
+                content.videoId = this.nextOnlineLesson.sections[i].content[0].videoOnly.videoUrl;              
+            }
+            else { //create questions content        
+                let tempQuestions : Question[] = []
+                //console.log("number of received questions: " + this.nextOnlineLesson.sections[i].content.length);
+                for (let j = 0; j < this.nextOnlineLesson.sections[i].content.length; j++) {
+                    let tempQuest = this.convertToQuestion(this.nextOnlineLesson.sections[i].content[j].singleChoice); 
+                    tempQuest.nr = j;
+                    tempQuestions.push(tempQuest);
+                }
+                content.questions = tempQuestions;
+            }
+            temp.push(content);                      
+        }
+
+        let q : Quiz = {
+            quizTitle : this.nextOnlineLesson.predefinedTheoryLessonIdString, 
+            pages : this.nextOnlineLesson.sections.length,
+            sheets : temp
+        };
+
+        this.currentSession.quiz = q;
+        this.currentSession.predefindedQuizId = this.nextOnlineLesson.predefinedTheoryLessonIdString;
+
+        for (let index = 0; index < this.currentSession.quiz.sheets.length; index++) {
+            this.addTabData(" " + (index + 1) + " ", 
+                index == 0 ? false : true,
+                index == 0 ? true : false,
+                this.currentSession.quiz.sheets[index].id.toString(),
+                this.currentSession.quiz.sheets[index].title, 
+                this.currentSession.quiz.sheets[index].mandatoryTime,
+                this.currentSession.quiz.sheets[index].questions,
+                this.currentSession.quiz.sheets[index].videoId
+            );         
+        }     
+    }
+   
+    resetQuizData() : void {
+        if(this.currentSession != null)  
+        {           
             for (let index = 0; index < this.currentSession.quiz.sheets.length; index++) {
                 this.deleteQuizData(index);           
             }
-            this.currentSession.progress = 0; 
+            this.currentSession = null;
             
             for (let index = 1; index < this.tabsData.length; index++) {                      
                 this.tabsData[index].disabled = true;
@@ -365,17 +326,30 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             this.changeTabState(0, "selected", false);           
         }
 
+        this.tabsData = [];
         this.messages = [];
         this.quizAborted = true;
         this.quizFinished = false;
     }
 
-    updateQuiz() : void {
+    finishQuiz(quizCanceld: boolean) {
+        this.currentSession.endTime = moment().locale(moment.defaultFormat);
+        let x = moment.duration(this.currentSession.endTime.diff(this.currentSession.startTime)); 
+        this.currentSession.duration = x.get("seconds");
+        
+        let input : FinishOnlineTheoryLessonInput = new FinishOnlineTheoryLessonInput();
+        input.predefinedTheoryLessonIdString = this.currentSession.predefindedQuizId;
+        input.canceled = quizCanceld;
+        this.finishOnlineTheoryLesson(input);
+        //this.debugSavedQuizData();
+    }
+
+    updateQuizProgress() : void {
         if(this.currentSession.quiz.sheets[this.currentSession.progress].questions != null && 
             !this.sheetCompleted(this.currentSession.quiz.sheets[this.currentSession.progress]))
         {
             //console.log("sheet not completed yet " + this.currentTimer.toString());
-            this.showMessage("Sheet not completed yet.", 'You need to answer all questions!');
+            this.showMessage("Sheet not completed yet.", 'You need to answer all questions correctly!');
         }
         else if(this.currentTimer > 0)
         {
@@ -388,7 +362,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             this.enableQuizPart(this.currentSession.progress+1);
         }    
     }
-
+     
     sheetCompleted(sheet: QuizContent) : boolean {
         if(sheet.questions != null)
         {
@@ -399,14 +373,6 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             return true;
         }
         return false;      
-    }
-
-    saveQuiz() {
-        this.currentSession.endTime = moment().locale(moment.defaultFormat);
-        let x = moment.duration(this.currentSession.endTime.diff(this.currentSession.startTime)); 
-        this.currentSession.duration = x.get("seconds");
-        //send information to server...
-        this.debugSavedQuizData();
     }
 
     enableQuizPart(numberOfTab : number) {       
@@ -426,6 +392,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             {                                           
                 this.tabsData[this.currentSession.progress].active = true; 
                 this.quizFinished = true;
+                this.finishQuiz(false);
                 return;
             }                                              
         }
@@ -484,7 +451,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     }
 
     startTimer(timerValue : number) {        
-        this.currentTimer = timerValue;
+        this.currentTimer = 1; //(timerValue * 60);
         let intervalId = setInterval(() => {
             this.currentTimer = this.currentTimer - 1;
             if(this.currentTimer === 0) clearInterval(intervalId)           
@@ -496,77 +463,28 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
         this.messages = [];
         this.messages.push({severity: 'error', summary: _summary, detail: _details })
     }
- 
-    createQuiz() : void {
-        let quiz : QuizSession =  {
-            user: this.appSession.user,
-            quiz : null,
-            duration : 0,
-            startTime: moment().locale(moment.defaultFormat),
-            endTime: null,
-            progress: 0
-        };
-
-        let temp : QuizContent[] = new QuizContent[this.nextOnlineLesson.sections.length];
-        for(let index = 0; index < temp.length; index++)
-        {
-            temp[index].completed = false;
-            temp[index].id = index + 1;
-            temp[index].mandatoryTime = this.nextOnlineLesson.sections[index].content[0].mandatoryTimeInMinutes;
-            temp[index].title = this.nextOnlineLesson.sections[index].name;
-
-            let isVideoContent = this.nextOnlineLesson.sections[index].content.length == 1 && this.nextOnlineLesson.sections[index].content[0].videoOnly != null 
-            if(isVideoContent) // create video content
-            {               
-                temp[index].videoId = this.nextOnlineLesson.sections[index].content[0].videoOnly.videoUrl;              
-            }
-            else { //create questions content
-                temp[index].questions = new Question[this.nextOnlineLesson.sections[index].content.length];
-                for (let j = 0; j < temp[index].questions.length; j++) {
-                    temp[index].questions[j] = this.convertToQuestion(this.nextOnlineLesson.sections[index].content[j].singleChoice); 
-                }
-            }
-        }
-
-        let q : Quiz = {
-            quizTitle : this.nextOnlineLesson.predefinedTheoryLessonIdString, 
-            pages : this.nextOnlineLesson.sections.length,
-            sheets : temp
-        };
-
-        this.currentSession.quiz = q;
-
-        for (let index = 0; index < this.nextOnlineLesson.sections.length; index++) {
-            this.addTabData(" " + (index + 1) + " ", 
-                index == 0 ? false : true,
-                index == 0 ? true : false,
-                this.currentSession.quiz.sheets[index].id.toString(),
-                this.currentSession.quiz.sheets[index].title, 
-                this.currentSession.quiz.sheets[index].mandatoryTime,
-                this.currentSession.quiz.sheets[index].questions,
-                this.currentSession.quiz.sheets[index].videoId
-            );         
-        }     
-    }
-
+   
     convertToQuestion(question : OTSingleChoiceDto) : Question {
-        let temp : Question;
+        let temp : Question = new Question();
         temp.answerAttempts = 0;
-        temp.correctAnswer = question.correctAnswer;
-        temp.pictureUrl = null; //question.
+        temp.correctAnswer = question.correctAnswer-1;
+        temp.pictureUrl = question.imageURL != null ? question.imageURL : null;
         temp.quest = question.question;
         let answersLength = this.getNumberOfAnswers(question);
-        temp.answerOptions.length = new String[answersLength];
+        let answers : string[] = [];
         for (let index = 0; index < answersLength; index++) {
+            let tempAnswer : string = "";
             if(index == 0)
-                temp.answerOptions[index] = question.answer1;
+                tempAnswer = question.answer1;
             if(index == 1)
-                temp.answerOptions[index] = question.answer2;
+                tempAnswer = question.answer2;
             if(index == 2)
-                temp.answerOptions[index] = question.answer3;
+                tempAnswer = question.answer3;
             if(index == 3)
-                temp.answerOptions[index] = question.answer4;          
+                tempAnswer = question.answer4; 
+            answers.push(tempAnswer);            
         }
+        temp.answerOptions = answers;
         return temp;
     }
 
@@ -596,7 +514,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     debugSavedQuizData() {
         console.log("Debug saved work: " + this.currentSession.quiz.quizTitle);
         console.log("duration: " + this.currentSession.duration);
-        console.log("start time: " + this.currentSession.startTime.format("HH.mm.ss") + "   endTime: " + this.currentSession.endTime.format("HH.mm.ss") );
+        //console.log("start time: " + this.currentSession.startTime.format("HH.mm.ss") + "   endTime: " + this.currentSession.endTime.format("HH.mm.ss") );
         console.log("sheets: ");
         for (let index = 0; index < this.currentSession.quiz.sheets.length; index++) {
             console.log(" sheet nr: " + index +"  completed: " + this.currentSession.quiz.sheets[index].completed);
@@ -606,6 +524,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
                 console.log("questions");
                 for (let j = 0; j < this.currentSession.quiz.sheets[index].questions.length; j++) {
                     console.log("question: " + this.currentSession.quiz.sheets[index].questions[j].quest);
+                    console.log("correct answer: " + this.currentSession.quiz.sheets[index].questions[j].correctAnswer);
                     console.log("answer: " + this.currentSession.quiz.sheets[index].questions[j].selectedAnswer);
                     console.log("attempts: " + this.currentSession.quiz.sheets[index].questions[j].answerAttempts);
                 }              

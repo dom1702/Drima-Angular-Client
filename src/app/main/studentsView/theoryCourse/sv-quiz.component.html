@@ -44,7 +44,7 @@
                                 </ng-template>                                                               
                             </tab> -->
 
-                            <div *ngIf="isClosed || quizAborted || quizFinished; then emptyTabs else quizTabs"></div>
+                            <div *ngIf="quizAborted || quizFinished; then emptyTabs else quizTabs"></div>
                             <ng-template #emptyTabs>                
                                 <tab *ngFor="let tab of tabsData; index as i;" [disabled]="tab.disabled" [id]="tab.id" [active]="tab.active">
                                     <div class="row">
@@ -83,16 +83,17 @@
 
                                 <div *ngIf="quizFinished; then finishedPage else closedPage"></div>
                                 <ng-template  #finishedPage>
-                                    <finishedTab (loadQuiz) = onContinueLesson()></finishedTab>
+                                    <finishedTab 
+                                        (loadQuiz) = onContinueLesson()
+                                        [currentLesson]= currentSession.predefindedQuizId></finishedTab>
                                 </ng-template>
                                 <ng-template #closedPage>
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <closedTab                                
-                                                [closingTime] = closingTime
                                                 [aborted] = quizAborted
                                                 [quizParts] = sheetNumber
-                                                (abortedChanged) = onAbortedChanged($event)>
+                                                (quizMayStart) = onQuizStart($event)>
                                             </closedTab>  
                                         </div>
                                     </div>
@@ -105,12 +106,12 @@
                                                                      
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <span>Lesson room closes at {{closingTime.format("HH.ss")}} </span>
+                                            <span>Lesson room closes at {{closingTime.format("HH.mm")}} </span>
                                         </div>
                                         
                                         <div class="col-sm-6">
                                             <span>Mandatory minimum time for this part:
-                                                {{getTimeInMinutes(tab.mandatoryTime)}} </span>
+                                                {{tab.mandatoryTime}} minutes </span>
                                         </div>
                                         <div class="col-sm-12">
                                             <h3 class="m-portlet__head-text">
@@ -168,10 +169,10 @@
                                                     </question>                                                                                                  
                                             </ng-template>
                                         
-                                            <button *ngIf="!quizAborted && !quizFinished" pButton type="button" 
-                                                label="Save" 
-                                                (click)="updateQuiz()"
-                                                class="ui-button-raised">
+                                            <button *ngIf="!quizAborted && !quizFinished" type="button"                                            
+                                                (click)="updateQuizProgress()"
+                                                class="btn btn-primary mr-5">
+                                                Save
                                             </button>
                                             <p-messages [(value)]="messages" [closable]="true"></p-messages>
                                         </div>
@@ -296,7 +297,7 @@
                                 <ng-template tabHeading>                                                                
                                     <div *ngIf="quizAborted; then homeBlock else cancelBlock"></div> 
                                     <ng-template #homeBlock>
-                                        <button class="defaultNavButton" routerLink="/app/main/studentsView/theoryCourse/">
+                                        <button class="defaultNavButton" routerLink="/app/main/studentsView/theoryLessons/">
                                             <span class="flaticon-logout"></span>
                                             <h6>Home</h6>
                                         </button> 

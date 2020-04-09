@@ -1,0 +1,43 @@
+<div [@routerTransition]>
+    <div class="m-subheader">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-md-12">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("TheoryExamPractice")}}</span>
+                </h3>
+                <span class="m-section__sub">
+                    {{l("ChooseDrivingClass")}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <h4 class="m-portlet__head-text">
+                    Welcome to Drima theory exam practice. Start by choosing driving class.
+                </h4>
+
+                <div class="m--space-10"></div>
+
+                <div >
+                    <div *ngIf="licenseClasses" class="row">                                     
+                        <p-card *ngFor="let license of licenseClasses" [style]="{width:'250px', height:'200px'}" class="align-items-center">                           
+                            <div style="text-align:center;">
+                                <div>
+                                    <img src={{license.pictureUrl}} style="width:64;height:64;"/>
+                                </div>
+                                <div>
+                                    <h3>{{license.title}}</h3>
+                                    <h5>{{license.description}}</h5>                                         
+                                </div> 
+                            </div>                          
+                        </p-card>                                                    
+                    </div> 
+                </div>              
+            </div>
+        </div>
+
+      
+    </div>
+</div>

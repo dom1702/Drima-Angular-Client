@@ -1,9 +1,10 @@
-import { Component, ViewEncapsulation, Input, Injector, OnInit, Output, EventEmitter} from "@angular/core";
+import { Component, ViewEncapsulation, Input, Injector, OnInit, Output, EventEmitter, AfterViewInit} from "@angular/core";
 import { appModuleAnimation } from "@shared/animations/routerTransition";
 import * as moment from 'moment';
 import {Message, MessageService} from 'primeng//api';
 import { AppComponentBase } from "@shared/common/app-component-base";
-import { OnlineTheoryOpeningHoursDto, OnlineTheoryServiceProxy } from "@shared/service-proxies/service-proxies";
+import { OnlineTheoryOpeningHoursDto, OnlineTheoryServiceProxy, PrepareOnlineTheoryLessonDto } from "@shared/service-proxies/service-proxies";
+import { outputs } from "@syncfusion/ej2-angular-inputs/src/textbox/textbox.component";
 
 @Component({
     templateUrl: './sv-quiz-closedTab.component.html',
@@ -22,16 +23,17 @@ export class SVQuizClosedTabComponent extends AppComponentBase implements OnInit
     showVideoTest : boolean = false;
 
     _aborted : boolean;
-    studentPhoneNumber: number = 123456;
     checked : boolean = false;
     videoUrl : string = "https://player.vimeo.com/video/692568";
 
-    currentOpeningHours: OnlineTheoryOpeningHoursDto;
     upcomingOpeningHours: OnlineTheoryOpeningHoursDto[];
-    currentDaysOfWeek: string[];
+    _todayOpeningHours : PrepareOnlineTheoryLessonDto;
 
     @Output() 
     abortedChanged = new EventEmitter();
+
+    @Output()
+    studentPhoneNumber: number = 123456;
 
     @Input() 
     quizParts : number;
@@ -43,9 +45,6 @@ export class SVQuizClosedTabComponent extends AppComponentBase implements OnInit
     openingDays : moment.Moment[];
 
     @Input()
-    closed : boolean;
-
-    @Input()
     get aborted() : boolean {
         return this._aborted;
     };
@@ -53,7 +52,27 @@ export class SVQuizClosedTabComponent extends AppComponentBase implements OnInit
         if(value != this._aborted)
         {
             this._aborted = value;       
-            this.abortedChanged.emit(this._aborted);
+            this.abortedChanged.emit([this._aborted, this.studentPhoneNumber.toString()]);
+        }
+    }
+
+    get todayOpeningHours() : PrepareOnlineTheoryLessonDto {
+        return this._todayOpeningHours;
+    };
+    set todayOpeningHours(value : PrepareOnlineTheoryLessonDto) {
+        if(value != null)
+        {
+            let temp = [value.day2OpeningHours, 
+                value.day3OpeningHours, 
+                value.day4OpeningHours, 
+                value.day5OpeningHours, 
+                value.day6OpeningHours, 
+                value.day7OpeningHours];
+            this.upcomingOpeningHours = temp;
+            this.studentPhoneNumber = Number.parseInt(value.studentPhoneDefault);
+            this._todayOpeningHours = value;
+
+            this.showOpeningHourMessages();
         }
     }
 
@@ -88,31 +107,25 @@ export class SVQuizClosedTabComponent extends AppComponentBase implements OnInit
     }
 
     ngOnInit(): void {
-        //console.log("cl: " + this.closed + "  ch: " + this.checked); 
-        this.currentDaysOfWeek = [moment().format('D'), 
-            moment().set('day', 1).format('D'), 
-            moment().set('day', 2).format('D'), 
-            moment().set('day', 3).format('D'), 
-            moment().set('day', 4).format('D'), 
-            moment().set('day', 5).format('D'),
-            moment().set('day', 6).format('D')];
-
+        this.prepareLessonStart();    
         if(this.aborted)
             this.show("error", "The eLesson has been cancelled and has to be started again.", this.abortedMessage);
         else
-            this.abortedMessage = [];
-
-        if(this.currentOpeningHours.closed)
-        {
-            this.show("error", "The lesson room is closed.", this.closedMessage);
-        }
-        else this.show("info", "The Drima control room is open today " +  this.currentOpeningHours.opening + ".", this.closedMessage);      
-   
-        this.show("info", "eLesson requirements", this.requirementMessage, "The control room has to be able to contact you when needed. Check the number below and change it if needed. Check that the WhatsApp application is installed and running in the number below. The device, you are using for this eLesson, supports the media in it and the video format");
+            this.abortedMessage = [];         
     }
 
     show(intention: string, message : string, msg : Message[], detail? : string) {
         msg.push({severity: intention, summary: message, detail: detail != null ? detail : ""});
+    }
+
+    showOpeningHourMessages() {
+        if(this.todayOpeningHours.closed)
+            {
+                this.show("error", "The lesson room is closed.", this.closedMessage);
+            }
+            else this.show("info", "The Drima control room is open today " +  this.todayOpeningHours.currentDayOpeningHours.opening + ".", this.closedMessage);      
+    
+            this.show("info", "eLesson requirements", this.requirementMessage, "The control room has to be able to contact you when needed. Check the number below and change it if needed. Check that the WhatsApp application is installed and running in the number below. The device, you are using for this eLesson, supports the media in it and the video format");   
     }
 
     showToastError(sum: string, det? : string) {
@@ -124,10 +137,8 @@ export class SVQuizClosedTabComponent extends AppComponentBase implements OnInit
         this.messageService.clear('toast')
     }
 
-    disableAborted() {
-        let bfClosing = this.closingTime.clone().subtract(1 ,"hours");
-               
-        if(moment().isBetween(bfClosing, this.closingTime))
+    disableAborted() {                  
+        if(false) // !this.todayOpeningHours.mayStart
         {     
             this.showToastError("lesson room closes soon!", "try again tomorrow.")      
         }
@@ -138,10 +149,19 @@ export class SVQuizClosedTabComponent extends AppComponentBase implements OnInit
 
     prepareLessonStart()
     {
-        this._onlineTheoryService.prepareLessonStart().subscribe((result) => {
-            this.currentOpeningHours = result.currentDayOpeningHours;
-            let temp = [result.day2OpeningHours, result.day3OpeningHours, result.day4OpeningHours, result.day5OpeningHours, result.day6OpeningHours, result.day7OpeningHours];
-            this.upcomingOpeningHours = temp;
+        this._onlineTheoryService.prepareLessonStart().subscribe((result) => {            
+            this.todayOpeningHours = result;                    
+            //console.log(this.todayOpeningHours);
         });
+    }
+
+    getNextDayName(dayCount : number) : string{
+        dayCount+=1;
+        if(dayCount < 0 || dayCount > 7)
+            moment().format('dddd');
+        else
+        {
+           return moment().add('day', dayCount).format('dddd')
+        }
     }
 }

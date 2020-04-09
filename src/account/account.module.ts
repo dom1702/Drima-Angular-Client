@@ -36,6 +36,8 @@ import { TenantChangeModalComponent } from './shared/tenant-change-modal.compone
 import { TenantChangeComponent } from './shared/tenant-change.component';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { PaymentHelperService } from './payment/payment-helper.service';
+import { EnrollmentComponent } from './enrollment/enrollment.component';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @NgModule({
     imports: [
@@ -50,7 +52,8 @@ import { PaymentHelperService } from './payment/payment-helper.service';
         UtilsModule,
         ServiceProxyModule,
         AccountRoutingModule,
-        OAuthModule.forRoot()
+        OAuthModule.forRoot(),
+        TabsModule.forRoot()
     ],
     declarations: [
         AccountComponent,
@@ -74,7 +77,8 @@ import { PaymentHelperService } from './payment/payment-helper.service';
         PayPalPurchaseComponent,
         StripePurchaseComponent,
         StripeSubscribeComponent,
-        StripeUpdateSubscriptionComponent
+        StripeUpdateSubscriptionComponent,
+        EnrollmentComponent
     ],
     providers: [
         LoginService,

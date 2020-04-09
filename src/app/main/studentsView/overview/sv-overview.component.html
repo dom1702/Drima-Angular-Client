@@ -59,12 +59,15 @@
                         <div class="m--margin-top-20">
                             <div class="row">
                                 <div class="col-6" *ngFor="let ptl of theoryLessons; index as i">
-                                    <div *ngIf="ptl.isDone" class="text-center"><i class="fa fa-check-circle m--font-success"
+                                    <div *ngIf="ptl.currentState === 0" class="text-center"><i class="fa fa-times-circle"
                                             title="True"></i><label>&nbsp;{{ptl.name}}</label></div>
-                                    <div *ngIf="!ptl.isDone && !ptl.isRunning" class="text-center"><i
-                                            class="fa fa-times-circle m--font-danger"
+                                    <div *ngIf="ptl.currentState === 1" class="text-center"><i class="fa fa-spinner"
                                             title="False"></i><label>&nbsp;{{ptl.name}}</label></div>
-                                    <div *ngIf="!ptl.isDone && ptl.isRunning" class="text-center"><i class="fa fa-spinner m--font-info"
+                                    <div *ngIf="ptl.currentState === 2" class="text-center"><i
+                                            class="fa fa-check-circle m--font-success"
+                                            title="False"></i><label>&nbsp;{{ptl.name}}</label></div>
+                                    <div *ngIf="ptl.currentState === 3" class="text-center"><i
+                                            class="fa fa-times-circle m--font-danger"
                                             title="False"></i><label>&nbsp;{{ptl.name}}</label></div>
                                 </div>
                             </div>

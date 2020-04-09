@@ -29009,6 +29009,7 @@ export interface IOnlineTheoryLessonDto {
 
 export class SectionDto implements ISectionDto {
     name!: string;
+    mandatoryTimeInMinutes!: number | undefined;
     content!: ContentDto[] | undefined;
     id!: number | undefined;
 
@@ -29024,6 +29025,7 @@ export class SectionDto implements ISectionDto {
     init(data?: any) {
         if (data) {
             this.name = data["name"];
+            this.mandatoryTimeInMinutes = data["mandatoryTimeInMinutes"];
             if (data["content"] && data["content"].constructor === Array) {
                 this.content = [] as any;
                 for (let item of data["content"])
@@ -29043,6 +29045,7 @@ export class SectionDto implements ISectionDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["mandatoryTimeInMinutes"] = this.mandatoryTimeInMinutes;
         if (this.content && this.content.constructor === Array) {
             data["content"] = [];
             for (let item of this.content)
@@ -29055,13 +29058,13 @@ export class SectionDto implements ISectionDto {
 
 export interface ISectionDto {
     name: string;
+    mandatoryTimeInMinutes: number | undefined;
     content: ContentDto[] | undefined;
     id: number | undefined;
 }
 
 export class ContentDto implements IContentDto {
     title!: string | undefined;
-    mandatoryTimeInMinutes!: number | undefined;
     singleChoice!: OTSingleChoiceDto | undefined;
     videoOnly!: OTVideoOnlyDto | undefined;
     id!: number | undefined;
@@ -29078,7 +29081,6 @@ export class ContentDto implements IContentDto {
     init(data?: any) {
         if (data) {
             this.title = data["title"];
-            this.mandatoryTimeInMinutes = data["mandatoryTimeInMinutes"];
             this.singleChoice = data["singleChoice"] ? OTSingleChoiceDto.fromJS(data["singleChoice"]) : <any>undefined;
             this.videoOnly = data["videoOnly"] ? OTVideoOnlyDto.fromJS(data["videoOnly"]) : <any>undefined;
             this.id = data["id"];
@@ -29095,7 +29097,6 @@ export class ContentDto implements IContentDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
-        data["mandatoryTimeInMinutes"] = this.mandatoryTimeInMinutes;
         data["singleChoice"] = this.singleChoice ? this.singleChoice.toJSON() : <any>undefined;
         data["videoOnly"] = this.videoOnly ? this.videoOnly.toJSON() : <any>undefined;
         data["id"] = this.id;
@@ -29105,7 +29106,6 @@ export class ContentDto implements IContentDto {
 
 export interface IContentDto {
     title: string | undefined;
-    mandatoryTimeInMinutes: number | undefined;
     singleChoice: OTSingleChoiceDto | undefined;
     videoOnly: OTVideoOnlyDto | undefined;
     id: number | undefined;
@@ -29118,6 +29118,7 @@ export class OTSingleChoiceDto implements IOTSingleChoiceDto {
     answer3!: string;
     answer4!: string;
     correctAnswer!: number;
+    imageURL!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: IOTSingleChoiceDto) {
@@ -29137,6 +29138,7 @@ export class OTSingleChoiceDto implements IOTSingleChoiceDto {
             this.answer3 = data["answer3"];
             this.answer4 = data["answer4"];
             this.correctAnswer = data["correctAnswer"];
+            this.imageURL = data["imageURL"];
             this.id = data["id"];
         }
     }
@@ -29156,6 +29158,7 @@ export class OTSingleChoiceDto implements IOTSingleChoiceDto {
         data["answer3"] = this.answer3;
         data["answer4"] = this.answer4;
         data["correctAnswer"] = this.correctAnswer;
+        data["imageURL"] = this.imageURL;
         data["id"] = this.id;
         return data; 
     }
@@ -29168,6 +29171,7 @@ export interface IOTSingleChoiceDto {
     answer3: string;
     answer4: string;
     correctAnswer: number;
+    imageURL: string | undefined;
     id: number | undefined;
 }
 
@@ -29213,6 +29217,7 @@ export interface IOTVideoOnlyDto {
 
 export class FinishOnlineTheoryLessonInput implements IFinishOnlineTheoryLessonInput {
     predefinedTheoryLessonIdString!: string | undefined;
+    canceled!: boolean | undefined;
 
     constructor(data?: IFinishOnlineTheoryLessonInput) {
         if (data) {
@@ -29226,6 +29231,7 @@ export class FinishOnlineTheoryLessonInput implements IFinishOnlineTheoryLessonI
     init(data?: any) {
         if (data) {
             this.predefinedTheoryLessonIdString = data["predefinedTheoryLessonIdString"];
+            this.canceled = data["canceled"];
         }
     }
 
@@ -29239,12 +29245,14 @@ export class FinishOnlineTheoryLessonInput implements IFinishOnlineTheoryLessonI
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["predefinedTheoryLessonIdString"] = this.predefinedTheoryLessonIdString;
+        data["canceled"] = this.canceled;
         return data; 
     }
 }
 
 export interface IFinishOnlineTheoryLessonInput {
     predefinedTheoryLessonIdString: string | undefined;
+    canceled: boolean | undefined;
 }
 
 export class ListResultDtoOfOrganizationUnitDto implements IListResultDtoOfOrganizationUnitDto {
@@ -35552,8 +35560,7 @@ export interface IAssignToCourseInput {
 export class StudentCoursePredefinedTheoryLessonDto implements IStudentCoursePredefinedTheoryLessonDto {
     predefinedTheoryLessonStringId!: string | undefined;
     length!: number | undefined;
-    isDone!: boolean | undefined;
-    isRunning!: boolean | undefined;
+    currentState!: TheoryLessonState | undefined;
     name!: string | undefined;
 
     constructor(data?: IStudentCoursePredefinedTheoryLessonDto) {
@@ -35569,8 +35576,7 @@ export class StudentCoursePredefinedTheoryLessonDto implements IStudentCoursePre
         if (data) {
             this.predefinedTheoryLessonStringId = data["predefinedTheoryLessonStringId"];
             this.length = data["length"];
-            this.isDone = data["isDone"];
-            this.isRunning = data["isRunning"];
+            this.currentState = data["currentState"];
             this.name = data["name"];
         }
     }
@@ -35586,8 +35592,7 @@ export class StudentCoursePredefinedTheoryLessonDto implements IStudentCoursePre
         data = typeof data === 'object' ? data : {};
         data["predefinedTheoryLessonStringId"] = this.predefinedTheoryLessonStringId;
         data["length"] = this.length;
-        data["isDone"] = this.isDone;
-        data["isRunning"] = this.isRunning;
+        data["currentState"] = this.currentState;
         data["name"] = this.name;
         return data; 
     }
@@ -35596,9 +35601,15 @@ export class StudentCoursePredefinedTheoryLessonDto implements IStudentCoursePre
 export interface IStudentCoursePredefinedTheoryLessonDto {
     predefinedTheoryLessonStringId: string | undefined;
     length: number | undefined;
-    isDone: boolean | undefined;
-    isRunning: boolean | undefined;
+    currentState: TheoryLessonState | undefined;
     name: string | undefined;
+}
+
+export enum TheoryLessonState {
+    NotStarted = 0, 
+    Running = 1, 
+    Completed = 2, 
+    Canceled = 3, 
 }
 
 export class StudentCourseDrivingLessonsDto implements IStudentCourseDrivingLessonsDto {
@@ -35910,7 +35921,7 @@ export class SVTheoryLessonDto implements ISVTheoryLessonDto {
     startTime!: moment.Moment | undefined;
     office!: string | undefined;
     topic!: string | undefined;
-    completed!: boolean | undefined;
+    currentState!: TheoryLessonState | undefined;
     description!: string | undefined;
     licenseClass!: string | undefined;
     instructorNames!: string[] | undefined;
@@ -35930,7 +35941,7 @@ export class SVTheoryLessonDto implements ISVTheoryLessonDto {
             this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
             this.office = data["office"];
             this.topic = data["topic"];
-            this.completed = data["completed"];
+            this.currentState = data["currentState"];
             this.description = data["description"];
             this.licenseClass = data["licenseClass"];
             if (data["instructorNames"] && data["instructorNames"].constructor === Array) {
@@ -35954,7 +35965,7 @@ export class SVTheoryLessonDto implements ISVTheoryLessonDto {
         data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
         data["office"] = this.office;
         data["topic"] = this.topic;
-        data["completed"] = this.completed;
+        data["currentState"] = this.currentState;
         data["description"] = this.description;
         data["licenseClass"] = this.licenseClass;
         if (this.instructorNames && this.instructorNames.constructor === Array) {
@@ -35971,7 +35982,7 @@ export interface ISVTheoryLessonDto {
     startTime: moment.Moment | undefined;
     office: string | undefined;
     topic: string | undefined;
-    completed: boolean | undefined;
+    currentState: TheoryLessonState | undefined;
     description: string | undefined;
     licenseClass: string | undefined;
     instructorNames: string[] | undefined;
@@ -37987,6 +37998,7 @@ export class TheoryLessonDto implements ITheoryLessonDto {
     office!: string | undefined;
     topic!: string | undefined;
     completed!: boolean | undefined;
+    currentState!: TheoryLessonState | undefined;
     description!: string | undefined;
     internalDescription!: string | undefined;
     licenseClass!: string | undefined;
@@ -38010,6 +38022,7 @@ export class TheoryLessonDto implements ITheoryLessonDto {
             this.office = data["office"];
             this.topic = data["topic"];
             this.completed = data["completed"];
+            this.currentState = data["currentState"];
             this.description = data["description"];
             this.internalDescription = data["internalDescription"];
             this.licenseClass = data["licenseClass"];
@@ -38037,6 +38050,7 @@ export class TheoryLessonDto implements ITheoryLessonDto {
         data["office"] = this.office;
         data["topic"] = this.topic;
         data["completed"] = this.completed;
+        data["currentState"] = this.currentState;
         data["description"] = this.description;
         data["internalDescription"] = this.internalDescription;
         data["licenseClass"] = this.licenseClass;
@@ -38057,6 +38071,7 @@ export interface ITheoryLessonDto {
     office: string | undefined;
     topic: string | undefined;
     completed: boolean | undefined;
+    currentState: TheoryLessonState | undefined;
     description: string | undefined;
     internalDescription: string | undefined;
     licenseClass: string | undefined;

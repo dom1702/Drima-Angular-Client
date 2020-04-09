@@ -89,10 +89,9 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <closedTab                                
-                                                [closed] = isClosed
                                                 [closingTime] = closingTime
                                                 [aborted] = quizAborted
-                                                [quizParts] = currentSession.quiz.sheets.length
+                                                [quizParts] = sheetNumber
                                                 (abortedChanged) = onAbortedChanged($event)>
                                             </closedTab>  
                                         </div>

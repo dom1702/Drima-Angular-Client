@@ -21,6 +21,7 @@ import { PayPalPurchaseComponent } from './payment/paypal/paypal-purchase.compon
 import { StripePurchaseComponent } from './payment/stripe/stripe-purchase.component';
 import { StripeSubscribeComponent } from './payment/stripe/stripe-subscribe.component';
 import { StripeUpdateSubscriptionComponent } from './payment/stripe/stripe-update-subscription.component';
+import { EnrollmentComponent } from './enrollment/enrollment.component';
 
 @NgModule({
     imports: [
@@ -48,7 +49,7 @@ import { StripeUpdateSubscriptionComponent } from './payment/stripe/stripe-updat
                     { path: 'paypal-purchase', component: PayPalPurchaseComponent },
                     { path: 'stripe-purchase', component: StripePurchaseComponent },
                     { path: 'stripe-subscribe', component: StripeSubscribeComponent },
-                    { path: 'stripe-update-subscription', component: StripeUpdateSubscriptionComponent }
+                    { path: 'stripe-update-subscription', component: StripeUpdateSubscriptionComponent },
                 ]
             }
         ])

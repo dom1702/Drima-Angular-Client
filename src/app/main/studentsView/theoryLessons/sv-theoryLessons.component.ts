@@ -43,7 +43,7 @@ export class SVTheoryLessonsComponent extends AppComponentBase implements OnInit
     loadData()
     {
         this.loadCourseSelection();
-       this.loadTheoryLessons();
+        this.loadTheoryLessons();
     }
 
     loadCourseSelection()
@@ -71,12 +71,12 @@ export class SVTheoryLessonsComponent extends AppComponentBase implements OnInit
         {
             abp.ui.clearBusy();
             this.theoryLessonsList = result;
+            console.log(result);
         });
     }
 
     courseChanged() : void{
         this._helper.setSelectedStudentCourse(this.selectedStudentCourse);
-
         this.loadTheoryLessons();
     }
 }

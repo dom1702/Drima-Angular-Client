@@ -36,7 +36,7 @@ import { CreateOrEditDrivingLessonModalComponent } from './lessons/drivingLesson
 import { CreateEventTypeModalComponent } from './scheduler/create-event-type-modal.component';
 
 
-import { AutoCompleteModule, TabViewModule, AccordionModule, MessageModule, MessagesModule, CheckboxModule} from 'primeng/primeng';
+import { AutoCompleteModule, TabViewModule, AccordionModule, MessageModule, MessagesModule, CheckboxModule, CarouselModule, CodeHighlighterModule, ButtonModule, CardModule} from 'primeng/primeng';
 import { PaginatorModule } from 'primeng/primeng';
 import { EditorModule } from 'primeng/primeng';
 import { InputMaskModule } from 'primeng/primeng';import { FileUploadModule } from 'primeng/primeng';
@@ -99,6 +99,7 @@ import { AssignStudentToCourseModalComponent } from './students/students/assign-
 import { SVTheoryPracticeComponent } from './studentsView/theoryPractice/sv-theoryPractice.component';
 import { SVInvoicesComponent } from './studentsView/invoices/sv-invoices.component';
 import { SVOverviewComponent } from './studentsView/overview/sv-overview.component';
+import { SVLicenseClassSelection } from './studentsView/theoryPractice/sv-licenseClassSelection.component';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -139,7 +140,9 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       MultiSelectModule,
       AlertModule.forRoot(),
       ProgressbarModule.forRoot(),
-      ToastModule
+      ToastModule,
+      CarouselModule,
+      CardModule   
     ],
     declarations: 
     [
@@ -199,7 +202,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       ViewCourseModalComponent,		
       CreateOrEditCourseModalComponent,
       OfficeLookupTableModalComponent,
-      AssignStudentToCourseModalComponent
+      AssignStudentToCourseModalComponent,
+      SVLicenseClassSelection
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

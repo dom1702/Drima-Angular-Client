@@ -87,7 +87,6 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     navigateAwaySelection: Subject<boolean> = new Subject<boolean>();
 
     homeTab : TabDirective;
-    //startTab : TabDirective;
 
     tabsData : any[] = []; // read data from dummyData into a struct that can be red by the template
     messages: Message[] = [];
@@ -141,7 +140,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
         }       
     }
 
-    onQuizStart(value : any) {
+    onQuizStart(value : any) {       
         this.quizAborted = value[0];  
         this.closingTime = value[2];
         this.openingTime = value[3] 
@@ -193,12 +192,13 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
         {
             this.message.confirm('Do you really want to end?', "Progress will be lost.",
             (isConfirmed) => {
-                if (isConfirmed) {           
-                    this.resetQuizData(); 
+                if (isConfirmed) {  
+                    this.finishQuiz(true);         
+                    this.resetQuizData();                    
                 }                 
             });
         }
-        else { //homeTab selected
+        else { //homeTab selected          
             this.router.navigateByUrl("/app/main/studentsView/theoryLessons");
         }             
     }
@@ -220,8 +220,9 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             this.message.confirm('Discard answers from this sheet?',
                 (isConfirmed) => {
                     if (isConfirmed) {
-                        this.navigateAwaySelection.next(isConfirmed);
+                        this.finishQuiz(true);
                         this.resetQuizData(); 
+                        this.navigateAwaySelection.next(isConfirmed);                       
                     }
                     else {
                         this.homeTab.active = false;
@@ -235,15 +236,14 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     startNextOnlineTheoryLesson(input: StartNextOnlineTheoryLessonInput)
     {    
         this._onlineTheoryService.startNextOnlineTheoryLesson(input).subscribe((result) => {
-            console.log(result);
+            console.log("get result from server: " + result);
             this.nextOnlineLesson = result;
         });
     }
 
     finishOnlineTheoryLesson(input : FinishOnlineTheoryLessonInput)
     {        
-        this._onlineTheoryService.finishOnlineTheoryLesson(input).subscribe((result) => {
-            console.log(result);
+        this._onlineTheoryService.finishOnlineTheoryLesson(input).subscribe(() => {          
         });
     }
 
@@ -332,13 +332,14 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
         this.quizFinished = false;
     }
 
-    finishQuiz() {
+    finishQuiz(quizCanceld: boolean) {
         this.currentSession.endTime = moment().locale(moment.defaultFormat);
         let x = moment.duration(this.currentSession.endTime.diff(this.currentSession.startTime)); 
         this.currentSession.duration = x.get("seconds");
         
         let input : FinishOnlineTheoryLessonInput = new FinishOnlineTheoryLessonInput();
         input.predefinedTheoryLessonIdString = this.currentSession.predefindedQuizId;
+        input.canceled = quizCanceld;
         this.finishOnlineTheoryLesson(input);
         //this.debugSavedQuizData();
     }
@@ -391,7 +392,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             {                                           
                 this.tabsData[this.currentSession.progress].active = true; 
                 this.quizFinished = true;
-                this.finishQuiz();
+                this.finishQuiz(false);
                 return;
             }                                              
         }

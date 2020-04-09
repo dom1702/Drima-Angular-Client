@@ -20,6 +20,7 @@ import { SVQuizGuard } from './studentsView/theoryCourse/sv-quiz.guard';
 import { SVTheoryPracticeComponent } from './studentsView/theoryPractice/sv-theoryPractice.component';
 import { SVInvoicesComponent } from './studentsView/invoices/sv-invoices.component';
 import { SVOverviewComponent } from './studentsView/overview/sv-overview.component';
+import { SVLicenseClassSelection } from './studentsView/theoryPractice/sv-licenseClassSelection.component';
 
 @NgModule({
     imports: [
@@ -49,7 +50,8 @@ import { SVOverviewComponent } from './studentsView/overview/sv-overview.compone
                         canDeactivate: [SVQuizGuard],
                         component: SVQuizComponent, 
                         data: { permission: 'StudentView' }
-                    }
+                    },
+                   { path: 'studentsView/theoryPractice/licenseClassSelection', component: SVLicenseClassSelection, data: { permission: 'StudentView' }},
                 ]
             }
         ])

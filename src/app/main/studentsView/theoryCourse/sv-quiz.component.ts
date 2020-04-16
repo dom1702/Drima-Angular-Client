@@ -453,7 +453,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     startTimer(timerValue : number) {        
         this.currentTimer = 1; //(timerValue * 60);
         let intervalId = setInterval(() => {
-            this.currentTimer = this.currentTimer - 1;
+            this.currentTimer =  (timerValue * 60);
             if(this.currentTimer === 0) clearInterval(intervalId)           
         }, 1000)
         //console.log("start timer... " + intervalId);

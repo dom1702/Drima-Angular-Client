@@ -14,7 +14,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="form-group m-form__group">
+                    <div class="form-group m-form__group" *ngIf="showStudentSelection">
                         <label for="StudentFirstName">{{l("Student")}}</label>
                         <div class="input-group">
                             <input class="form-control" id="studentFullName" name="studentFullName"
@@ -31,6 +31,10 @@
                     </div>
                     <input class="form-control" name="drivingLesson.studentId" [(ngModel)]="drivingLesson.studentId"
                         type="text" hidden>
+
+                        <div class="form-group m-form__group" *ngIf="!showStudentSelection">
+                            <h5>Student: {{studentFullName}}</h5>
+                        </div>
 
                     <div *ngIf="studentSelected">
                         <div class="m--margin-top-40">

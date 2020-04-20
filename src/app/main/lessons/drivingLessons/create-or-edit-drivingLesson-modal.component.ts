@@ -47,6 +47,8 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
   
     instructorPersonalLesson: boolean;
     instructorId?: number;
+
+    showStudentSelection = false;
     studentSelected = false;
 
     selectedStudentCourse: CourseDto;
@@ -105,6 +107,8 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             this.drivingLesson.addingMinutesAfter = 0;
             this.refreshStudentFullName();
 
+            this.showStudentSelection = true;
+
             this.active = true;
             this.updateInstructors(false);
 
@@ -136,6 +140,28 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
                 this.refreshStudentFullName();
                 this.startTime = result.drivingLesson.startTime.toDate();
 
+                this.showStudentSelection = false;
+                this.studentSelected = true;
+                this.selectedStudentCourse = null;
+                this.studentCourses = null;
+
+                this._drivingLessonsServiceProxy.getCoursesForCreateOrEdit(this.drivingLesson.studentId).subscribe(result2 => {
+                    this.studentCourses = result2.courses;
+
+                    for (let course of this.studentCourses) {
+                        if(course.id == result.drivingLesson.courseId)
+                        {
+                            this.selectedStudentCourse = course;
+
+                            for(let pdl of course.predefinedDrivingLessons)
+                            {
+                                if(pdl.id == result.drivingLesson.predefinedDrivingLessonId)
+                                    this.selectedPdl = pdl;
+                            }
+                        }
+                    }
+                });
+
                 this.active = true;
                 this.updateInstructors(true);
 
@@ -166,8 +192,11 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
         if(this.selectedPdl)
         {
-            console.log(this.selectedPdl.id);
             this.drivingLesson.predefinedDrivingLessonId = this.selectedPdl.id;
+        }
+        else
+        {
+            this.drivingLesson.predefinedDrivingLessonId = null;
         }
 
         this.drivingLesson.courseId = this.selectedStudentCourse.id;
@@ -193,7 +222,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     }
 
     updateInstructors(drivingLessonEdit: boolean): void {
-        console.log(this.active);
+       // console.log(this.active);
         if (!this.active) {
             return;
         }
@@ -205,7 +234,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             "",
             0,
             1000).subscribe(result => {
-                console.log("in");
+               // console.log("in");
                 // for(var r = 0; r < result.items.length; r++)
                 //     console.log(result.items[r].id);
 
@@ -225,7 +254,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
                 if (drivingLessonEdit) {
                     for (var item of this.dropdownList) {
-                        console.log(this.drivingLesson.instructors.length);
+                     //   console.log(this.drivingLesson.instructors.length);
                         for (var instructor of this.drivingLesson.instructors) {
                             console.log(instructor.id);
                             console.log(this.dropdownListIds[item.item_id]);

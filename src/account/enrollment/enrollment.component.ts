@@ -58,12 +58,61 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
         }
     ]
 
-    editionsSelectOutput: EditionsSelectOutput = new EditionsSelectOutput();
+    licenseClassesOwned : any[] = 
+    [
+        {
+            className: "Class B",
+            subtitle: "Passenger car",
+            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
+            isOwned: false,
+        },
+        {
+            className: "Class A",
+            subtitle: "Motorcycle",
+            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-a.jpg?__blob=normal",
+            isOwned: false,
+        },
+        {
+            className: "Class BE",
+            subtitle: "Passenger car with trailer",
+            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-be.jpg?__blob=normal",
+            isOwned: false,
+        },
+        {
+            className: "Class M",
+            subtitle: "Motorcycle 50 ccm",
+            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-am.jpg?__blob=normal",
+            isOwned: false,
+        },
+        {
+            className: "Class AM125",
+            subtitle: "Motorcycle 125 ccm",
+            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-a2.jpg?__blob=normal",
+            isOwned: false,
+        },
+        {
+            className: "Moped",
+            subtitle: "Motorcycle 50 ccm, 25 km/h",
+            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-am.jpg?__blob=normal",
+            isOwned: false,
+        }
+    ]
+
+    activeDivClass = "p-3 mb-2 bg-primary text-white";
+    inactiveDivClass = "p-3 mb-2 bg-light text-dark";
+
+    licenseClassDivClass = this.activeDivClass;
+    licenseClassOwnedDivClass = this.inactiveDivClass;
+    locationDivClass = this.inactiveDivClass;
+    coursesDivClass = this.inactiveDivClass;
+    pricePackageDivClass = this.inactiveDivClass;
+    yourDataDivClass = this.inactiveDivClass;
+
+    currentPageNumber = 0;
+    maxPageNumber = 6;
+   
     isUserLoggedIn = false;
-    isSetted = false;
-    editionPaymentType: typeof EditionPaymentType = EditionPaymentType;
-    subscriptionStartType: typeof SubscriptionStartType = SubscriptionStartType;
-    /*you can change your edition icons order within editionIcons variable */
+
     editionIcons: string[] = ['flaticon-open-box', 'flaticon-rocket', 'flaticon-gift', 'flaticon-confetti', 'flaticon-cogwheel-2', 'flaticon-app', 'flaticon-coins', 'flaticon-piggy-bank', 'flaticon-bag', 'flaticon-lifebuoy', 'flaticon-technology-1', 'flaticon-cogwheel-1', 'flaticon-infinity', 'flaticon-interface-5', 'flaticon-squares-3', 'flaticon-interface-6', 'flaticon-mark', 'flaticon-business', 'flaticon-interface-7', 'flaticon-list-2', 'flaticon-bell', 'flaticon-technology', 'flaticon-squares-2', 'flaticon-notes', 'flaticon-profile', 'flaticon-layers', 'flaticon-interface-4', 'flaticon-signs', 'flaticon-menu-1', 'flaticon-symbol'];
 
     constructor(
@@ -77,83 +126,54 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
 
     ngOnInit() {
         this.isUserLoggedIn = abp.session.userId > 0;
-
-        this._tenantRegistrationService.getEditionsForSelect()
-            .subscribe((result) => {
-                this.editionsSelectOutput = result;
-
-                if (!this.editionsSelectOutput.editionsWithFeatures || this.editionsSelectOutput.editionsWithFeatures.length <= 0) {
-                    this._router.navigate(['/account/register-tenant']);
-                }
-            });
     }
 
-    isFree(edition: EditionSelectDto): boolean {
-        return !edition.monthlyPrice && !edition.annualPrice;
+    goToNextPage()
+    {
+        if(this.currentPageNumber + 1 == this.maxPageNumber)
+            return; 
+
+        this.currentPageNumber++;
+        this.switchActivePageIndicator(this.currentPageNumber);
+
+        console.log(this.licenseClassesOwned[0].isOwned);
+        console.log(this.licenseClassesOwned[1].isOwned);
     }
 
-    isTrueFalseFeature(feature: FlatFeatureSelectDto): boolean {
-        return feature.inputType.name === 'CHECKBOX';
-    }
+    switchActivePageIndicator(pageNumber : number)
+    {
+        this.licenseClassDivClass = this.inactiveDivClass;
+        this.licenseClassOwnedDivClass = this.inactiveDivClass;
+        this.locationDivClass = this.inactiveDivClass;
+        this.coursesDivClass = this.inactiveDivClass;
+        this.pricePackageDivClass = this.inactiveDivClass;
+        this.yourDataDivClass = this.inactiveDivClass;
 
-    featureEnabledForEdition(feature: FlatFeatureSelectDto, edition: EditionWithFeaturesDto): boolean {
-        const featureValues = _.filter(edition.featureValues, { name: feature.name });
-        if (!featureValues || featureValues.length <= 0) {
-            return false;
-        }
-
-        const featureValue = featureValues[0];
-        return featureValue.value.toLowerCase() === 'true';
-    }
-
-    getFeatureValueForEdition(feature: FlatFeatureSelectDto, edition: EditionWithFeaturesDto): string {
-        const featureValues = _.filter(edition.featureValues, { name: feature.name });
-        if (!featureValues || featureValues.length <= 0) {
-            return '';
-        }
-
-        const featureValue = featureValues[0];
-        return featureValue.value;
-    }
-
-    canUpgrade(edition: EditionSelectDto): boolean {
-        if (this.appSession.tenant.edition.id === edition.id) {
-            return false;
-        }
-
-        const currentMonthlyPrice = this.appSession.tenant.edition.monthlyPrice
-            ? this.appSession.tenant.edition.monthlyPrice
-            : 0;
-
-        const targetMonthlyPrice = edition && edition.monthlyPrice ? edition.monthlyPrice : 0;
-
-        return this.isUserLoggedIn &&
-            this.appSession.tenant.edition &&
-            currentMonthlyPrice <= targetMonthlyPrice;
-    }
-
-    upgrade(upgradeEdition: EditionSelectDto, editionPaymentType: EditionPaymentType): void {
-        if (editionPaymentType === EditionPaymentType.Upgrade && this.upgradeIsFree(upgradeEdition)) {
-            this._subscriptionService.upgradeTenantToEquivalentEdition(upgradeEdition.id)
-                .subscribe(() => {
-                    this._router.navigate(['app/admin/subscription-management']);
-                });
-        } else {
-            this._router.navigate(['/account/upgrade'], { queryParams: { upgradeEditionId: upgradeEdition.id, editionPaymentType: editionPaymentType } });
-        }
-    }
-
-    upgradeIsFree(upgradeEdition: EditionSelectDto): boolean {
-        if (!this.appSession.tenant || !this.appSession.tenant.edition) {
-            return false;
-        }
-
-        const bothEditionsAreFree = this.appSession.tenant.edition.isFree && upgradeEdition.isFree;
-
-        const bothEditionsHasSamePrice = !upgradeEdition.isFree &&
-            upgradeEdition.monthlyPrice === this.appSession.tenant.edition.monthlyPrice &&
-            upgradeEdition.annualPrice === this.appSession.tenant.edition.annualPrice;
-
-        return bothEditionsAreFree || bothEditionsHasSamePrice;
+        switch(pageNumber) { 
+            case 0: { 
+                this.licenseClassDivClass = this.activeDivClass;
+               break; 
+            } 
+            case 1: { 
+                this.licenseClassOwnedDivClass = this.activeDivClass;
+               break; 
+            } 
+            case 2: { 
+                this.locationDivClass = this.activeDivClass;
+                break; 
+             } 
+             case 3: { 
+                this.coursesDivClass = this.activeDivClass;
+                break; 
+             } 
+             case 4: { 
+                this.pricePackageDivClass = this.activeDivClass;
+                break; 
+             } 
+             case 5: { 
+                this.yourDataDivClass = this.activeDivClass;
+                break; 
+             } 
+         } 
     }
 }

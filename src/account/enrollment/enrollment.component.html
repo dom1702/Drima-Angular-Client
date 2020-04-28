@@ -1,33 +1,71 @@
 <div [@routerTransition]>
-    <!-- <div class="card">
-        <div class="card-body">
-            <tabset #staticTabs>
-                <tab heading="1. Required License">
-                    <div class="container">
-                    <div class="row justify-content-center">
+    <div class="m-pricing-table-1 m-pricing-table-1--fixed">
+        <div class="m-portlet">
+            <div class="m-portlet__body">
+                <div class="m-pricing-table-1__items row row-centered">
+                    <div class="m-pricing-table-1__item col-lg-3 col-centered"
+                         *ngFor="let licenseClass of licenseClasses;  let i = index">
 
 
-                        <div class="col-4" *ngFor="let class of licenseClasses;  let i = index">
-                            <div class="card">
-                                <div class="card-body">
-                                    <span class="m-pricing-table-1__icon m--font-brand">
-                                        <i class="fa flaticon-car"></i>
-                                    </span>
-                                    <h5>Class X</h5>
-                                </div>
-                            </div>
+                        <div class="m-pricing-table-1__visual">
+                            <div class="m-pricing-table-1__hexagon1"></div>
+                            <div class="m-pricing-table-1__hexagon2"></div>
+                            
+                            <span class="m-pricing-table-1__icon m--font-brand">
+                                <i><img alt="Qries" src="{{licenseClass.imageUrl}}"
+                            width="120" height="70"></i>
+                                <!-- <i class="fa {{editionIcons[i]}}"></i> -->
+                            </span>
                         </div>
+
+
+                        <span class="m-pricing-table-1__price">
+                            {{licenseClass.className}}
+                        </span>
+
+                        <h2 class="m-pricing-table-1__subtitle">
+                            {{licenseClass.subtitle}}
+                        </h2>
+
+                        <!-- <h2 class="m-pricing-table-1__subtitle" *ngIf="licenseClass.description">
+
+                            {{licenseClass.description}}
+                            
+
+                        </h2> -->
+
+                        <!-- <span class="m-pricing-table-1__description">
+
+                            <ng-container *ngFor="let feature of editionsSelectOutput.allFeatures">
+                                
+                                <ng-container *ngIf="isTrueFalseFeature(feature)">
+                                    <i class="la la-check m--font-success" *ngIf="featureEnabledForEdition(feature,editionWithFeatures)"></i>
+                                    <i class="la la-times m--font-metal" *ngIf="!featureEnabledForEdition(feature,editionWithFeatures)"></i>
+                                </ng-container>
+                                <ng-container *ngIf="isTrueFalseFeature(feature)">{{feature.displayName}}</ng-container>
+                               
+                                <ng-container *ngIf="!isTrueFalseFeature(feature)">
+                                    <i class="la la-check m--font-success"></i>
+                                </ng-container>
+                                <ng-container *ngIf="!isTrueFalseFeature(feature)">{{feature.displayName}}:{{getFeatureValueForEdition(feature,editionWithFeatures)}}</ng-container>
+                               
+                                <br />
+                            </ng-container>
+
+                        </span> -->
+
+                        <div class="m-pricing-table-1__btn">
+
+                            <button class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm" >
+                                Select
+                            </button>
+
+
+                        </div>
+
                     </div>
                 </div>
-                </tab>
-                <tab heading="2. License Owned">Static content 1</tab>
-                <tab heading="3. Office">Static content 2</tab>
-                <tab heading="4. Courses">Static content 3</tab>
-                <tab heading="5. Price Packages">Static content 3</tab>
-                <tab heading="6. Personal Data">Static content 3</tab>
-            </tabset>
-
+            </div>
         </div>
-
-    </div> -->
+    </div>
 </div>

@@ -77,7 +77,11 @@ export class PersonalSchedulerComponent extends AppComponentBase implements ISch
 
     ngOnInit(): void {
         this.allowedToSeeOwnAppointments = this.isGranted('OwnAppointments');
-        this.allowedToSeeOwnDrivingLessons = this.isGranted('Pages.InstructorsOwnDrivingLessons');
+        this.allowedToSeeOwnDrivingLessons = this.isGranted('Pages.InstructorsOwnDrivingLessons') && this.isGranted('InstructorView');
+
+        console.log(this.isGranted('Pages.InstructorsOwnDrivingLessons'));
+        console.log(this.isGranted('InstructorsView'));
+        console.log(this.isGranted('Something'));
 
         this.updateCurrentView();
     }

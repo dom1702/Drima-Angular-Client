@@ -36,7 +36,7 @@ import { CreateOrEditDrivingLessonModalComponent } from './lessons/drivingLesson
 import { CreateEventTypeModalComponent } from './scheduler/create-event-type-modal.component';
 
 
-import { AutoCompleteModule, TabViewModule, AccordionModule, MessageModule, MessagesModule, CheckboxModule, CarouselModule, CodeHighlighterModule, ButtonModule, CardModule} from 'primeng/primeng';
+import { AutoCompleteModule, TabViewModule, AccordionModule, MessageModule, MessagesModule, CheckboxModule, CarouselModule, CodeHighlighterModule, ButtonModule, CardModule, SelectButtonModule, MessageService} from 'primeng/primeng';
 import { PaginatorModule } from 'primeng/primeng';
 import { EditorModule } from 'primeng/primeng';
 import { InputMaskModule } from 'primeng/primeng';import { FileUploadModule } from 'primeng/primeng';
@@ -45,7 +45,7 @@ import {ToastModule} from 'primeng/toast';
 
 import { UtilsModule } from '@shared/utils/utils.module';
 import { CountoModule } from 'angular2-counto';
-import { ModalModule, TabsModule, TooltipModule, BsDropdownModule, PopoverModule } from 'ngx-bootstrap';
+import { ModalModule, TabsModule, TooltipModule, BsDropdownModule, PopoverModule, PaginationModule } from 'ngx-bootstrap';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MainRoutingModule } from './main-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -100,6 +100,8 @@ import { SVTheoryPracticeComponent } from './studentsView/theoryPractice/sv-theo
 import { SVInvoicesComponent } from './studentsView/invoices/sv-invoices.component';
 import { SVOverviewComponent } from './studentsView/overview/sv-overview.component';
 import { SVLicenseClassSelection } from './studentsView/theoryPractice/sv-licenseClassSelection.component';
+import { SVTheoryPracticeQuizComponent } from './studentsView/theoryPractice/sv-theoryPracticeQuiz.component';
+import { SVLicenseClassTasksOverview } from './studentsView/theoryPractice/sv-licenseClassTasksOverview.component';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -142,7 +144,9 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       ProgressbarModule.forRoot(),
       ToastModule,
       CarouselModule,
-      CardModule   
+      CardModule,
+      SelectButtonModule,
+      PaginationModule.forRoot()
     ],
     declarations: 
     [
@@ -203,7 +207,9 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       CreateOrEditCourseModalComponent,
       OfficeLookupTableModalComponent,
       AssignStudentToCourseModalComponent,
-      SVLicenseClassSelection
+      SVLicenseClassSelection,
+      SVTheoryPracticeQuizComponent,
+      SVLicenseClassTasksOverview
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

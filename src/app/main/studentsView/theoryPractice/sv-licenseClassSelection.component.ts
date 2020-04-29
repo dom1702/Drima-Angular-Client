@@ -5,10 +5,7 @@ import * as moment from 'moment';
 
 
 @Component({
-    templateUrl: './sv-licenseClassSelection.component.html', 
-    //.ui-card-title {
-    //    text-align: center;
-    //}   
+    templateUrl: './sv-licenseClassSelection.component.html',      
     animations: [appModuleAnimation()]
 })
 export class SVLicenseClassSelection extends AppComponentBase implements OnInit {
@@ -38,6 +35,10 @@ export class SVLicenseClassSelection extends AppComponentBase implements OnInit 
             title: "A",
             description: "Motorcycle"
         }];
+    }
+
+    getLicenseTasks(licenseClassName : string) : void  {
+        console.log("selected class: " + licenseClassName);
     }
 
 

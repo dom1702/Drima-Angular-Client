@@ -2,22 +2,34 @@
     <div class="container">
         <div class="row mb-4">
             <div class="col-2">
-                <div class="{{licenseClassDivClass}}"><h6>1</h6><label class="d-none d-md-block">License Class</label></div>
+                <div class="{{licenseClassDivClass}}">
+                    <h6>1</h6><label class="d-none d-md-block">License Class</label>
+                </div>
             </div>
             <div class="col-2">
-                <div class="{{licenseClassOwnedDivClass}}"><h6>2</h6><label class="d-none d-md-block">Previous Licenses</label></div>
+                <div class="{{licenseClassOwnedDivClass}}">
+                    <h6>2</h6><label class="d-none d-md-block">Previous Licenses</label>
+                </div>
             </div>
             <div class="col-2">
-                <div class="{{locationDivClass}}"><h6>3</h6><label class="d-none d-md-block">Location</label></div>
+                <div class="{{locationDivClass}}">
+                    <h6>3</h6><label class="d-none d-md-block">Location</label>
+                </div>
             </div>
             <div class="col-2">
-                <div class="{{coursesDivClass}}"><h6>4</h6><label class="d-none d-md-block">Courses</label></div>
+                <div class="{{coursesDivClass}}">
+                    <h6>4</h6><label class="d-none d-md-block">Courses</label>
+                </div>
             </div>
             <div class="col-2">
-                <div class="{{pricePackageDivClass}}"><h6>5</h6><label class="d-none d-md-block">Price Packages</label></div>
+                <div class="{{pricePackageDivClass}}">
+                    <h6>5</h6><label class="d-none d-md-block">Price Packages</label>
+                </div>
             </div>
             <div class="col-2">
-                <div class="{{yourDataDivClass}}"><h6>6</h6><label class="d-none d-md-block">Your data</label></div>
+                <div class="{{yourDataDivClass}}">
+                    <h6>6</h6><label class="d-none d-md-block">Your data</label>
+                </div>
             </div>
         </div>
     </div>
@@ -33,10 +45,11 @@
                             <div *ngFor="let licenseClass of licenseClasses;  let i = index">
                                 <div class="col">
                                     <div class="card my-3">
-                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG" alt="Card image cap">
+                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG"
+                                            alt="Card image cap">
                                         <div class="card-body">
-                                            <h5 class="card-title">    {{licenseClass.className}}</h5>
-                                            <p class="card-text">    {{licenseClass.subtitle}}</p>
+                                            <h5 class="card-title"> {{licenseClass.className}}</h5>
+                                            <p class="card-text"> {{licenseClass.subtitle}}</p>
                                             <button
                                                 class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
                                                 (click)="goToNextPage()">
@@ -48,142 +61,203 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="m-pricing-table-1__items row row-centered">
-                        <div class="m-pricing-table-1__item col-lg-3 col-centered"
-                            *ngFor="let licenseClass of licenseClasses;  let i = index">
-                            <div class="m-pricing-table-1__visual">
-                                <div class="m-pricing-table-1__hexagon1"></div>
-                                <div class="m-pricing-table-1__hexagon2"></div>
-
-                                <span class="m-pricing-table-1__icon m--font-brand">
-                                    <i><img alt="Qries" src="{{licenseClass.imageUrl}}" width="120" height="70"></i>
-                                </span>
-                            </div>
-                            <span class="m-pricing-table-1__price">
-                                {{licenseClass.className}}
-                            </span>
-                            <h2 class="m-pricing-table-1__subtitle">
-                                {{licenseClass.subtitle}}
-                            </h2>
-
-                            <div class="m-pricing-table-1__btn">
-                                <button
-                                    class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                                    (click)="goToNextPage()">
-                                    Select
-                                </button>
-                            </div>
-
-                        </div>
-                    </div> -->
-                </div>
-
-                <div *ngIf="currentPageNumber == 2">
-                    <h1>What license do you want to acquire?</h1>
-                    <div class="m-pricing-table-1__items row row-centered">
-                        <div class="m-pricing-table-1__item col-lg-3 col-centered"
-                            *ngFor="let licenseClass of licenseClasses;  let i = index">
-                            <div class="m-pricing-table-1__visual">
-                                <div class="m-pricing-table-1__hexagon1"></div>
-                                <div class="m-pricing-table-1__hexagon2"></div>
-
-                                <span class="m-pricing-table-1__icon m--font-brand">
-                                    <i><img alt="Qries" src="{{licenseClass.imageUrl}}" width="120" height="70"></i>
-                                    <!-- <i class="fa {{editionIcons[i]}}"></i> -->
-                                </span>
-                            </div>
-                            <span class="m-pricing-table-1__price">
-                                {{licenseClass.className}}
-                            </span>
-                            <h2 class="m-pricing-table-1__subtitle">
-                                {{licenseClass.subtitle}}
-                            </h2>
-
-                            <!-- <h2 class="m-pricing-table-1__subtitle" *ngIf="licenseClass.description">
-
-                            {{licenseClass.description}}
-                            
-
-                        </h2> -->
-
-                            <!-- <span class="m-pricing-table-1__description">
-
-                            <ng-container *ngFor="let feature of editionsSelectOutput.allFeatures">
-                                
-                                <ng-container *ngIf="isTrueFalseFeature(feature)">
-                                    <i class="la la-check m--font-success" *ngIf="featureEnabledForEdition(feature,editionWithFeatures)"></i>
-                                    <i class="la la-times m--font-metal" *ngIf="!featureEnabledForEdition(feature,editionWithFeatures)"></i>
-                                </ng-container>
-                                <ng-container *ngIf="isTrueFalseFeature(feature)">{{feature.displayName}}</ng-container>
-                               
-                                <ng-container *ngIf="!isTrueFalseFeature(feature)">
-                                    <i class="la la-check m--font-success"></i>
-                                </ng-container>
-                                <ng-container *ngIf="!isTrueFalseFeature(feature)">{{feature.displayName}}:{{getFeatureValueForEdition(feature,editionWithFeatures)}}</ng-container>
-                               
-                                <br />
-                            </ng-container>
-
-                        </span> -->
-
-                            <div class="m-pricing-table-1__btn">
-                                <button
-                                    class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                                    (click)="goToNextPage()">
-                                    Select
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
 
                 <div *ngIf="currentPageNumber == 1">
-                    <h1>Do you have any licenses completed before?</h1>
-                    <div class="m-pricing-table-1__items row row-centered">
-                        <div class="m-pricing-table-1__item col-lg-3 col-centered"
-                            *ngFor="let licenseClassOwned of licenseClassesOwned;  let i = index">
+                    <h3 class="mb-5">Do you have any licenses completed before?</h3>
 
-                            <div class="m-pricing-table-1__visual">
+                    <button
+                        class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                        (click)="goToNextPage()">
+                        I don't have any license yet
+                    </button>
 
-                                <span class="m-pricing-table-1__icon m--font-brand">
-                                    <i><img alt="Qries" src="{{licenseClassOwned.imageUrl}}" width="120"
-                                            height="70"></i>
-                                    <!-- <i class="fa {{editionIcons[i]}}"></i> -->
-                                </span>
+                    <div class="container my-3">
+                        <div class="row justify-content-center">
+                            <div *ngFor="let licenseClassOwned of licenseClassesOwned;  let i = index">
+                                <div class="col">
+                                    <div class="card my-3">
+                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG"
+                                            alt="Card image cap">
+                                        <div class="card-body">
+                                            <h5 class="card-title"> {{licenseClassOwned.className}}</h5>
+                                            <p class="card-text"> {{licenseClassOwned.subtitle}}</p>
+                                            <label class="m-checkbox mt-3">
+                                                <input type="checkbox" name="licenseClassOwned"
+                                                    [(ngModel)]="licenseClassOwned.isOwned">
+                                                I have this license
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
-                            <span class="m-pricing-table-1__price">
-                                {{licenseClassOwned.className}}
-                            </span>
-
-                            <h2 class="m-pricing-table-1__subtitle">
-                                {{licenseClassOwned.subtitle}}
-                            </h2>
-
-                            <span class="m-pricing-table-1__description">
-                                <label class="m-checkbox mt-3">
-                                    <input type="checkbox" name="licenseClassOwned"
-                                        [(ngModel)]="licenseClassOwned.isOwned">
-                                    I have this license
-                                    <span></span>
-                                </label>
-                            </span>
-
                         </div>
-
                     </div>
-                    <div class="m-pricing-table-1__btn">
-                        <button
-                            class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                            (click)="goToNextPage()">
-                            Next
-                        </button>
+                    <button
+                        class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                        (click)="goToNextPage()">
+                        Next
+                    </button>
+                </div>
+
+                <div *ngIf="currentPageNumber == 2">
+                    <h3 class="mb-5">What office do you want to go to?</h3>
+
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div *ngFor="let location of locations;  let i = index">
+                                <div class="col">
+                                    <div class="card my-3">
+                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG"
+                                            alt="Card image cap">
+                                        <div class="card-body">
+                                            <h5 class="card-title"> {{location.officeName}}</h5>
+                                            <p class="card-text"> {{location.address}}</p>
+                                            <button
+                                                class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                                (click)="goToNextPage()">
+                                                Select
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <div *ngIf="currentPageNumber == 3">
+                    <h3 class="mb-5">What course do you want to enroll in?</h3>
+
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div *ngFor="let course of courses;  let i = index">
+                                <div class="col">
+                                    <div class="card my-3">
+                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG"
+                                            alt="Card image cap">
+                                        <div class="card-body">
+                                            <h5 class="card-title"> {{course.name}}</h5>
+                                            <p class="card-text" style="max-width: 18rem;"> {{course.class}}</p>
+                                            <p class="card-text" style="max-width: 18rem;"> Saat käyttäjätunnukset ja
+                                                ohjeet kurssin
+                                                suorittamiseen sähköpostitse, jonka jälkeen voit aloittaa kurssin.
+                                                Luovumme infotunneista 17.3 alkaen toistaiseksi koronan takia. </p>
+                                            <p class="card-text" style="max-width: 18rem;">
+                                                Jos sinulla on aikaisempi ajokortti tai todistus suoritetusta
+                                                turvallisuukoulutuksesta (EAS), turvallisuuskoulutuksen teoriatunteja ei
+                                                tarvitse käydä uudelleen. </p>
+                                            <p class="card-text" style="max-width: 18rem;">
+                                                Kurssimaksun lisäksi suoritettavat viranomaismaksut:
+                                                Ajokorttilupamaksu 35€
+                                                Teoriakoe 35€
+                                                Ajokoe 90€
+                                            </p>
+                                            <button
+                                                class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                                (click)="goToNextPage()">
+                                                Select
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="currentPageNumber == 4">
+                    <h3 class="mb-5">What price package do you prefer?</h3>
+
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div *ngFor="let pp of pricePackages;  let i = index">
+                                <div class="col">
+                                    <div class="card my-3">
+                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG"
+                                            alt="Card image cap">
+                                        <div class="card-body">
+                                            <h5 class="card-title"> {{pp.name}}</h5>
+                                            <p class="card-text"> 5x Basic Lesson 50 EUR / Lesson</p>
+                                            <p class="card-text"> 5x Basic Lesson 50 EUR / Lesson</p>
+                                            <p class="card-text"> 5x Basic Lesson 50 EUR / Lesson</p>
+                                            <p class="card-text"> 5x Basic Lesson 50 EUR / Lesson</p>
+                                            <p class="card-text"> 5x Basic Lesson 50 EUR / Lesson</p>
+                                            <button
+                                                class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                                (click)="goToNextPage()">
+                                                Select
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="currentPageNumber == 5">
+                    <h3 class="mb-5">Please enter your data to finish enrollment!</h3>
+
+                    <form>
+                        <div class="form-group row">
+                            <label for="personId" class="col-sm-2 col-form-label">Person ID</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="personId" placeholder="PPKKVV-XXXX">
+                            </div>
+                          </div>
+                        <div class="form-group row">
+                          <label for="firstNameInput" class="col-sm-2 col-form-label">First Name</label>
+                          <div class="col-sm-4">
+                            <input type="text" class="form-control" id="firstNameInput" placeholder="Enter your first name">
+                          </div>
+                          <label for="lastNameInput" class="col-sm-2 col-form-label">Last Name</label>
+                          <div class="col-sm-4">
+                            <input type="text" class="form-control" id="lastNameInput" placeholder="Enter your last name">
+                          </div>
+                        </div>
+                      
+                        <div class="form-group row">
+                          <label for="streetInput" class="col-sm-2 col-form-label">Street</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="streetInput" placeholder="Enter your street">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="zipCodeInput" class="col-sm-2 col-form-label">ZIP code</label>
+                            <div class="col-sm-4">
+                              <input type="text" class="form-control" id="zipCodeInput" placeholder="Enter your ZIP code">
+                            </div>
+                            <label for="cityInput" class="col-sm-2 col-form-label">City</label>
+                            <div class="col-sm-4">
+                              <input type="text" class="form-control" id="cityInput" placeholder="Enter your city">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="phoneInput" class="col-sm-2 col-form-label">Phone</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="phoneInput" placeholder="Enter your phone number">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="emailInput" class="col-sm-2 col-form-label">E-mail</label>
+                            <div class="col-sm-4">
+                              <input type="email" class="form-control" id="emailInput" placeholder="Enter your email">
+                            </div>
+                            <label for="confirmEmailInput" class="col-sm-2 col-form-label">Confirm e-mail</label>
+                            <div class="col-sm-4">
+                              <input type="email" class="form-control" id="confirmEmailInput" placeholder="Enter your email again">
+                            </div>
+                        </div>
+                         
+                    </form>
+                </div>
+
+               
             </div>
+
         </div>
     </div>
 </div>

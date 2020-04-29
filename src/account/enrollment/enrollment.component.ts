@@ -98,6 +98,41 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
         }
     ]
 
+    locations : any[] = 
+    [
+        {
+            officeName: "Office Philippsthal",
+            address: "Hattorfer Street 20, 36269 Philippsthal",
+            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
+        },
+        {
+            officeName: "Office Heringen",
+            address: "Lmao Street 20, 36268 Heringen",
+            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
+        },
+        {
+            officeName: "Office Bad Hersfeld",
+            address: "Foo Street 20, 36261 Bad Hersfeld",
+            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
+        },
+    ]
+
+    courses : any[] = 
+    [
+        {
+            name: "Course B April 2020",
+            class: "B",
+            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
+        },
+    ]
+
+    pricePackages : any[] = 
+    [
+        {
+            name: "Price Package A",
+        },
+    ]
+
     activeDivClass = "p-3 mb-2 bg-primary text-white";
     inactiveDivClass = "p-3 mb-2 bg-light text-dark";
 
@@ -108,7 +143,7 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
     pricePackageDivClass = this.inactiveDivClass;
     yourDataDivClass = this.inactiveDivClass;
 
-    currentPageNumber = 0;
+    currentPageNumber = 5;
     maxPageNumber = 6;
    
     isUserLoggedIn = false;

@@ -13,6 +13,8 @@ import {
     SubscriptionStartType
 } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
+import { Language, LanguagesService } from '@app/shared/common/services/languages.service';
+import { CountriesService, Country } from '@app/shared/common/services/countries.service';
 
 @Component({
     selector: 'enrollment',
@@ -133,6 +135,11 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
         },
     ]
 
+    currentNativeLanguage: string;
+    languages: Language[];
+    currentBirthCountry: string;
+    countries: Country[];
+
     activeDivClass = "p-3 mb-2 bg-primary text-white";
     inactiveDivClass = "p-3 mb-2 bg-light text-dark";
 
@@ -143,7 +150,7 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
     pricePackageDivClass = this.inactiveDivClass;
     yourDataDivClass = this.inactiveDivClass;
 
-    currentPageNumber = 5;
+    currentPageNumber = 0;
     maxPageNumber = 6;
    
     isUserLoggedIn = false;
@@ -154,12 +161,34 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
         injector: Injector,
         private _tenantRegistrationService: TenantRegistrationServiceProxy,
         private _subscriptionService: SubscriptionServiceProxy,
-        private _router: Router
+        private _router: Router,
+        private _languagesService: LanguagesService,
+        private _countriesService: CountriesService,
     ) {
         super(injector);
     }
 
     ngOnInit() {
+
+        this._countriesService.loadData().subscribe(result => {
+            this.countries = result;
+
+            for (var i = 0; i < this.countries.length; i++) {
+                if (this.countries[i].name == 'Finland')
+                    this.currentBirthCountry = this.countries[i].name;
+            }
+
+        });
+
+        this._languagesService.loadData().subscribe(result => {
+            this.languages = result;
+
+            for (var i = 0; i < this.languages.length; i++) {
+                if (this.languages[i].name == 'Finnish')
+                    this.currentNativeLanguage = this.languages[i].name;
+            }
+        });
+
         this.isUserLoggedIn = abp.session.userId > 0;
     }
 

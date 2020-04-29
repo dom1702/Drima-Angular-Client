@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { AppComponentBase } from "@shared/common/app-component-base";
 import { basename } from "path";
 import { SVQuizComponent } from "./sv-quiz.component";
+import { SVTheoryPracticeQuizComponent } from "../theoryPractice/sv-theoryPracticeQuiz.component";
 
 export interface ICanComponentDeactivate {
     canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;

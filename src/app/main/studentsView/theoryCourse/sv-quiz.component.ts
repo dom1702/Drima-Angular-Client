@@ -86,8 +86,6 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     openingTime: moment.Moment; 
     navigateAwaySelection: Subject<boolean> = new Subject<boolean>();
 
-    homeTab : TabDirective;
-
     tabsData : any[] = []; // read data from dummyData into a struct that can be red by the template
     messages: Message[] = [];
 
@@ -225,7 +223,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
                         this.navigateAwaySelection.next(isConfirmed);                       
                     }
                     else {
-                        this.homeTab.active = false;
+                        //this.homeTab.active = false;
                         this.quizTabs.tabs[this.currentSession.progress+1].active = true;                    
                     }
                 });

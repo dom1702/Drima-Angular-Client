@@ -1,0 +1,24 @@
+.background {
+    z-index: 0;
+    top: 35px; 
+    left: 300px;  
+    position: absolute;
+
+    /*text*/
+    color: grey;
+    text-transform: uppercase;
+    padding: 8px;
+    font-size: 180px;
+}
+
+.cardText {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.taskTab {      
+    font-size: 16px;
+  }
+
+.taskTab:hover {color: royalblue;}
+

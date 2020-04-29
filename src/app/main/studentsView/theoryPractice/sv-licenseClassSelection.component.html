@@ -12,17 +12,21 @@
         </div>
     </div>
     <div class="m-content">
-        <div class="m-portlet m-portlet--mobile">
+        <div class="m-portlet m-portlet--mobile">         
             <div class="m-portlet__body">
-                <h4 class="m-portlet__head-text">
-                    Welcome to Drima theory exam practice. Start by choosing driving class.
-                </h4>
+                 
+                <div class="row">                 
+                    <h4 class="m-portlet__head-text">
+                        Welcome to Drima theory exam practice. Start by choosing driving class.
+                    </h4>
+                </div>
 
-                <div class="m--space-10"></div>
-
-                <div >
-                    <div *ngIf="licenseClasses" class="row">                                     
-                        <p-card *ngFor="let license of licenseClasses" [style]="{width:'250px', height:'200px'}" class="align-items-center">                           
+                <hr class="ng-tns-c19-1">
+                    
+                <div *ngIf="licenseClasses" class="row">  
+                    <div class="col-sm-1"></div>   
+                    <div class="col-md-auto" *ngFor="let license of licenseClasses">                                                              
+                        <p-card [style]="{width:'250px', height:'200px'}">                           
                             <div style="text-align:center;">
                                 <div>
                                     <img src={{license.pictureUrl}} style="width:64;height:64;"/>
@@ -31,10 +35,20 @@
                                     <h3>{{license.title}}</h3>
                                     <h5>{{license.description}}</h5>                                         
                                 </div> 
+                                
+                                <div>
+                                    <button type="button"  class="btn btn-primary mr-5" 
+                                        (click)=getLicenseTasks(license.title)
+                                        routerLink="/app/main/studentsView/theoryPractice/licenseClassTasksOverview">  
+                                        Open                 
+                                    </button>
+                                </div>                             
                             </div>                          
-                        </p-card>                                                    
-                    </div> 
-                </div>              
+                        </p-card> 
+                    
+                    </div>
+                    <div class="col sm-1"></div>                                                    
+                </div>                            
             </div>
         </div>
 

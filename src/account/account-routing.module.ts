@@ -50,6 +50,8 @@ import { EnrollmentComponent } from './enrollment/enrollment.component';
                     { path: 'stripe-purchase', component: StripePurchaseComponent },
                     { path: 'stripe-subscribe', component: StripeSubscribeComponent },
                     { path: 'stripe-update-subscription', component: StripeUpdateSubscriptionComponent },
+
+                    { path: 'enrollment', component: EnrollmentComponent },
                 ]
             }
         ])

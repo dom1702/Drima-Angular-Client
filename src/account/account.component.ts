@@ -29,7 +29,8 @@ export class AccountComponent extends AppComponentBase implements OnInit {
         'stripe-purchase',
         'stripe-subscribe',
         'stripe-update-subscription',
-        'paypal-purchase'
+        'paypal-purchase',
+        'enrollment'
     ];
 
     public constructor(
@@ -58,7 +59,7 @@ export class AccountComponent extends AppComponentBase implements OnInit {
     }
 
     useFullWidthLayout(): boolean {
-        return this._router.url.indexOf('/account/select-edition') >= 0;
+        return this._router.url.indexOf('/account/select-edition') >= 0 || this._router.url.indexOf('/account/enrollment') >= 0;
     }
 
     ngOnInit(): void {

@@ -1,10 +1,15 @@
 ﻿
+	
 
 
 import { CommonModule } from '@angular/common';
 import { SimulatorLessonsComponent } from './lessons/simulatorLessons/simulatorLessons.component';
 import { ViewSimulatorLessonModalComponent } from './lessons/simulatorLessons/view-simulatorLesson-modal.component';
 import { CreateOrEditSimulatorLessonModalComponent } from './lessons/simulatorLessons/create-or-edit-simulatorLesson-modal.component';
+import { EnrollmentsComponent } from './enrollments/enrollments/enrollments.component';
+import { ViewEnrollmentModalComponent } from './enrollments/enrollments/view-enrollment-modal.component';
+import { CreateOrEditEnrollmentModalComponent } from './enrollments/enrollments/create-or-edit-enrollment-modal.component';
+
 import { CoursesComponent } from './courses/courses/courses.component';
 import { ViewCourseModalComponent } from './courses/courses/view-course-modal.component';
 import { CreateOrEditCourseModalComponent } from './courses/courses/create-or-edit-course-modal.component';
@@ -209,7 +214,10 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       AssignStudentToCourseModalComponent,
       SVLicenseClassSelection,
       SVTheoryPracticeQuizComponent,
-      SVLicenseClassTasksOverview
+      SVLicenseClassTasksOverview,
+      EnrollmentsComponent,
+      ViewEnrollmentModalComponent,		
+      CreateOrEditEnrollmentModalComponent,
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

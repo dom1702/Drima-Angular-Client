@@ -20,17 +20,18 @@ export class AppNavigationService {
     getMenu(): AppMenu {
         return new AppMenu('MainMenu', 'MainMenu', [
 
-            new AppMenuItem("PersonalScheduler", 'Pages.PersonalScheduler', "flaticon-line-graph", "/app/main/personalScheduler"),
+            new AppMenuItem("PersonalScheduler", 'Pages.PersonalScheduler', 'flaticon-event-calendar-symbol', "/app/main/personalScheduler"),
 
             //new AppMenuItem('Dashboard', 'Pages.Administration.Host.Dashboard', 'flaticon-line-graph', '/app/admin/hostDashboard'),
             //new AppMenuItem('Dashboard', 'Pages.Tenant.Dashboard', 'flaticon-line-graph', '/app/main/dashboard'),
-            new AppMenuItem('Scheduler', 'Pages.Scheduler', 'flaticon-line-graph', '/app/main/scheduler'),
+            new AppMenuItem('Scheduler', 'Pages.Scheduler', 'flaticon-calendar-with-a-clock-time-tools', '/app/main/scheduler'),
 
             new AppMenuItem("Overview", 'StudentView', "flaticon-book", "/app/main/studentsView/overview"),    
+            new AppMenuItem('Enrollments', 'Pages.Enrollments', 'flaticon-user', '/app/main/enrollments/enrollments'),
             new AppMenuItem("TheoryLessons", 'StudentView', "flaticon-book", "/app/main/studentsView/theoryLessons"),    
             new AppMenuItem("DrivingLessons", 'StudentView', "flaticon-book", "/app/main/studentsView/drivingLessons"), 
             new AppMenuItem("TheoryPractice", 'StudentView', "flaticon-book", "/app/main/studentsView/theoryPractice"), 
-            new AppMenuItem("Invoices", 'StudentView', "flaticon-book", "/app/main/studentsView/invoices"), 
+            new AppMenuItem("Invoices", 'StudentView', "flaticon-coins", "/app/main/studentsView/invoices"), 
             new AppMenuItem("FAQ", 'StudentView', "flaticon-search-1", "/app/main/studentsView/frequentlyAskedQuestions"), 
             new AppMenuItem("PlannedInstructorDL", 'InstructorView', "flaticon-book", "/app/main/studentsView/plannedDrivingLessons"),
 
@@ -46,12 +47,14 @@ export class AppNavigationService {
             undefined, undefined, undefined,  () => {
                 return this._featureCheckerService.isEnabled('App.Simulator')}),
             
-            new AppMenuItem('StudentInvoices', 'Pages.StudentInvoices', 'flaticon-more', '/app/main/sales/studentInvoices'),
+            new AppMenuItem('StudentInvoices', 'Pages.StudentInvoices', 'flaticon-coins', '/app/main/sales/studentInvoices'),
             
          
 
             
-            new AppMenuItem('Courses', 'Pages.Courses', 'flaticon-more', '/app/main/courses/courses'),
+            new AppMenuItem('Courses', 'Pages.Courses', 'flaticon-tabs', '/app/main/courses/courses'),
+            
+           
              new AppMenuItem('Administration', '', 'flaticon-interface-8', '', [
                 new AppMenuItem('OrganizationUnits', 'Pages.Administration.OrganizationUnits', 'flaticon-map', '/app/admin/organization-units'),
                 new AppMenuItem('Roles', 'Pages.Administration.Roles', 'flaticon-suitcase', '/app/admin/roles'),

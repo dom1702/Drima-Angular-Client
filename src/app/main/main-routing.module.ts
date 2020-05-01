@@ -20,7 +20,7 @@ import { SVQuizGuard } from './studentsView/theoryCourse/sv-quiz.guard';
 import { SVTheoryPracticeComponent } from './studentsView/theoryPractice/sv-theoryPractice.component';
 import { SVInvoicesComponent } from './studentsView/invoices/sv-invoices.component';
 import { SVOverviewComponent } from './studentsView/overview/sv-overview.component';
-import { SVLicenseClassSelection } from './studentsView/theoryPractice/sv-licenseClassSelection.component';
+import { SVLicenseClassSelectionComponent } from './studentsView/theoryPractice/sv-licenseClassSelection.component';
 import { SVLicenseClassTasksOverview } from './studentsView/theoryPractice/sv-licenseClassTasksOverview.component';
 import { SVTheoryPracticeQuizComponent } from './studentsView/theoryPractice/sv-theoryPracticeQuiz.component';
 
@@ -53,7 +53,7 @@ import { SVTheoryPracticeQuizComponent } from './studentsView/theoryPractice/sv-
                         component: SVQuizComponent, 
                         data: { permission: 'StudentView' }
                     },
-                   { path: 'studentsView/theoryPractice/licenseClassSelection', component: SVLicenseClassSelection, data: { permission: 'StudentView' }},
+                   { path: 'studentsView/theoryPractice/licenseClassSelection', component: SVLicenseClassSelectionComponent, data: { permission: 'StudentView' }},
                    { path: 'studentsView/theoryPractice/licenseClassTasksOverview', component: SVLicenseClassTasksOverview, data: { permission: 'StudentView' }},
                    { 
                        path: 'studentsView/theoryPractice/quiz', 

@@ -8,7 +8,7 @@ import * as moment from 'moment';
     templateUrl: './sv-licenseClassSelection.component.html',      
     animations: [appModuleAnimation()]
 })
-export class SVLicenseClassSelection extends AppComponentBase implements OnInit {
+export class SVLicenseClassSelectionComponent extends AppComponentBase implements OnInit {
 
     licenseClasses : any[];
 

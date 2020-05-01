@@ -28,7 +28,8 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
             pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
             answerOptions: ['yes', 'no'],
             correctAnswer: 1,
-            type: 2
+            type: 2,
+            hint: "There is a bus dude!"
         },
         {
             quest : 'I can turn right using this lane',
@@ -74,6 +75,7 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
             pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
             answerOptions: ['yes', 'no'],
             correctAnswer: 0,
+            hint: "dude! There is a bus....",
             type: 2
         },
         {
@@ -88,7 +90,7 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
     
     navigateAwaySelection: Subject<boolean> = new Subject<boolean>();
 
-    enableAnimation: boolean = false;
+    quizFinished: boolean = true;
     progressBarType: string = "success";
 
     timerMinutes: number;

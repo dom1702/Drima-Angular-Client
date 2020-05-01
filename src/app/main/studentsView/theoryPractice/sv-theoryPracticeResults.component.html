@@ -1,0 +1,173 @@
+<h4 class="m-portlet__head-text">
+    Number of correct answers:
+</h4>
+
+<h6 class="m-portlet__head-text">
+    Questions: 
+</h6>
+
+<h6 class="m-portlet__head-text">
+    Licence class questions:
+</h6>
+
+<h6 class="m-portlet__head-text">
+    Total:
+</h6>
+
+<p-messages [value]="overallResult" [closable]="false"></p-messages> 
+
+<h6 class="m-portlet__head-text">
+    Max error for license class questions is: 
+</h6>
+
+<h6 class="m-portlet__head-text">
+    Max errors for situation questions is:
+</h6>
+
+<h6 class="m-portlet__head-text">
+    Max errors for max questions is: 
+</h6>
+
+<button class="btn btn-primary mr-5" type="button"   
+    (click)="restartQuiz()">  
+    Start over                 
+</button>
+
+<hr class="ng-tns-c19-1">
+
+<h2 class="m-portlet__head-text mb-2">
+    Feedback
+</h2>
+
+<p-scrollPanel [style]="{width: '100%', height: '450px'}" refresh>
+    <div *ngFor="let question of wrongQuestions">
+
+        <h4 class="m-portlet__head-text"> <!--Question-->
+           {{question.quest}}
+        </h4>
+    
+        <div class="mb-2" [ngSwitch]="question.type"> <!--Correct result and hint-->
+            <div *ngSwitchCase="0"> <!--Single Choice Question-->
+                <div class="row">
+                    <div class="col-sm-6">                    
+                        <div *ngFor="let answer of question.answerOptions; index as j">
+                            <div *ngIf="j == question.correctAnswer; then correctText else defaultText"></div>           
+                            <ng-template #correctText>
+                                <h6 class="m-portlet__head-text text-success font-weight-bold">
+                                    {{j+1}}. {{question.answerOptions[j]}}
+                                </h6>                            
+                            </ng-template>
+                            <ng-template #defaultText>                       
+                                <h6 class="m-portlet__head-text">
+                                    {{j+1}}. {{question.answerOptions[j]}}
+                                </h6>   
+                            </ng-template>
+                        </div>
+                        <div *ngIf="question.selectedAnswer; then answer else empty"></div> <!--User selection-->
+                        <ng-template #answer>
+                            <div *ngIf="question.type == 0; then simpleAnswer else extendedAnswer"></div>
+                            <ng-template #simpleAnswer>
+                                <h6 class="m-portlet__head-text text-danger">
+                                    You answered: {{question.selectedAnswer+1}}.
+                                </h6>
+                            </ng-template>
+                            <ng-template #extendedAnswer>
+                                <h6 class="m-portlet__head-text text-danger">
+                                    You answered: {{question.selectedAnswer+1}}. {{question.answerOptions[selectedAnswer]}}
+                                </h6> 
+                            </ng-template>   
+                        </ng-template>
+                        <ng-template #empty>
+                            <h6 class="m-portlet__head-text text-danger">
+                                You didn't answer this question.
+                            </h6>
+                        </ng-template>
+                    </div>
+                    <div class="col-sm-6">
+                        <div *ngIf="question.pictureUrl">
+                            <img src={{question.pictureUrl}} style="max-width:500px; height:auto; width:100%;"> 
+                        </div>
+                        <div *ngIf="question.hint"> 
+                            <h6 class="m-portlet__head-text">
+                                Hint: {{question.hint}}
+                            </h6>
+                        </div>                   
+                    </div>
+                </div>    
+            </div>
+            <div *ngSwitchCase="1"> <!--Picture Choice Question-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-4 mb-2" *ngFor="let answer of question.answerOptions; index as i">
+                            <div *ngIf="i == question.correctAnswer; then correctFigure else defaultFigure"></div>
+                            <ng-template #correctFigure>
+                                
+                                <figure class="figure">
+                                    <img src={{answer}} class="figure-img img-fluid correctResultBorder" style="max-width:128px; height:auto; width:100%;">       
+                                    <figcaption class="figure-caption text-success">Sign {{i+1}}</figcaption>
+                                </figure>
+                                
+                            </ng-template>
+                            <ng-template #defaultFigure>
+                                
+                                <figure class="figure">
+                                    <img src={{answer}} class="figure-img img-fluid" style="max-width:128px; height:auto; width:100%;">       
+                                    <figcaption class="figure-caption">Sign {{i+1}}</figcaption>
+                                </figure>
+                            
+                            </ng-template>
+                        </div> 
+        
+                        <div *ngIf="question.selectedAnswer; then answer else empty"></div> <!--User selection-->
+                        <ng-template #answer>
+                            <h6 class="m-portlet__head-text text-danger">
+                                You answered: Sign {{question.selectedAnswer+1}}.
+                            </h6>              
+                        </ng-template>
+                        <ng-template #empty>
+                            <h6 class="m-portlet__head-text text-danger">
+                                You didn't answer this question.
+                            </h6>
+                        </ng-template>
+                    </div>           
+                </div>                      
+            </div>
+            <div *ngSwitchCase="2">  <!--Binary Choice Question-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div>
+                            <h6 class="m-portlet__head-text">
+                                Correct answer: {{question.answerOptions[question.correctAnswer]}}
+                            </h6>
+                        </div>
+                        <div *ngIf="question.selectedAnswer; then answer else empty"></div> <!--User selection-->
+                        <ng-template #answer>                                       
+                            <ng-template #extendedAnswer>
+                                <h6 class="m-portlet__head-text text-danger">
+                                    You answered: {{question.answerOptions[question.selectedAnswer]}}
+                                </h6> 
+                            </ng-template>   
+                        </ng-template>
+                        <ng-template #empty>
+                            <h6 class="m-portlet__head-text text-danger">
+                                You didn't answer this question.
+                            </h6>
+                        </ng-template>
+                        <div *ngIf="question.hint"> 
+                            <h6 class="m-portlet__head-text">
+                                Hint: {{question.hint}}
+                            </h6>
+                        </div> 
+                        <div *ngIf="question.pictureUrl">
+                            <img src={{question.pictureUrl}} style="max-width:2500px; height:auto; width:100%;"> 
+                        </div>
+                        
+                    </div>                                
+                </div>  
+            </div>         
+        </div>
+    
+        <hr class="ng-tns-c19-1">
+    </div>
+</p-scrollPanel>
+

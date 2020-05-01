@@ -11,7 +11,7 @@ class LicenseClass {
     includePictureTasks: boolean  
 }
 
-enum QuestionType {
+export enum QuestionType {
     SingleChoice,
     PictureChoice,
     BinaryChoice
@@ -41,7 +41,8 @@ export class TheoryExamQuestion {
     selectedAnswer? : number = -1;
     answerAttempts?: number = 0;
     type: QuestionType;
-    isMarked?: boolean = false;     
+    hint?: string;
+    isMarked?: boolean = false;   
 }
 
 export class QuizSession {

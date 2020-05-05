@@ -2,7 +2,18 @@ import { Component, Injector, OnInit, ViewChild, OnDestroy } from '@angular/core
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import * as moment from 'moment';
-import { Message } from 'primeng/api';
+
+export enum QuestionDisplayType {
+    SingleChoice,
+    PictureChoice,
+    BinaryChoice
+}
+
+export enum QuestionContentType {
+    LicenseClass,
+    TrafficSituation,
+    RiskIdentify
+}
 
 class LicenseClass {
     name: string;
@@ -11,10 +22,25 @@ class LicenseClass {
     includePictureTasks: boolean  
 }
 
-export enum QuestionType {
-    SingleChoice,
-    PictureChoice,
-    BinaryChoice
+export class EvaluatedQuiz {
+    incorrectQuestions: TheoryExamQuestion[];
+    correctAnswersTotal: number;
+    questionsTotal: number;
+
+    showCategoryErrors: boolean = false;
+    errorsLicenceClassQuestions?: number;
+    errorsSituationQuestions?: number;
+    errorsRiskQuestions?: number;
+
+    correctLicenceClassQuestions?: number;
+    correctSituationQuestions?: number;
+    correctRiskQuestions?: number;
+
+    totalLicenceClassQuestions?: number;
+    totalSituationQuestions?: number;
+    totalRiskQuestions?: number;
+
+    quizPassed? : boolean;
 }
 
 export class VehicleDimensions {
@@ -40,9 +66,11 @@ export class TheoryExamQuestion {
     correctAnswer : number;
     selectedAnswer? : number = -1;
     answerAttempts?: number = 0;
-    type: QuestionType;
     hint?: string;
-    isMarked?: boolean = false;   
+    isMarked?: boolean = false; 
+
+    displayType: QuestionDisplayType; 
+    contentType: QuestionContentType;
 }
 
 export class QuizSession {
@@ -56,11 +84,17 @@ export class QuizSession {
     isMarkable: boolean;
     vehicleInformations? : VehicleDimensions;
 
+    incorrectQuestions: TheoryExamQuestion[];
+    maxErrorsLicenceClassQuestions?: number;
+    maxErrorsSituationQuestions?: number;
+    maxErrorsRiskQuestions?: number;
+
     constructor(markable: boolean, timeInMinutes: number, dimensions?: VehicleDimensions) {
         this.isMarkable = markable;
         this.vehicleInformations = dimensions;
         this.selectedQuestion = 1;
         this.duration = timeInMinutes;
+        this.incorrectQuestions = [];
     }
 
     hasAnswer(quizIndex: number) : boolean {
@@ -69,6 +103,58 @@ export class QuizSession {
             return this.quiz[quizIndex].selectedAnswer > -1;
         }
         return false;
+    }
+
+    numberOfLicenceClassQuestions() : number {
+        let n = 0;
+        if(this.quiz != null)
+        {
+            for (let index = 0; index < this.quiz.length; index++) {
+                if(this.quiz[index].contentType == 0)
+                n++;               
+            }
+        }
+        return n;
+    }
+
+    numberOfSituationQuestions() : number {
+        let n = 0;
+        if(this.quiz != null)
+        {
+            for (let index = 0; index < this.quiz.length; index++) {
+                if(this.quiz[index].contentType == 1)
+                n++;               
+            }
+        }
+        return n;
+    }
+
+    numberOfRiskIdentifyingQuestions() : number{
+        let n = 0;
+        if(this.quiz != null)
+        {
+            for (let index = 0; index < this.quiz.length; index++) {
+                if(this.quiz[index].contentType == 2)
+                n++;               
+            }
+        }
+        return n;
+    }
+
+    getNextQuestion() : TheoryExamQuestion {
+        let index = this.selectedQuestion;
+        if(index < 0 || index > this.quiz.length)
+            return null;
+        else
+            return this.quiz[index];
+    }
+
+    getCurrentQuestion() : TheoryExamQuestion {
+        let index = this.selectedQuestion-1;
+        if(index < 0 || index > this.quiz.length)
+            return null;
+        else
+            return this.quiz[index];
     }
 }
 
@@ -81,7 +167,6 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
 
     currentLicenseClass : LicenseClass;
     trafficSituationTaskNames : string[] = [];
-    trafficSituationsReferences : Message[] = [];
 
     constructor(
         injector: Injector,
@@ -98,14 +183,11 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
             includePictureTasks : true
         }; 
         
-        this.trafficSituationTaskNames = ["Test 1", "Test 2", "Test 3", "Test 4"];
-        this.trafficSituationsReferences.push({
-            severity: "info", 
-            summary: "Choose a question serie by clicking the links below. Each serie includes 10 questions. ", 
-            detail: ""});
+        this.trafficSituationTaskNames = ["Iam allowed to turn right", "Iam allowed to turn left", "Iam allowed to turn straight", "the cars are parked correctly"];
+        
     }
 
-    startQuizSession(markable: boolean) : void {
+    startSelectedQuiz(id: string) : void {
         console.log("start exam");
     }
 

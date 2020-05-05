@@ -21,17 +21,17 @@ export class SVLicenseClassSelectionComponent extends AppComponentBase implement
 
     ngOnInit(): void {
         this.licenseClasses = [{
-            pictureUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
+            pictureUrl: "/assets/onlineTheory/licenceClassPictures/B_PassengerCar.png",
             title: "B",
             description: "Passenger Car"
         },
         {
-            pictureUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-be.jpg?__blob=normal",
+            pictureUrl: "/assets/onlineTheory/licenceClassPictures/BE_PassengerCarTrailer.png",
             title: "BE",
             description: "Passenger car with trailer"
         },
         {
-            pictureUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-a.jpg?__blob=normal",
+            pictureUrl: "/assets/onlineTheory/licenceClassPictures/A_Motorcycle.png",
             title: "A",
             description: "Motorcycle"
         }];

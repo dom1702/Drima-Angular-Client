@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { ICanComponentDeactivate } from '../theoryCourse/sv-quiz.guard';
@@ -6,9 +6,10 @@ import { Observable, Subject } from 'rxjs';
 import { PagesModel } from 'ngx-bootstrap/pagination/models';
 import { PaginationComponent } from 'ngx-bootstrap';
 import * as moment from 'moment';
-import { TheoryExamQuestion, QuizSession } from './sv-licenseClassTasksOverview.component';
+import { TheoryExamQuestion, QuizSession, EvaluatedQuiz } from './sv-licenseClassTasksOverview.component';
 import { MessageService, SelectItem } from 'primeng/api';
 import { SelectButtonModule } from 'primeng/primeng';
+import { SVTheoryPracticeResultsComponent } from './sv-theoryPracticeResults.component';
 
 @Component({
     templateUrl: './sv-theoryPracticeQuiz.component.html',
@@ -17,32 +18,20 @@ import { SelectButtonModule } from 'primeng/primeng';
     providers: [MessageService]
 })
 
-export class SVTheoryPracticeQuizComponent extends AppComponentBase implements OnInit, ICanComponentDeactivate {
+export class SVTheoryPracticeQuizComponent extends AppComponentBase implements OnInit, ICanComponentDeactivate {   
     @ViewChild("pic01") picButton01 : ElementRef;
     @ViewChild("pic02") picButton02 : ElementRef;
     @ViewChild("pic03") picButton03 : ElementRef;
+
+    currentResults : EvaluatedQuiz = null;
     
-    dummyContent: TheoryExamQuestion[] = [      
-        {
-            quest : 'I can turn straight using this lane',
-            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
-            answerOptions: ['yes', 'no'],
-            correctAnswer: 1,
-            type: 2,
-            hint: "There is a bus dude!"
-        },
-        {
-            quest : 'I can turn right using this lane',
-            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
-            answerOptions: ['yes', 'no'],
-            correctAnswer: 0,
-            type: 2
-        },
+    dummyContent: TheoryExamQuestion[] = [     
         {
             quest : 'Why?',
             answerOptions: ['therefore!', 'dunno?', 'yolo!'],
             correctAnswer: 2,
-            type: 0
+            displayType: 0,
+            contentType: 0
         },
         {
             quest : 'Select the tree.',
@@ -52,13 +41,22 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
                   'https://img.etsystatic.com/il/32caaf/1331103981/il_340x270.1331103981_rsm5.jpg?version=1'
                 ],
             correctAnswer: 0,
-            type: 1
+            displayType: 1,
+            contentType: 0
         },       
         {
             quest : 'Why?',
             answerOptions: ['therefore!', 'dunno?', 'yolo!'],
             correctAnswer: 2,
-            type: 0
+            displayType: 0,
+            contentType: 0
+        },
+        {
+            quest : 'ABC 123?',
+            answerOptions: ['A!', 'B?', 'CCC!'],
+            correctAnswer: 1,
+            displayType: 0,
+            contentType: 0
         },
         {
             quest : 'Select the tree.',
@@ -68,29 +66,67 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
                   'https://img.etsystatic.com/il/32caaf/1331103981/il_340x270.1331103981_rsm5.jpg?version=1'
                 ],
             correctAnswer: 0,
-            type: 1
+            displayType: 1,
+            contentType: 0
         },
+        {
+            quest : 'What are the RISKS of alcohol',
+            pictureUrl: 'https://m1.paperblog.com/i/64/643369/dibujos-animados-enfermedades-o-trastornos-L-F0UDdF.jpeg',
+            answerOptions: ['addiction', 'nothing', 'getting dumb'],
+            correctAnswer: 0,
+            displayType: 0,
+            contentType: 2
+        }, 
         {
             quest : 'I can turn straight using this lane',
             pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
             answerOptions: ['yes', 'no'],
-            correctAnswer: 0,
-            hint: "dude! There is a bus....",
-            type: 2
+            correctAnswer: 1,
+            displayType: 2,
+            contentType: 1,
+            hint: "There is a bus dude!"
         },
         {
-            quest : 'Why?',
-            answerOptions: ['therefore!', 'dunno?', 'yolo!'],
-            correctAnswer: 2,
-            type: 0
-        }        
+            quest : 'I can turn RIGHT using this lane',
+            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
+            answerOptions: ['yes', 'no'],
+            correctAnswer: 0,
+            displayType: 2,
+            contentType: 1
+        },
+        {
+            quest : 'I can turn STRAIGHT using this lane',
+            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
+            answerOptions: ['yes', 'no'],
+            correctAnswer: 1,
+            displayType: 2,
+            contentType: 1,
+            hint: "There is a bus dude!"
+        },
+        {
+            quest : 'I can turn LEFT using this lane',
+            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
+            answerOptions: ['yes', 'no'],
+            correctAnswer: 0,
+            displayType: 2,
+            contentType: 1
+        },
+        {
+            quest : 'I can park right now',
+            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
+            answerOptions: ['yes', 'no'],
+            correctAnswer: 1,
+            hint: "dude, you are on a junction...",
+            displayType: 2,
+            contentType: 1
+        }     
     ];
 
     questionPageButtons: any[] = [];
     
     navigateAwaySelection: Subject<boolean> = new Subject<boolean>();
 
-    quizFinished: boolean = true;
+    quizFinished: boolean = false;
     progressBarType: string = "success";
 
     timerMinutes: number;
@@ -135,11 +171,11 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         if(this.currentQuizSession.quiz[this.questionContentIndex].selectedAnswer > -1)
         {
             let answer = this.currentQuizSession.quiz[this.questionContentIndex].selectedAnswer;
-            if(this.currentQuizSession.quiz[this.questionContentIndex].type == 2)
+            if(this.currentQuizSession.quiz[this.questionContentIndex].displayType == 2)
             {    
                 return answer == 0 ? "Yes" : "No";
             }
-            else if(this.currentQuizSession.quiz[this.questionContentIndex].type == 1) {
+            else if(this.currentQuizSession.quiz[this.questionContentIndex].displayType == 1) {
                 let answer = this.currentQuizSession.quiz[this.questionContentIndex].selectedAnswer; 
                 let p = "Sign ";
                 switch (answer) {
@@ -153,7 +189,7 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
                         return "None";
                 }
             }
-            else if(this.currentQuizSession.quiz[this.questionContentIndex].type == 0) {
+            else if(this.currentQuizSession.quiz[this.questionContentIndex].displayType == 0) {
                 let quest = this.currentQuizSession.quiz[this.questionContentIndex];
                 for (let index = 0; index < quest.answerOptions.length; index++) {
                     if(index == quest.selectedAnswer)
@@ -168,26 +204,33 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         super(injector);
     }
 
-    canDeactivate(): Observable<boolean> | Promise<boolean> {
-        this.message.confirm('Discard answers from this sheet?', (isConfirmed) => {
-            if (isConfirmed) {
-                console.log("navigated away from TheoryPracticeQuiz");
-                //this.finishQuiz(true);
-                //this.resetQuizData(); 
-                this.navigateAwaySelection.next(isConfirmed);                       
-            }
-            else {
-                //this.homeTab.active = false;
-                //this.quizTabs.tabs[this.currentSession.progress+1].active = true;                    
-                console.log("navigation: return to TheoryPracticeQuiz");
-            }
-        });
-        return this.navigateAwaySelection;
+    canDeactivate(): Observable<boolean> | Promise<boolean> | boolean{
+        console.log("check can Deactivate");
+        if(!this.quizFinished)
+        {
+            this.message.confirm('Discard answers from this sheet?', (isConfirmed) => {
+                if (isConfirmed) {
+                    console.log("navigated away from TheoryPracticeQuiz");                   
+                    this.navigateAwaySelection.next(isConfirmed);                       
+                }
+                else {                                    
+                    console.log("navigation: return to TheoryPracticeQuiz");
+                }
+            });
+            return this.navigateAwaySelection;
+        }
+        else 
+        {
+            return true;
+        }
     }
 
     ngOnInit(): void {  
         this.currentQuizSession = new QuizSession(true, 30);   
-        this.currentQuizSession.quiz = this.dummyContent;  
+        this.currentQuizSession.quiz = this.dummyContent;
+        this.currentQuizSession.maxErrorsLicenceClassQuestions = 2;
+        this.currentQuizSession.maxErrorsRiskQuestions = 1;
+        this.currentQuizSession.maxErrorsSituationQuestions = 2;  
         this.startTimer(this.currentQuizSession.duration);
 
         for (let index = 0; index < this.currentQuizSession.quiz.length; index++) {
@@ -213,8 +256,10 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
     }
 
     finishQuiz() {
+        this.evaluateAnswers();
         console.log("data to server, show reults");
         this.toggleQuizNavigation(false);
+        this.quizFinished = true;
     }  
 
     correctQuiz() {      
@@ -233,7 +278,7 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
 
     loadSelectedAnswer() {       
         this.selectedOption = this.currentQuizSession.quiz[this.questionContentIndex].selectedAnswer;    
-        console.log("buttons: " + this.picButton01 + " ," + this.picButton02 + " ," + this.picButton03 );
+        //console.log("buttons: " + this.picButton01 + " ," + this.picButton02 + " ," + this.picButton03 );
         if(this.picButton01 != null)
         {
             if(this.selectedOption == 0)   
@@ -250,6 +295,7 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         {
             this.currentQuizSession.selectedQuestion += 1;
             this.changeAllButtonStyles(true, "defaultPageButton");
+            this.loadSelectedAnswer();
         }
     }
 
@@ -257,6 +303,7 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         if(this.currentQuizSession != null &&  this.currentQuizSession.selectedQuestion > 1) {
             this.currentQuizSession.selectedQuestion -= 1;
             this.changeAllButtonStyles(true, "defaultPageButton");
+            this.loadSelectedAnswer();
         }
     }
 
@@ -344,6 +391,84 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         }
     }
 
+    evaluateAnswers() {
+        let showCatErrors = this.currentQuizSession.maxErrorsLicenceClassQuestions ? true : false;
+        let errorsLicenceClass = 0; let errorsRisk = 0; let errorsSituation = 0;
+        let correctLicenceClass = 0; let correctRisk = 0; let correctSituation = 0;
+        
+        for (let index = 0; index < this.currentQuizSession.quiz.length; index++) {
+            let q = this.currentQuizSession.quiz[index];
+            if(q.selectedAnswer != q.correctAnswer ) {
+                this.currentQuizSession.incorrectQuestions.push(q);
+
+                if(showCatErrors)
+                {
+                    switch (q.contentType) {
+                        case 0:
+                            errorsLicenceClass++;
+                            break;
+                        case 1:
+                            errorsSituation++;
+                            break;
+                        case 2: 
+                            errorsRisk++;  
+                            break;                         
+                        default:
+                            break;
+                    }                  
+                }
+            }
+            else {
+                if(showCatErrors)
+                {
+                    switch (q.contentType) {
+                        case 0:
+                            correctLicenceClass++;
+                            break;
+                        case 1:
+                            correctSituation++;
+                            break;
+                        case 2: 
+                        correctRisk++;  
+                            break;                         
+                        default:
+                            break;
+                    }                  
+                }
+            }            
+        }
+
+        let evaluation: EvaluatedQuiz = {
+            incorrectQuestions : this.currentQuizSession.incorrectQuestions,
+            correctAnswersTotal : (this.currentQuizSession.quiz.length - 
+                this.currentQuizSession.incorrectQuestions.length),
+            questionsTotal: this.currentQuizSession.quiz.length,
+            showCategoryErrors: showCatErrors
+        };
+
+        if(showCatErrors)
+        {
+            evaluation.errorsLicenceClassQuestions = errorsLicenceClass;
+            evaluation.totalLicenceClassQuestions = this.currentQuizSession.numberOfLicenceClassQuestions();
+            evaluation.correctLicenceClassQuestions = correctLicenceClass;
+
+            evaluation.errorsRiskQuestions = errorsRisk;
+            evaluation.totalRiskQuestions = this.currentQuizSession.numberOfRiskIdentifyingQuestions();
+            evaluation.correctRiskQuestions = correctRisk;
+
+            evaluation.errorsSituationQuestions = errorsSituation;
+            evaluation.totalSituationQuestions = this.currentQuizSession.numberOfSituationQuestions();
+            evaluation.correctSituationQuestions = correctSituation;
+
+            evaluation.quizPassed = evaluation.errorsLicenceClassQuestions <= this.currentQuizSession.maxErrorsLicenceClassQuestions &&
+                evaluation.errorsSituationQuestions <= this.currentQuizSession.maxErrorsSituationQuestions &&
+                evaluation.errorsLicenceClassQuestions <= this.currentQuizSession.maxErrorsLicenceClassQuestions ?
+                true : false;
+        }
+
+        this.currentResults = evaluation;
+    }
+
     getMarkedQuestionsToString() : string {
         let s = "";
         for (let index = 0; index < this.markedQuestionPages.length; index++) {
@@ -424,8 +549,8 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         }
     }
 
-    addSingleToast(situation: string) {
-        this.messageService.add({key:'trafficSituationToast', severity:'info', summary:'Next traffic situation', detail:situation});
+    addSingleToast(title: string, description: string) {
+        this.messageService.add({key:'trafficSituationToast', severity:'info', summary: title, detail: description});
     }
 
     clearToast() {
@@ -433,15 +558,46 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
     }
 
     checkTrafficSituationNotification() {
-        let debug = false;
+        let currentQuestion = this.currentQuizSession.getCurrentQuestion();
+        let nextQuestion = this.currentQuizSession.getNextQuestion();
+       
+        /*let debug = true;
         if(debug)
         {
             this.addSingleToast("toast works");
-        }
-        else
+        }*/
+        if(nextQuestion != null)
         {
-            console.log("Quiz: Check for toast notification on changing traffic situation dosent work yet");
+            if(currentQuestion.contentType != nextQuestion.contentType)
+            {
+                if(nextQuestion.contentType == 1)
+                    this.addSingleToast("Next traffic situation exercices.",  "First claim: " + nextQuestion.quest);
+            }
+            else {
+                if(currentQuestion.quest != nextQuestion.quest && nextQuestion.contentType == 1)
+                    this.addSingleToast("Next traffic situation.", "Claim: " + nextQuestion.quest);
+            }               
         }
+    }
+
+    getQuizSubtitle() : string {
+        if(!this.quizFinished)
+        {
+            let currQuestion = this.currentQuizSession.getCurrentQuestion();
+            switch (currQuestion.contentType) {
+                case 0:
+                    return "Licence class question";              
+                case 1:
+                    return "Traffic situation question";              
+                case 2:
+                    return "Risk identifying question";                          
+                default:
+                    break;
+            }
+        }
+        else {
+            return "Results";
+        }    
     }
 
 }

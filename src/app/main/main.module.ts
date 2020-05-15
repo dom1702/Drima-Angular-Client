@@ -103,6 +103,7 @@ import { SVLicenseClassSelectionComponent } from './studentsView/theoryPractice/
 import { SVTheoryPracticeQuizComponent } from './studentsView/theoryPractice/sv-theoryPracticeQuiz.component';
 import { SVLicenseClassTasksOverview } from './studentsView/theoryPractice/sv-licenseClassTasksOverview.component';
 import { SVTheoryPracticeResultsComponent } from './studentsView/theoryPractice/sv-theoryPracticeResults.component';
+import { SVLicenseClassDimensionInfoComponent } from './studentsView/theoryPractice/customElements/sv-licenseClassDimensionInfo.componet';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -212,7 +213,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       SVLicenseClassSelectionComponent,
       SVTheoryPracticeQuizComponent,
       SVLicenseClassTasksOverview,
-      SVTheoryPracticeResultsComponent
+      SVTheoryPracticeResultsComponent,
+      SVLicenseClassDimensionInfoComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

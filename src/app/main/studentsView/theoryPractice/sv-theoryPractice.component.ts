@@ -10,7 +10,7 @@ import { StudentsViewServiceProxy } from '@shared/service-proxies/service-proxie
     templateUrl: './sv-theoryPractice.component.html',
     animations: [appModuleAnimation()]
 })
-export class SVTheoryPracticeComponent extends AppComponentBase implements OnInit, OnDestroy {
+export class SVTheoryPracticeComponent extends AppComponentBase implements OnInit {
 
     constructor(
         injector: Injector,
@@ -34,10 +34,4 @@ export class SVTheoryPracticeComponent extends AppComponentBase implements OnIni
         console.log(this._helper.studentsCourses);
         console.log(this._helper.studentData);
     }
-
-    ngOnDestroy(): void {
-        //if(this.initEventHandler != null)
-        // this.initEventHandler.unsubscribe();
-     }
-
 }

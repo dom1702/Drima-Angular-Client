@@ -23,9 +23,9 @@
     
                     <hr class="ng-tns-c19-1">
                                         
-                    <div class="row">
+                    <div class="row" *ngIf="licenseClasses">
                         <div class="col-sm-1"></div>
-                        <div class="col-md-auto" *ngFor="let license of licenseClasses">
+                        <div class="col-md-auto" *ngFor="let license of licenseClasses; index as i;">
                             <div class="card">
                                 <img src={{license.pictureUrl}} class="card-image">
                                 <div class="card-header">
@@ -34,8 +34,8 @@
                                         <div class="col-9"><h5>{{license.description}}</h5></div>                 
                                     </div>
                                     <button type="button"  class="btn btn-primary btn-block" 
-                                    (click)=getLicenseTasks(license.title)
-                                    routerLink="/app/main/studentsView/theoryPractice/licenseClassTasksOverview">  
+                                        (click)= "selectLicencseClass(i)"
+                                        routerLink="/app/main/studentsView/theoryPractice/licenseClassTasksOverview">  
                                     Open                 
                                     </button>                                                             
                                 </div>           

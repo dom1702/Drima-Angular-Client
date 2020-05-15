@@ -14,7 +14,7 @@
     <div class="m-content">
         <div class="m-portlet m-portlet--mobile">         
             <div class="m-portlet__body">                
-                <div class="container" *ngIf="currentQuizSession.quiz">                   
+                <div class="container" *ngIf="currentQuizSession">                   
                     <div class="row justify-content-center">                   
                         <div class="col-sm-1"></div>                        
                         <div class="col-sm-10"> 
@@ -57,19 +57,8 @@
                                     
                                     <div>                           
                                         <div class="col-md">                                                                  
-                                            <div *ngIf="currentQuizSession.vehicleInformations" class="row">
-                                                <div class="col-sm-12 mb-2">
-                                                    <p-card styleClass="ui-card-shadow">                                                                     
-                                                        <div>
-                                                            <span class="flaticon-exclamation"> Vehicle - {{currentLicenseClass.token}} Dimensions:</span>
-                                                        </div>                                        
-                                                        <div>
-                                                            <span class="cardText">Length: {{currentLicenseClass.vehicleDimensions.maxLength}} m;</span>
-                                                            <span class="cardText"> Weight: {{currentLicenseClass.vehicleDimensions.carWeight}} + {{currentLicenseClass.vehicleDimensions.transportWeight}} = {{currentLicenseClass.vehicleDimensions.totalWeight}} t;</span>
-                                                            <span class="cardText"> Height: {{currentLicenseClass.vehicleDimensions.height}} m.</span>
-                                                        </div>                                                                                            
-                                                    </p-card>
-                                                </div>                                          
+                                            <div *ngIf="currentQuizSession.classInformations" class="row">
+                                                <dimensionInfo [dimension]="currentQuizSession.classInformations.vehicleDimensions" [classToken]="currentQuizSession.classInformations.token"></dimensionInfo>                                          
                                             </div>                                       
                                         </div>                           
                                     </div>

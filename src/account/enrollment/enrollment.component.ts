@@ -10,7 +10,14 @@ import {
     SubscriptionServiceProxy,
     TenantRegistrationServiceProxy,
     EditionPaymentType,
-    SubscriptionStartType
+    SubscriptionStartType,
+    EnrollmentsServiceProxy,
+    GetAvailableLicenseClassesForEnrollmentDto,
+    GetPossibleAlreadyOwnedLicenseClassesDto,
+    GetOfficesForEnrollmentDto,
+    GetCoursesFromOfficeDto,
+    GetPricePackagesFromCourseDto,
+    SubmitEnrollmentInput
 } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
 import { Language, LanguagesService } from '@app/shared/common/services/languages.service';
@@ -25,115 +32,11 @@ import { CountriesService, Country } from '@app/shared/common/services/countries
 })
 export class EnrollmentComponent extends AppComponentBase implements OnInit {
 
-    licenseClasses : any[] = 
-    [
-        {
-            className: "Class B",
-            subtitle: "Passenger car",
-            description: "Choose this class if you want to drive a normal car",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal"
-        },
-        {
-            className: "Class A",
-            subtitle: "Motorcycle",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-a.jpg?__blob=normal"
-        },
-        {
-            className: "Class BE",
-            subtitle: "Passenger car with trailer",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-be.jpg?__blob=normal"
-        },
-        {
-            className: "Class M",
-            subtitle: "Motorcycle 50 ccm",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-am.jpg?__blob=normal"
-        },
-        {
-            className: "Class AM125",
-            subtitle: "Motorcycle 125 ccm",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-a2.jpg?__blob=normal"
-        },
-        {
-            className: "Moped",
-            subtitle: "Motorcycle 50 ccm, 25 km/h",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-am.jpg?__blob=normal"
-        }
-    ]
-
-    licenseClassesOwned : any[] = 
-    [
-        {
-            className: "Class B",
-            subtitle: "Passenger car",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
-            isOwned: false,
-        },
-        {
-            className: "Class A",
-            subtitle: "Motorcycle",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-a.jpg?__blob=normal",
-            isOwned: false,
-        },
-        {
-            className: "Class BE",
-            subtitle: "Passenger car with trailer",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-be.jpg?__blob=normal",
-            isOwned: false,
-        },
-        {
-            className: "Class M",
-            subtitle: "Motorcycle 50 ccm",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-am.jpg?__blob=normal",
-            isOwned: false,
-        },
-        {
-            className: "Class AM125",
-            subtitle: "Motorcycle 125 ccm",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-a2.jpg?__blob=normal",
-            isOwned: false,
-        },
-        {
-            className: "Moped",
-            subtitle: "Motorcycle 50 ccm, 25 km/h",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-am.jpg?__blob=normal",
-            isOwned: false,
-        }
-    ]
-
-    locations : any[] = 
-    [
-        {
-            officeName: "Office Philippsthal",
-            address: "Hattorfer Street 20, 36269 Philippsthal",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
-        },
-        {
-            officeName: "Office Heringen",
-            address: "Lmao Street 20, 36268 Heringen",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
-        },
-        {
-            officeName: "Office Bad Hersfeld",
-            address: "Foo Street 20, 36261 Bad Hersfeld",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
-        },
-    ]
-
-    courses : any[] = 
-    [
-        {
-            name: "Course B April 2020",
-            class: "B",
-            imageUrl: "https://www.bmvi.de/SharedDocs/DE/Bilder/VerkehrUndMobilitaet/Strasse/fahrerlaubnisklasse-b.jpg?__blob=normal",
-        },
-    ]
-
-    pricePackages : any[] = 
-    [
-        {
-            name: "Price Package A",
-        },
-    ]
+    licenseClasses : GetAvailableLicenseClassesForEnrollmentDto;
+    licenseClassesOwned : GetPossibleAlreadyOwnedLicenseClassesDto;
+    offices : GetOfficesForEnrollmentDto;
+    courses : GetCoursesFromOfficeDto;
+    pricePackages : GetPricePackagesFromCourseDto;
 
     currentNativeLanguage: string;
     languages: Language[];
@@ -152,6 +55,12 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
 
     currentPageNumber = 0;
     maxPageNumber = 6;
+
+    // Selected values
+    selectedClass : string = "";
+    officeId : number;
+    courseId : number;
+    pricePackageId : number
    
     isUserLoggedIn = false;
 
@@ -164,6 +73,7 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
         private _router: Router,
         private _languagesService: LanguagesService,
         private _countriesService: CountriesService,
+        private _enrollmentService: EnrollmentsServiceProxy
     ) {
         super(injector);
     }
@@ -189,19 +99,36 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
             }
         });
 
+        this._enrollmentService.getAvailableLicenseClassesForEnrollment().subscribe(result => {
+            this.licenseClasses = result;
+        })
+
         this.isUserLoggedIn = abp.session.userId > 0;
     }
 
     goToNextPage()
     {
+        return; 
         if(this.currentPageNumber + 1 == this.maxPageNumber)
             return; 
 
         this.currentPageNumber++;
         this.switchActivePageIndicator(this.currentPageNumber);
+    }
 
-        console.log(this.licenseClassesOwned[0].isOwned);
-        console.log(this.licenseClassesOwned[1].isOwned);
+    goToPage(pageNumber : number)
+    {
+        this.currentPageNumber = pageNumber;
+        this.switchActivePageIndicator(pageNumber);
+    }
+
+    goToPreviousPage()
+    {
+        if(this.currentPageNumber == 0)
+            return; 
+
+        this.currentPageNumber--;
+        this.switchActivePageIndicator(this.currentPageNumber);
     }
 
     switchActivePageIndicator(pageNumber : number)
@@ -239,5 +166,75 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
                 break; 
              } 
          } 
+    }
+
+    classToAcquireSelected(selectedClass : string)
+    {
+        this.selectedClass = selectedClass;
+
+        this._enrollmentService.getPossibleAlreadyOwnedLicenseClasses(this.selectedClass).subscribe(result => {
+            this.licenseClassesOwned = result;
+        })
+
+        this.goToPage(1);
+    }
+
+    classesAlreadyOwnedSelected()
+    {
+        console.log(this.licenseClassesOwned);
+
+        this._enrollmentService.getOffices(this.selectedClass).subscribe(result => {
+            this.offices = result;
+            console.log(this.offices);
+        })
+
+        this.goToPage(2);
+    }
+
+    officeSelected(officeId : number)
+    {
+        console.log(officeId);
+        this.officeId = officeId;
+
+        this._enrollmentService.getCoursesFromOffice(this.selectedClass, officeId).subscribe(result => {
+            this.courses = result;
+        })
+
+        this.goToPage(3);
+    }
+
+    courseSelected(courseId : number)
+    {
+        console.log(courseId);
+        this.courseId = courseId;
+
+        this._enrollmentService.getPricePackagesFromCourse(courseId).subscribe(result => {
+            this.pricePackages = result;
+        })
+
+        this.goToPage(4);
+    }
+
+    pricePackageSelected(pricePackageId : number)
+    {
+        console.log(pricePackageId);
+
+        this.pricePackageId = pricePackageId;
+
+        this.goToPage(5);
+    }
+
+    submit()
+    {
+        // var input :SubmitEnrollmentInput =
+        // {
+        //     firstName = ""
+        // };
+        // this._enrollmentService.submitEnrollment(courseId).subscribe(result => {
+
+        //     abp.message.success('Success', 'You just enrolled in a new course. Please read the confirmation email for further information!');
+
+        // })
+        
     }
 }

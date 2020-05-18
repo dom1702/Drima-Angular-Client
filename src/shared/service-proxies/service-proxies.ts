@@ -4480,6 +4480,328 @@ export class EnrollmentsServiceProxy {
         }
         return _observableOf<EnrollmentOfficeLookupTableDto[]>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    getAvailableLicenseClassesForEnrollment(): Observable<GetAvailableLicenseClassesForEnrollmentDto> {
+        let url_ = this.baseUrl + "/api/services/app/Enrollments/GetAvailableLicenseClassesForEnrollment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAvailableLicenseClassesForEnrollment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAvailableLicenseClassesForEnrollment(<any>response_);
+                } catch (e) {
+                    return <Observable<GetAvailableLicenseClassesForEnrollmentDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetAvailableLicenseClassesForEnrollmentDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAvailableLicenseClassesForEnrollment(response: HttpResponseBase): Observable<GetAvailableLicenseClassesForEnrollmentDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetAvailableLicenseClassesForEnrollmentDto.fromJS(resultData200) : new GetAvailableLicenseClassesForEnrollmentDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetAvailableLicenseClassesForEnrollmentDto>(<any>null);
+    }
+
+    /**
+     * @param licenseClassToAcquire (optional) 
+     * @return Success
+     */
+    getPossibleAlreadyOwnedLicenseClasses(licenseClassToAcquire: string | null | undefined): Observable<GetPossibleAlreadyOwnedLicenseClassesDto> {
+        let url_ = this.baseUrl + "/api/services/app/Enrollments/GetPossibleAlreadyOwnedLicenseClasses?";
+        if (licenseClassToAcquire !== undefined)
+            url_ += "LicenseClassToAcquire=" + encodeURIComponent("" + licenseClassToAcquire) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPossibleAlreadyOwnedLicenseClasses(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPossibleAlreadyOwnedLicenseClasses(<any>response_);
+                } catch (e) {
+                    return <Observable<GetPossibleAlreadyOwnedLicenseClassesDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetPossibleAlreadyOwnedLicenseClassesDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPossibleAlreadyOwnedLicenseClasses(response: HttpResponseBase): Observable<GetPossibleAlreadyOwnedLicenseClassesDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetPossibleAlreadyOwnedLicenseClassesDto.fromJS(resultData200) : new GetPossibleAlreadyOwnedLicenseClassesDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetPossibleAlreadyOwnedLicenseClassesDto>(<any>null);
+    }
+
+    /**
+     * @param licenseClassToAcquire (optional) 
+     * @return Success
+     */
+    getOffices(licenseClassToAcquire: string | null | undefined): Observable<GetOfficesForEnrollmentDto> {
+        let url_ = this.baseUrl + "/api/services/app/Enrollments/GetOffices?";
+        if (licenseClassToAcquire !== undefined)
+            url_ += "LicenseClassToAcquire=" + encodeURIComponent("" + licenseClassToAcquire) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetOffices(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetOffices(<any>response_);
+                } catch (e) {
+                    return <Observable<GetOfficesForEnrollmentDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetOfficesForEnrollmentDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetOffices(response: HttpResponseBase): Observable<GetOfficesForEnrollmentDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetOfficesForEnrollmentDto.fromJS(resultData200) : new GetOfficesForEnrollmentDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetOfficesForEnrollmentDto>(<any>null);
+    }
+
+    /**
+     * @param licenseClassToAcquire (optional) 
+     * @param officeId (optional) 
+     * @return Success
+     */
+    getCoursesFromOffice(licenseClassToAcquire: string | null | undefined, officeId: number | null | undefined): Observable<GetCoursesFromOfficeDto> {
+        let url_ = this.baseUrl + "/api/services/app/Enrollments/GetCoursesFromOffice?";
+        if (licenseClassToAcquire !== undefined)
+            url_ += "LicenseClassToAcquire=" + encodeURIComponent("" + licenseClassToAcquire) + "&"; 
+        if (officeId !== undefined)
+            url_ += "OfficeId=" + encodeURIComponent("" + officeId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCoursesFromOffice(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCoursesFromOffice(<any>response_);
+                } catch (e) {
+                    return <Observable<GetCoursesFromOfficeDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetCoursesFromOfficeDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetCoursesFromOffice(response: HttpResponseBase): Observable<GetCoursesFromOfficeDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetCoursesFromOfficeDto.fromJS(resultData200) : new GetCoursesFromOfficeDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetCoursesFromOfficeDto>(<any>null);
+    }
+
+    /**
+     * @param courseId (optional) 
+     * @return Success
+     */
+    getPricePackagesFromCourse(courseId: number | null | undefined): Observable<GetPricePackagesFromCourseDto> {
+        let url_ = this.baseUrl + "/api/services/app/Enrollments/GetPricePackagesFromCourse?";
+        if (courseId !== undefined)
+            url_ += "CourseId=" + encodeURIComponent("" + courseId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPricePackagesFromCourse(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPricePackagesFromCourse(<any>response_);
+                } catch (e) {
+                    return <Observable<GetPricePackagesFromCourseDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetPricePackagesFromCourseDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPricePackagesFromCourse(response: HttpResponseBase): Observable<GetPricePackagesFromCourseDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetPricePackagesFromCourseDto.fromJS(resultData200) : new GetPricePackagesFromCourseDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetPricePackagesFromCourseDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    submitEnrollment(input: SubmitEnrollmentInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Enrollments/SubmitEnrollment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSubmitEnrollment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSubmitEnrollment(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSubmitEnrollment(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
 }
 
 @Injectable()
@@ -26367,6 +26689,582 @@ export class EnrollmentOfficeLookupTableDto implements IEnrollmentOfficeLookupTa
 export interface IEnrollmentOfficeLookupTableDto {
     id: number | undefined;
     displayName: string | undefined;
+}
+
+export class GetAvailableLicenseClassesForEnrollmentDto implements IGetAvailableLicenseClassesForEnrollmentDto {
+    licenseClasses!: LC[] | undefined;
+
+    constructor(data?: IGetAvailableLicenseClassesForEnrollmentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["licenseClasses"] && data["licenseClasses"].constructor === Array) {
+                this.licenseClasses = [] as any;
+                for (let item of data["licenseClasses"])
+                    this.licenseClasses!.push(LC.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetAvailableLicenseClassesForEnrollmentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetAvailableLicenseClassesForEnrollmentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.licenseClasses && this.licenseClasses.constructor === Array) {
+            data["licenseClasses"] = [];
+            for (let item of this.licenseClasses)
+                data["licenseClasses"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IGetAvailableLicenseClassesForEnrollmentDto {
+    licenseClasses: LC[] | undefined;
+}
+
+export class LC implements ILC {
+    licenseClass!: string | undefined;
+    description!: string | undefined;
+    image!: string | undefined;
+
+    constructor(data?: ILC) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.licenseClass = data["licenseClass"];
+            this.description = data["description"];
+            this.image = data["image"];
+        }
+    }
+
+    static fromJS(data: any): LC {
+        data = typeof data === 'object' ? data : {};
+        let result = new LC();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["licenseClass"] = this.licenseClass;
+        data["description"] = this.description;
+        data["image"] = this.image;
+        return data; 
+    }
+}
+
+export interface ILC {
+    licenseClass: string | undefined;
+    description: string | undefined;
+    image: string | undefined;
+}
+
+export class GetPossibleAlreadyOwnedLicenseClassesDto implements IGetPossibleAlreadyOwnedLicenseClassesDto {
+    licenseClasses!: OwnedLC[] | undefined;
+
+    constructor(data?: IGetPossibleAlreadyOwnedLicenseClassesDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["licenseClasses"] && data["licenseClasses"].constructor === Array) {
+                this.licenseClasses = [] as any;
+                for (let item of data["licenseClasses"])
+                    this.licenseClasses!.push(OwnedLC.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPossibleAlreadyOwnedLicenseClassesDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPossibleAlreadyOwnedLicenseClassesDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.licenseClasses && this.licenseClasses.constructor === Array) {
+            data["licenseClasses"] = [];
+            for (let item of this.licenseClasses)
+                data["licenseClasses"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IGetPossibleAlreadyOwnedLicenseClassesDto {
+    licenseClasses: OwnedLC[] | undefined;
+}
+
+export class OwnedLC implements IOwnedLC {
+    licenseClass!: string | undefined;
+    description!: string | undefined;
+    image!: string | undefined;
+
+    constructor(data?: IOwnedLC) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.licenseClass = data["licenseClass"];
+            this.description = data["description"];
+            this.image = data["image"];
+        }
+    }
+
+    static fromJS(data: any): OwnedLC {
+        data = typeof data === 'object' ? data : {};
+        let result = new OwnedLC();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["licenseClass"] = this.licenseClass;
+        data["description"] = this.description;
+        data["image"] = this.image;
+        return data; 
+    }
+}
+
+export interface IOwnedLC {
+    licenseClass: string | undefined;
+    description: string | undefined;
+    image: string | undefined;
+}
+
+export class GetOfficesForEnrollmentDto implements IGetOfficesForEnrollmentDto {
+    offices!: OfficeEnrollment[] | undefined;
+
+    constructor(data?: IGetOfficesForEnrollmentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["offices"] && data["offices"].constructor === Array) {
+                this.offices = [] as any;
+                for (let item of data["offices"])
+                    this.offices!.push(OfficeEnrollment.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetOfficesForEnrollmentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetOfficesForEnrollmentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.offices && this.offices.constructor === Array) {
+            data["offices"] = [];
+            for (let item of this.offices)
+                data["offices"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IGetOfficesForEnrollmentDto {
+    offices: OfficeEnrollment[] | undefined;
+}
+
+export class OfficeEnrollment implements IOfficeEnrollment {
+    officeId!: number | undefined;
+    officeName!: string | undefined;
+    address!: string | undefined;
+    image!: string | undefined;
+
+    constructor(data?: IOfficeEnrollment) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.officeId = data["officeId"];
+            this.officeName = data["officeName"];
+            this.address = data["address"];
+            this.image = data["image"];
+        }
+    }
+
+    static fromJS(data: any): OfficeEnrollment {
+        data = typeof data === 'object' ? data : {};
+        let result = new OfficeEnrollment();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["officeId"] = this.officeId;
+        data["officeName"] = this.officeName;
+        data["address"] = this.address;
+        data["image"] = this.image;
+        return data; 
+    }
+}
+
+export interface IOfficeEnrollment {
+    officeId: number | undefined;
+    officeName: string | undefined;
+    address: string | undefined;
+    image: string | undefined;
+}
+
+export class GetCoursesFromOfficeDto implements IGetCoursesFromOfficeDto {
+    courses!: Course[] | undefined;
+
+    constructor(data?: IGetCoursesFromOfficeDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["courses"] && data["courses"].constructor === Array) {
+                this.courses = [] as any;
+                for (let item of data["courses"])
+                    this.courses!.push(Course.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetCoursesFromOfficeDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCoursesFromOfficeDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.courses && this.courses.constructor === Array) {
+            data["courses"] = [];
+            for (let item of this.courses)
+                data["courses"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IGetCoursesFromOfficeDto {
+    courses: Course[] | undefined;
+}
+
+export class Course implements ICourse {
+    courseId!: number | undefined;
+    courseName!: string | undefined;
+    image!: string | undefined;
+
+    constructor(data?: ICourse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.courseId = data["courseId"];
+            this.courseName = data["courseName"];
+            this.image = data["image"];
+        }
+    }
+
+    static fromJS(data: any): Course {
+        data = typeof data === 'object' ? data : {};
+        let result = new Course();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["courseId"] = this.courseId;
+        data["courseName"] = this.courseName;
+        data["image"] = this.image;
+        return data; 
+    }
+}
+
+export interface ICourse {
+    courseId: number | undefined;
+    courseName: string | undefined;
+    image: string | undefined;
+}
+
+export class GetPricePackagesFromCourseDto implements IGetPricePackagesFromCourseDto {
+    pricePackages!: PricePackage[] | undefined;
+
+    constructor(data?: IGetPricePackagesFromCourseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["pricePackages"] && data["pricePackages"].constructor === Array) {
+                this.pricePackages = [] as any;
+                for (let item of data["pricePackages"])
+                    this.pricePackages!.push(PricePackage.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPricePackagesFromCourseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPricePackagesFromCourseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.pricePackages && this.pricePackages.constructor === Array) {
+            data["pricePackages"] = [];
+            for (let item of this.pricePackages)
+                data["pricePackages"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IGetPricePackagesFromCourseDto {
+    pricePackages: PricePackage[] | undefined;
+}
+
+export class PricePackage implements IPricePackage {
+    pricePackageId!: number | undefined;
+    packageName!: string | undefined;
+    description!: string | undefined;
+    image!: string | undefined;
+
+    constructor(data?: IPricePackage) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.pricePackageId = data["pricePackageId"];
+            this.packageName = data["packageName"];
+            this.description = data["description"];
+            this.image = data["image"];
+        }
+    }
+
+    static fromJS(data: any): PricePackage {
+        data = typeof data === 'object' ? data : {};
+        let result = new PricePackage();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pricePackageId"] = this.pricePackageId;
+        data["packageName"] = this.packageName;
+        data["description"] = this.description;
+        data["image"] = this.image;
+        return data; 
+    }
+}
+
+export interface IPricePackage {
+    pricePackageId: number | undefined;
+    packageName: string | undefined;
+    description: string | undefined;
+    image: string | undefined;
+}
+
+export class SubmitEnrollmentInput implements ISubmitEnrollmentInput {
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+    socialSecurityNo!: string | undefined;
+    street!: string | undefined;
+    zipCode!: string | undefined;
+    city!: string | undefined;
+    phone!: string | undefined;
+    email!: string | undefined;
+    birthCountry!: string | undefined;
+    nativeLanguage!: string | undefined;
+    additionalInformation!: string | undefined;
+    payersSocialSecurityNo!: string | undefined;
+    payersName!: string | undefined;
+    payersStreet!: string | undefined;
+    payersZipCode!: string | undefined;
+    payersCity!: string | undefined;
+    payersPhone!: string | undefined;
+    payersEmail!: string | undefined;
+    previousClasses!: string | undefined;
+    licenseClass!: string | undefined;
+    userExists!: boolean | undefined;
+    officeId!: number | undefined;
+    courseId!: number | undefined;
+    pricePackageId!: number | undefined;
+
+    constructor(data?: ISubmitEnrollmentInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+            this.socialSecurityNo = data["socialSecurityNo"];
+            this.street = data["street"];
+            this.zipCode = data["zipCode"];
+            this.city = data["city"];
+            this.phone = data["phone"];
+            this.email = data["email"];
+            this.birthCountry = data["birthCountry"];
+            this.nativeLanguage = data["nativeLanguage"];
+            this.additionalInformation = data["additionalInformation"];
+            this.payersSocialSecurityNo = data["payersSocialSecurityNo"];
+            this.payersName = data["payersName"];
+            this.payersStreet = data["payersStreet"];
+            this.payersZipCode = data["payersZipCode"];
+            this.payersCity = data["payersCity"];
+            this.payersPhone = data["payersPhone"];
+            this.payersEmail = data["payersEmail"];
+            this.previousClasses = data["previousClasses"];
+            this.licenseClass = data["licenseClass"];
+            this.userExists = data["userExists"];
+            this.officeId = data["officeId"];
+            this.courseId = data["courseId"];
+            this.pricePackageId = data["pricePackageId"];
+        }
+    }
+
+    static fromJS(data: any): SubmitEnrollmentInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new SubmitEnrollmentInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["socialSecurityNo"] = this.socialSecurityNo;
+        data["street"] = this.street;
+        data["zipCode"] = this.zipCode;
+        data["city"] = this.city;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["birthCountry"] = this.birthCountry;
+        data["nativeLanguage"] = this.nativeLanguage;
+        data["additionalInformation"] = this.additionalInformation;
+        data["payersSocialSecurityNo"] = this.payersSocialSecurityNo;
+        data["payersName"] = this.payersName;
+        data["payersStreet"] = this.payersStreet;
+        data["payersZipCode"] = this.payersZipCode;
+        data["payersCity"] = this.payersCity;
+        data["payersPhone"] = this.payersPhone;
+        data["payersEmail"] = this.payersEmail;
+        data["previousClasses"] = this.previousClasses;
+        data["licenseClass"] = this.licenseClass;
+        data["userExists"] = this.userExists;
+        data["officeId"] = this.officeId;
+        data["courseId"] = this.courseId;
+        data["pricePackageId"] = this.pricePackageId;
+        return data; 
+    }
+}
+
+export interface ISubmitEnrollmentInput {
+    firstName: string | undefined;
+    lastName: string | undefined;
+    socialSecurityNo: string | undefined;
+    street: string | undefined;
+    zipCode: string | undefined;
+    city: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    birthCountry: string | undefined;
+    nativeLanguage: string | undefined;
+    additionalInformation: string | undefined;
+    payersSocialSecurityNo: string | undefined;
+    payersName: string | undefined;
+    payersStreet: string | undefined;
+    payersZipCode: string | undefined;
+    payersCity: string | undefined;
+    payersPhone: string | undefined;
+    payersEmail: string | undefined;
+    previousClasses: string | undefined;
+    licenseClass: string | undefined;
+    userExists: boolean | undefined;
+    officeId: number | undefined;
+    courseId: number | undefined;
+    pricePackageId: number | undefined;
 }
 
 export class PagedResultDtoOfGetFormForViewDto implements IPagedResultDtoOfGetFormForViewDto {

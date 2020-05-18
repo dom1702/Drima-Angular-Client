@@ -26,7 +26,7 @@ export class SVLicenseClassSelectionComponent extends AppComponentBase implement
     }
 
     ngOnInit(): void {
-        this.getAvailableLicenceClasses();
+        this.getAvailableLicenceClasses();         
     }
 
     selectLicencseClass(index : number) : void  {

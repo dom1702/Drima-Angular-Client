@@ -33,7 +33,7 @@ export class SVLicenseClassSelectionComponent extends AppComponentBase implement
         
         this.theoryPracticeHelper.selectedLicenseClass = this.licenseClasses[index];
         this.router.navigateByUrl("/app/main/studentsView/theoryPractice/licenseClassTasksOverview");
-        console.log("helper selected license class " + this.theoryPracticeHelper.selectedLicenseClass);
+        //console.log("helper selected license class " + this.theoryPracticeHelper.selectedLicenseClass);
     }
 
     getAvailableLicenceClasses() {

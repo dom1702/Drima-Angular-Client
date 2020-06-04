@@ -29,11 +29,11 @@ export class LicenseClass {
 }
 
 export class EvaluatedQuiz {
-    incorrectQuestions: TheoryExamQuestion[];
+    incorrectQuestions: TheoryExamQuestion[] = [];
+    correctQuestions: TheoryExamQuestion[] = [];
     correctAnswersTotal: number;
     questionsTotal: number;
 
-    showCategoryErrors: boolean = false;
     errorsLicenceClassQuestions?: number;
     errorsSituationQuestions?: number;
     errorsRiskQuestions?: number;
@@ -72,10 +72,10 @@ export class VehicleDimensions {
 }
 
 export class TheoryExamQuestion {
-    quest : string;
+    quest : string = "";
     pictureUrl? : string;
-    answerOptions : string[];
-    correctAnswer : number;
+    answerOptions : string[] = [];
+    correctAnswer : number = -1;
     selectedAnswer? : number = -1;
     answerAttempts?: number = 0;
     hint?: string;
@@ -83,6 +83,7 @@ export class TheoryExamQuestion {
 
     displayType: QuestionDisplayType; 
     contentType: QuestionContentType;
+    questionId : number;
 }
 
 export class QuizSession {
@@ -94,16 +95,15 @@ export class QuizSession {
     endTime: moment.Moment;
     predefindedQuizId : string;
     isMarkable: boolean;
-    classInformations? : LicenseClass;
+    classInformations : LicenseClass;
+    results: EvaluatedQuiz;
 
-    incorrectQuestions: TheoryExamQuestion[];
     maxErrorsLicenceClassQuestions?: number;
     maxErrorsSituationQuestions?: number;
     maxErrorsRiskQuestions?: number;
 
     constructor() {       
         this.selectedQuestion = 1;
-        this.incorrectQuestions = [];
     }
 
     hasAnswer(quizIndex: number) : boolean {
@@ -177,9 +177,9 @@ export class QuizSession {
 export class SVLicenseClassTasksOverview extends AppComponentBase implements OnInit {
 
     currentLicenseClass : LicenseClass;
-    trafficSituationQuestionSeries : string[] = [];
-    classQuestionSeries : string[] = [];
-    trafficSignQuestionSeries : string[] = [];
+    trafficSituationQuestionSeries : any[] = [];
+    classQuestionSeries : any[] = [];
+    trafficSignQuestionSeries : any[] = [];
 
     classQuestionCount: number;
     trafficSituationQuestionCount: number;
@@ -188,6 +188,7 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
     errorsTrafficSituationCount: number;
     errorsRiskIdentifyingCount: number;
     duration: number;
+    nextTheoryExamId : number;
 
     exam = "Theory Exam";
     previewReceived : boolean;
@@ -204,59 +205,91 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
         
         if(this.currentLicenseClass)
         {
-            this.getLicenseClassTaskTopics();
-            this.getTheoryExamPreview();
+            this.getLicenseClassTaskTopicsAsync();
+            this.getTheoryExamPreviewAsync();
         }
         else
         {
             console.log("Warning: No selected license class found, navigate back and select again");
             this.router.navigateByUrl("/app/main/studentsView/theoryPractice");
         }
-
-        this.trafficSituationQuestionSeries = ["Iam allowed to turn right", "Iam allowed to turn left", "Iam allowed to turn straight", "the cars are parked correctly"]; 
-        this.classQuestionSeries = ["Class Question Series 1"];     
-        this.trafficSignQuestionSeries = ["Traffic Sign Series 1", "Traffic Sign Series 2"];                   
     }
 
-    startSelectedQuiz(id: string, markable: boolean) : void {
-        console.log("start exam " + id);
+    startSelectedQuiz(id: number) : void {       
         this.theoryPracticeHelper.quizId = id;
-        this.theoryPracticeHelper.quizMarkable = markable;
+        this.theoryPracticeHelper.quizMarkable = false;
+        this.theoryPracticeHelper.quizDuration = this.duration;
+        this.theoryPracticeHelper.selectedLicenseClass = this.currentLicenseClass;
         this.router.navigateByUrl("/app/main/studentsView/theoryPractice/quiz");
     }
 
-    getLicenseClassTaskTopics() {
+    startTheoryExamSimulation() {
+        this.theoryPracticeHelper.quizMarkable = true;  
+        this.theoryPracticeHelper.quizDuration = this.duration;
+        this.theoryPracticeHelper.selectedLicenseClass = this.currentLicenseClass;
+        this.theoryPracticeHelper.maxErrorsLicenseClassQuestions = this.errorsClassCount;  
+        this.theoryPracticeHelper.maxErrorsRiskIdentifyingQuestions = this.errorsRiskIdentifyingCount;
+        this.theoryPracticeHelper.maxErrorsTrafficSituationQuestions = this.errorsTrafficSituationCount;
+        this.router.navigateByUrl("/app/main/studentsView/theoryPractice/quiz");
+    }
+
+    getLicenseClassTaskTopicsAsync() {
         this.theoryExamService.getTopicsForView(this.currentLicenseClass.token).subscribe(
             (result) => this.generateTaskTopics(result)
         );
     }
 
-    getTheoryExamPreview() {
-       this.theoryExamService.getTheoryExamPreparationForView(this.currentLicenseClass.token).subscribe(
-           (result) => {
-               if(result != null)
-               {
-                    this.previewReceived = true;
-                    this.trafficSituationQuestionCount = result.trafficSituationsQuestionCount;
-                    this.classQuestionCount = result.classQuestionCount;
-                    this.riskIdentifyingQuestionCount = result.riskIdentifyingQuestionCount;
-                    this.theoryPracticeHelper.quizDuration = this.duration = result.maxTimeInMinutes;
-                    this.theoryPracticeHelper.maxErrorsLicenseClassQuestions = this.errorsClassCount = 
-                        result.classQuestionMaxIncorrectCount;
-                    this.theoryPracticeHelper.maxErrorsRiskIdentifyingQuestions = this.errorsRiskIdentifyingCount = 
-                        result.riskIdentifyingQuestionMaxIncorrectCount;
-                    this.theoryPracticeHelper.maxErrorsTrafficSituationQuestions = this.errorsTrafficSituationCount = 
-                        result.trafficSituationsQuestionMaxIncorrectCount; 
-               }         
-           });
+    getTheoryExamPreviewAsync() {
+        console.log("get exam preview");
+        this.theoryExamService.getTheoryExamPreparationForView(this.currentLicenseClass.token).subscribe(
+            (result) => {
+                if(result != null)
+                {
+                        this.previewReceived = true;
+                        this.trafficSituationQuestionCount = result.trafficSituationsQuestionCount;
+                        this.classQuestionCount = result.classQuestionCount;
+                        this.riskIdentifyingQuestionCount = result.riskIdentifyingQuestionCount;
+
+                        this.duration = result.maxTimeInMinutes;
+                        this.errorsClassCount = result.classQuestionMaxIncorrectCount;
+                        this.errorsRiskIdentifyingCount = result.riskIdentifyingQuestionMaxIncorrectCount;
+                        this.errorsTrafficSituationCount = result.trafficSituationsQuestionMaxIncorrectCount; 
+                }         
+            });
     }
 
     generateTaskTopics(result : GetTopicsForViewDto) {
-        for (let index = 0; index < result.topics.length; index++) {       
-            console.log(result.topics[index].name);  
-            console.log(result.topics[index].licenseClasses);  
-            console.log(result.topics[index].id);         
+        for (let index = 0; index < result.topics.length; index++) {           
+            if(result.topics[index].name === "Traffic Situations") 
+            {
+                for (let j = 0; j < result.topics[index].questionSeries.length; j++) {  
+                    this.trafficSituationQuestionSeries.push({
+                        topic: result.topics[index].questionSeries[j].name,
+                        id: result.topics[index].questionSeries[j].id
+                    });
+                }
+            }
+            else if(result.topics[index].name === "Class Questions")
+            {
+                for (let j = 0; j < result.topics[index].questionSeries.length; j++) {                                                  
+                    this.classQuestionSeries.push({
+                        topic: result.topics[index].questionSeries[j].name,
+                        id: result.topics[index].questionSeries[j].id
+                    });
+                }
+            }
+            else if(result.topics[index].name === "Traffic Signs")
+            {
+                for (let j = 0; j < result.topics[index].questionSeries.length; j++) {                                                  
+                    this.trafficSignQuestionSeries.push({
+                        topic: result.topics[index].questionSeries[j].name,
+                        id: result.topics[index].questionSeries[j].id
+                    });
+                }
+            }
+            else {
+                console.log("Found Topic: " + result.topics[index].name + " not supported");
+            }                  
         }
     }
-
 }

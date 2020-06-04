@@ -3,10 +3,10 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto col-md-12">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <span>{{l("Theory Exam")}}</span>
+                    <span>{{quizMainTitle}}</span>
                 </h3>
                 <span class="m-section__sub">
-                    {{getQuizSubtitle()}}
+                    {{quizSubtitle}}
                 </span>
             </div>
         </div>
@@ -16,8 +16,8 @@
             <div class="m-portlet__body">                
                 <div class="container" *ngIf="currentQuizSession">                   
                     <div class="row justify-content-center">                   
-                        <div class="col-sm-1"></div>                        
-                        <div class="col-sm-10"> 
+                                                
+                        <div class="col-sm-12"> 
                             <div *ngIf="!quizFinished; then quiz else results"></div> 
                             <ng-template #quiz>                                                      
                                 <div class="row mb-3"> <!--Quiz State-->
@@ -57,7 +57,7 @@
                                     
                                     <div>                           
                                         <div class="col-md">                                                                  
-                                            <div *ngIf="currentQuizSession.classInformations" class="row">
+                                            <div *ngIf="currentQuizSession.classInformations.vehicleDimensions && currentQuizSession.isMarkable" class="row">
                                                 <dimensionInfo [dimension]="currentQuizSession.classInformations.vehicleDimensions" [classToken]="currentQuizSession.classInformations.token"></dimensionInfo>                                          
                                             </div>                                       
                                         </div>                           
@@ -111,8 +111,8 @@
                                             <ng-template #singleChoiceContainer>
                                                 <div class="container">
                                                     <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <div class="mb-3" *ngFor="let answer of currentQuizSession.quiz[questionContentIndex].answerOptions; index as i"> 
+                                                        <div class="col-sm-5">
+                                                            <div class="row mb-3" *ngFor="let answer of currentQuizSession.quiz[questionContentIndex].answerOptions; index as i"> 
                                                                 <p-radioButton                               
                                                                     value={{i}}  
                                                                     label={{currentQuizSession.quiz[questionContentIndex].answerOptions[i]}}                
@@ -121,7 +121,7 @@
                                                                 </p-radioButton>
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-8">
+                                                        <div class="col-sm-7">
                                                             <div *ngIf="currentQuizSession.quiz[questionContentIndex].pictureUrl">
                                                                 <img  src={{currentQuizSession.quiz[questionContentIndex].pictureUrl}} 
                                                                     style="max-width:1028px; height:auto; width:100%;"> 
@@ -168,7 +168,8 @@
                             </ng-template>
 
                             <ng-template #results>
-                                <results [evaluatedQuiz]="currentResults"
+                                <results [evaluatedQuiz]="currentQuizSession.results"
+                                    [showCategoryErrors]="theoryPracticeHelperService.quizMarkable"
                                     [maxErrorsLicenceClass]="currentQuizSession.maxErrorsLicenceClassQuestions"
                                     [maxErrorsSituation]="currentQuizSession.maxErrorsSituationQuestions"
                                     [maxErrorsRisk]="currentQuizSession.maxErrorsRiskQuestions">                   
@@ -176,7 +177,7 @@
                             </ng-template> 
                                                                                         
                         </div> 
-                        <div class="col-sm-1"></div>
+                        
                     </div>                
                 </div>
             </div>                             

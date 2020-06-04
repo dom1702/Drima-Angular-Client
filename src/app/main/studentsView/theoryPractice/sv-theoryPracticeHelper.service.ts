@@ -11,7 +11,7 @@ export class SVTheoryPracticeHelperService {
 
     quizDuration: number; 
     quizMarkable: boolean;
-    quizId: string;
+    quizId: number;
 
     maxErrorsLicenseClassQuestions: number;
     maxErrorsTrafficSituationQuestions: number;

@@ -14,7 +14,10 @@ import { TheoryExamQuestion, QuestionDisplayType, EvaluatedQuiz } from "./sv-lic
 export class SVTheoryPracticeResultsComponent extends AppComponentBase implements OnInit {
     
     overallResult : Message[] = [];
-     
+
+    @Input()
+    showCategoryErrors : boolean;
+    
     @Input() 
     evaluatedQuiz: EvaluatedQuiz;
 

@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { TheoryExamQuestion, QuizSession, EvaluatedQuiz } from './sv-licenseClassTasksOverview.component';
 import { MessageService, SelectItem } from 'primeng/api';
 import { SVTheoryPracticeHelperService } from './sv-theoryPracticeHelper.service';
-import { TheoryExamsServiceProxy, QuestionDto } from '@shared/service-proxies/service-proxies';
+import { TheoryExamsServiceProxy, QuestionDto, QuestionSeriesDto, GetNextTheoryExamQuestionSeriesInput, FinishTheoryExamQuestionSeriesInput, TESingleChoiceDto, TESingleChoiceResultDto } from '@shared/service-proxies/service-proxies';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,105 +22,8 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
     @ViewChild("pic02") picButton02 : ElementRef;
     @ViewChild("pic03") picButton03 : ElementRef;
 
-    currentResults : EvaluatedQuiz = null;
-    
-    dummyContent: TheoryExamQuestion[] = [     
-        {
-            quest : 'Why?',
-            answerOptions: ['therefore!', 'dunno?', 'yolo!'],
-            correctAnswer: 2,
-            displayType: 0,
-            contentType: 0
-        },
-        {
-            quest : 'Select the tree.',
-            answerOptions: [
-                'https://thorpetrees.com/wp-content/uploads/2013/11/oak-tree11.jpg',
-                 'https://i.ytimg.com/vi/KBXqxgGnghY/hqdefault.jpg',
-                  'https://img.etsystatic.com/il/32caaf/1331103981/il_340x270.1331103981_rsm5.jpg?version=1'
-                ],
-            correctAnswer: 0,
-            displayType: 1,
-            contentType: 0
-        },       
-        {
-            quest : 'Why?',
-            answerOptions: ['therefore!', 'dunno?', 'yolo!'],
-            correctAnswer: 2,
-            displayType: 0,
-            contentType: 0
-        },
-        {
-            quest : 'ABC 123?',
-            answerOptions: ['A!', 'B?', 'CCC!'],
-            correctAnswer: 1,
-            displayType: 0,
-            contentType: 0
-        },
-        {
-            quest : 'Select the tree.',
-            answerOptions: [
-                'https://thorpetrees.com/wp-content/uploads/2013/11/oak-tree11.jpg',
-                 'https://i.ytimg.com/vi/KBXqxgGnghY/hqdefault.jpg',
-                  'https://img.etsystatic.com/il/32caaf/1331103981/il_340x270.1331103981_rsm5.jpg?version=1'
-                ],
-            correctAnswer: 0,
-            displayType: 1,
-            contentType: 0
-        },
-        {
-            quest : 'What are the RISKS of alcohol',
-            pictureUrl: 'https://m1.paperblog.com/i/64/643369/dibujos-animados-enfermedades-o-trastornos-L-F0UDdF.jpeg',
-            answerOptions: ['addiction', 'nothing', 'getting dumb'],
-            correctAnswer: 0,
-            displayType: 0,
-            contentType: 2
-        }, 
-        {
-            quest : 'I can turn straight using this lane',
-            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
-            answerOptions: ['yes', 'no'],
-            correctAnswer: 1,
-            displayType: 2,
-            contentType: 1,
-            hint: "There is a bus dude!"
-        },
-        {
-            quest : 'I can turn RIGHT using this lane',
-            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
-            answerOptions: ['yes', 'no'],
-            correctAnswer: 0,
-            displayType: 2,
-            contentType: 1
-        },
-        {
-            quest : 'I can turn STRAIGHT using this lane',
-            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
-            answerOptions: ['yes', 'no'],
-            correctAnswer: 1,
-            displayType: 2,
-            contentType: 1,
-            hint: "There is a bus dude!"
-        },
-        {
-            quest : 'I can turn LEFT using this lane',
-            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
-            answerOptions: ['yes', 'no'],
-            correctAnswer: 0,
-            displayType: 2,
-            contentType: 1
-        },
-        {
-            quest : 'I can park right now',
-            pictureUrl: 'https://s3.123fahrschule.de/fahrschule/prod/tuv/question-img/1.4.41-157.jpeg',
-            answerOptions: ['yes', 'no'],
-            correctAnswer: 1,
-            hint: "dude, you are on a junction...",
-            displayType: 2,
-            contentType: 1
-        }     
-    ];
-
+   // currentResults : EvaluatedQuiz = null;
+  
     questionPageButtons: any[] = [];
     
     navigateAwaySelection: Subject<boolean> = new Subject<boolean>();
@@ -132,7 +35,7 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
     timerSeconds: number;
     timerProgress: number;
     timerMax: number;
-       
+    
     selectOptions: SelectItem[] = [
         {label: 'YES', value: {binary: 0, url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Yes_Check_Circle.svg/1024px-Yes_Check_Circle.svg.png'}},
         {label: 'NO', value: {binary: 1, url:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/No_icon_red.svg/582px-No_icon_red.svg.png'}},
@@ -158,10 +61,10 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
             console.log("Warning: TheoryPracticeQuiz question index is below 0!")
             return 0;
         }
-        else if(x >= this.dummyContent.length)
+        else if(x >= this.currentQuizSession.quiz.length)
         {
-            console.log("Warning: TheoryPracticeQuiz question index is higher then content! " + this.dummyContent.length)
-            return this.dummyContent.length-1;
+            console.log("Warning: TheoryPracticeQuiz question index is higher then content! ")
+            return this.currentQuizSession.quiz.length - 1;
         }
         return x;
     }
@@ -199,6 +102,41 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         return "None";
     }
 
+    get quizMainTitle() : string{
+        if(this.currentQuizSession != null)
+        { 
+            return this.currentQuizSession.predefindedQuizId;
+        }
+        else
+        {
+            return "Theory Exam";
+        }
+    }
+
+    get quizSubtitle() : string {
+        if(this.currentQuizSession)
+        {
+            if(!this.quizFinished)
+            {
+                let currQuestion = this.currentQuizSession.getCurrentQuestion();
+                switch (currQuestion.contentType) {
+                    case 0:
+                        return "Licence class question";              
+                    case 1:
+                        return "Traffic situation question";              
+                    case 2:
+                        return "Risk identifying question";                          
+                    default:
+                        break;
+                }
+            }
+            else {
+                return "Results";
+            } 
+        }
+        else return "No Quiz";
+    }
+
     constructor(injector: Injector, 
         private messageService: MessageService,
         private theoryPracticeHelperService: SVTheoryPracticeHelperService,
@@ -230,112 +168,114 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
 
     ngOnInit(): void {      
         let quizId = this.theoryPracticeHelperService.quizId;
-        this.getQuestionSeries(quizId);
-
-        if(this.currentQuizSession)
-        {          
-            this.startQuiz();
-        }
-        else
+        if(quizId)
         {
-            console.log("Warning: No quizId, navigate back and select again");
-            this.router.navigateByUrl("/app/main/studentsView/theoryPractice");
+            this.getQuestionSeriesAsync(quizId);
         }
-              
-        /*this.currentQuizSession = new QuizSession(true, 30);   
-        this.currentQuizSession.quiz = this.dummyContent;
-        this.currentQuizSession.maxErrorsLicenceClassQuestions = 2;
-        this.currentQuizSession.maxErrorsRiskQuestions = 1;
-        this.currentQuizSession.maxErrorsSituationQuestions = 2;  
-        this.startTimer(this.currentQuizSession.duration);
-        */       
+        else {
+            this.getTheoryExamQuestionSeriesAsync();
+        }
     }
 
-    getQuestionSeries(id : string) {
-        let res;
-        this.theoryExamService.getQuestionSeries(0).subscribe(
-           (result) => {res = result}                       
+    getQuestionSeriesAsync(id : number) {
+        let res;      
+        this.theoryExamService.getQuestionSeries(id).subscribe(
+           (result) => this.generateQuiz(result)                      
+        );     
+    }
+
+    getTheoryExamQuestionSeriesAsync() {
+        let input: GetNextTheoryExamQuestionSeriesInput = new GetNextTheoryExamQuestionSeriesInput();
+        input.licenseClass = this.theoryPracticeHelperService.selectedLicenseClass.token;
+        this.theoryExamService.startNextTheoryExamQuestionSeries(input).subscribe(
+            (result) => {this.generateQuiz(result);}
         );
-
-        if(res != null)
-        {
-            this.getQuestionSeries(res);
-        }      
     }
 
-    generateQuiz(questions: QuestionDto[]) {
-        let quiz : TheoryExamQuestion[] = [];
-        for (let index = 0; index < questions.length; index++) {
-            let currentQuestion = questions[index];
-            let parsedQuestion : TheoryExamQuestion;
-            switch (currentQuestion.type) {
-                case 0: // TrafficSituation
-                    parsedQuestion.displayType = 2;
-                    parsedQuestion.contentType = 1;               
-                    parsedQuestion.pictureUrl = currentQuestion.singleChoiceAnswer.imageUrl;                
-                break;
-                case 1: // ClassRelated
-                    parsedQuestion.displayType = 0;
-                    parsedQuestion.contentType = 0;                    
-                break;
-                case 2: // RiskIdentifying
-                    parsedQuestion.displayType = 0;
-                    parsedQuestion.contentType = 2;                   
-                    parsedQuestion.pictureUrl = currentQuestion.singleChoiceAnswer.imageUrl;                
-                break;
-                case 3: // Other --> PictureQuestion
-                    parsedQuestion.displayType = 1;
-                    parsedQuestion.contentType = 1;
-                break;
-                          
-                default:
-                    break;     
-            }   
-            
-            parsedQuestion.correctAnswer = currentQuestion.singleChoiceAnswer.correctAnswer;                      
-            parsedQuestion.answerOptions.push(currentQuestion.singleChoiceAnswer.answer1);
-            parsedQuestion.answerOptions.push(currentQuestion.singleChoiceAnswer.answer2);
-            parsedQuestion.answerOptions.push(currentQuestion.singleChoiceAnswer.answer3);
-            parsedQuestion.quest = currentQuestion.questionString;
-            quiz.push(parsedQuestion);
+    setTheoryExamQuestionSeriesResultAsync(results : EvaluatedQuiz) {
+        let input : FinishTheoryExamQuestionSeriesInput = new FinishTheoryExamQuestionSeriesInput();
+        input.wrongAnsweredSingleChoiceQuestions = [];
+        input.licenseClass = this.currentQuizSession.classInformations.token;
+        input.correctlyAnsweredClassQuestions = results.correctLicenceClassQuestions;
+        input.correctlyAnsweredRiskIdentifyingQuestions = results.correctRiskQuestions;
+        input.correctlyAnsweredTrafficSituationsQuestions = results.correctSituationQuestions;
+        input.startTime = this.currentQuizSession.startTime;
+        
+        for (let index = 0; index < results.correctQuestions.length; index++) {
+            input.correctlyAnsweredQuestionIds.push(results.correctQuestions[index].questionId);        
         }
 
+        for (let index = 0; index < results.incorrectQuestions.length; index++) {
+            input.wrongAnsweredSingleChoiceQuestions.push(this.convertToQuestionResultDto(results.incorrectQuestions[index]));          
+        }
+
+        this.theoryExamService.finishTheoryExamQuestionSeries(input);
+    }
+
+    generateQuiz(questionSeries: QuestionSeriesDto) {
+        
         this.currentQuizSession = new QuizSession();
+        this.currentQuizSession.predefindedQuizId = questionSeries.name;
+        
+        let quiz : TheoryExamQuestion[] = [];
+        for (let index = 0; index < questionSeries.questions.length; index++) {           
+            quiz.push(this.convertToTheoryExamQuestion(questionSeries.questions[index]));
+        }
+ 
         this.currentQuizSession.quiz = quiz;
 
         for (let index = 0; index < this.currentQuizSession.quiz.length; index++) {
             this.questionPageButtons.push({class: 'disabledPageButton', disabled: true});          
         }
         this.changeButtonStyle(0, "selectedPageButton"); 
+
+        this.startQuiz();
     }
 
     onFinishQuiz() { 
-        this.message.confirm("Otherwise continue with results.", 'Do you want to change your answers?',
+        let message = "Otherwise check your answers.";
+        let title = this.currentQuizSession.isMarkable ?  "Do you want to end the theory exam simulation?" :
+            "Do you want to end the question series?";
+        this.message.confirm(message, title,
             (isConfirmed) => {
-            if (isConfirmed) {  
-                this.correctQuiz();                             
+            if (isConfirmed) { 
+                this.finishQuiz();                                
             }  
             else {
-                this.finishQuiz();
+                this.correctQuiz();    
             }               
         });                           
     }
 
-    startQuiz() {       
-        this.currentQuizSession.duration = this.theoryPracticeHelperService.quizDuration;
-        this.currentQuizSession.isMarkable = this.theoryPracticeHelperService.quizMarkable;
-        this.currentQuizSession.maxErrorsLicenceClassQuestions = this.theoryPracticeHelperService.maxErrorsLicenseClassQuestions;
-        this.currentQuizSession.maxErrorsRiskQuestions = this.theoryPracticeHelperService.maxErrorsRiskIdentifyingQuestions;
-        this.currentQuizSession.maxErrorsSituationQuestions = this.theoryPracticeHelperService.maxErrorsTrafficSituationQuestions;
-        this.currentQuizSession.selectedQuestion = 1;
-        this.currentQuizSession.incorrectQuestions = [];
-        this.startTimer(this.currentQuizSession.duration);
-          
+    startQuiz() {
+        if(this.currentQuizSession != null) 
+        {      
+            this.currentQuizSession.duration = this.theoryPracticeHelperService.quizDuration;
+            this.currentQuizSession.isMarkable = this.theoryPracticeHelperService.quizMarkable;
+            this.currentQuizSession.classInformations = this.theoryPracticeHelperService.selectedLicenseClass;
+            
+            if(this.currentQuizSession.isMarkable)
+            {
+                this.currentQuizSession.maxErrorsLicenceClassQuestions = this.theoryPracticeHelperService.maxErrorsLicenseClassQuestions;
+                this.currentQuizSession.maxErrorsRiskQuestions = this.theoryPracticeHelperService.maxErrorsRiskIdentifyingQuestions;
+                this.currentQuizSession.maxErrorsSituationQuestions = this.theoryPracticeHelperService.maxErrorsTrafficSituationQuestions;
+            }
+
+            this.currentQuizSession.selectedQuestion = 1;
+            this.currentQuizSession.startTime = moment().locale(moment.defaultFormat);
+            this.startTimer(this.currentQuizSession.duration); 
+        }  
+        else {
+            console.log("Warning: No selected QuizId found! --> Navigating back back");
+            this.router.navigateByUrl("/app/main/studentsView/theoryPractice");
+        }      
     }
 
     finishQuiz() {
-        this.evaluateAnswers();
-        console.log("data to server, show reults");
+        this.evaluateQuiz();
+        if(this.currentQuizSession.isMarkable) // is exam --> send data to server      
+            this.setTheoryExamQuestionSeriesResultAsync(this.currentQuizSession.results);
+              
         this.toggleQuizNavigation(false);
         this.quizFinished = true;
     }  
@@ -345,6 +285,80 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         this.toggleQuizNavigation(true);
     }
 
+    evaluateQuiz() {   
+        let errorsLicenceClass = 0; let errorsRisk = 0; let errorsSituation = 0;
+        let correctLicenceClass = 0; let correctRisk = 0; let correctSituation = 0;
+        let evaluation: EvaluatedQuiz = new EvaluatedQuiz();
+        
+        for (let index = 0; index < this.currentQuizSession.quiz.length; index++) {
+            let q = this.currentQuizSession.quiz[index];
+            if(q.selectedAnswer != q.correctAnswer ) {
+                evaluation.incorrectQuestions.push(q);
+
+                if(this.theoryPracticeHelperService.quizMarkable)
+                {
+                    switch (q.contentType) {
+                        case 0:
+                            errorsLicenceClass++;
+                            break;
+                        case 1:
+                            errorsSituation++;
+                            break;
+                        case 2: 
+                            errorsRisk++;  
+                            break;                         
+                        default:
+                            break;
+                    }                  
+                }
+            }
+            else {
+                if(this.theoryPracticeHelperService.quizMarkable)
+                {
+                    evaluation.correctQuestions.push(q);
+                    switch (q.contentType) {
+                        case 0:
+                            correctLicenceClass++;
+                            break;
+                        case 1:
+                            correctSituation++;
+                            break;
+                        case 2: 
+                        correctRisk++;  
+                            break;                         
+                        default:
+                            break;
+                    }                  
+                }
+            }            
+        }
+            
+        evaluation.correctAnswersTotal = (this.currentQuizSession.quiz.length - evaluation.incorrectQuestions.length);
+        evaluation.questionsTotal = this.currentQuizSession.quiz.length;
+        
+        if(this.theoryPracticeHelperService.quizMarkable)
+        {
+            evaluation.errorsLicenceClassQuestions = errorsLicenceClass;
+            evaluation.totalLicenceClassQuestions = this.currentQuizSession.numberOfLicenceClassQuestions();
+            evaluation.correctLicenceClassQuestions = correctLicenceClass;
+
+            evaluation.errorsRiskQuestions = errorsRisk;
+            evaluation.totalRiskQuestions = this.currentQuizSession.numberOfRiskIdentifyingQuestions();
+            evaluation.correctRiskQuestions = correctRisk;
+
+            evaluation.errorsSituationQuestions = errorsSituation;
+            evaluation.totalSituationQuestions = this.currentQuizSession.numberOfSituationQuestions();
+            evaluation.correctSituationQuestions = correctSituation;
+
+            evaluation.quizPassed = evaluation.errorsLicenceClassQuestions <= this.currentQuizSession.maxErrorsLicenceClassQuestions &&
+                evaluation.errorsSituationQuestions <= this.currentQuizSession.maxErrorsSituationQuestions &&
+                evaluation.errorsLicenceClassQuestions <= this.currentQuizSession.maxErrorsLicenceClassQuestions ?
+                true : false;
+        } 
+        
+        this.currentQuizSession.results = evaluation;
+    }
+
     onPageClicked(index: number) {
         if(this.currentQuizSession != null )
         {        
@@ -352,20 +366,6 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
             this.changeAllButtonStyles(true, "defaultPageButton");
             this.loadSelectedAnswer();
         }
-    }
-
-    loadSelectedAnswer() {       
-        this.selectedOption = this.currentQuizSession.quiz[this.questionContentIndex].selectedAnswer;    
-        //console.log("buttons: " + this.picButton01 + " ," + this.picButton02 + " ," + this.picButton03 );
-        if(this.picButton01 != null)
-        {
-            if(this.selectedOption == 0)   
-                this.picButton01.nativeElement.focus(); 
-            else if(this.selectedOption == 1)   
-                this.picButton02.nativeElement.focus(); 
-            else if(this.selectedOption == 2)   
-                this.picButton03.nativeElement.focus(); 
-        }  
     }
 
     onNextPageClicked() {
@@ -383,6 +383,20 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
             this.changeAllButtonStyles(true, "defaultPageButton");
             this.loadSelectedAnswer();
         }
+    }
+
+    loadSelectedAnswer() {       
+        this.selectedOption = this.currentQuizSession.quiz[this.questionContentIndex].selectedAnswer;    
+        //console.log("buttons: " + this.picButton01 + " ," + this.picButton02 + " ," + this.picButton03 );
+        if(this.picButton01 != null)
+        {
+            if(this.selectedOption == 0)   
+                this.picButton01.nativeElement.focus(); 
+            else if(this.selectedOption == 1)   
+                this.picButton02.nativeElement.focus(); 
+            else if(this.selectedOption == 2)   
+                this.picButton03.nativeElement.focus(); 
+        }  
     }
 
     markQuestion() {
@@ -446,105 +460,72 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
     }
 
     setQuestionAnswerRadioButton(value : number) {
-        if(this.dummyContent)
+        if(this.currentQuizSession)
         {
             //console.log("set answer to: " + value);
-            this.dummyContent[this.questionContentIndex].selectedAnswer = value;           
+            this.currentQuizSession.quiz[this.questionContentIndex].selectedAnswer = value;           
         }
     }
 
     setQuestionAnswerSelectButton(event: any) {
-        if(this.dummyContent)
+        if(this.currentQuizSession)
         {
             //console.log("set answer to: " + event.value + " " + event.value.value.binary + "selected option: " + this.selectedOption);
-            this.dummyContent[this.questionContentIndex].selectedAnswer = event.value.value.binary;                         
+            this.currentQuizSession.quiz[this.questionContentIndex].selectedAnswer = event.value.value.binary;                         
         }
     }
 
     setQuestionAnswerPictureButton(value : number) {
-        if(this.dummyContent)
+        if(this.currentQuizSession)
         {
             //console.log("(pic) set answer to: " + value);
-            this.dummyContent[this.questionContentIndex].selectedAnswer = value;           
+            this.currentQuizSession.quiz[this.questionContentIndex].selectedAnswer = value;           
         }
     }
 
-    evaluateAnswers() {
-        let showCatErrors = this.currentQuizSession.maxErrorsLicenceClassQuestions ? true : false;
-        let errorsLicenceClass = 0; let errorsRisk = 0; let errorsSituation = 0;
-        let correctLicenceClass = 0; let correctRisk = 0; let correctSituation = 0;
+    convertToQuestionResultDto(target : TheoryExamQuestion) : TESingleChoiceResultDto {
+        let temp : TESingleChoiceResultDto = new TESingleChoiceResultDto();
+        temp.answer = target.selectedAnswer;
+        temp.questionId = target.questionId;
+        return temp;
+    }
+
+    convertToTheoryExamQuestion(target : QuestionDto) : TheoryExamQuestion {
+        let temp : TheoryExamQuestion = new TheoryExamQuestion();
+
+        switch (target.type) {
+            case 0: // TrafficSituation
+                temp.displayType = 2;
+                temp.contentType = 1;               
+                temp.pictureUrl = target.singleChoiceAnswer.imageUrl;                
+            break;
+            case 1: // ClassRelated
+                temp.displayType = 0;
+                temp.contentType = 0;                    
+            break;
+            case 2: // RiskIdentifying
+                temp.displayType = 0;
+                temp.contentType = 2;                   
+                temp.pictureUrl = target.singleChoiceAnswer.imageUrl;                
+            break;
+            case 3: // Other --> PictureQuestion
+                temp.displayType = 1;
+                temp.contentType = 0;
+            break;                      
+            default:
+                console.log("Display Question: Question type not found " + target.type);
+                break;     
+        }
         
-        for (let index = 0; index < this.currentQuizSession.quiz.length; index++) {
-            let q = this.currentQuizSession.quiz[index];
-            if(q.selectedAnswer != q.correctAnswer ) {
-                this.currentQuizSession.incorrectQuestions.push(q);
+        temp.correctAnswer = target.singleChoiceAnswer.correctAnswer; 
+        temp.questionId = target.id;                    
+        temp.answerOptions.push(target.singleChoiceAnswer.answer1);
+        temp.answerOptions.push(target.singleChoiceAnswer.answer2);
+        if(target.singleChoiceAnswer.answer3) temp.answerOptions.push(target.singleChoiceAnswer.answer3);
+        if(target.singleChoiceAnswer.answer4) temp.answerOptions.push(target.singleChoiceAnswer.answer4);
+        temp.quest = target.questionString;
 
-                if(showCatErrors)
-                {
-                    switch (q.contentType) {
-                        case 0:
-                            errorsLicenceClass++;
-                            break;
-                        case 1:
-                            errorsSituation++;
-                            break;
-                        case 2: 
-                            errorsRisk++;  
-                            break;                         
-                        default:
-                            break;
-                    }                  
-                }
-            }
-            else {
-                if(showCatErrors)
-                {
-                    switch (q.contentType) {
-                        case 0:
-                            correctLicenceClass++;
-                            break;
-                        case 1:
-                            correctSituation++;
-                            break;
-                        case 2: 
-                        correctRisk++;  
-                            break;                         
-                        default:
-                            break;
-                    }                  
-                }
-            }            
-        }
-
-        let evaluation: EvaluatedQuiz = {
-            incorrectQuestions : this.currentQuizSession.incorrectQuestions,
-            correctAnswersTotal : (this.currentQuizSession.quiz.length - 
-                this.currentQuizSession.incorrectQuestions.length),
-            questionsTotal: this.currentQuizSession.quiz.length,
-            showCategoryErrors: showCatErrors
-        };
-
-        if(showCatErrors)
-        {
-            evaluation.errorsLicenceClassQuestions = errorsLicenceClass;
-            evaluation.totalLicenceClassQuestions = this.currentQuizSession.numberOfLicenceClassQuestions();
-            evaluation.correctLicenceClassQuestions = correctLicenceClass;
-
-            evaluation.errorsRiskQuestions = errorsRisk;
-            evaluation.totalRiskQuestions = this.currentQuizSession.numberOfRiskIdentifyingQuestions();
-            evaluation.correctRiskQuestions = correctRisk;
-
-            evaluation.errorsSituationQuestions = errorsSituation;
-            evaluation.totalSituationQuestions = this.currentQuizSession.numberOfSituationQuestions();
-            evaluation.correctSituationQuestions = correctSituation;
-
-            evaluation.quizPassed = evaluation.errorsLicenceClassQuestions <= this.currentQuizSession.maxErrorsLicenceClassQuestions &&
-                evaluation.errorsSituationQuestions <= this.currentQuizSession.maxErrorsSituationQuestions &&
-                evaluation.errorsLicenceClassQuestions <= this.currentQuizSession.maxErrorsLicenceClassQuestions ?
-                true : false;
-        }
-
-        this.currentResults = evaluation;
+        return temp;
     }
 
     getMarkedQuestionsToString() : string {
@@ -639,11 +620,6 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         let currentQuestion = this.currentQuizSession.getCurrentQuestion();
         let nextQuestion = this.currentQuizSession.getNextQuestion();
        
-        /*let debug = true;
-        if(debug)
-        {
-            this.addSingleToast("toast works");
-        }*/
         if(nextQuestion != null)
         {
             if(currentQuestion.contentType != nextQuestion.contentType)
@@ -657,29 +633,4 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
             }               
         }
     }
-
-    getQuizSubtitle() : string {
-        if(this.currentQuizSession)
-        {
-            if(!this.quizFinished)
-            {
-                let currQuestion = this.currentQuizSession.getCurrentQuestion();
-                switch (currQuestion.contentType) {
-                    case 0:
-                        return "Licence class question";              
-                    case 1:
-                        return "Traffic situation question";              
-                    case 2:
-                        return "Risk identifying question";                          
-                    default:
-                        break;
-                }
-            }
-            else {
-                return "Results";
-            } 
-        }
-    else return "No Quiz"   ;
-    }
-
 }

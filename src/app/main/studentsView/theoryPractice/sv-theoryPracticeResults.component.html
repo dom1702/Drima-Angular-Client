@@ -2,7 +2,7 @@
     Number of correct answers:
 </h4>
 
-<div *ngIf="evaluatedQuiz.showCategoryErrors">
+<div *ngIf="showCategoryErrors">
     <h6 class="m-portlet__head-text">
         Licence Class Questions: {{evaluatedQuiz.correctLicenceClassQuestions}} / {{evaluatedQuiz.totalLicenceClassQuestions}}
     </h6>
@@ -20,7 +20,7 @@
     Total: {{evaluatedQuiz.correctAnswersTotal}} / {{evaluatedQuiz.questionsTotal}}
 </h6>
 
-<div class="container" *ngIf="evaluatedQuiz.showCategoryErrors">
+<div class="container" *ngIf="showCategoryErrors">
     <div class="row">
         <div class="col">    
             <p-messages [value]="overallResult" [closable]="false"></p-messages>         
@@ -29,7 +29,7 @@
     </div>
 </div>
 
-<div *ngIf="evaluatedQuiz.showCategoryErrors && !evaluatedQuiz.quizPassed">
+<div *ngIf="showCategoryErrors && !evaluatedQuiz.quizPassed">
     <h6 class="m-portlet__head-text text-danger">
         Max error for license class questions is: {{maxErrorsLicenceClass}}
     </h6>

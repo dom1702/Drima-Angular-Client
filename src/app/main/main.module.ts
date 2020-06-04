@@ -218,14 +218,11 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       SVLicenseClassSelectionComponent,
       SVTheoryPracticeQuizComponent,
       SVLicenseClassTasksOverview,
-<<<<<<< HEAD
       SVTheoryPracticeResultsComponent,
-      SVLicenseClassDimensionInfoComponent
-=======
+      SVLicenseClassDimensionInfoComponent,
       EnrollmentsComponent,
       ViewEnrollmentModalComponent,		
       CreateOrEditEnrollmentModalComponent,
->>>>>>> d3ff213f77d535ee174cc5d07cc48dc32402c7a0
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

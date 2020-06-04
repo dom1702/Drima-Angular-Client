@@ -55,10 +55,10 @@
                                                 <div *ngFor="let tab of trafficSituationQuestionSeries; index as i;">
                                                     <div *ngIf="i % 2 === 0; then whiteTab else lightTab"></div>
                                                     <ng-template #whiteTab>
-                                                        <button type="button" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab, false)">{{tab}}</button>                                                                                                         
+                                                        <button type="button" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">{{tab.topic}}</button>                                                                                                         
                                                     </ng-template>
                                                     <ng-template #lightTab>
-                                                        <button type="button" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab, false)">{{tab}}</button>                                                                                                           
+                                                        <button type="button" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">{{tab.topic}}</button>                                                                                                           
                                                     </ng-template> 
                                                 </div>
                                             </div>
@@ -78,10 +78,10 @@
                                                 <div *ngFor="let tab of classQuestionSeries; index as i;">
                                                     <div *ngIf="i % 2 === 0; then whiteTab else lightTab"></div>
                                                     <ng-template #whiteTab>
-                                                        <button type="button" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab, false)">{{tab}}</button>                                                                                                         
+                                                        <button type="button" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id, false)">{{tab.topic}}</button>                                                                                                         
                                                     </ng-template>
                                                     <ng-template #lightTab>
-                                                        <button type="button" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab, false)">{{tab}}</button>                                                                                                           
+                                                        <button type="button" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id, false)">{{tab.topic}}</button>                                                                                                           
                                                     </ng-template> 
                                                 </div>
                                             </div>
@@ -101,10 +101,10 @@
                                                 <div *ngFor="let tab of trafficSignQuestionSeries; index as i;">
                                                     <div *ngIf="i % 2 === 0; then whiteTab else lightTab"></div>
                                                     <ng-template #whiteTab>
-                                                        <button type="button" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab, false)">{{tab}}</button>                                                                                                         
+                                                        <button type="button" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id, false)">{{tab.topic}}</button>                                                                                                         
                                                     </ng-template>
                                                     <ng-template #lightTab>
-                                                        <button type="button" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab, false)">{{tab}}</button>                                                                                                           
+                                                        <button type="button" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id, false)">{{tab.topic}}</button>                                                                                                           
                                                     </ng-template> 
                                                 </div>
                                             </div>
@@ -156,8 +156,8 @@
 
                                                     <div>
                                                         <button type="button"  class="btn btn-primary mr-5" 
-                                                            (click)="startSelectedQuiz(exam, true)">  
-                                                            Open                 
+                                                            (click)="startTheoryExamSimulation()">  
+                                                            Start                 
                                                         </button>
                                                     </div> 
                                                 </div>       

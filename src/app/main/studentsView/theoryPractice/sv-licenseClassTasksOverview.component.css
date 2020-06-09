@@ -11,14 +11,9 @@
     font-size: 180px;
 }
 
-.cardText {
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.taskTab {      
+.tabButton {      
     font-size: 16px;
   }
 
-.taskTab:hover {color: royalblue;}
+.tabButton:hover {color: royalblue;}
 

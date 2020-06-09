@@ -3,10 +3,10 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto col-md-12">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <span>{{l("TheoryExam")}}</span>
+                    <span>{{quizMainTitle}}</span>
                 </h3>
                 <span class="m-section__sub">
-                    {{l("empty")}}
+                    {{quizSubtitle}}
                 </span>
             </div>
         </div>
@@ -14,156 +14,170 @@
     <div class="m-content">
         <div class="m-portlet m-portlet--mobile">         
             <div class="m-portlet__body">                
-                <div class="container" *ngIf="currentQuizSession.quiz">                   
+                <div class="container" *ngIf="currentQuizSession">                   
                     <div class="row justify-content-center">                   
-                        <div class="col-sm-1"></div>                        
-                        <div class="col-sm-10">                                           
-                            <div class="row mb-3"> <!--Quiz State-->
-                                
-                                <div class="col-md-auto">  <!--Time Progress-->
-                                    <h6>Time:</h6>
-                                </div> 
-                                <div class="col-1">
-                                    <p class="text-right">{{timerMinutes}}:{{timerSeconds}}</p>
-                                </div> 
-                                <div class="col-10">                 
-                                    <progressbar [max]="timerMax" [animate]="false" [value]="timerProgress" type={{progressBarType}}></progressbar>                              
-                                </div> 
-                                
-                                <div class="w-100"></div> <!--Force line break-->
-                                
-                                <div class="col-md-auto"> <!--Pagination-->
-                                    <h6>Part:</h6>
-                                </div>
-                                <div class="col-1">
-                                    <p class="text-right">{{currentQuizSession.selectedQuestion}}/{{currentQuizSession.quiz.length}}</p>          
-                                </div>
-                                <div class="col-10"> 
+                                                
+                        <div class="col-sm-12"> 
+                            <div *ngIf="!quizFinished; then quiz else results"></div> 
+                            <ng-template #quiz>                                                      
+                                <div class="row mb-3"> <!--Quiz State-->
                                     
-                                    <button *ngIf="showDirectionalLinks" class="defaultPageButton" (click)="onPreviousPageClicked()">Previous</button>
-                                    <button 
-                                        *ngFor="let b of questionPageButtons;index as i"
-                                        (click) = "onPageClicked(i)"                                      
-                                        class = {{b.class}}
-                                        [disabled]="b.disabled">
-                                        {{i+1}}
-                                    </button> 
-                                    <button *ngIf="showDirectionalLinks" class="defaultPageButton" (click)="onNextPageClicked()">Next</button>                                   
-                                </div> 
-
-                                <div class="w-100"></div>                                                  
-                                   
-                                <div>                           
-                                    <div class="col-md">                                                                  
-                                        <div *ngIf="currentQuizSession.vehicleInformations" class="row">
-                                            <div class="col-sm-12 mb-2">
-                                                <p-card styleClass="ui-card-shadow">                                                                     
-                                                    <div>
-                                                        <span class="flaticon-exclamation"> Vehicle - {{currentLicenseClass.token}} Dimensions:</span>
-                                                    </div>                                        
-                                                    <div>
-                                                        <span class="cardText">Length: {{currentLicenseClass.vehicleDimensions.maxLength}} m;</span>
-                                                        <span class="cardText"> Weight: {{currentLicenseClass.vehicleDimensions.carWeight}} + {{currentLicenseClass.vehicleDimensions.transportWeight}} = {{currentLicenseClass.vehicleDimensions.totalWeight}} t;</span>
-                                                        <span class="cardText"> Height: {{currentLicenseClass.vehicleDimensions.height}} m.</span>
-                                                    </div>                                                                                            
-                                                </p-card>
-                                            </div>                                          
-                                        </div>                                       
-                                    </div>                           
-                                </div>
-                            </div>
-
-                            <hr class="ng-tns-c19-1"> 
-                                                                                  
-                            <div class="row mb-4 mt-2"><!--Questions-->
-                                <p-toast key="trafficSituationToast" position="center" [modal]="true" closable="true"></p-toast>
-                                <div class="col-sm-12">
-                                    <h4 class="m-portlet__head-text">
-                                        {{currentQuizSession.quiz[questionContentIndex].quest}}
-                                    </h4>
-                                    <div *ngIf="currentQuizSession.quiz[questionContentIndex].type == 1; then pictureContainer else defaultContainer"></div>
-                                    <ng-template #pictureContainer>
-                                        <div class="row justify-content-center">
-                                            <div class="col-sm-4 mb-2">
-                                                <button #pic01 class="pictureButton" (click)="setQuestionAnswerPictureButton(0)">
-                                                    <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[0]}} style="max-width:128px; height:auto; width:100%;"> 
-                                                </button>
-                                            </div>
-                                            <div class="col-sm-4 mb-2">
-                                                <button #pic02 class="pictureButton" (click)="setQuestionAnswerPictureButton(1)">
-                                                    <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[1]}} style="max-width:128px; height:auto; width:100%;"> 
-                                                </button>
-                                            </div>
-                                            <div class="col-sm-4 mb-2">
-                                                <button #pic03 class="pictureButton" (click)="setQuestionAnswerPictureButton(2)">
-                                                    <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[2]}} style="max-width:128px; height:auto; width:100%;"> 
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </ng-template>
-                                    <ng-template #defaultContainer>  
+                                    <div class="col-md-auto">  <!--Time Progress-->
+                                        <h6>Time:</h6>
+                                    </div> 
+                                    <div class="col-1">
+                                        <p class="text-right">{{timerMinutes}}:{{timerSeconds}}</p>
+                                    </div> 
+                                    <div class="col-10">                 
+                                        <progressbar [max]="timerMax" [animate]="false" [value]="timerProgress" type={{progressBarType}}></progressbar>                              
+                                    </div> 
+                                    
+                                    <div class="w-100"></div> <!--Force line break-->
+                                    
+                                    <div class="col-md-auto"> <!--Pagination-->
+                                        <h6>Part:</h6>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="text-right">{{currentQuizSession.selectedQuestion}}/{{currentQuizSession.quiz.length}}</p>          
+                                    </div>
+                                    <div class="col-10"> 
                                         
-                                        <div *ngIf="currentQuizSession.quiz[questionContentIndex].type == 2; then selectContainer else singleChoiceContainer"></div>
-                                        <ng-template #selectContainer>
-                                            <div class="mb-1 mt-1">
-                                                <img src={{currentQuizSession.quiz[questionContentIndex].pictureUrl}} style="max-width:2000px; height:auto; width:100%;"> 
-                                            </div> 
+                                        <button *ngIf="showDirectionalLinks" class="defaultPageButton" (click)="onPreviousPageClicked()">Previous</button>
+                                        <button 
+                                            *ngFor="let b of questionPageButtons;index as i"
+                                            (click) = "onPageClicked(i)"                                      
+                                            class = {{b.class}}
+                                            [disabled]="b.disabled">
+                                            {{i+1}}
+                                        </button> 
+                                        <button *ngIf="showDirectionalLinks" class="defaultPageButton" (click)="onNextPageClicked()">Next</button>                                   
+                                    </div> 
+
+                                    <div class="w-100"></div>                                                  
+                                    
+                                    <div>                           
+                                        <div class="col-md">                                                                  
+                                            <div *ngIf="currentQuizSession.classInformations.vehicleDimensions && currentQuizSession.isMarkable" class="row">
+                                                <dimensionInfo [dimension]="currentQuizSession.classInformations.vehicleDimensions" [classToken]="currentQuizSession.classInformations.token"></dimensionInfo>                                          
+                                            </div>                                       
+                                        </div>                           
+                                    </div>
+                                </div>
+
+                                <hr class="ng-tns-c19-1"> 
+                                                                                    
+                                <div class="row mb-4 mt-2"><!--Questions-->
+                                    <p-toast key="trafficSituationToast" position="center" [modal]="true" closable="true" life="7000"></p-toast>
+                                    <div class="col-sm-12">
+                                        <h4 class="m-portlet__head-text">
+                                            {{currentQuizSession.quiz[questionContentIndex].quest}}
+                                        </h4>
+                                        <div *ngIf="currentQuizSession.quiz[questionContentIndex].displayType == 1; then pictureContainer else defaultContainer"></div>
+                                        <ng-template #pictureContainer>
                                             <div class="row justify-content-center">
-                                                <p-selectButton [options]="selectOptions" [(ngModel)]="selectedOption" optionLabel="currentQuizSession.quiz[questionContentIndex].quest" (onChange)="setQuestionAnswerSelectButton($event)">
-                                                    <ng-template let-item>
-                                                        <img src={{item.value.value.url}} style="width:64px;height:64px; vertical-align: middle; margin-right: 10px; margin-left: 10px; margin-top: 10px; margin-bottom: 10px"/>
-                                                        <span>{{item.name}}</span>
-                                                    </ng-template>
-                                                </p-selectButton>
+                                                <div class="col-sm-4 mb-2">
+                                                    <button #pic01 class="pictureButton" (click)="setQuestionAnswerPictureButton(0)">
+                                                        <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[0]}} style="max-width:128px; height:auto; width:100%;"> 
+                                                    </button>
+                                                </div>
+                                                <div class="col-sm-4 mb-2">
+                                                    <button #pic02 class="pictureButton" (click)="setQuestionAnswerPictureButton(1)">
+                                                        <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[1]}} style="max-width:128px; height:auto; width:100%;"> 
+                                                    </button>
+                                                </div>
+                                                <div class="col-sm-4 mb-2">
+                                                    <button #pic03 class="pictureButton" (click)="setQuestionAnswerPictureButton(2)">
+                                                        <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[2]}} style="max-width:128px; height:auto; width:100%;"> 
+                                                    </button>
+                                                </div>
                                             </div>
                                         </ng-template>
-                                        <ng-template #singleChoiceContainer>
-                                            <div class="mb-3" *ngFor="let answer of currentQuizSession.quiz[questionContentIndex].answerOptions; index as i"> 
-                                                <p-radioButton                               
-                                                    value={{i}}  
-                                                    label={{currentQuizSession.quiz[questionContentIndex].answerOptions[i]}}                
-                                                    (click)="setQuestionAnswerRadioButton(i)"
-                                                    [(ngModel)]="selectedOption">
-                                                </p-radioButton>
-                                            </div>
-                                        </ng-template>                                                    
-                                    </ng-template>
-                                    <h6 class="m-portlet__head-text" *ngIf="currentQuizSession.quiz[questionContentIndex].selectedAnswer > -1">
-                                        Selected answer:  {{parsedAnswer}}
-                                    </h6>                                      
-                                </div>                  
-                            </div>
+                                        <ng-template #defaultContainer>  
+                                            
+                                            <div *ngIf="currentQuizSession.quiz[questionContentIndex].displayType == 2; then selectContainer else singleChoiceContainer"></div>
+                                            <ng-template #selectContainer>
+                                                <div class="mb-1 mt-1">
+                                                    <img src={{currentQuizSession.quiz[questionContentIndex].pictureUrl}} style="max-width:2000px; height:auto; width:100%;"> 
+                                                </div> 
+                                                <div class="row justify-content-center">
+                                                    <p-selectButton [options]="selectOptions" [(ngModel)]="selectedOption" optionLabel="currentQuizSession.quiz[questionContentIndex].quest" (onChange)="setQuestionAnswerSelectButton($event)">
+                                                        <ng-template let-item>
+                                                            <img src={{item.value.value.url}} style="width:64px;height:64px; vertical-align: middle; margin-right: 10px; margin-left: 10px; margin-top: 10px; margin-bottom: 10px"/>
+                                                            <span>{{item.name}}</span>
+                                                        </ng-template>
+                                                    </p-selectButton>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template #singleChoiceContainer>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-sm-5">
+                                                            <div class="row mb-3" *ngFor="let answer of currentQuizSession.quiz[questionContentIndex].answerOptions; index as i"> 
+                                                                <p-radioButton                               
+                                                                    value={{i}}  
+                                                                    label={{currentQuizSession.quiz[questionContentIndex].answerOptions[i]}}                
+                                                                    (click)="setQuestionAnswerRadioButton(i)"
+                                                                    [(ngModel)]="selectedOption">
+                                                                </p-radioButton>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-7">
+                                                            <div *ngIf="currentQuizSession.quiz[questionContentIndex].pictureUrl">
+                                                                <img  src={{currentQuizSession.quiz[questionContentIndex].pictureUrl}} 
+                                                                    style="max-width:1028px; height:auto; width:100%;"> 
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>                                                    
+                                                </div>
+                                            </ng-template>                                                    
+                                        </ng-template>
+                                        <h6 class="m-portlet__head-text" *ngIf="currentQuizSession.quiz[questionContentIndex].selectedAnswer > -1">
+                                            Selected answer:  {{parsedAnswer}}
+                                        </h6>                                      
+                                    </div>                  
+                                </div>
 
-                            <hr class="ng-tns-c19-1"> 
-                                
-                            <div class="row"> <!--Quiz Buttons-->                           
-                                <div class="col mb-1"> 
-                                    <button class="btn btn-primary mr-5" type="button"
-                                        [disabled]="!currentQuizSession.isMarkable"    
-                                        (click)="markQuestion()">  
-                                        Mark                 
-                                    </button>                    
-                                </div> 
-                                
-                                <div class="col mb-1">
-                                    <button type="button" class="btn btn-primary mr-5"
-                                        [disabled]="!currentQuizSession.hasAnswer(questionContentIndex)"
-                                        (click)="nextPage(false)">  
-                                        Next                 
-                                    </button>
-                                </div >
-                                <div class="col"></div>        
-                                <div class="col">
-                                    <button type="button" class="btn btn-primary mr-5"
-                                        *ngIf="showDirectionalLinks"                      
-                                        (click)="finishQuiz()">  
-                                            Results                 
-                                    </button>
-                                </div> 
-                            </div>
+                                <hr class="ng-tns-c19-1"> 
+                                    
+                                <div class="row"> <!--Quiz Buttons-->                           
+                                    <div class="col mb-1"> 
+                                        <button class="btn btn-primary mr-5" type="button"
+                                            [disabled]="!currentQuizSession.isMarkable"    
+                                            (click)="markQuestion()">  
+                                            Mark                 
+                                        </button>                    
+                                    </div> 
+                                    
+                                    <div class="col mb-1">
+                                        <button type="button" class="btn btn-primary mr-5"
+                                            [disabled]="!currentQuizSession.hasAnswer(questionContentIndex)"
+                                            (click)="nextPage(false)">  
+                                            Next                 
+                                        </button>
+                                    </div >
+                                    <div class="col"></div>        
+                                    <div class="col">
+                                        <button type="button" class="btn btn-primary mr-5"
+                                            *ngIf="showDirectionalLinks"                      
+                                            (click)="finishQuiz()">  
+                                                Results                 
+                                        </button>
+                                    </div> 
+                                </div>
+                            </ng-template>
+
+                            <ng-template #results>
+                                <results [evaluatedQuiz]="currentQuizSession.results"
+                                    [showCategoryErrors]="theoryPracticeHelperService.quizMarkable"
+                                    [maxErrorsLicenceClass]="currentQuizSession.maxErrorsLicenceClassQuestions"
+                                    [maxErrorsSituation]="currentQuizSession.maxErrorsSituationQuestions"
+                                    [maxErrorsRisk]="currentQuizSession.maxErrorsRiskQuestions">                   
+                                </results>
+                            </ng-template> 
                                                                                         
                         </div> 
-                        <div class="col-sm-1"></div>
+                        
                     </div>                
                 </div>
             </div>                             

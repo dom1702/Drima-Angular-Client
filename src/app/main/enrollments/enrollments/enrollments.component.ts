@@ -1,6 +1,6 @@
 ﻿import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EnrollmentsServiceProxy, EnrollmentDto  } from '@shared/service-proxies/service-proxies';
+import { EnrollmentsServiceProxy, EnrollmentDto, GetEnrollmentForViewDto, ApproveEnrollmentInput  } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -107,6 +107,18 @@ export class EnrollmentsComponent extends AppComponentBase {
                 }
             }
         );
+    }
+
+    approveEnrollment(item: GetEnrollmentForViewDto)
+    {
+        var input : ApproveEnrollmentInput = new ApproveEnrollmentInput();
+        input.enrollment = item.enrollment;
+
+        this._enrollmentsServiceProxy.approveEnrollment(input).subscribe(result => 
+            {
+                console.log(result.newStudentCreated);
+                console.log(result.studentAlreadyExisted);
+            });
     }
 
     exportToExcel(): void {

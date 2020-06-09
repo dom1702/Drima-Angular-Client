@@ -85,7 +85,7 @@
                                             <p class="card-text"> {{licenseClassOwned.description}}</p>
                                             <label class="m-checkbox mt-3">
                                                 <input type="checkbox" name="licenseClassOwned"
-                                                    [(ngModel)]="licenseClassOwned.isOwned">
+                                                    (change)="previousClassChecked(licenseClassOwned.licenseClass, $event)">
                                                 I have this license
                                                 <span></span>
                                             </label>
@@ -135,9 +135,9 @@
                     </div>
 
                     <button
-                    class="btn btn-secondary m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                    (click)="goToPreviousPage()">
-                    Back
+                        class="btn btn-secondary m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                        (click)="goToPreviousPage()">
+                        Back
                     </button>
                 </div>
 
@@ -178,15 +178,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>                           
+                            </div>
                         </div>
                     </div>
 
                     <button
-                    class="btn btn-secondary m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                    (click)="goToPreviousPage()">
-                    Back
-                </button>
+                        class="btn btn-secondary m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                        (click)="goToPreviousPage()">
+                        Back
+                    </button>
                 </div>
 
                 <div *ngIf="currentPageNumber == 4 && pricePackages != undefined">
@@ -222,62 +222,97 @@
                 <div *ngIf="currentPageNumber == 5">
                     <h3 class="mb-5">Please enter your data to finish enrollment!</h3>
 
-                    <form>
+                    <form (ngSubmit)="onSubmit()" #userDataForm="ngForm">
                         <div class="form-group row">
-                            <label for="personId" class="col-sm-2 col-form-label">Person ID</label>
+                            <label for="personId" class="col-sm-2 col-form-label">Person ID *</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="personId" placeholder="PPKKVV-XXXX">
+                                <input type="text" class="form-control" id="personId" placeholder="PPKKVV-XXXX"
+                                    [(ngModel)]="userData.socialSecurityNo" name="ssn" required #ssc="ngModel">
+                                <div *ngIf="ssc.invalid && (ssc.dirty || ssc.touched)" class="alert alert-danger">
+                                    <div *ngIf="ssc.errors.required">
+                                        Person ID is required.
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="firstNameInput" class="col-sm-2 col-form-label">First Name</label>
+                            <label for="firstNameInput" class="col-sm-2 col-form-label">First Name *</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="firstNameInput"
-                                    placeholder="Enter your first name">
+                                    placeholder="Enter your first name" [(ngModel)]="userData.firstName"
+                                    name="firstName" required #firstName="ngModel">
+                                <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+                                    class="alert alert-danger">
+                                    <div *ngIf="firstName.errors.required">
+                                        First name is required.
+                                    </div>
+                                </div>
                             </div>
-                            <label for="lastNameInput" class="col-sm-2 col-form-label">Last Name</label>
+                            <label for="lastNameInput" class="col-sm-2 col-form-label">Last Name *</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="lastNameInput"
-                                    placeholder="Enter your last name">
+                                    placeholder="Enter your last name" [(ngModel)]="userData.lastName" name="lastName"
+                                    required>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="streetInput" class="col-sm-2 col-form-label">Street</label>
+                            <label for="streetInput" class="col-sm-2 col-form-label">Street *</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="streetInput"
-                                    placeholder="Enter your street">
+                                <input type="text" class="form-control" id="streetInput" placeholder="Enter your street"
+                                    [(ngModel)]="userData.street" name="street" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="zipCodeInput" class="col-sm-2 col-form-label">ZIP code</label>
+                            <label for="zipCodeInput" class="col-sm-2 col-form-label">ZIP code *</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="zipCodeInput"
-                                    placeholder="Enter your ZIP code">
+                                    placeholder="Enter your ZIP code" [(ngModel)]="userData.zipCode" name="zipCode"
+                                    required>
                             </div>
-                            <label for="cityInput" class="col-sm-2 col-form-label">City</label>
+                            <label for="cityInput" class="col-sm-2 col-form-label">City *</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="cityInput" placeholder="Enter your city">
+                                <input type="text" class="form-control" id="cityInput" placeholder="Enter your city"
+                                    [(ngModel)]="userData.city" name="city" required>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="phoneInput" class="col-sm-2 col-form-label">Phone</label>
+                            <label for="phoneInput" class="col-sm-2 col-form-label">Phone *</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="phoneInput"
-                                    placeholder="Enter your phone number">
+                                    placeholder="Enter your phone number" [(ngModel)]="userData.phone" name="phone"
+                                    required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="emailInput" class="col-sm-2 col-form-label">E-mail</label>
+                            <label for="emailInput" class="col-sm-2 col-form-label">E-mail *</label>
                             <div class="col-sm-4">
-                                <input type="email" class="form-control" id="emailInput" placeholder="Enter your email">
+                                <input type="email" class="form-control" id="emailInput" placeholder="Enter your email"
+                                    [(ngModel)]="userData.email" name="email" required email #email="ngModel">
+                                <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+                                    <div *ngIf="email.errors?.email">
+                                        Email not valid.
+                                    </div>
+                                </div>
                             </div>
-                            <label for="confirmEmailInput" class="col-sm-2 col-form-label">Confirm e-mail</label>
+
+                            <label for="confirmEmailInput" class="col-sm-2 col-form-label">Confirm e-mail *</label>
                             <div class="col-sm-4">
                                 <input type="email" class="form-control" id="confirmEmailInput"
-                                    placeholder="Enter your email again">
+                                    placeholder="Enter your email again" [(ngModel)]="userData.confirmEmail"
+                                    name="confirmEmail" required email #confirmationEmail="ngModel">
+                                <div *ngIf="(confirmationEmail.invalid && (confirmationEmail.dirty || confirmationEmail.touched))
+                            || confirmationEmail.value !== email.value" class="alert alert-danger">
+                                    <div *ngIf="confirmationEmail.errors?.email">
+                                        Email not valid.
+                                    </div>
+                                    <div *ngIf="confirmationEmail.value !== email.value">
+                                        Emails do not match each other.
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                         <div class="form-group row">
 
@@ -307,23 +342,26 @@
                             <label for="exampleFormControlTextarea1" class="col-sm-2 col-form-label">Additional
                                 information</label>
                             <div class="col-sm-10"><textarea class="form-control" id="exampleFormControlTextarea1"
-                                    rows="3"></textarea>
+                                    rows="3" [(ngModel)]="userData.additionalInformation"
+                                    name="additionalInformation"></textarea>
                             </div>
                         </div>
-                    </form>
+  
 
                     <h3 class="my-5">If you don't pay yourself, please add payer's data below!</h3>
 
-                    <form>
+              
                         <div class="form-group row">
                             <label for="payersPersonId" class="col-sm-2 col-form-label">Payers Person ID</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="payersPersonId" placeholder="PPKKVV-XXXX">
+                                <input type="text" class="form-control" id="payersPersonId" placeholder="PPKKVV-XXXX"
+                                    [(ngModel)]="userData.payersSocialSecurityNo" name="payersSocialSecurityNo">
                             </div>
                             <label for="payersNameInput" class="col-sm-2 col-form-label">Payers Name</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="payersNameInput"
-                                    placeholder="Enter the payers name">
+                                    placeholder="Enter the payers name" [(ngModel)]="userData.payersName"
+                                    name="payersName">
                             </div>
                         </div>
 
@@ -331,19 +369,22 @@
                             <label for="payersStreetInput" class="col-sm-2 col-form-label">Payers Street</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="payersStreetInput"
-                                    placeholder="Enter the payers street">
+                                    placeholder="Enter the payers street" [(ngModel)]="userData.payersStreet"
+                                    name="payersStreet">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="payersZipCodeInput" class="col-sm-2 col-form-label">Payers ZIP code</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="payersZipCodeInput"
-                                    placeholder="Enter the payers ZIP code">
+                                    placeholder="Enter the payers ZIP code" [(ngModel)]="userData.payersZipCode"
+                                    name="payersZipCode">
                             </div>
                             <label for="payersCityInput" class="col-sm-2 col-form-label">Payers City</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="payersCityInput"
-                                    placeholder="Enter the payers city">
+                                    placeholder="Enter the payers city" [(ngModel)]="userData.payersCity"
+                                    name="payersCity">
                             </div>
                         </div>
 
@@ -352,30 +393,43 @@
                             <label for="payersPhoneInput" class="col-sm-2 col-form-label">Payers Phone</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="payersPhoneInput"
-                                    placeholder="Enter the payers phone number">
+                                    placeholder="Enter the payers phone number" [(ngModel)]="userData.payersPhone"
+                                    name="payersPhone">
                             </div>
                             <label for="payersEmailInput" class="col-sm-2 col-form-label">Payers E-mail</label>
                             <div class="col-sm-4">
                                 <input type="email" class="form-control" id="payersEmailInput"
-                                    placeholder="Enter the payers email">
+                                    placeholder="Enter the payers email" [(ngModel)]="userData.payersEmail"
+                                    name="payersEmail">
                             </div>
 
                         </div>
 
-
+                        <div class="mt-5">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"
+                                [(ngModel)]="confirmTerms"
+                                    name="confirm" required #confirm="ngModel">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    I have read the terms and conditions and agree with them.
+                                </label>
+                                <div *ngIf="confirm.invalid && (confirm.dirty || confirm.touched)"
+                                    class="alert alert-danger">
+                                    <div *ngIf="!confirmTerms">
+                                        You have to agree with terms and conditions.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary"
+                                [disabled]="!userDataForm.form.valid"
+                                [buttonBusy]="submitting" 
+                                [busyText]="l('PleaseWait')">Submit</button>
+                        </div>
                     </form>
 
-                    <div class="mt-5">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                            <label class="form-check-label" for="defaultCheck1">
-                                I have read the terms and conditions and agree with them.
-                            </label>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
+                   
 
                 </div>
 

@@ -4802,6 +4802,62 @@ export class EnrollmentsServiceProxy {
         }
         return _observableOf<void>(<any>null);
     }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    approveEnrollment(input: ApproveEnrollmentInput | null | undefined): Observable<ApproveEnrollmentOutput> {
+        let url_ = this.baseUrl + "/api/services/app/Enrollments/ApproveEnrollment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApproveEnrollment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApproveEnrollment(<any>response_);
+                } catch (e) {
+                    return <Observable<ApproveEnrollmentOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ApproveEnrollmentOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processApproveEnrollment(response: HttpResponseBase): Observable<ApproveEnrollmentOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ApproveEnrollmentOutput.fromJS(resultData200) : new ApproveEnrollmentOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ApproveEnrollmentOutput>(<any>null);
+    }
 }
 
 @Injectable()
@@ -27267,6 +27323,82 @@ export interface ISubmitEnrollmentInput {
     pricePackageId: number | undefined;
 }
 
+export class ApproveEnrollmentInput implements IApproveEnrollmentInput {
+    enrollment!: EnrollmentDto | undefined;
+
+    constructor(data?: IApproveEnrollmentInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.enrollment = data["enrollment"] ? EnrollmentDto.fromJS(data["enrollment"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ApproveEnrollmentInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApproveEnrollmentInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["enrollment"] = this.enrollment ? this.enrollment.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IApproveEnrollmentInput {
+    enrollment: EnrollmentDto | undefined;
+}
+
+export class ApproveEnrollmentOutput implements IApproveEnrollmentOutput {
+    newStudentCreated!: boolean | undefined;
+    studentAlreadyExisted!: boolean | undefined;
+
+    constructor(data?: IApproveEnrollmentOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.newStudentCreated = data["newStudentCreated"];
+            this.studentAlreadyExisted = data["studentAlreadyExisted"];
+        }
+    }
+
+    static fromJS(data: any): ApproveEnrollmentOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApproveEnrollmentOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["newStudentCreated"] = this.newStudentCreated;
+        data["studentAlreadyExisted"] = this.studentAlreadyExisted;
+        return data; 
+    }
+}
+
+export interface IApproveEnrollmentOutput {
+    newStudentCreated: boolean | undefined;
+    studentAlreadyExisted: boolean | undefined;
+}
+
 export class PagedResultDtoOfGetFormForViewDto implements IPagedResultDtoOfGetFormForViewDto {
     totalCount!: number | undefined;
     items!: GetFormForViewDto[] | undefined;
@@ -40351,6 +40483,7 @@ export interface IGetTopicsForViewDto {
 export class TheoryExamTopicDto implements ITheoryExamTopicDto {
     name!: string | undefined;
     licenseClasses!: string[] | undefined;
+    questionSeries!: QuestionSeriesDto[] | undefined;
     id!: number | undefined;
 
     constructor(data?: ITheoryExamTopicDto) {
@@ -40369,6 +40502,11 @@ export class TheoryExamTopicDto implements ITheoryExamTopicDto {
                 this.licenseClasses = [] as any;
                 for (let item of data["licenseClasses"])
                     this.licenseClasses!.push(item);
+            }
+            if (data["questionSeries"] && data["questionSeries"].constructor === Array) {
+                this.questionSeries = [] as any;
+                for (let item of data["questionSeries"])
+                    this.questionSeries!.push(QuestionSeriesDto.fromJS(item));
             }
             this.id = data["id"];
         }
@@ -40389,6 +40527,11 @@ export class TheoryExamTopicDto implements ITheoryExamTopicDto {
             for (let item of this.licenseClasses)
                 data["licenseClasses"].push(item);
         }
+        if (this.questionSeries && this.questionSeries.constructor === Array) {
+            data["questionSeries"] = [];
+            for (let item of this.questionSeries)
+                data["questionSeries"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -40397,67 +40540,8 @@ export class TheoryExamTopicDto implements ITheoryExamTopicDto {
 export interface ITheoryExamTopicDto {
     name: string | undefined;
     licenseClasses: string[] | undefined;
+    questionSeries: QuestionSeriesDto[] | undefined;
     id: number | undefined;
-}
-
-export class GetTheoryExamPreparationForViewDto implements IGetTheoryExamPreparationForViewDto {
-    trafficSituationsQuestionCount!: number | undefined;
-    riskIdentifyingQuestionCount!: number | undefined;
-    classQuestionCount!: number | undefined;
-    maxTimeInMinutes!: number | undefined;
-    trafficSituationsQuestionMaxIncorrectCount!: number | undefined;
-    riskIdentifyingQuestionMaxIncorrectCount!: number | undefined;
-    classQuestionMaxIncorrectCount!: number | undefined;
-
-    constructor(data?: IGetTheoryExamPreparationForViewDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.trafficSituationsQuestionCount = data["trafficSituationsQuestionCount"];
-            this.riskIdentifyingQuestionCount = data["riskIdentifyingQuestionCount"];
-            this.classQuestionCount = data["classQuestionCount"];
-            this.maxTimeInMinutes = data["maxTimeInMinutes"];
-            this.trafficSituationsQuestionMaxIncorrectCount = data["trafficSituationsQuestionMaxIncorrectCount"];
-            this.riskIdentifyingQuestionMaxIncorrectCount = data["riskIdentifyingQuestionMaxIncorrectCount"];
-            this.classQuestionMaxIncorrectCount = data["classQuestionMaxIncorrectCount"];
-        }
-    }
-
-    static fromJS(data: any): GetTheoryExamPreparationForViewDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new GetTheoryExamPreparationForViewDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["trafficSituationsQuestionCount"] = this.trafficSituationsQuestionCount;
-        data["riskIdentifyingQuestionCount"] = this.riskIdentifyingQuestionCount;
-        data["classQuestionCount"] = this.classQuestionCount;
-        data["maxTimeInMinutes"] = this.maxTimeInMinutes;
-        data["trafficSituationsQuestionMaxIncorrectCount"] = this.trafficSituationsQuestionMaxIncorrectCount;
-        data["riskIdentifyingQuestionMaxIncorrectCount"] = this.riskIdentifyingQuestionMaxIncorrectCount;
-        data["classQuestionMaxIncorrectCount"] = this.classQuestionMaxIncorrectCount;
-        return data; 
-    }
-}
-
-export interface IGetTheoryExamPreparationForViewDto {
-    trafficSituationsQuestionCount: number | undefined;
-    riskIdentifyingQuestionCount: number | undefined;
-    classQuestionCount: number | undefined;
-    maxTimeInMinutes: number | undefined;
-    trafficSituationsQuestionMaxIncorrectCount: number | undefined;
-    riskIdentifyingQuestionMaxIncorrectCount: number | undefined;
-    classQuestionMaxIncorrectCount: number | undefined;
 }
 
 export class QuestionSeriesDto implements IQuestionSeriesDto {
@@ -40625,6 +40709,66 @@ export interface ITESingleChoiceDto {
     correctAnswer: number | undefined;
     imageUrl: string | undefined;
     id: number | undefined;
+}
+
+export class GetTheoryExamPreparationForViewDto implements IGetTheoryExamPreparationForViewDto {
+    trafficSituationsQuestionCount!: number | undefined;
+    riskIdentifyingQuestionCount!: number | undefined;
+    classQuestionCount!: number | undefined;
+    maxTimeInMinutes!: number | undefined;
+    trafficSituationsQuestionMaxIncorrectCount!: number | undefined;
+    riskIdentifyingQuestionMaxIncorrectCount!: number | undefined;
+    classQuestionMaxIncorrectCount!: number | undefined;
+
+    constructor(data?: IGetTheoryExamPreparationForViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.trafficSituationsQuestionCount = data["trafficSituationsQuestionCount"];
+            this.riskIdentifyingQuestionCount = data["riskIdentifyingQuestionCount"];
+            this.classQuestionCount = data["classQuestionCount"];
+            this.maxTimeInMinutes = data["maxTimeInMinutes"];
+            this.trafficSituationsQuestionMaxIncorrectCount = data["trafficSituationsQuestionMaxIncorrectCount"];
+            this.riskIdentifyingQuestionMaxIncorrectCount = data["riskIdentifyingQuestionMaxIncorrectCount"];
+            this.classQuestionMaxIncorrectCount = data["classQuestionMaxIncorrectCount"];
+        }
+    }
+
+    static fromJS(data: any): GetTheoryExamPreparationForViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetTheoryExamPreparationForViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["trafficSituationsQuestionCount"] = this.trafficSituationsQuestionCount;
+        data["riskIdentifyingQuestionCount"] = this.riskIdentifyingQuestionCount;
+        data["classQuestionCount"] = this.classQuestionCount;
+        data["maxTimeInMinutes"] = this.maxTimeInMinutes;
+        data["trafficSituationsQuestionMaxIncorrectCount"] = this.trafficSituationsQuestionMaxIncorrectCount;
+        data["riskIdentifyingQuestionMaxIncorrectCount"] = this.riskIdentifyingQuestionMaxIncorrectCount;
+        data["classQuestionMaxIncorrectCount"] = this.classQuestionMaxIncorrectCount;
+        return data; 
+    }
+}
+
+export interface IGetTheoryExamPreparationForViewDto {
+    trafficSituationsQuestionCount: number | undefined;
+    riskIdentifyingQuestionCount: number | undefined;
+    classQuestionCount: number | undefined;
+    maxTimeInMinutes: number | undefined;
+    trafficSituationsQuestionMaxIncorrectCount: number | undefined;
+    riskIdentifyingQuestionMaxIncorrectCount: number | undefined;
+    classQuestionMaxIncorrectCount: number | undefined;
 }
 
 export class GetNextTheoryExamQuestionSeriesInput implements IGetNextTheoryExamQuestionSeriesInput {

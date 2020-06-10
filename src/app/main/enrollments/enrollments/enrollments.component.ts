@@ -26,6 +26,10 @@ export class EnrollmentsComponent extends AppComponentBase {
     @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
+    @ViewChild('newDataTable') newDataTable: Table;
+
+    newRecords : any[];
+
     advancedFiltersAreShown = false;
     filterText = '';
     firstNameFilter = '';
@@ -81,9 +85,21 @@ export class EnrollmentsComponent extends AppComponentBase {
         ).subscribe(result => {
             this.primengTableHelper.totalRecordsCount = result.totalCount;
             this.primengTableHelper.records = result.items;
+this.getUnapprovedEnrollments();
             this.primengTableHelper.hideLoadingIndicator();
         });
     }
+
+    getUnapprovedEnrollments()
+    {
+        this.newRecords = [];
+
+        for(let r of this.primengTableHelper.records)
+            if(r.enrollment.approved)
+                this.newRecords.push(r);
+
+        console.log(this.newRecords);
+    }   
 
     reloadPage(): void {
         this.paginator.changePage(this.paginator.getPage());

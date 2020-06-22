@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
-import { View, EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService, ScheduleComponent, PopupOpenEventArgs, CellClickEventArgs, EventClickArgs, NavigatingEventArgs, ActionEventArgs, EventRenderedArgs } from '@syncfusion/ej2-angular-schedule';
+import { View, EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService, ScheduleComponent, PopupOpenEventArgs, CellClickEventArgs, EventClickArgs, NavigatingEventArgs, ActionEventArgs, EventRenderedArgs, WorkHoursModel } from '@syncfusion/ej2-angular-schedule';
 import { SchedulerServiceProxy } from '@shared/service-proxies/service-proxies';
 import * as moment from 'moment';
 import { CreateOrEditDrivingLessonModalComponent } from '../lessons/drivingLessons/create-or-edit-drivingLesson-modal.component';
@@ -85,6 +85,15 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
         
         this.updateCurrentView();
     }
+
+    onCreated(): void {
+    
+        let currTime: Date = new Date();
+        let hours: string = currTime.getHours() < 10 ? '0' +currTime.getHours().toString() : currTime.getHours().toString();
+        let minutes: string = currTime.getMinutes().toString();
+        let time: string = hours + ':' + minutes;
+        this.scheduleObj.scrollTo(time);
+      }
 
     onPopupOpen(args: PopupOpenEventArgs): void {
         args.cancel = true;

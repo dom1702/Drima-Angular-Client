@@ -38,6 +38,7 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import { PaymentHelperService } from './payment/payment-helper.service';
 import { EnrollmentComponent } from './enrollment/enrollment.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
     imports: [
@@ -53,7 +54,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
         ServiceProxyModule,
         AccountRoutingModule,
         OAuthModule.forRoot(),
-        TabsModule.forRoot()
+        TabsModule.forRoot(),
+        BsDatepickerModule.forRoot()
     ],
     declarations: [
         AccountComponent,

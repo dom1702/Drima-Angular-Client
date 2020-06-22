@@ -14,6 +14,7 @@ import {
     SubmitEnrollmentInput
 } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { Language, LanguagesService } from '@app/shared/common/services/languages.service';
 import { CountriesService, Country } from '@app/shared/common/services/countries.service';
 
@@ -35,7 +36,9 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
     currentNativeLanguage: string;
     languages: Language[];
     currentBirthCountry: string;
+    currentCountry : string;
     countries: Country[];
+    dateOfBirth : Date;
 
     activeDivClass = "p-3 mb-2 bg-primary text-white";
     inactiveDivClass = "p-3 mb-2 bg-light text-dark";
@@ -104,6 +107,10 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
             for (var i = 0; i < this.countries.length; i++) {
                 if (this.countries[i].name == 'Finland')
                     this.currentBirthCountry = this.countries[i].name;
+            }
+            for (var i = 0; i < this.countries.length; i++) {
+                if (this.countries[i].name == 'Finland')
+                    this.currentCountry = this.countries[i].name;
             }
 
         });
@@ -256,6 +263,8 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
         input.email = this.userData.email,
         input.birthCountry = this._countriesService.getCode(this.currentBirthCountry),
         input.nativeLanguage = this._languagesService.getCode(this.currentNativeLanguage),
+        input.country = this._countriesService.getCode(this.currentCountry),
+        input.dateOfBirth = moment(this.dateOfBirth);
         input.additionalInformation = this.userData.additionalInformation,
         input.payersSocialSecurityNo = this.userData.payersSocialSecurityNo,
         input.payersName = this.userData.payersName,

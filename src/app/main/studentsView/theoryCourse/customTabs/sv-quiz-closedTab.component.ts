@@ -35,7 +35,7 @@ export class SVQuizClosedTabComponent extends AppComponentBase implements OnInit
     quizMayStart = new EventEmitter();
 
     @Output()
-    studentPhoneNumber: number = 123456;
+    studentPhoneNumber: number = 0;
 
     @Input() 
     quizParts : number;
@@ -98,21 +98,7 @@ export class SVQuizClosedTabComponent extends AppComponentBase implements OnInit
     get studentPhoneNumberParsed() : string {
         return this.studentPhoneNumber.toString();
     }   
-    set studentPhoneNumberParsed(value : string) {
-        let parsedNr = Number.parseInt(value);
-        if(parsedNr.toFixed(0) == "NaN" || parsedNr == null ||  parsedNr.toFixed(0).length < 3)
-        {
-            //console.log("invalid phoneNR!");
-            this.showToastError("Invalid phone number", "Saved phone number is set instead");
-            this.studentPhoneNumber = this.studentPhoneNumber;
-        }
-        else {
-            //console.log("set number! " + parsedNr);
-            this.clearValidationError();
-            this.studentPhoneNumber = parsedNr;
-        }        
-    }
-     
+        
     constructor(private injector: Injector, private messageService : MessageService, private _onlineTheoryService : OnlineTheoryServiceProxy) {       
         super(injector);             
     }
@@ -126,12 +112,7 @@ export class SVQuizClosedTabComponent extends AppComponentBase implements OnInit
     }
 
     ngOnInit(): void {
-        this.prepareLessonStart();   
-
-        if(this.aborted)
-            this.show("error", "The eLesson has been cancelled and has to be started again.", this.abortedMessage);
-        else
-            this.abortedMessage = [];         
+        this.prepareLessonStart();         
     }
 
     show(intention: string, message : string, msg : Message[], detail? : string) {
@@ -143,7 +124,8 @@ export class SVQuizClosedTabComponent extends AppComponentBase implements OnInit
             {
                 this.show("error", "The lesson room is closed.", this.closedMessage);
             }
-            else this.show("info", "The Drima control room is open today " +  this.todayOpeningHours.currentDayOpeningHours.opening.slice(0,5) + ".", this.closedMessage);      
+            else this.show("info", "The Drima control room is open today from " +  this.todayOpeningHours.currentDayOpeningHours.opening.slice(0,5) + 
+                " to " +  this.todayOpeningHours.currentDayOpeningHours.closing.slice(0,5) + ".", this.closedMessage);      
     
             this.show("info", "eLesson requirements", this.requirementMessage, "The control room has to be able to contact you when needed. Check the number below and change it if needed. Check that the WhatsApp application is installed and running in the number below. The device, you are using for this eLesson, supports the media in it and the video format");   
     }

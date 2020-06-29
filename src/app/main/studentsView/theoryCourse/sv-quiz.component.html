@@ -168,15 +168,18 @@
                                                         (valueSelected)="onValueSelected($event)">
                                                     </question>                                                                                                  
                                             </ng-template>
-                                        
-                                            <button *ngIf="!quizAborted && !quizFinished" type="button"                                            
-                                                (click)="updateQuizProgress()"
-                                                class="btn btn-primary mr-5">
-                                                Save
-                                            </button>
+                                                             
                                             <p-messages [(value)]="messages" [closable]="true"></p-messages>
                                         </div>
-                                    </div>                               
+                                    </div> 
+                                    
+                                    <div class="row justify-content-md-center">
+                                        <div class="col-md-auto">
+                                            <button *ngIf="!quizAborted && !quizFinished" type="button"                                            
+                                                (click)="updateQuizProgress()"
+                                                class="btn btn-primary mr-5"> Save </button>                                                                        
+                                        </div>                                     
+                                    </div>
                                 </tab>
                             </ng-template>
 
@@ -296,11 +299,7 @@
                             <tab id="cancel" disabled="true">                                  
                                 <ng-template tabHeading>                                                                
                                     <div *ngIf="quizAborted; then homeBlock else cancelBlock"></div> 
-                                    <ng-template #homeBlock>
-                                        <button class="defaultNavButton" routerLink="/app/main/studentsView/theoryLessons/">
-                                            <span class="flaticon-logout"></span>
-                                            <h6>Home</h6>
-                                        </button> 
+                                    <ng-template #homeBlock>                  
                                     </ng-template>
                                     <ng-template #cancelBlock>
                                         <button class="cancelNavButton" (click)="cancelTabSelected()">

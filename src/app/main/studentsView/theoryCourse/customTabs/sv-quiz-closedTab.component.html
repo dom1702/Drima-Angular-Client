@@ -3,7 +3,7 @@
     <p-toast [style]="{marginTop: '80px'}" styleClass="custom-toast" key="toast" position="bottom-right"></p-toast>
     <div class="col col-sm-2"></div>  
     <div class="col-sm-8">
-        <p-messages  severity="error" [value]="abortedMessage" [closable]="false"></p-messages>
+
         <h3 class="m-portlet__head-text">
             Welcome to the Drima eLesson!
         </h3>
@@ -74,24 +74,15 @@
        
             <div class="m--space-10"></div>
 
-            <div class="row">
-                <div class="col-sm-3"></div>
-                <div class="col-sm-3">
+            <div class="row justify-content-md-center">             
+                <div class="col-md-auto">
                     <button type="button"
                         class="btn btn-primary mr-5"                       
                         [disabled]="todayOpeningHours.closed || !todayOpeningHours.closed && checked == false"
                         (click)="startLesson()">
                         Start eLesson
                     </button>
-                </div>
-                <div class="col-sm-3">
-                    <button type="button"                                          
-                        class="btn btn-primary mr-5"   
-                        routerLink="/app/main/studentsView/theoryCourse">  
-                        Cancel                 
-                    </button>
-                </div>
-                <div class="col-sm-3"></div>
+                </div>               
             </div>
         </div>
     </div>

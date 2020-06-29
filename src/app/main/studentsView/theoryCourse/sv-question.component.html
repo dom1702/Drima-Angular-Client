@@ -8,7 +8,7 @@
         </div>                                                                                  
         
         <div *ngFor="let answer of answerOptions; index as i"> 
-            <p-radioButton name="quest" value={{i}}  label={{answer}} (click)="onClick(i)" [(ngModel)]="selectedValue"></p-radioButton>
+            <p-radioButton value={{i}}  label={{answer}} (click)="onClick(i)" [(ngModel)]="selectedValue"></p-radioButton>
         </div>
         <p-messages [(value)]="messages" [closable]="false"></p-messages>
     </div>

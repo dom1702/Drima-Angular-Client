@@ -1,6 +1,6 @@
 ﻿import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EnrollmentsServiceProxy, EnrollmentDto  } from '@shared/service-proxies/service-proxies';
+import { EnrollmentsServiceProxy, EnrollmentDto, GetEnrollmentForViewDto, ApproveEnrollmentInput, DenyEnrollmentInput  } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -25,6 +25,10 @@ export class EnrollmentsComponent extends AppComponentBase {
     @ViewChild('viewEnrollmentModalComponent') viewEnrollmentModal: ViewEnrollmentModalComponent;
     @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
+
+    @ViewChild('newDataTable') newDataTable: Table;
+
+    newRecords : any[];
 
     advancedFiltersAreShown = false;
     filterText = '';
@@ -81,9 +85,29 @@ export class EnrollmentsComponent extends AppComponentBase {
         ).subscribe(result => {
             this.primengTableHelper.totalRecordsCount = result.totalCount;
             this.primengTableHelper.records = result.items;
+            console.log(this.primengTableHelper.records);
+            this.getUnapprovedEnrollments();
             this.primengTableHelper.hideLoadingIndicator();
         });
     }
+
+    getUnapprovedEnrollments()
+    {
+        this.newRecords = [];
+
+        for(let r of this.primengTableHelper.records)
+            if(!r.enrollment.approved && !r.enrollment.denied)
+            {
+                this.newRecords.push(r);
+
+                this.primengTableHelper.records.forEach( (item, index) => {
+                    if(item === r) this.primengTableHelper.records.splice(index,1);
+                  });
+            }
+
+            console.log(this.primengTableHelper.records);
+        console.log(this.newRecords);
+    }   
 
     reloadPage(): void {
         this.paginator.changePage(this.paginator.getPage());
@@ -107,6 +131,53 @@ export class EnrollmentsComponent extends AppComponentBase {
                 }
             }
         );
+    }
+
+    approveEnrollment(item: GetEnrollmentForViewDto)
+    {
+        this.message.confirm(
+            'Do you really want to approve this enrollment?',
+            'Approving',
+            (isConfirmed) => {
+                if (isConfirmed) {
+                    console.log("YES");
+                    var input : ApproveEnrollmentInput = new ApproveEnrollmentInput();
+                    input.enrollment = item.enrollment;
+            
+                    this._enrollmentsServiceProxy.approveEnrollment(input).subscribe(result => 
+                        {
+                            console.log(result.newStudentCreated);
+                            console.log(result.studentAlreadyExisted);
+                            this.reloadPage();
+                        });
+
+                 
+                }
+            }
+        );
+        
+    }
+
+    denyEnrollment(item: GetEnrollmentForViewDto)
+    {
+        this.message.confirm(
+            'Do you really want to approve this enrollment?',
+            'Approving',
+            (isConfirmed) => {
+                if (isConfirmed) {
+                    var input : DenyEnrollmentInput = new DenyEnrollmentInput();
+                    input.enrollment = item.enrollment;
+            
+                    this._enrollmentsServiceProxy.denyEnrollment(input).subscribe(result => 
+                        {
+                            this.reloadPage();
+                        });
+
+                   
+                }
+            }
+        );
+       
     }
 
     exportToExcel(): void {

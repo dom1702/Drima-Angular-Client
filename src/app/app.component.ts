@@ -13,6 +13,15 @@ import { ChangeProfilePictureModalComponent } from '@app/shared/layout/profile/c
 import { MySettingsModalComponent } from '@app/shared/layout/profile/my-settings-modal.component';
 import { NotificationSettingsModalComponent } from '@app/shared/layout/notifications/notification-settings-modal.component';
 import { UserNotificationHelper } from '@app/shared/layout/notifications/UserNotificationHelper';
+//import the loadCldr from ej2-base
+import { loadCldr} from '@syncfusion/ej2-base';
+import * as numberingSystems from 'cldr-data/supplemental/numberingSystems.json';
+import * as gregorian from 'cldr-data/main/de/ca-gregorian.json';
+import * as numbers from 'cldr-data/main/de/numbers.json';
+import * as timeZoneNames from 'cldr-data/main/de/timeZoneNames.json';
+
+// Angular CLI 8.0 and above versions
+loadCldr(numberingSystems['default'], gregorian['default'], numbers['default'], timeZoneNames['default']);
 
 @Component({
     templateUrl: './app.component.html',

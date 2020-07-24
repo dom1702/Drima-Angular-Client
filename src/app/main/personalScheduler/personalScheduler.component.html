@@ -58,7 +58,10 @@
         </div>
 
         <ejs-schedule #scheduleObj [allowDragAndDrop]='false' [eventSettings]='eventSettings'
-            [currentView]='currentView' (popupOpen)='onPopupOpen($event)' (cellClick)='onCellClick($event)'
+            [currentView]='currentView' 
+            startHour='06:00' endHour='23:00' [firstDayOfWeek]='1' 
+            locale='de'
+            (created)="onCreated()"(popupOpen)='onPopupOpen($event)' (cellClick)='onCellClick($event)'
             (eventClick)='onEventClick($event)' (recordDoubleClick)='Doubleclick($event)'
             (navigating)='navigating($event)' (actionComplete)='actionComplete($event)'
             (created)='schedulerCreated($event)' (eventRendered)="onEventRendered($event)"></ejs-schedule>

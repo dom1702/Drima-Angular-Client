@@ -56,6 +56,10 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
     selectedPdl;
 
+    numberOfLessonsAddition : string = "(á -- minutes)";
+
+    setTopicNameAutomatically : boolean = true;
+
 
     constructor(
         injector: Injector,
@@ -78,6 +82,9 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         };
 
         this.ismeridian = false;
+
+        var minutesPerLesson = abp.setting.get("App.CoreData.DurationDrivingLesson");
+        this.numberOfLessonsAddition = "(á " + minutesPerLesson + " minutes)";
     }
 
     onItemSelect(item: any) {

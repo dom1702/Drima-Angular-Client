@@ -78,7 +78,16 @@
                             </div>
                         </div>
 
-                        <div *ngIf="!selectedPdl" class="form-group m-form__group">
+                        <div class="m-checkbox-list">
+                            <label for="SetTopicAutomatically" class="m-checkbox">
+                                <input id="SetTopicAutomatically" type="checkbox" name="SetTopicAutomatically"
+                                    [(ngModel)]="setTopicNameAutomatically">
+                                {{l("SetTopicAutomatically")}}
+                                <span></span>
+                            </label>
+                        </div>
+
+                        <div *ngIf="!selectedPdl && !setTopicNameAutomatically" class="form-group m-form__group">
                             <label for="DrivingLessonTopic">{{l("DrivingLessonTopic")}}</label>
                             <div class="input-group">
                                 <input class="form-control" id="DrivingLessonTopic" name="drivingLessonTopic"
@@ -175,7 +184,8 @@
 
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <label for="DrivingLesson_Length">{{l("Length")}}</label>
+                                        <div><label for="DrivingLesson_Length">{{l("NumberOfLessons")}}</label></div>
+                                        <div><label>{{numberOfLessonsAddition}}</label></div>
                                         <input type="number" id="DrivingLesson_Length" min="1" max="10"
                                             class="form-control" [(ngModel)]="drivingLesson.length" name="Length" />
                                     </div>

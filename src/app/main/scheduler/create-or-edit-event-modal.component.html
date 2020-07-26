@@ -107,6 +107,15 @@
                             <label for="Event_EndTime">{{l("EndTime")}}</label>
                             <timepicker [(ngModel)]="endTime" [showMeridian]="ismeridian" name="endTime"></timepicker>
                         </div>
+
+                        <div class="m-checkbox-list">
+                            <label for="Paid" class="m-checkbox">
+                                <input id="Paid" type="checkbox" name="Paid"
+                                    [(ngModel)]="event.paid">
+                                {{l("PaidWork")}}
+                                <span></span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

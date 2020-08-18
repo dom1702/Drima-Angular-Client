@@ -2,7 +2,7 @@ import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { View, EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService, ScheduleComponent, PopupOpenEventArgs, CellClickEventArgs, EventClickArgs, NavigatingEventArgs, ActionEventArgs, EventRenderedArgs, WorkHoursModel } from '@syncfusion/ej2-angular-schedule';
-import { SchedulerServiceProxy } from '@shared/service-proxies/service-proxies';
+import { SchedulerServiceProxy, GetAllVehiclesForSchedulerDto, VehicleForScheduler } from '@shared/service-proxies/service-proxies';
 import * as moment from 'moment';
 import { CreateOrEditDrivingLessonModalComponent } from '../lessons/drivingLessons/create-or-edit-drivingLesson-modal.component';
 import { CreateEventTypeModalComponent } from './create-event-type-modal.component';
@@ -12,7 +12,7 @@ import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/i
 import { StudentLookupTableModalComponent } from '@app/shared/common/lookup/student-lookup-table-modal.component';
 import { IScheduler } from './scheduler-interface';
 import { CreateOrEditSimulatorLessonModalComponent } from '../lessons/simulatorLessons/create-or-edit-simulatorLesson-modal.component';
-
+import { Query, Predicate } from '@syncfusion/ej2-data';
 
 @Component({
     providers: [DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService],
@@ -55,9 +55,10 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
 
     startTime: Date;
 
+    vehicles : GetAllVehiclesForSchedulerDto;
+
     eventTypeFilter: any = { drivingLessons: true, simulatorLessons: false, theoryLessons: true, otherEvents: true };
 
-    // public data: object[] = [];
     public data: object[] = [{
         Id: 2,
         Subject: 'Meeting',
@@ -84,15 +85,40 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
         this.eventTypeFilter.drivingLessons = true;
         
         this.updateCurrentView();
+
+        this.vehicles = new GetAllVehiclesForSchedulerDto();
+        this.vehicles.vehicles = [];
+        this._schedulerServiceProxy.getAllVehicles().subscribe(result => {
+            this.vehicles = result;
+        });
     }
 
+    // onChange(args) {
+    //     var ele = document.querySelectorAll('.e-resource');
+    //     var filteredData = [];
+    //     for (var i = 0; i < ele.length; i++) {
+    //       if (ele[i].getAttribute('aria-checked') === 'true') {
+    //         debugger;
+    //         var fildata = this.filter(ele[i].firstElementChild.children[0].id);
+    //         filteredData = filteredData.concat(fildata);
+    //       }
+    //     }
+    //     this.scheduleObj.eventSettings.dataSource = filteredData;
+    //     this.scheduleObj.dataBind();
+    //   }
+    //   filter(id) {
+    //     var dm = new ej.data.DataManager({ json: data });
+    //     var CurData = dm.executeLocal(new ej.data.Query().where("Category", 'equal', id));
+    //     return CurData;
+    //   }
+
     onCreated(): void {
-    
-        let currTime: Date = new Date();
-        let hours: string = currTime.getHours() < 10 ? '0' +currTime.getHours().toString() : currTime.getHours().toString();
-        let minutes: string = currTime.getMinutes().toString();
-        let time: string = hours + ':' + minutes;
-        this.scheduleObj.scrollTo(time);
+        // let currTime: Date = new Date();
+        // let hours: string = currTime.getHours() < 10 ? '0' +currTime.getHours().toString() : currTime.getHours().toString();
+        // let minutes: string = currTime.getMinutes().toString();
+        // let time: string = hours + ':' + minutes;
+        // this.scheduleObj.scrollTo(time);
+      
       }
 
     onPopupOpen(args: PopupOpenEventArgs): void {
@@ -135,6 +161,8 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
 
     schedulerCreated(args: Object) {
         this.updateCurrentView();
+
+ 
     }
 
     navigating(args: NavigatingEventArgs): void {
@@ -223,12 +251,13 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
             moment(to),
             (this.studentId == null) ? -1 : this.studentId,
             (this.instructorId == null) ? -1 : this.instructorId,
+            //this.vehicles.vehicles.map<number>(v => (v.id)),
             this.eventTypeFilter.drivingLessons,
             this.eventTypeFilter.theoryLessons,
             this.eventTypeFilter.otherEvents,
             this.eventTypeFilter.simulatorLessons).subscribe(result => {
 
-                //console.log(result);
+                console.log(result);
 
                 for (var item of result) {
                     this.data.push(
@@ -237,7 +266,8 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
                             Subject: item.subject,
                             StartTime: item.startTime.toDate(),
                             EndTime: item.endTime.toDate(),
-                            AppointmentType: item.appointmentType.toString()
+                            AppointmentType: item.appointmentType.toString(),
+                            VehicleID: 1
                         });
                 }
 

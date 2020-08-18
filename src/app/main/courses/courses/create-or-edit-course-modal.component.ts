@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { OfficeLookupTableModalComponent } from '../../../shared/common/lookup/office-lookup-table-modal.component';
 import { MultiSelectComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { Subscription } from 'rxjs';
+import { LicenseClassLookupTableModalComponent } from '../../../shared/common/lookup/licenseClass-lookup-table-modal.component';
 
 @Component({
     selector: 'createOrEditCourseModal',
@@ -16,9 +17,9 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('officeLookupTableModal') courseOfficeLookupTableModal: OfficeLookupTableModalComponent;
+    @ViewChild('licenseClassLookupTableModal') licenseClassLookupTableModal: LicenseClassLookupTableModalComponent;
     @ViewChildren('pdl_multiselect') predefinedDL_Multiselect: QueryList<MultiSelectComponent>;
     @ViewChildren('ptl_multiselect') predefinedTL_Multiselect: QueryList<MultiSelectComponent>;
-    @ViewChildren('pp_multiselect') pricePackage_Multiselect: QueryList<MultiSelectComponent>;
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
 
@@ -31,7 +32,9 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
 
     predefinedDrivingLessons: Object[];
     predefinedTheoryLessons: Object[];
-    pricePackages: Object[];
+    pricePackages: any[];
+
+    pricePackageSelectedAsHighlighted: PricePackageDto;
 
     fields: Object = { text: 'dl', value: 'id' };
     placeholderPdlSelection: string = 'Select predefined driving lessons';
@@ -39,11 +42,11 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
     ptlFields: Object = { text: 'tl', value: 'id' };
     placeholderPtlSelection: string = 'Select predefined theory lessons';
 
-    placeholderPricePackageSelection: string = 'Select price packages';
+    licenseClassId: number;
+    licenseClassSelected: string = '';
 
     private pdlMultiselectSubscription: Subscription;
     private ptlMultiselectSubscription: Subscription;
-    private pricePackageMultiselectSubscription: Subscription;
 
     constructor(
         injector: Injector,
@@ -86,54 +89,6 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
             this.ptlMultiselectSubscription.unsubscribe();
         });
 
-        this.pricePackageMultiselectSubscription = this.pricePackage_Multiselect.changes.subscribe((comps: QueryList<MultiSelectComponent>) => {
-            var selected: number[] = [];
-
-            if (this.course.pricePackages != null) {
-
-                for (var i = 0; i < this.course.pricePackages.length; i++) {
-                    selected.push(this.course.pricePackages[i].id);
-                }
-
-                this.pricePackage_Multiselect.first.value = selected;
-            }
-
-            this.pricePackageMultiselectSubscription.unsubscribe();
-        });
-    }
-
-    show(courseId?: number): void {
-
-        this.UpdateMultiSelect();
-
-        this._predefinedDrivingLessonsServiceProxy.getAllForLookup().subscribe(result => {
-
-            this.predefinedDrivingLessons = [];
-
-            for (var i = 0; i < result.length; i++) {
-                this.predefinedDrivingLessons.push(
-                    {
-                        id: result[i].id,
-                        dl: result[i].name
-                    }
-                );
-            }
-        });
-
-        this._predefinedTheoryLessonsServiceProxy.getAllForLookup().subscribe(result => {
-
-            this.predefinedTheoryLessons = [];
-
-            for (var i = 0; i < result.length; i++) {
-                this.predefinedTheoryLessons.push(
-                    {
-                        id: result[i].id,
-                        tl: result[i].name
-                    }
-                );
-            }
-        });
-
         this._pricePackagesServiceProxy.getAllForLookup().subscribe(result => {
 
             this.pricePackages = [];
@@ -142,19 +97,90 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
                 this.pricePackages.push(
                     {
                         id: result[i].id,
-                        dl: result[i].name
+                        dl: result[i].name,
+                        checked: false
                     }
                 );
             }
+
+
+            console.log(this.course.pricePackages);
         
+            if (this.course.pricePackages != null) {
+
+                for (var i = 0; i < this.course.pricePackages.length; i++) {
+                    this.pricePackages.find(e => e.id === this.course.pricePackages[i].id).checked = true;
+                }
+            }
+
+            if(this.course.pricePackages.some(e => e.id === this.course.highlightedPricePackageId))
+                this.pricePackageSelectedAsHighlighted  = this.pricePackages.find(e => e.id === this.course.highlightedPricePackageId);
         });
 
+    }
+
+    updateHighlightedPricePackage(): void {
+        console.log(this.pricePackageSelectedAsHighlighted);
+    }
+
+    pricePackagesChanged(): void{
+        if(this.pricePackageSelectedAsHighlighted == null)
+            return;
+
+        for(var i = 0; i < this.pricePackages.length; i++)
+        {
+            if(!this.pricePackages[i].checked && this.pricePackageSelectedAsHighlighted.id == this.pricePackages[i].id)
+            {
+                this.pricePackageSelectedAsHighlighted = null;
+                return;
+            }
+        }
+    }
+
+    show(courseId?: number): void {
+
+        this.pricePackageSelectedAsHighlighted = null;
+
+        // this._predefinedDrivingLessonsServiceProxy.getAllForLookup(this.licenseClassSelected).subscribe(result => {
+
+        //     this.predefinedDrivingLessons = [];
+
+        //     for (var i = 0; i < result.length; i++) {
+        //         this.predefinedDrivingLessons.push(
+        //             {
+        //                 id: result[i].id,
+        //                 dl: result[i].name
+        //             }
+        //         );
+        //     }
+        // });
+
+        // this._predefinedTheoryLessonsServiceProxy.getAllForLookup().subscribe(result => {
+
+        //     this.predefinedTheoryLessons = [];
+
+        //     for (var i = 0; i < result.length; i++) {
+        //         this.predefinedTheoryLessons.push(
+        //             {
+        //                 id: result[i].id,
+        //                 tl: result[i].name
+        //             }
+        //         );
+        //     }
+        // });
+
+        
         if (!courseId) {
             this.course = new CreateOrEditCourseDto();
             this.course.id = courseId;
             this.course.startDate = moment().startOf('day');
             this.course.lastEnrollmentDate = moment().startOf('day');
             this.officeName = '';
+
+            this.licenseClassId = null;
+            this.licenseClassSelected = '';
+
+            this.UpdateMultiSelect();
 
             this.active = true;
             this.modal.show();
@@ -163,6 +189,11 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
                 this.course = result.course;
 
                 this.officeName = result.officeName;
+                this.licenseClassSelected = result.course.licenseClass;
+                
+               
+
+                this.UpdateMultiSelect();
 
                 this.active = true;
                 this.modal.show();
@@ -170,9 +201,6 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
 
             });
         }
-
-
-      
     }
 
     save(): void {
@@ -196,14 +224,21 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
             }
         }
 
-        if (this.pricePackage_Multiselect.first.value != null) {
-            this.course.pricePackages = [];
-            for (var i = 0; i < this.pricePackage_Multiselect.first.value.length; i++) {
+
+        this.course.pricePackages = [];
+        for (var i = 0; i < this.pricePackages.length; i++) {
+            if(this.pricePackages[i].checked)
+            {
                 var pp: PricePackageDto = new PricePackageDto()
-                pp.id = Number(this.pricePackage_Multiselect.first.value[i]);
+                pp.id = this.pricePackages[i].id;
                 this.course.pricePackages.push(pp);
             }
         }
+
+
+        this.course.licenseClass = this.licenseClassSelected;
+        if(this.pricePackageSelectedAsHighlighted != null)
+            this.course.highlightedPricePackageId = this.pricePackageSelectedAsHighlighted.id;
 
         this._coursesServiceProxy.createOrEdit(this.course)
             .pipe(finalize(() => { this.saving = false; }))
@@ -230,6 +265,53 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
     getNewOfficeId() {
         this.course.officeId = this.courseOfficeLookupTableModal.id;
         this.officeName = this.courseOfficeLookupTableModal.displayName;
+    }
+
+    openSelectLicenseClassModal() {
+        this.licenseClassLookupTableModal.id = this.licenseClassId;
+        this.licenseClassLookupTableModal.displayName = this.licenseClassSelected;
+        this.licenseClassLookupTableModal.show();
+    }
+
+
+    setLicenseClassIdNull() {
+        this.licenseClassLookupTableModal.id = null;
+        this.licenseClassId = null;
+        this.licenseClassSelected = '';
+    }
+
+
+    getNewLicenseClass() {
+        this.licenseClassId = this.licenseClassLookupTableModal.id;
+        this.licenseClassSelected = this.licenseClassLookupTableModal.displayName;
+
+        this._predefinedDrivingLessonsServiceProxy.getAllForLookup(this.licenseClassSelected).subscribe(result => {
+
+            this.predefinedDrivingLessons = [];
+
+            for (var i = 0; i < result.length; i++) {
+                this.predefinedDrivingLessons.push(
+                    {
+                        id: result[i].id,
+                        dl: result[i].name
+                    }
+                );
+            }
+        });
+
+        this._predefinedTheoryLessonsServiceProxy.getAllForLookup(this.licenseClassSelected).subscribe(result => {
+
+            this.predefinedTheoryLessons = [];
+
+            for (var i = 0; i < result.length; i++) {
+                this.predefinedTheoryLessons.push(
+                    {
+                        id: result[i].id,
+                        tl: result[i].name
+                    }
+                );
+            }
+        });
     }
 
 

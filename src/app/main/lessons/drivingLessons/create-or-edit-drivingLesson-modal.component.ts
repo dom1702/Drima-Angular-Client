@@ -180,7 +180,10 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     save(): void {
         this.saving = true;
 
-        this.drivingLesson.topic = this.drivingLessonTopic;
+        if(!this.setTopicNameAutomatically)
+            this.drivingLesson.topic = this.drivingLessonTopic;
+        else
+            this.drivingLesson.topic = this.selectedStudentCourse.licenseClass + " - " + this.studentFirstName + " " + this.studentLastName;
 
         this.drivingLesson.instructors = [];
 

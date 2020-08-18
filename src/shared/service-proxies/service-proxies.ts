@@ -4860,19 +4860,22 @@ export class EnrollmentsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param input (optional) 
      * @return Success
      */
-    denyEnrollment(id: number | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/Enrollments/DenyEnrollment?";
-        if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+    denyEnrollment(input: DenyEnrollmentInput | null | undefined): Observable<DenyEnrollmentOutput> {
+        let url_ = this.baseUrl + "/api/services/app/Enrollments/DenyEnrollment";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(input);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
             })
         };
 
@@ -4883,14 +4886,14 @@ export class EnrollmentsServiceProxy {
                 try {
                     return this.processDenyEnrollment(<any>response_);
                 } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
+                    return <Observable<DenyEnrollmentOutput>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<void>><any>_observableThrow(response_);
+                return <Observable<DenyEnrollmentOutput>><any>_observableThrow(response_);
         }));
     }
 
-    protected processDenyEnrollment(response: HttpResponseBase): Observable<void> {
+    protected processDenyEnrollment(response: HttpResponseBase): Observable<DenyEnrollmentOutput> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -4899,14 +4902,17 @@ export class EnrollmentsServiceProxy {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? DenyEnrollmentOutput.fromJS(resultData200) : new DenyEnrollmentOutput();
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(<any>null);
+        return _observableOf<DenyEnrollmentOutput>(<any>null);
     }
 }
 
@@ -7716,6 +7722,69 @@ export class LicenseClassesServiceProxy {
             }));
         }
         return _observableOf<FileDto>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllLicenseClassesForLookupTable(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfLicenseClassLookupTableDto> {
+        let url_ = this.baseUrl + "/api/services/app/LicenseClasses/GetAllLicenseClassesForLookupTable?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllLicenseClassesForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllLicenseClassesForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfLicenseClassLookupTableDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfLicenseClassLookupTableDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllLicenseClassesForLookupTable(response: HttpResponseBase): Observable<PagedResultDtoOfLicenseClassLookupTableDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfLicenseClassLookupTableDto.fromJS(resultData200) : new PagedResultDtoOfLicenseClassLookupTableDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfLicenseClassLookupTableDto>(<any>null);
     }
 }
 
@@ -10812,10 +10881,13 @@ export class PredefinedDrivingLessonsServiceProxy {
     }
 
     /**
+     * @param licenseClass (optional) 
      * @return Success
      */
-    getAllForLookup(): Observable<PredefinedDrivingLessonDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/PredefinedDrivingLessons/GetAllForLookup";
+    getAllForLookup(licenseClass: string | null | undefined): Observable<PredefinedDrivingLessonDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/PredefinedDrivingLessons/GetAllForLookup?";
+        if (licenseClass !== undefined)
+            url_ += "licenseClass=" + encodeURIComponent("" + licenseClass) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -11161,10 +11233,13 @@ export class PredefinedTheoryLessonsServiceProxy {
     }
 
     /**
+     * @param licenseClass (optional) 
      * @return Success
      */
-    getAllForLookup(): Observable<PredefinedTheoryLessonDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/PredefinedTheoryLessons/GetAllForLookup";
+    getAllForLookup(licenseClass: string | null | undefined): Observable<PredefinedTheoryLessonDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/PredefinedTheoryLessons/GetAllForLookup?";
+        if (licenseClass !== undefined)
+            url_ += "licenseClass=" + encodeURIComponent("" + licenseClass) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -13119,6 +13194,57 @@ export class SchedulerServiceProxy {
             }));
         }
         return _observableOf<SchedulerEventDto[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllVehicles(): Observable<GetAllVehiclesForSchedulerDto> {
+        let url_ = this.baseUrl + "/api/services/app/Scheduler/GetAllVehicles";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllVehicles(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllVehicles(<any>response_);
+                } catch (e) {
+                    return <Observable<GetAllVehiclesForSchedulerDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetAllVehiclesForSchedulerDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllVehicles(response: HttpResponseBase): Observable<GetAllVehiclesForSchedulerDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetAllVehiclesForSchedulerDto.fromJS(resultData200) : new GetAllVehiclesForSchedulerDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetAllVehiclesForSchedulerDto>(<any>null);
     }
 }
 
@@ -18784,6 +18910,58 @@ export class TheoryExamsServiceProxy {
         }
         return _observableOf<FinishTheoryExamQuestionSeriesDto>(<any>null);
     }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    finisTopicQuestionSeries(input: FinishTopicQuestionSeriesInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/TheoryExams/FinisTopicQuestionSeries";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFinisTopicQuestionSeries(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFinisTopicQuestionSeries(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processFinisTopicQuestionSeries(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
 }
 
 @Injectable()
@@ -24109,6 +24287,8 @@ export class CourseDto implements ICourseDto {
     visibleOnFrontPage!: boolean | undefined;
     enrollmentAvailable!: boolean | undefined;
     officeId!: number | undefined;
+    licenseClass!: string | undefined;
+    highlightedPricePackageId!: number | undefined;
     predefinedDrivingLessons!: PredefinedDrivingLessonDto[] | undefined;
     predefinedTheoryLessons!: PredefinedTheoryLessonDto[] | undefined;
     pricePackages!: PricePackageDto[] | undefined;
@@ -24132,6 +24312,8 @@ export class CourseDto implements ICourseDto {
             this.visibleOnFrontPage = data["visibleOnFrontPage"];
             this.enrollmentAvailable = data["enrollmentAvailable"];
             this.officeId = data["officeId"];
+            this.licenseClass = data["licenseClass"];
+            this.highlightedPricePackageId = data["highlightedPricePackageId"];
             if (data["predefinedDrivingLessons"] && data["predefinedDrivingLessons"].constructor === Array) {
                 this.predefinedDrivingLessons = [] as any;
                 for (let item of data["predefinedDrivingLessons"])
@@ -24167,6 +24349,8 @@ export class CourseDto implements ICourseDto {
         data["visibleOnFrontPage"] = this.visibleOnFrontPage;
         data["enrollmentAvailable"] = this.enrollmentAvailable;
         data["officeId"] = this.officeId;
+        data["licenseClass"] = this.licenseClass;
+        data["highlightedPricePackageId"] = this.highlightedPricePackageId;
         if (this.predefinedDrivingLessons && this.predefinedDrivingLessons.constructor === Array) {
             data["predefinedDrivingLessons"] = [];
             for (let item of this.predefinedDrivingLessons)
@@ -24195,6 +24379,8 @@ export interface ICourseDto {
     visibleOnFrontPage: boolean | undefined;
     enrollmentAvailable: boolean | undefined;
     officeId: number | undefined;
+    licenseClass: string | undefined;
+    highlightedPricePackageId: number | undefined;
     predefinedDrivingLessons: PredefinedDrivingLessonDto[] | undefined;
     predefinedTheoryLessons: PredefinedTheoryLessonDto[] | undefined;
     pricePackages: PricePackageDto[] | undefined;
@@ -24324,6 +24510,7 @@ export interface IPredefinedTheoryLessonDto {
 export class PricePackageDto implements IPricePackageDto {
     name!: string | undefined;
     products!: PricePackageItemDto[] | undefined;
+    highlight!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: IPricePackageDto) {
@@ -24343,6 +24530,7 @@ export class PricePackageDto implements IPricePackageDto {
                 for (let item of data["products"])
                     this.products!.push(PricePackageItemDto.fromJS(item));
             }
+            this.highlight = data["highlight"];
             this.id = data["id"];
         }
     }
@@ -24362,6 +24550,7 @@ export class PricePackageDto implements IPricePackageDto {
             for (let item of this.products)
                 data["products"].push(item.toJSON());
         }
+        data["highlight"] = this.highlight;
         data["id"] = this.id;
         return data; 
     }
@@ -24370,6 +24559,7 @@ export class PricePackageDto implements IPricePackageDto {
 export interface IPricePackageDto {
     name: string | undefined;
     products: PricePackageItemDto[] | undefined;
+    highlight: boolean | undefined;
     id: number | undefined;
 }
 
@@ -24478,7 +24668,9 @@ export class CreateOrEditCourseDto implements ICreateOrEditCourseDto {
     priceDescription!: string | undefined;
     visibleOnFrontPage!: boolean | undefined;
     enrollmentAvailable!: boolean | undefined;
+    licenseClass!: string | undefined;
     officeId!: number | undefined;
+    highlightedPricePackageId!: number | undefined;
     predefinedDrivingLessons!: PredefinedDrivingLessonDto[] | undefined;
     predefinedTheoryLessons!: PredefinedTheoryLessonDto[] | undefined;
     pricePackages!: PricePackageDto[] | undefined;
@@ -24503,7 +24695,9 @@ export class CreateOrEditCourseDto implements ICreateOrEditCourseDto {
             this.priceDescription = data["priceDescription"];
             this.visibleOnFrontPage = data["visibleOnFrontPage"];
             this.enrollmentAvailable = data["enrollmentAvailable"];
+            this.licenseClass = data["licenseClass"];
             this.officeId = data["officeId"];
+            this.highlightedPricePackageId = data["highlightedPricePackageId"];
             if (data["predefinedDrivingLessons"] && data["predefinedDrivingLessons"].constructor === Array) {
                 this.predefinedDrivingLessons = [] as any;
                 for (let item of data["predefinedDrivingLessons"])
@@ -24540,7 +24734,9 @@ export class CreateOrEditCourseDto implements ICreateOrEditCourseDto {
         data["priceDescription"] = this.priceDescription;
         data["visibleOnFrontPage"] = this.visibleOnFrontPage;
         data["enrollmentAvailable"] = this.enrollmentAvailable;
+        data["licenseClass"] = this.licenseClass;
         data["officeId"] = this.officeId;
+        data["highlightedPricePackageId"] = this.highlightedPricePackageId;
         if (this.predefinedDrivingLessons && this.predefinedDrivingLessons.constructor === Array) {
             data["predefinedDrivingLessons"] = [];
             for (let item of this.predefinedDrivingLessons)
@@ -24570,7 +24766,9 @@ export interface ICreateOrEditCourseDto {
     priceDescription: string | undefined;
     visibleOnFrontPage: boolean | undefined;
     enrollmentAvailable: boolean | undefined;
+    licenseClass: string | undefined;
     officeId: number | undefined;
+    highlightedPricePackageId: number | undefined;
     predefinedDrivingLessons: PredefinedDrivingLessonDto[] | undefined;
     predefinedTheoryLessons: PredefinedTheoryLessonDto[] | undefined;
     pricePackages: PricePackageDto[] | undefined;
@@ -26489,6 +26687,7 @@ export class EnrollmentDto implements IEnrollmentDto {
     payersName!: string | undefined;
     licenseClass!: string | undefined;
     approved!: boolean | undefined;
+    denied!: boolean | undefined;
     enrollmentDate!: moment.Moment | undefined;
     courseId!: number | undefined;
     officeId!: number | undefined;
@@ -26512,6 +26711,7 @@ export class EnrollmentDto implements IEnrollmentDto {
             this.payersName = data["payersName"];
             this.licenseClass = data["licenseClass"];
             this.approved = data["approved"];
+            this.denied = data["denied"];
             this.enrollmentDate = data["enrollmentDate"] ? moment(data["enrollmentDate"].toString()) : <any>undefined;
             this.courseId = data["courseId"];
             this.officeId = data["officeId"];
@@ -26535,6 +26735,7 @@ export class EnrollmentDto implements IEnrollmentDto {
         data["payersName"] = this.payersName;
         data["licenseClass"] = this.licenseClass;
         data["approved"] = this.approved;
+        data["denied"] = this.denied;
         data["enrollmentDate"] = this.enrollmentDate ? this.enrollmentDate.toISOString() : <any>undefined;
         data["courseId"] = this.courseId;
         data["officeId"] = this.officeId;
@@ -26551,6 +26752,7 @@ export interface IEnrollmentDto {
     payersName: string | undefined;
     licenseClass: string | undefined;
     approved: boolean | undefined;
+    denied: boolean | undefined;
     enrollmentDate: moment.Moment | undefined;
     courseId: number | undefined;
     officeId: number | undefined;
@@ -26848,7 +27050,7 @@ export interface IGetAvailableLicenseClassesForEnrollmentDto {
 export class LC implements ILC {
     licenseClass!: string | undefined;
     description!: string | undefined;
-    image!: string | undefined;
+    symbolImageUrl!: string | undefined;
 
     constructor(data?: ILC) {
         if (data) {
@@ -26863,7 +27065,7 @@ export class LC implements ILC {
         if (data) {
             this.licenseClass = data["licenseClass"];
             this.description = data["description"];
-            this.image = data["image"];
+            this.symbolImageUrl = data["symbolImageUrl"];
         }
     }
 
@@ -26878,7 +27080,7 @@ export class LC implements ILC {
         data = typeof data === 'object' ? data : {};
         data["licenseClass"] = this.licenseClass;
         data["description"] = this.description;
-        data["image"] = this.image;
+        data["symbolImageUrl"] = this.symbolImageUrl;
         return data; 
     }
 }
@@ -26886,7 +27088,7 @@ export class LC implements ILC {
 export interface ILC {
     licenseClass: string | undefined;
     description: string | undefined;
-    image: string | undefined;
+    symbolImageUrl: string | undefined;
 }
 
 export class GetPossibleAlreadyOwnedLicenseClassesDto implements IGetPossibleAlreadyOwnedLicenseClassesDto {
@@ -26936,7 +27138,7 @@ export interface IGetPossibleAlreadyOwnedLicenseClassesDto {
 export class OwnedLC implements IOwnedLC {
     licenseClass!: string | undefined;
     description!: string | undefined;
-    image!: string | undefined;
+    symbolImageUrl!: string | undefined;
 
     constructor(data?: IOwnedLC) {
         if (data) {
@@ -26951,7 +27153,7 @@ export class OwnedLC implements IOwnedLC {
         if (data) {
             this.licenseClass = data["licenseClass"];
             this.description = data["description"];
-            this.image = data["image"];
+            this.symbolImageUrl = data["symbolImageUrl"];
         }
     }
 
@@ -26966,7 +27168,7 @@ export class OwnedLC implements IOwnedLC {
         data = typeof data === 'object' ? data : {};
         data["licenseClass"] = this.licenseClass;
         data["description"] = this.description;
-        data["image"] = this.image;
+        data["symbolImageUrl"] = this.symbolImageUrl;
         return data; 
     }
 }
@@ -26974,7 +27176,7 @@ export class OwnedLC implements IOwnedLC {
 export interface IOwnedLC {
     licenseClass: string | undefined;
     description: string | undefined;
-    image: string | undefined;
+    symbolImageUrl: string | undefined;
 }
 
 export class GetOfficesForEnrollmentDto implements IGetOfficesForEnrollmentDto {
@@ -27117,6 +27319,9 @@ export class Course implements ICourse {
     courseId!: number | undefined;
     courseName!: string | undefined;
     image!: string | undefined;
+    class!: string | undefined;
+    description!: string | undefined;
+    priceDescription!: string | undefined;
 
     constructor(data?: ICourse) {
         if (data) {
@@ -27132,6 +27337,9 @@ export class Course implements ICourse {
             this.courseId = data["courseId"];
             this.courseName = data["courseName"];
             this.image = data["image"];
+            this.class = data["class"];
+            this.description = data["description"];
+            this.priceDescription = data["priceDescription"];
         }
     }
 
@@ -27147,6 +27355,9 @@ export class Course implements ICourse {
         data["courseId"] = this.courseId;
         data["courseName"] = this.courseName;
         data["image"] = this.image;
+        data["class"] = this.class;
+        data["description"] = this.description;
+        data["priceDescription"] = this.priceDescription;
         return data; 
     }
 }
@@ -27155,6 +27366,9 @@ export interface ICourse {
     courseId: number | undefined;
     courseName: string | undefined;
     image: string | undefined;
+    class: string | undefined;
+    description: string | undefined;
+    priceDescription: string | undefined;
 }
 
 export class GetPricePackagesFromCourseDto implements IGetPricePackagesFromCourseDto {
@@ -27206,6 +27420,9 @@ export class PricePackage implements IPricePackage {
     packageName!: string | undefined;
     description!: string | undefined;
     image!: string | undefined;
+    highlighted!: boolean | undefined;
+    finalPrice!: number | undefined;
+    products!: Product[] | undefined;
 
     constructor(data?: IPricePackage) {
         if (data) {
@@ -27222,6 +27439,13 @@ export class PricePackage implements IPricePackage {
             this.packageName = data["packageName"];
             this.description = data["description"];
             this.image = data["image"];
+            this.highlighted = data["highlighted"];
+            this.finalPrice = data["finalPrice"];
+            if (data["products"] && data["products"].constructor === Array) {
+                this.products = [] as any;
+                for (let item of data["products"])
+                    this.products!.push(Product.fromJS(item));
+            }
         }
     }
 
@@ -27238,6 +27462,13 @@ export class PricePackage implements IPricePackage {
         data["packageName"] = this.packageName;
         data["description"] = this.description;
         data["image"] = this.image;
+        data["highlighted"] = this.highlighted;
+        data["finalPrice"] = this.finalPrice;
+        if (this.products && this.products.constructor === Array) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -27247,6 +27478,53 @@ export interface IPricePackage {
     packageName: string | undefined;
     description: string | undefined;
     image: string | undefined;
+    highlighted: boolean | undefined;
+    finalPrice: number | undefined;
+    products: Product[] | undefined;
+}
+
+export class Product implements IProduct {
+    name!: string | undefined;
+    quantity!: number | undefined;
+    totalPrice!: number | undefined;
+
+    constructor(data?: IProduct) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.quantity = data["quantity"];
+            this.totalPrice = data["totalPrice"];
+        }
+    }
+
+    static fromJS(data: any): Product {
+        data = typeof data === 'object' ? data : {};
+        let result = new Product();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["quantity"] = this.quantity;
+        data["totalPrice"] = this.totalPrice;
+        return data; 
+    }
+}
+
+export interface IProduct {
+    name: string | undefined;
+    quantity: number | undefined;
+    totalPrice: number | undefined;
 }
 
 export class SubmitEnrollmentInput implements ISubmitEnrollmentInput {
@@ -27258,6 +27536,8 @@ export class SubmitEnrollmentInput implements ISubmitEnrollmentInput {
     city!: string | undefined;
     phone!: string | undefined;
     email!: string | undefined;
+    dateOfBirth!: moment.Moment | undefined;
+    country!: string | undefined;
     birthCountry!: string | undefined;
     nativeLanguage!: string | undefined;
     additionalInformation!: string | undefined;
@@ -27294,6 +27574,8 @@ export class SubmitEnrollmentInput implements ISubmitEnrollmentInput {
             this.city = data["city"];
             this.phone = data["phone"];
             this.email = data["email"];
+            this.dateOfBirth = data["dateOfBirth"] ? moment(data["dateOfBirth"].toString()) : <any>undefined;
+            this.country = data["country"];
             this.birthCountry = data["birthCountry"];
             this.nativeLanguage = data["nativeLanguage"];
             this.additionalInformation = data["additionalInformation"];
@@ -27330,6 +27612,8 @@ export class SubmitEnrollmentInput implements ISubmitEnrollmentInput {
         data["city"] = this.city;
         data["phone"] = this.phone;
         data["email"] = this.email;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["country"] = this.country;
         data["birthCountry"] = this.birthCountry;
         data["nativeLanguage"] = this.nativeLanguage;
         data["additionalInformation"] = this.additionalInformation;
@@ -27359,6 +27643,8 @@ export interface ISubmitEnrollmentInput {
     city: string | undefined;
     phone: string | undefined;
     email: string | undefined;
+    dateOfBirth: moment.Moment | undefined;
+    country: string | undefined;
     birthCountry: string | undefined;
     nativeLanguage: string | undefined;
     additionalInformation: string | undefined;
@@ -27454,6 +27740,78 @@ export class ApproveEnrollmentOutput implements IApproveEnrollmentOutput {
 export interface IApproveEnrollmentOutput {
     newStudentCreated: boolean | undefined;
     studentAlreadyExisted: boolean | undefined;
+    alreadyAssignedToCourse: boolean | undefined;
+}
+
+export class DenyEnrollmentInput implements IDenyEnrollmentInput {
+    enrollment!: EnrollmentDto | undefined;
+
+    constructor(data?: IDenyEnrollmentInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.enrollment = data["enrollment"] ? EnrollmentDto.fromJS(data["enrollment"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DenyEnrollmentInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new DenyEnrollmentInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["enrollment"] = this.enrollment ? this.enrollment.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IDenyEnrollmentInput {
+    enrollment: EnrollmentDto | undefined;
+}
+
+export class DenyEnrollmentOutput implements IDenyEnrollmentOutput {
+    alreadyAssignedToCourse!: boolean | undefined;
+
+    constructor(data?: IDenyEnrollmentOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.alreadyAssignedToCourse = data["alreadyAssignedToCourse"];
+        }
+    }
+
+    static fromJS(data: any): DenyEnrollmentOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new DenyEnrollmentOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["alreadyAssignedToCourse"] = this.alreadyAssignedToCourse;
+        return data; 
+    }
+}
+
+export interface IDenyEnrollmentOutput {
     alreadyAssignedToCourse: boolean | undefined;
 }
 
@@ -30292,6 +30650,7 @@ export interface IGetLicenseClassForViewDto {
 export class LicenseClassDto implements ILicenseClassDto {
     class!: string | undefined;
     description!: string | undefined;
+    symbolImageUrl!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: ILicenseClassDto) {
@@ -30307,6 +30666,7 @@ export class LicenseClassDto implements ILicenseClassDto {
         if (data) {
             this.class = data["class"];
             this.description = data["description"];
+            this.symbolImageUrl = data["symbolImageUrl"];
             this.id = data["id"];
         }
     }
@@ -30322,6 +30682,7 @@ export class LicenseClassDto implements ILicenseClassDto {
         data = typeof data === 'object' ? data : {};
         data["class"] = this.class;
         data["description"] = this.description;
+        data["symbolImageUrl"] = this.symbolImageUrl;
         data["id"] = this.id;
         return data; 
     }
@@ -30330,6 +30691,7 @@ export class LicenseClassDto implements ILicenseClassDto {
 export interface ILicenseClassDto {
     class: string | undefined;
     description: string | undefined;
+    symbolImageUrl: string | undefined;
     id: number | undefined;
 }
 
@@ -30411,6 +30773,94 @@ export interface ICreateOrEditLicenseClassDto {
     class: string;
     description: string | undefined;
     id: number | undefined;
+}
+
+export class PagedResultDtoOfLicenseClassLookupTableDto implements IPagedResultDtoOfLicenseClassLookupTableDto {
+    totalCount!: number | undefined;
+    items!: LicenseClassLookupTableDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfLicenseClassLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(LicenseClassLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfLicenseClassLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfLicenseClassLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfLicenseClassLookupTableDto {
+    totalCount: number | undefined;
+    items: LicenseClassLookupTableDto[] | undefined;
+}
+
+export class LicenseClassLookupTableDto implements ILicenseClassLookupTableDto {
+    id!: number | undefined;
+    displayName!: string | undefined;
+
+    constructor(data?: ILicenseClassLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.displayName = data["displayName"];
+        }
+    }
+
+    static fromJS(data: any): LicenseClassLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new LicenseClassLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["displayName"] = this.displayName;
+        return data; 
+    }
+}
+
+export interface ILicenseClassLookupTableDto {
+    id: number | undefined;
+    displayName: string | undefined;
 }
 
 export enum UserNotificationState {
@@ -32980,6 +33430,7 @@ export class SchedulerEventDto implements ISchedulerEventDto {
     allDay!: boolean | undefined;
     location!: string | undefined;
     isBlocked!: boolean | undefined;
+    vehicleId!: number | undefined;
     id!: number | undefined;
 
     constructor(data?: ISchedulerEventDto) {
@@ -33001,6 +33452,7 @@ export class SchedulerEventDto implements ISchedulerEventDto {
             this.allDay = data["allDay"];
             this.location = data["location"];
             this.isBlocked = data["isBlocked"];
+            this.vehicleId = data["vehicleId"];
             this.id = data["id"];
         }
     }
@@ -33022,6 +33474,7 @@ export class SchedulerEventDto implements ISchedulerEventDto {
         data["allDay"] = this.allDay;
         data["location"] = this.location;
         data["isBlocked"] = this.isBlocked;
+        data["vehicleId"] = this.vehicleId;
         data["id"] = this.id;
         return data; 
     }
@@ -33036,6 +33489,7 @@ export interface ISchedulerEventDto {
     allDay: boolean | undefined;
     location: string | undefined;
     isBlocked: boolean | undefined;
+    vehicleId: number | undefined;
     id: number | undefined;
 }
 
@@ -34692,6 +35146,98 @@ export class CreateOrUpdateRoleInput implements ICreateOrUpdateRoleInput {
 export interface ICreateOrUpdateRoleInput {
     role: RoleEditDto;
     grantedPermissionNames: string[];
+}
+
+export class GetAllVehiclesForSchedulerDto implements IGetAllVehiclesForSchedulerDto {
+    vehicles!: VehicleForScheduler[] | undefined;
+
+    constructor(data?: IGetAllVehiclesForSchedulerDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["vehicles"] && data["vehicles"].constructor === Array) {
+                this.vehicles = [] as any;
+                for (let item of data["vehicles"])
+                    this.vehicles!.push(VehicleForScheduler.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetAllVehiclesForSchedulerDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetAllVehiclesForSchedulerDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.vehicles && this.vehicles.constructor === Array) {
+            data["vehicles"] = [];
+            for (let item of this.vehicles)
+                data["vehicles"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IGetAllVehiclesForSchedulerDto {
+    vehicles: VehicleForScheduler[] | undefined;
+}
+
+export class VehicleForScheduler implements IVehicleForScheduler {
+    id!: number | undefined;
+    name!: string | undefined;
+    color!: string | undefined;
+    selected!: boolean | undefined;
+
+    constructor(data?: IVehicleForScheduler) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.name = data["name"];
+            this.color = data["color"];
+            this.selected = data["selected"];
+        }
+    }
+
+    static fromJS(data: any): VehicleForScheduler {
+        data = typeof data === 'object' ? data : {};
+        let result = new VehicleForScheduler();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["color"] = this.color;
+        data["selected"] = this.selected;
+        return data; 
+    }
+}
+
+export interface IVehicleForScheduler {
+    id: number | undefined;
+    name: string | undefined;
+    color: string | undefined;
+    selected: boolean | undefined;
 }
 
 export class GetCurrentLoginInformationsOutput implements IGetCurrentLoginInformationsOutput {
@@ -37298,6 +37844,13 @@ export class StudentDto implements IStudentDto {
     userId!: number | undefined;
     userName!: string | undefined;
     ssn!: string | undefined;
+    payersSocialSecurityNo!: string | undefined;
+    payersName!: string | undefined;
+    payersStreet!: string | undefined;
+    payersZipCode!: string | undefined;
+    payersCity!: string | undefined;
+    payersPhone!: string | undefined;
+    payersEmail!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: IStudentDto) {
@@ -37336,6 +37889,13 @@ export class StudentDto implements IStudentDto {
             this.userId = data["userId"];
             this.userName = data["userName"];
             this.ssn = data["ssn"];
+            this.payersSocialSecurityNo = data["payersSocialSecurityNo"];
+            this.payersName = data["payersName"];
+            this.payersStreet = data["payersStreet"];
+            this.payersZipCode = data["payersZipCode"];
+            this.payersCity = data["payersCity"];
+            this.payersPhone = data["payersPhone"];
+            this.payersEmail = data["payersEmail"];
             this.id = data["id"];
         }
     }
@@ -37374,6 +37934,13 @@ export class StudentDto implements IStudentDto {
         data["userId"] = this.userId;
         data["userName"] = this.userName;
         data["ssn"] = this.ssn;
+        data["payersSocialSecurityNo"] = this.payersSocialSecurityNo;
+        data["payersName"] = this.payersName;
+        data["payersStreet"] = this.payersStreet;
+        data["payersZipCode"] = this.payersZipCode;
+        data["payersCity"] = this.payersCity;
+        data["payersPhone"] = this.payersPhone;
+        data["payersEmail"] = this.payersEmail;
         data["id"] = this.id;
         return data; 
     }
@@ -37397,6 +37964,13 @@ export interface IStudentDto {
     userId: number | undefined;
     userName: string | undefined;
     ssn: string | undefined;
+    payersSocialSecurityNo: string | undefined;
+    payersName: string | undefined;
+    payersStreet: string | undefined;
+    payersZipCode: string | undefined;
+    payersCity: string | undefined;
+    payersPhone: string | undefined;
+    payersEmail: string | undefined;
     id: number | undefined;
 }
 
@@ -40604,7 +41178,10 @@ export interface ITheoryExamTopicDto {
 
 export class QuestionSeriesDto implements IQuestionSeriesDto {
     name!: string | undefined;
+    groupId!: number | undefined;
+    groupName!: string | undefined;
     questions!: QuestionDto[] | undefined;
+    finishedOnce!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: IQuestionSeriesDto) {
@@ -40619,11 +41196,14 @@ export class QuestionSeriesDto implements IQuestionSeriesDto {
     init(data?: any) {
         if (data) {
             this.name = data["name"];
+            this.groupId = data["groupId"];
+            this.groupName = data["groupName"];
             if (data["questions"] && data["questions"].constructor === Array) {
                 this.questions = [] as any;
                 for (let item of data["questions"])
                     this.questions!.push(QuestionDto.fromJS(item));
             }
+            this.finishedOnce = data["finishedOnce"];
             this.id = data["id"];
         }
     }
@@ -40638,11 +41218,14 @@ export class QuestionSeriesDto implements IQuestionSeriesDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["groupId"] = this.groupId;
+        data["groupName"] = this.groupName;
         if (this.questions && this.questions.constructor === Array) {
             data["questions"] = [];
             for (let item of this.questions)
                 data["questions"].push(item.toJSON());
         }
+        data["finishedOnce"] = this.finishedOnce;
         data["id"] = this.id;
         return data; 
     }
@@ -40650,7 +41233,10 @@ export class QuestionSeriesDto implements IQuestionSeriesDto {
 
 export interface IQuestionSeriesDto {
     name: string | undefined;
+    groupId: number | undefined;
+    groupName: string | undefined;
     questions: QuestionDto[] | undefined;
+    finishedOnce: boolean | undefined;
     id: number | undefined;
 }
 
@@ -41031,6 +41617,42 @@ export interface IFinishTheoryExamQuestionSeriesDto {
     trafficSituationQuestions: string | undefined;
     riskIdentifyingQuestions: string | undefined;
     success: boolean | undefined;
+}
+
+export class FinishTopicQuestionSeriesInput implements IFinishTopicQuestionSeriesInput {
+    questionSeriesId!: number | undefined;
+
+    constructor(data?: IFinishTopicQuestionSeriesInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.questionSeriesId = data["questionSeriesId"];
+        }
+    }
+
+    static fromJS(data: any): FinishTopicQuestionSeriesInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new FinishTopicQuestionSeriesInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["questionSeriesId"] = this.questionSeriesId;
+        return data; 
+    }
+}
+
+export interface IFinishTopicQuestionSeriesInput {
+    questionSeriesId: number | undefined;
 }
 
 export class PagedResultDtoOfGetTheoryLessonForViewDto implements IPagedResultDtoOfGetTheoryLessonForViewDto {

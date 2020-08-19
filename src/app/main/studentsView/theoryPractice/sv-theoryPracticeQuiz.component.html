@@ -76,19 +76,51 @@
                                         <ng-template #pictureContainer>
                                             <div class="row justify-content-center">
                                                 <div class="col-sm-4 mb-2">
-                                                    <button #pic01 class="pictureButton" (click)="setQuestionAnswerPictureButton(0)">
-                                                        <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[0]}} style="max-width:128px; height:auto; width:100%;"> 
-                                                    </button>
+                                                    <div>
+                                                        <figure class="figure">
+                                                            <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[0]}} 
+                                                                class="figure-img img-fluid" 
+                                                                style="max-width:128px; height:auto; width:100%;">       
+                                                            <figcaption class="figure-caption">Sign 1</figcaption>
+                                                        </figure> 
+                                                    </div>
+                                                    <div>
+                                                        <button #pic01 class="btn btn-secondary mr-5" (click)="setQuestionAnswerPictureButton(0)">                           
+                                                            Select
+                                                        </button>
+                                                    </div>                              
                                                 </div>
+                                                
                                                 <div class="col-sm-4 mb-2">
-                                                    <button #pic02 class="pictureButton" (click)="setQuestionAnswerPictureButton(1)">
-                                                        <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[1]}} style="max-width:128px; height:auto; width:100%;"> 
-                                                    </button>
+                                                    <div>
+                                                        <figure class="figure">
+                                                            <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[1]}} 
+                                                                class="figure-img img-fluid" 
+                                                                style="max-width:128px; height:auto; width:100%;">       
+                                                            <figcaption class="figure-caption">Sign 2</figcaption>
+                                                        </figure>
+                                                    </div>
+                                                     <div>
+                                                        <button #pic02 class="btn btn-secondary mr-5" (click)="setQuestionAnswerPictureButton(1)">                        
+                                                            Select
+                                                        </button>
+                                                     </div>                          
                                                 </div>
+                                                
                                                 <div class="col-sm-4 mb-2">
-                                                    <button #pic03 class="pictureButton" (click)="setQuestionAnswerPictureButton(2)">
-                                                        <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[2]}} style="max-width:128px; height:auto; width:100%;"> 
-                                                    </button>
+                                                    <div>
+                                                        <figure class="figure">
+                                                            <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[2]}} 
+                                                                class="figure-img img-fluid" 
+                                                                style="max-width:128px; height:auto; width:100%;">       
+                                                            <figcaption class="figure-caption">Sign 3</figcaption>
+                                                        </figure> 
+                                                    </div>                        
+                                                    <div>
+                                                        <button #pic03 class="btn btn-secondary mr-5" (click)="setQuestionAnswerPictureButton(2)">                                                      
+                                                            Select
+                                                        </button>
+                                                    </div>                                                   
                                                 </div>
                                             </div>
                                         </ng-template>
@@ -131,39 +163,35 @@
                                                     </div>                                                    
                                                 </div>
                                             </ng-template>                                                    
-                                        </ng-template>
-                                        <h6 class="m-portlet__head-text" *ngIf="currentQuizSession.quiz[questionContentIndex].selectedAnswer > -1">
-                                            Selected answer:  {{parsedAnswer}}
-                                        </h6>                                      
+                                        </ng-template>                                                                          
                                     </div>                  
                                 </div>
 
                                 <hr class="ng-tns-c19-1"> 
                                     
                                 <div class="row"> <!--Quiz Buttons-->                           
-                                    <div class="col mb-1"> 
+                                    <div class="col-sm-8 mb-1"> 
                                         <button class="btn btn-primary mr-5" type="button"
                                             [disabled]="!currentQuizSession.isMarkable"    
                                             (click)="markQuestion()">  
                                             Mark                 
                                         </button>                    
-                                    </div> 
-                                    
-                                    <div class="col mb-1">
                                         <button type="button" class="btn btn-primary mr-5"
                                             [disabled]="!currentQuizSession.hasAnswer(questionContentIndex)"
                                             (click)="nextPage(false)">  
                                             Next                 
-                                        </button>
-                                    </div >
-                                    <div class="col"></div>        
-                                    <div class="col">
+                                        </button>                                                                     
                                         <button type="button" class="btn btn-primary mr-5"
                                             *ngIf="showDirectionalLinks"                      
                                             (click)="finishQuiz()">  
                                                 Results                 
                                         </button>
                                     </div> 
+                                    <div class="col-sm-4 mb-1">
+                                        <h6 class="m-portlet__head-text" *ngIf="currentQuizSession.quiz[questionContentIndex].selectedAnswer > -1">
+                                            Selected answer:  {{parsedAnswer}}
+                                        </h6>   
+                                    </div>                              
                                 </div>
                             </ng-template>
 

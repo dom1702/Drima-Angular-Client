@@ -28,10 +28,10 @@
                             <div class="card">
                                 <img src={{license.pictureUrl}} class="card-image">
                                 <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-3 text-uppercase"><h3>{{license.title}}</h3></div>
-                                        <div class="col-9"><h5>{{license.description}}</h5></div>                 
-                                    </div>
+                                    
+                                    <div class="text-uppercase" style="text-align:center;"><h3>{{license.token}}</h3></div>
+                                    <div>{{license.name}}</div>                 
+                                    
                                     <button type="button"  class="btn btn-primary btn-block" 
                                         (click)= "selectLicencseClass(i)"
                                         routerLink="/app/main/studentsView/theoryPractice/licenseClassTasksOverview">  

@@ -4860,19 +4860,22 @@ export class EnrollmentsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param input (optional) 
      * @return Success
      */
-    denyEnrollment(id: number | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/Enrollments/DenyEnrollment?";
-        if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+    denyEnrollment(input: DenyEnrollmentInput | null | undefined): Observable<DenyEnrollmentOutput> {
+        let url_ = this.baseUrl + "/api/services/app/Enrollments/DenyEnrollment";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(input);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
             })
         };
 
@@ -4883,14 +4886,14 @@ export class EnrollmentsServiceProxy {
                 try {
                     return this.processDenyEnrollment(<any>response_);
                 } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
+                    return <Observable<DenyEnrollmentOutput>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<void>><any>_observableThrow(response_);
+                return <Observable<DenyEnrollmentOutput>><any>_observableThrow(response_);
         }));
     }
 
-    protected processDenyEnrollment(response: HttpResponseBase): Observable<void> {
+    protected processDenyEnrollment(response: HttpResponseBase): Observable<DenyEnrollmentOutput> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -4899,14 +4902,17 @@ export class EnrollmentsServiceProxy {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? DenyEnrollmentOutput.fromJS(resultData200) : new DenyEnrollmentOutput();
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(<any>null);
+        return _observableOf<DenyEnrollmentOutput>(<any>null);
     }
 }
 
@@ -26489,6 +26495,7 @@ export class EnrollmentDto implements IEnrollmentDto {
     payersName!: string | undefined;
     licenseClass!: string | undefined;
     approved!: boolean | undefined;
+    denied!: boolean | undefined;
     enrollmentDate!: moment.Moment | undefined;
     courseId!: number | undefined;
     officeId!: number | undefined;
@@ -26512,6 +26519,7 @@ export class EnrollmentDto implements IEnrollmentDto {
             this.payersName = data["payersName"];
             this.licenseClass = data["licenseClass"];
             this.approved = data["approved"];
+            this.denied = data["denied"];
             this.enrollmentDate = data["enrollmentDate"] ? moment(data["enrollmentDate"].toString()) : <any>undefined;
             this.courseId = data["courseId"];
             this.officeId = data["officeId"];
@@ -26535,6 +26543,7 @@ export class EnrollmentDto implements IEnrollmentDto {
         data["payersName"] = this.payersName;
         data["licenseClass"] = this.licenseClass;
         data["approved"] = this.approved;
+        data["denied"] = this.denied;
         data["enrollmentDate"] = this.enrollmentDate ? this.enrollmentDate.toISOString() : <any>undefined;
         data["courseId"] = this.courseId;
         data["officeId"] = this.officeId;
@@ -26551,6 +26560,7 @@ export interface IEnrollmentDto {
     payersName: string | undefined;
     licenseClass: string | undefined;
     approved: boolean | undefined;
+    denied: boolean | undefined;
     enrollmentDate: moment.Moment | undefined;
     courseId: number | undefined;
     officeId: number | undefined;
@@ -27258,6 +27268,8 @@ export class SubmitEnrollmentInput implements ISubmitEnrollmentInput {
     city!: string | undefined;
     phone!: string | undefined;
     email!: string | undefined;
+    dateOfBirth!: moment.Moment | undefined;
+    country!: string | undefined;
     birthCountry!: string | undefined;
     nativeLanguage!: string | undefined;
     additionalInformation!: string | undefined;
@@ -27294,6 +27306,8 @@ export class SubmitEnrollmentInput implements ISubmitEnrollmentInput {
             this.city = data["city"];
             this.phone = data["phone"];
             this.email = data["email"];
+            this.dateOfBirth = data["dateOfBirth"] ? moment(data["dateOfBirth"].toString()) : <any>undefined;
+            this.country = data["country"];
             this.birthCountry = data["birthCountry"];
             this.nativeLanguage = data["nativeLanguage"];
             this.additionalInformation = data["additionalInformation"];
@@ -27330,6 +27344,8 @@ export class SubmitEnrollmentInput implements ISubmitEnrollmentInput {
         data["city"] = this.city;
         data["phone"] = this.phone;
         data["email"] = this.email;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["country"] = this.country;
         data["birthCountry"] = this.birthCountry;
         data["nativeLanguage"] = this.nativeLanguage;
         data["additionalInformation"] = this.additionalInformation;
@@ -27359,6 +27375,8 @@ export interface ISubmitEnrollmentInput {
     city: string | undefined;
     phone: string | undefined;
     email: string | undefined;
+    dateOfBirth: moment.Moment | undefined;
+    country: string | undefined;
     birthCountry: string | undefined;
     nativeLanguage: string | undefined;
     additionalInformation: string | undefined;
@@ -27454,6 +27472,78 @@ export class ApproveEnrollmentOutput implements IApproveEnrollmentOutput {
 export interface IApproveEnrollmentOutput {
     newStudentCreated: boolean | undefined;
     studentAlreadyExisted: boolean | undefined;
+    alreadyAssignedToCourse: boolean | undefined;
+}
+
+export class DenyEnrollmentInput implements IDenyEnrollmentInput {
+    enrollment!: EnrollmentDto | undefined;
+
+    constructor(data?: IDenyEnrollmentInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.enrollment = data["enrollment"] ? EnrollmentDto.fromJS(data["enrollment"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DenyEnrollmentInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new DenyEnrollmentInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["enrollment"] = this.enrollment ? this.enrollment.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IDenyEnrollmentInput {
+    enrollment: EnrollmentDto | undefined;
+}
+
+export class DenyEnrollmentOutput implements IDenyEnrollmentOutput {
+    alreadyAssignedToCourse!: boolean | undefined;
+
+    constructor(data?: IDenyEnrollmentOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.alreadyAssignedToCourse = data["alreadyAssignedToCourse"];
+        }
+    }
+
+    static fromJS(data: any): DenyEnrollmentOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new DenyEnrollmentOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["alreadyAssignedToCourse"] = this.alreadyAssignedToCourse;
+        return data; 
+    }
+}
+
+export interface IDenyEnrollmentOutput {
     alreadyAssignedToCourse: boolean | undefined;
 }
 
@@ -37298,6 +37388,13 @@ export class StudentDto implements IStudentDto {
     userId!: number | undefined;
     userName!: string | undefined;
     ssn!: string | undefined;
+    payersSocialSecurityNo!: string | undefined;
+    payersName!: string | undefined;
+    payersStreet!: string | undefined;
+    payersZipCode!: string | undefined;
+    payersCity!: string | undefined;
+    payersPhone!: string | undefined;
+    payersEmail!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: IStudentDto) {
@@ -37336,6 +37433,13 @@ export class StudentDto implements IStudentDto {
             this.userId = data["userId"];
             this.userName = data["userName"];
             this.ssn = data["ssn"];
+            this.payersSocialSecurityNo = data["payersSocialSecurityNo"];
+            this.payersName = data["payersName"];
+            this.payersStreet = data["payersStreet"];
+            this.payersZipCode = data["payersZipCode"];
+            this.payersCity = data["payersCity"];
+            this.payersPhone = data["payersPhone"];
+            this.payersEmail = data["payersEmail"];
             this.id = data["id"];
         }
     }
@@ -37374,6 +37478,13 @@ export class StudentDto implements IStudentDto {
         data["userId"] = this.userId;
         data["userName"] = this.userName;
         data["ssn"] = this.ssn;
+        data["payersSocialSecurityNo"] = this.payersSocialSecurityNo;
+        data["payersName"] = this.payersName;
+        data["payersStreet"] = this.payersStreet;
+        data["payersZipCode"] = this.payersZipCode;
+        data["payersCity"] = this.payersCity;
+        data["payersPhone"] = this.payersPhone;
+        data["payersEmail"] = this.payersEmail;
         data["id"] = this.id;
         return data; 
     }
@@ -37397,6 +37508,13 @@ export interface IStudentDto {
     userId: number | undefined;
     userName: string | undefined;
     ssn: string | undefined;
+    payersSocialSecurityNo: string | undefined;
+    payersName: string | undefined;
+    payersStreet: string | undefined;
+    payersZipCode: string | undefined;
+    payersCity: string | undefined;
+    payersPhone: string | undefined;
+    payersEmail: string | undefined;
     id: number | undefined;
 }
 

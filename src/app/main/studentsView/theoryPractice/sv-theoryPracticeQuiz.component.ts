@@ -146,7 +146,7 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
     }
 
     canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-        console.log("check can Deactivate");
+        //console.log("check can Deactivate");
         if(!this.quizFinished && this.currentQuizSession != null)
         {
             this.message.confirm('Discard answers from this sheet?', (isConfirmed) => {

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { LicenseClass, QuizSession } from "./sv-licenseClassTasksOverview.component";
+import { LicenseClass, TheoryExamQuestion} from "./sv-licenseClassTasksOverview.component";
 
 @Injectable({
     providedIn:"root"
@@ -7,7 +7,6 @@ import { LicenseClass, QuizSession } from "./sv-licenseClassTasksOverview.compon
 
 export class SVTheoryPracticeHelperService {   
     selectedLicenseClass: LicenseClass;
-    selectedQuestionSeries: string;
 
     quizDuration: number; 
     quizMarkable: boolean;

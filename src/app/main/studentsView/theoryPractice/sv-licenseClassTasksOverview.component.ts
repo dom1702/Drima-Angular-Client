@@ -187,7 +187,7 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
     errorsClassCount: number;
     errorsTrafficSituationCount: number;
     errorsRiskIdentifyingCount: number;
-    duration: number;
+    duration: number = 30;
     nextTheoryExamId : number;
 
     exam = "Theory Exam";
@@ -215,12 +215,17 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
         }
     }
 
-    startSelectedQuiz(id: number) : void {       
+    startSelectedQuiz(id: number) : void { 
+        console.log("current selected id: " + id);      
         this.theoryPracticeHelper.quizId = id;
         this.theoryPracticeHelper.quizMarkable = false;
         this.theoryPracticeHelper.quizDuration = this.duration;
         this.theoryPracticeHelper.selectedLicenseClass = this.currentLicenseClass;
         this.router.navigateByUrl("/app/main/studentsView/theoryPractice/quiz");
+    }
+
+    startNextTrafficSituationQuiz() : void {
+       this.theoryPracticeHelper
     }
 
     startTheoryExamSimulation() {
@@ -240,7 +245,7 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
     }
 
     getTheoryExamPreviewAsync() {
-        console.log("get exam preview");
+        //console.log("get exam preview");
         this.theoryExamService.getTheoryExamPreparationForView(this.currentLicenseClass.token).subscribe(
             (result) => {
                 if(result != null)
@@ -288,7 +293,7 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
                 }
             }
             else {
-                console.log("Found Topic: " + result.topics[index].name + " not supported");
+                console.log("Generate Task Topics: Found Topic: " + result.topics[index].name + " not supported");
             }                  
         }
     }

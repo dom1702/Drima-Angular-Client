@@ -52,15 +52,38 @@
                                                 <span>Choose a question serie by clicking the links below.</span>
                                             </div>
                                             <div class="col-sm-12 mt-3">
-                                                <div *ngFor="let tab of trafficSituationQuestionSeries; index as i;">
-                                                    <div *ngIf="i % 2 === 0; then whiteTab else lightTab"></div>
-                                                    <ng-template #whiteTab>
-                                                        <button type="button" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">{{tab.topic}}</button>                                                                                                         
-                                                    </ng-template>
-                                                    <ng-template #lightTab>
-                                                        <button type="button" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">{{tab.topic}}</button>                                                                                                           
-                                                    </ng-template> 
-                                                </div>
+                                                <div>
+                                                    <button type="button" value="can_drive_straight" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">
+                                                        I can drive straight on using this lane
+                                                    </button>
+                                                    <button type="button" value="can_turn_right" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">
+                                                        I can turn right using this lane
+                                                    </button>
+                                                    <button type="button" value="can_turn_left" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">
+                                                        I can turn left using this lane
+                                                    </button>
+                                                    <button type="button" value="straight_give_way" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">
+                                                        I'am going on straight, I have to give way to one or more road users in the picture
+                                                    </button>
+                                                    <button type="button" value="right_give_way" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">
+                                                        I'am turning right, I have to give way to one or more road users in the picture
+                                                    </button>
+                                                    <button type="button" value="left_give_way" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">
+                                                        I'am turning left, I have to give way to one or more road user seen in the picture
+                                                    </button>
+                                                    <button type="button" value="start_passing" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">
+                                                        I can start passing the car driving ahead me
+                                                    </button>
+                                                    <button type="button" value="change_lane" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">
+                                                        I can change lane
+                                                    </button>
+                                                    <button type="button" value="have_to_stop" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">
+                                                        I have to stop
+                                                    </button>
+                                                    <button type="button" value="parked_correctly" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">
+                                                        The car in the picture is parked correctly
+                                                    </button>
+                                                </div>                                               
                                             </div>
                                         </div> 
                                     </div>                                                                                                                                                                                                       

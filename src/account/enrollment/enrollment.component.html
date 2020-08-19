@@ -42,20 +42,26 @@
 
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div *ngFor="let licenseClass of licenseClasses.licenseClasses;  let i = index">
-                                <div class="col">
-                                    <div class="card my-3">
-                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG"
-                                            alt="Card image cap">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{l('Class')}} {{licenseClass.licenseClass}}</h5>
-                                            <p class="card-text"> {{licenseClass.description}}</p>
-                                            <button
-                                                class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                                                (click)="classToAcquireSelected(licenseClass.licenseClass)">
-                                                Select
-                                            </button>
-                                        </div>
+                            <div class="card-deck">
+
+
+                                <div class="card my-5"
+                                    *ngFor="let licenseClass of licenseClasses.licenseClasses;  let i = index">
+                                    <img class="card-img-top" src="{{licenseClass.symbolImageUrl}}"
+                                        alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{l('Class')}} {{licenseClass.licenseClass}}</h5>
+                                        <ul class="list-group list-group-flush mb-5" *ngIf="licenseClass.description">
+                                            <li class="list-group-item"> {{licenseClass.description}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button
+                                            class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                            (click)="classToAcquireSelected(licenseClass.licenseClass)">
+                                            Select
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -72,24 +78,31 @@
                         I don't have any license yet
                     </button>
 
-                    <div class="container my-3">
+                    <div class="container my-5">
                         <div class="row justify-content-center">
-                            <div *ngFor="let licenseClassOwned of licenseClassesOwned.licenseClasses;  let i = index">
-                                <div class="col">
-                                    <div class="card my-3">
-                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG"
-                                            alt="Card image cap">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{l('Class')}} {{licenseClassOwned.licenseClass}}
-                                            </h5>
-                                            <p class="card-text"> {{licenseClassOwned.description}}</p>
-                                            <label class="m-checkbox mt-3">
-                                                <input type="checkbox" name="licenseClassOwned"
-                                                    (change)="previousClassChecked(licenseClassOwned.licenseClass, $event)">
-                                                I have this license
-                                                <span></span>
-                                            </label>
-                                        </div>
+                            <div class="card-deck">
+
+
+                                <div class="card my-3"
+                                    *ngFor="let licenseClassOwned of licenseClassesOwned.licenseClasses;  let i = index">
+                                    <img class="card-img-top" src="{{licenseClassOwned.symbolImageUrl}}"
+                                        alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{l('Class')}} {{licenseClassOwned.licenseClass}}
+                                        </h5>
+                                        <ul class="list-group list-group-flush mb-5" *ngIf="licenseClassOwned.description">
+                                            <li class="list-group-item"> {{licenseClassOwned.description}}
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                    <div class="card-footer">
+                                        <label class="m-checkbox mt-3">
+                                            <input type="checkbox" name="licenseClassOwned"
+                                                (change)="previousClassChecked(licenseClassOwned.licenseClass, $event)">
+                                            I have this license
+                                            <span></span>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -102,7 +115,7 @@
                         Back
                     </button>
 
-                    <button
+                    <button *ngIf="previousClasses.length > 0"
                         class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
                         (click)="classesAlreadyOwnedSelected()">
                         Next
@@ -114,22 +127,29 @@
 
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div *ngFor="let location of offices.offices;  let i = index">
-                                <div class="col">
-                                    <div class="card my-3">
-                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG"
-                                            alt="Card image cap">
-                                        <div class="card-body">
-                                            <h5 class="card-title"> {{location.officeName}}</h5>
-                                            <p class="card-text"> {{location.address}}</p>
-                                            <button
-                                                class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                                                (click)="officeSelected(location.officeId)">
-                                                Select
-                                            </button>
-                                        </div>
+                            <div class="card-deck">
+
+
+                                <div class="card my-5" *ngFor="let location of offices.offices;  let i = index">
+                                    <img class="card-img-top" src="assets/symbols/office.png" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title"> {{location.officeName}}</h5>
+                                        <ul class="list-group list-group-flush mb-5">
+                                            <li class="list-group-item">{{location.address}}
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                    <div class="card-footer">
+                                        <button
+                                            class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                            (click)="officeSelected(location.officeId)">
+                                            Select
+                                        </button>
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
@@ -146,38 +166,35 @@
 
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div *ngFor="let course of courses.courses;  let i = index">
-                                <div class="col">
-                                    <div class="card my-3">
-                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG"
-                                            alt="Card image cap">
-                                        <div class="card-body">
-                                            <h5 class="card-title"> {{course.CourseName}}</h5>
+                            <div class="card-deck">
+
+
+                                <div class="card my-5" *ngFor="let course of courses.courses;  let i = index">
+                                    <img class="card-img-top" src="assets/symbols/course.png" alt="Card image cap">
+                                    <div class="card-body">
+                                        <!-- <h5 class="card-title"> {{course.courseName}}</h5>
                                             <p class="card-text" style="max-width: 18rem;"> {{course.class}}</p>
-                                            <p class="card-text" style="max-width: 18rem;"> Saat käyttäjätunnukset
-                                                ja
-                                                ohjeet kurssin
-                                                suorittamiseen sähköpostitse, jonka jälkeen voit aloittaa kurssin.
-                                                Luovumme infotunneista 17.3 alkaen toistaiseksi koronan takia. </p>
-                                            <p class="card-text" style="max-width: 18rem;">
-                                                Jos sinulla on aikaisempi ajokortti tai todistus suoritetusta
-                                                turvallisuukoulutuksesta (EAS), turvallisuuskoulutuksen
-                                                teoriatunteja ei
-                                                tarvitse käydä uudelleen. </p>
-                                            <p class="card-text" style="max-width: 18rem;">
-                                                Kurssimaksun lisäksi suoritettavat viranomaismaksut:
-                                                Ajokorttilupamaksu 35€
-                                                Teoriakoe 35€
-                                                Ajokoe 90€
-                                            </p>
-                                            <button
-                                                class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                                                (click)="courseSelected(course.courseId)">
-                                                Select
-                                            </button>
-                                        </div>
+                                            <p class="card-text" style="max-width: 18rem;"> {{course.description}} </p>
+                                            <p class="card-text" style="max-width: 18rem;"> {{course.priceDescription}}</p> -->
+                                        <h5 class="card-title"> {{course.courseName}}</h5>
+                                        <ul class="list-group list-group-flush mb-5">
+                                            <li class="list-group-item">{{l('LicenseClass')}}: {{course.class}}
+                                            </li>
+                                            <li class="list-group-item">{{course.description}}</li>
+                                            <li class="list-group-item">{{course.priceDescription}}</li>
+                                        </ul>
+
+                                    </div>
+                                    <div class="card-footer">
+                                        <button
+                                            class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                            (click)="courseSelected(course.courseId)">
+                                            Select
+                                        </button>
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
@@ -194,36 +211,53 @@
 
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div *ngFor="let pp of pricePackages.pricePackages;  let i = index">
-                                <div class="col">
-                                    <div class="card my-3">
-                                        <img class="card-img-top" src="assets/enrollment/icons/ProxyLicenseClass.PNG"
-                                            alt="Card image cap">
-                                        <div class="card-body">
-                                            <h5 class="card-title"> {{pp.packageName}}</h5>
-                                            <p class="card-text"> 5x Basic Lesson 50 EUR / Lesson</p>
-                                            <p class="card-text"> 5x Basic Lesson 50 EUR / Lesson</p>
-                                            <p class="card-text"> 5x Basic Lesson 50 EUR / Lesson</p>
-                                            <p class="card-text"> 5x Basic Lesson 50 EUR / Lesson</p>
-                                            <p class="card-text"> 5x Basic Lesson 50 EUR / Lesson</p>
-                                            <button
-                                                class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                                                (click)="pricePackageSelected(pp.pricePackageId)">
-                                                Select
-                                            </button>
+                            <div class="card-deck">
+
+
+                                <div class="card my-5" 
+                                *ngFor="let pp of pricePackages.pricePackages;  let i = index">
+                                    <img class="card-img-top" [src]="pp.highlighted ? 'assets/symbols/price_highlighted.png' : 'assets/symbols/price.png'" alt="Card image cap">
+                                    <div class="card-body">
+                                        <div *ngIf="pp.highlighted">
+                                        <h2><span class="badge badge-secondary">Standard
+                                                package</span></h2></div>
+                                        <h5 class="card-title"> {{pp.packageName}} </h5>
+                                        <div class="card-header">
+                                            {{pp.finalPrice}}€
                                         </div>
+                                        <ul class="list-group list-group-flush mb-5">
+
+                                            <li class="list-group-item"
+                                                *ngFor="let product of pp.products;  let j = index">
+                                                {{product.quantity}}x {{product.name}}
+                                                {{product.totalPrice}}€</li>
+
+                                        </ul>
+
+
+                                    </div>
+                                    <div class="card-footer">
+                                        <button
+                                            class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                            (click)="pricePackageSelected(pp.pricePackageId)">
+                                            Select
+                                        </button>
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
-
                     <button
-                    class="btn btn-secondary m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                    (click)="goToPreviousPage()">
-                    Back
-                </button>
+                        class="btn btn-secondary m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                        (click)="goToPreviousPage()">
+                        Back
+                    </button>
                 </div>
+
+
+
 
                 <div *ngIf="currentPageNumber == 5">
                     <h3 class="mb-5">Please enter your data to finish enrollment!</h3>
@@ -323,14 +357,12 @@
                         <div class="form-group row">
                             <label for="dateOfBirthInput" class="col-sm-2 col-form-label">Date of birth *</label>
                             <div class="col-sm-4">
-                                <input class="form-control m-input" type="datetime" bsDatepicker [(ngModel)]="dateOfBirth" name="dateOfBirth"
-                                    required>
+                                <input class="form-control m-input" type="datetime" bsDatepicker
+                                    [(ngModel)]="dateOfBirth" name="dateOfBirth" required>
                             </div>
-                            <label for="Student_Country"
-                                class="col-sm-2 col-form-label">{{l("Country")}}</label>
+                            <label for="Student_Country" class="col-sm-2 col-form-label">{{l("Country")}}</label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="Student_Country"
-                                    [(ngModel)]="currentCountry">
+                                <select class="form-control" name="Student_Country" [(ngModel)]="currentCountry">
                                     <option *ngFor="let option of countries" [ngValue]="option.name">
                                         {{l(option.name)}}
                                     </option>
@@ -449,12 +481,17 @@
                                 [buttonBusy]="submitting" [busyText]="l('PleaseWait')">Submit</button>
                         </div>
                     </form>
-
-
-
-                </div>
-
-
+<div class="mt-5">
+                    <button
+                    class="btn btn-secondary m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                    (click)="goToPreviousPage()">
+                    Back
+                </button>
             </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
+</div>

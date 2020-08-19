@@ -48,7 +48,7 @@
                 </div>
                 <input class="form-control" name="studentId" [(ngModel)]="studentId" type="text" hidden>
 
-                <h5 class="m--margin-top-30">{{l("Filter")}}</h5>
+                <h5 class="m--margin-top-30">{{l("AppointmentType")}}</h5>
                 <div class="m--margin-top-20">
                     <!-- <div class="row">
                         <div class="col">
@@ -142,6 +142,18 @@
                                 </label>
                         </div>
                     </div>
+                    <h5 class="m--margin-top-30">{{l("Vehicles")}}</h5>
+                    <div class="m--margin-top-20">
+                    <div class="row" *ngIf="vehicles">
+                        <div class="col-md-auto" *ngFor="let vehicle of vehicles.vehicles">
+                        <label attr.for="Vehicle_{{vehicle.name}}" class="m-checkbox" >
+                            <input id="Vehicle_{{vehicle.name}}" type="checkbox" name="{{vehicle.name}}" [(ngModel)]="vehicle.selected" 
+                            value="{{vehicle.id}}" (change)="onVehicleChange()">
+                            {{vehicle.name}}
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>
@@ -155,7 +167,15 @@
             (eventClick)='onEventClick($event)' (recordDoubleClick)='Doubleclick($event)'
             (navigating)='navigating($event)' (actionComplete)='actionComplete($event)'
             (created)='schedulerCreated($event)' (eventRendered)="onEventRendered($event)"
-            ></ejs-schedule>
+            >
+
+            <e-resources>
+                <e-resource field="vehicleId" title="Vehicle Name" name="Vehicle" textField="name" idField="id" colorField="color" 
+                [dataSource]="vehicles.vehicles">  
+                </e-resource>
+            </e-resources>
+        
+        </ejs-schedule>
     </div>
 
     <createOrEditDrivingLessonModal #createOrEditDrivingLessonModal (modalSave)="updateCurrentView()">

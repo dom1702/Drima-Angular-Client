@@ -146,11 +146,12 @@
                     <div class="m--margin-top-20">
                     <div class="row" *ngIf="vehicles">
                         <div class="col-md-auto" *ngFor="let vehicle of vehicles.vehicles">
-                        <label attr.for="Vehicle_{{vehicle.name}}" class="m-checkbox" >
+                        <label attr.for="Vehicle_{{vehicle.name}}" class="checkbox" >
+                            <ejs-checkbox label="Primary" [checked]="true"></ejs-checkbox>
                             <input id="Vehicle_{{vehicle.name}}" type="checkbox" name="{{vehicle.name}}" [(ngModel)]="vehicle.selected" 
                             value="{{vehicle.id}}" (change)="onVehicleChange()">
                             {{vehicle.name}}
-                            <span></span>
+                            <span> </span>
                         </label>
                     </div>
                 </div>
@@ -162,7 +163,6 @@
         <ejs-schedule #scheduleObj [allowDragAndDrop]='false' [eventSettings]='eventSettings'
             [currentView]='currentView' startHour='06:00' endHour='23:00' [firstDayOfWeek]='1' 
             locale='de'
-            (created)="onCreated()"
              (popupOpen)='onPopupOpen($event)' (cellClick)='onCellClick($event)'
             (eventClick)='onEventClick($event)' (recordDoubleClick)='Doubleclick($event)'
             (navigating)='navigating($event)' (actionComplete)='actionComplete($event)'

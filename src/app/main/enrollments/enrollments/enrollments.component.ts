@@ -1,6 +1,6 @@
 ﻿import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EnrollmentsServiceProxy, EnrollmentDto, GetEnrollmentForViewDto, ApproveEnrollmentInput, DenyEnrollmentInput  } from '@shared/service-proxies/service-proxies';
+import { EnrollmentsServiceProxy, EnrollmentDto, GetEnrollmentForViewDto, ApproveEnrollmentInput, DenyEnrollmentInput, RevertEnrollmentInput  } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -79,13 +79,14 @@ export class EnrollmentsComponent extends AppComponentBase {
             this.minEnrollmentDateFilter,
             this.courseNameFilter,
             this.officeNameFilter,
+            false,
             this.primengTableHelper.getSorting(this.dataTable),
             this.primengTableHelper.getSkipCount(this.paginator, event),
             this.primengTableHelper.getMaxResultCount(this.paginator, event)
         ).subscribe(result => {
             this.primengTableHelper.totalRecordsCount = result.totalCount;
             this.primengTableHelper.records = result.items;
-            console.log(this.primengTableHelper.records);
+         
             this.getUnapprovedEnrollments();
             this.primengTableHelper.hideLoadingIndicator();
         });
@@ -95,18 +96,23 @@ export class EnrollmentsComponent extends AppComponentBase {
     {
         this.newRecords = [];
 
-        for(let r of this.primengTableHelper.records)
+        for(var r of this.primengTableHelper.records)
+        {
             if(!r.enrollment.approved && !r.enrollment.denied)
-            {
                 this.newRecords.push(r);
+        }
 
-                this.primengTableHelper.records.forEach( (item, index) => {
-                    if(item === r) this.primengTableHelper.records.splice(index,1);
-                  });
-            }
+        // var otherRecords = [];
 
-            console.log(this.primengTableHelper.records);
-        console.log(this.newRecords);
+        // for(var r of this.primengTableHelper.records)
+        // {
+        //     if(r.enrollment.approved || r.enrollment.denied)
+        //         otherRecords.push(r);
+        // }
+
+        // this.primengTableHelper.records = [];
+        // this.primengTableHelper.records = Array.from(otherRecords);
+        // this.primengTableHelper.totalRecordsCount = this.primengTableHelper.records.length;
     }   
 
     reloadPage(): void {
@@ -117,16 +123,26 @@ export class EnrollmentsComponent extends AppComponentBase {
         this.createOrEditEnrollmentModal.show();
     }
 
-    deleteEnrollment(enrollment: EnrollmentDto): void {
+    revertEnrollment(enrollment: EnrollmentDto): void {
         this.message.confirm(
             '',
             this.l('AreYouSure'),
             (isConfirmed) => {
                 if (isConfirmed) {
-                    this._enrollmentsServiceProxy.delete(enrollment.id)
-                        .subscribe(() => {
-                            this.reloadPage();
-                            this.notify.success(this.l('SuccessfullyDeleted'));
+                    var input : RevertEnrollmentInput = new RevertEnrollmentInput();
+                    input.enrollment = enrollment;
+                    this._enrollmentsServiceProxy.revertEnrollment(input)
+                        .subscribe((result) => {
+
+                            if(result.revertSuccessfull)
+                            {
+                                this.reloadPage();
+                                this.notify.success(this.l('SuccessfullyReverted'));
+                            }
+                            else
+                            {
+                                this.notify.error(this.l('NoReversionPossibleDueToTime'));
+                            }
                         });
                 }
             }

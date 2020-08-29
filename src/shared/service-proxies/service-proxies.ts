@@ -3991,12 +3991,13 @@ export class EnrollmentsServiceProxy {
      * @param minEnrollmentDateFilter (optional) 
      * @param courseNameFilter (optional) 
      * @param officeNameFilter (optional) 
+     * @param onlyUndecidedFilter (optional) 
      * @param sorting (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getAll(filter: string | null | undefined, firstNameFilter: string | null | undefined, lastNameFilter: string | null | undefined, socialSecurityNoFilter: string | null | undefined, payersSocialSecurityNoFilter: string | null | undefined, payersNameFilter: string | null | undefined, licenseClassFilter: string | null | undefined, approvedFilter: number | null | undefined, maxEnrollmentDateFilter: moment.Moment | null | undefined, minEnrollmentDateFilter: moment.Moment | null | undefined, courseNameFilter: string | null | undefined, officeNameFilter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfGetEnrollmentForViewDto> {
+    getAll(filter: string | null | undefined, firstNameFilter: string | null | undefined, lastNameFilter: string | null | undefined, socialSecurityNoFilter: string | null | undefined, payersSocialSecurityNoFilter: string | null | undefined, payersNameFilter: string | null | undefined, licenseClassFilter: string | null | undefined, approvedFilter: number | null | undefined, maxEnrollmentDateFilter: moment.Moment | null | undefined, minEnrollmentDateFilter: moment.Moment | null | undefined, courseNameFilter: string | null | undefined, officeNameFilter: string | null | undefined, onlyUndecidedFilter: boolean | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfGetEnrollmentForViewDto> {
         let url_ = this.baseUrl + "/api/services/app/Enrollments/GetAll?";
         if (filter !== undefined)
             url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
@@ -4022,6 +4023,8 @@ export class EnrollmentsServiceProxy {
             url_ += "CourseNameFilter=" + encodeURIComponent("" + courseNameFilter) + "&"; 
         if (officeNameFilter !== undefined)
             url_ += "OfficeNameFilter=" + encodeURIComponent("" + officeNameFilter) + "&"; 
+        if (onlyUndecidedFilter !== undefined)
+            url_ += "OnlyUndecidedFilter=" + encodeURIComponent("" + onlyUndecidedFilter) + "&"; 
         if (sorting !== undefined)
             url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
         if (skipCount !== undefined)
@@ -4857,6 +4860,62 @@ export class EnrollmentsServiceProxy {
             }));
         }
         return _observableOf<ApproveEnrollmentOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    revertEnrollment(input: RevertEnrollmentInput | null | undefined): Observable<RevertEnrollmentOutput> {
+        let url_ = this.baseUrl + "/api/services/app/Enrollments/RevertEnrollment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRevertEnrollment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRevertEnrollment(<any>response_);
+                } catch (e) {
+                    return <Observable<RevertEnrollmentOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<RevertEnrollmentOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRevertEnrollment(response: HttpResponseBase): Observable<RevertEnrollmentOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? RevertEnrollmentOutput.fromJS(resultData200) : new RevertEnrollmentOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<RevertEnrollmentOutput>(<any>null);
     }
 
     /**
@@ -14226,6 +14285,57 @@ export class SimulatorsServiceProxy {
             }));
         }
         return _observableOf<PagedResultDtoOfSimulatorOfficeLookupTableDto>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    createApiKey(): Observable<string> {
+        let url_ = this.baseUrl + "/api/services/app/Simulators/CreateApiKey";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateApiKey(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateApiKey(<any>response_);
+                } catch (e) {
+                    return <Observable<string>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateApiKey(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string>(<any>null);
     }
 }
 
@@ -26689,8 +26799,10 @@ export class EnrollmentDto implements IEnrollmentDto {
     approved!: boolean | undefined;
     denied!: boolean | undefined;
     enrollmentDate!: moment.Moment | undefined;
+    decisionDate!: moment.Moment | undefined;
     courseId!: number | undefined;
     officeId!: number | undefined;
+    studentId!: number | undefined;
     id!: number | undefined;
 
     constructor(data?: IEnrollmentDto) {
@@ -26713,8 +26825,10 @@ export class EnrollmentDto implements IEnrollmentDto {
             this.approved = data["approved"];
             this.denied = data["denied"];
             this.enrollmentDate = data["enrollmentDate"] ? moment(data["enrollmentDate"].toString()) : <any>undefined;
+            this.decisionDate = data["decisionDate"] ? moment(data["decisionDate"].toString()) : <any>undefined;
             this.courseId = data["courseId"];
             this.officeId = data["officeId"];
+            this.studentId = data["studentId"];
             this.id = data["id"];
         }
     }
@@ -26737,8 +26851,10 @@ export class EnrollmentDto implements IEnrollmentDto {
         data["approved"] = this.approved;
         data["denied"] = this.denied;
         data["enrollmentDate"] = this.enrollmentDate ? this.enrollmentDate.toISOString() : <any>undefined;
+        data["decisionDate"] = this.decisionDate ? this.decisionDate.toISOString() : <any>undefined;
         data["courseId"] = this.courseId;
         data["officeId"] = this.officeId;
+        data["studentId"] = this.studentId;
         data["id"] = this.id;
         return data; 
     }
@@ -26754,8 +26870,10 @@ export interface IEnrollmentDto {
     approved: boolean | undefined;
     denied: boolean | undefined;
     enrollmentDate: moment.Moment | undefined;
+    decisionDate: moment.Moment | undefined;
     courseId: number | undefined;
     officeId: number | undefined;
+    studentId: number | undefined;
     id: number | undefined;
 }
 
@@ -27741,6 +27859,82 @@ export interface IApproveEnrollmentOutput {
     newStudentCreated: boolean | undefined;
     studentAlreadyExisted: boolean | undefined;
     alreadyAssignedToCourse: boolean | undefined;
+}
+
+export class RevertEnrollmentInput implements IRevertEnrollmentInput {
+    enrollment!: EnrollmentDto | undefined;
+
+    constructor(data?: IRevertEnrollmentInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.enrollment = data["enrollment"] ? EnrollmentDto.fromJS(data["enrollment"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): RevertEnrollmentInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new RevertEnrollmentInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["enrollment"] = this.enrollment ? this.enrollment.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IRevertEnrollmentInput {
+    enrollment: EnrollmentDto | undefined;
+}
+
+export class RevertEnrollmentOutput implements IRevertEnrollmentOutput {
+    revertSuccessfull!: boolean | undefined;
+    timeIsUp!: boolean | undefined;
+
+    constructor(data?: IRevertEnrollmentOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.revertSuccessfull = data["revertSuccessfull"];
+            this.timeIsUp = data["timeIsUp"];
+        }
+    }
+
+    static fromJS(data: any): RevertEnrollmentOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new RevertEnrollmentOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["revertSuccessfull"] = this.revertSuccessfull;
+        data["timeIsUp"] = this.timeIsUp;
+        return data; 
+    }
+}
+
+export interface IRevertEnrollmentOutput {
+    revertSuccessfull: boolean | undefined;
+    timeIsUp: boolean | undefined;
 }
 
 export class DenyEnrollmentInput implements IDenyEnrollmentInput {
@@ -36444,6 +36638,7 @@ export class SimulatorDto implements ISimulatorDto {
     model!: string | undefined;
     modules!: string | undefined;
     inUse!: boolean | undefined;
+    simulatorCode!: string | undefined;
     officeId!: number | undefined;
     id!: number | undefined;
 
@@ -36463,6 +36658,7 @@ export class SimulatorDto implements ISimulatorDto {
             this.model = data["model"];
             this.modules = data["modules"];
             this.inUse = data["inUse"];
+            this.simulatorCode = data["simulatorCode"];
             this.officeId = data["officeId"];
             this.id = data["id"];
         }
@@ -36482,6 +36678,7 @@ export class SimulatorDto implements ISimulatorDto {
         data["model"] = this.model;
         data["modules"] = this.modules;
         data["inUse"] = this.inUse;
+        data["simulatorCode"] = this.simulatorCode;
         data["officeId"] = this.officeId;
         data["id"] = this.id;
         return data; 
@@ -36494,6 +36691,7 @@ export interface ISimulatorDto {
     model: string | undefined;
     modules: string | undefined;
     inUse: boolean | undefined;
+    simulatorCode: string | undefined;
     officeId: number | undefined;
     id: number | undefined;
 }
@@ -36544,6 +36742,7 @@ export class CreateOrEditSimulatorDto implements ICreateOrEditSimulatorDto {
     model!: string | undefined;
     modules!: string | undefined;
     inUse!: boolean | undefined;
+    simulatorCode!: string | undefined;
     officeId!: number | undefined;
     id!: number | undefined;
 
@@ -36563,6 +36762,7 @@ export class CreateOrEditSimulatorDto implements ICreateOrEditSimulatorDto {
             this.model = data["model"];
             this.modules = data["modules"];
             this.inUse = data["inUse"];
+            this.simulatorCode = data["simulatorCode"];
             this.officeId = data["officeId"];
             this.id = data["id"];
         }
@@ -36582,6 +36782,7 @@ export class CreateOrEditSimulatorDto implements ICreateOrEditSimulatorDto {
         data["model"] = this.model;
         data["modules"] = this.modules;
         data["inUse"] = this.inUse;
+        data["simulatorCode"] = this.simulatorCode;
         data["officeId"] = this.officeId;
         data["id"] = this.id;
         return data; 
@@ -36594,6 +36795,7 @@ export interface ICreateOrEditSimulatorDto {
     model: string | undefined;
     modules: string | undefined;
     inUse: boolean | undefined;
+    simulatorCode: string | undefined;
     officeId: number | undefined;
     id: number | undefined;
 }
@@ -41244,6 +41446,7 @@ export class QuestionDto implements IQuestionDto {
     type!: TheoryQuestionType | undefined;
     questionString!: string | undefined;
     singleChoiceAnswer!: TESingleChoiceDto | undefined;
+    hintAfterWrongAnswer!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: IQuestionDto) {
@@ -41260,6 +41463,7 @@ export class QuestionDto implements IQuestionDto {
             this.type = data["type"];
             this.questionString = data["questionString"];
             this.singleChoiceAnswer = data["singleChoiceAnswer"] ? TESingleChoiceDto.fromJS(data["singleChoiceAnswer"]) : <any>undefined;
+            this.hintAfterWrongAnswer = data["hintAfterWrongAnswer"];
             this.id = data["id"];
         }
     }
@@ -41276,6 +41480,7 @@ export class QuestionDto implements IQuestionDto {
         data["type"] = this.type;
         data["questionString"] = this.questionString;
         data["singleChoiceAnswer"] = this.singleChoiceAnswer ? this.singleChoiceAnswer.toJSON() : <any>undefined;
+        data["hintAfterWrongAnswer"] = this.hintAfterWrongAnswer;
         data["id"] = this.id;
         return data; 
     }
@@ -41285,6 +41490,7 @@ export interface IQuestionDto {
     type: TheoryQuestionType | undefined;
     questionString: string | undefined;
     singleChoiceAnswer: TESingleChoiceDto | undefined;
+    hintAfterWrongAnswer: string | undefined;
     id: number | undefined;
 }
 

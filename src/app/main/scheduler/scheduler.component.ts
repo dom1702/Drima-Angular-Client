@@ -113,11 +113,7 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
     //   }
 
     onCreated(): void {
-        // let currTime: Date = new Date();
-        // let hours: string = currTime.getHours() < 10 ? '0' +currTime.getHours().toString() : currTime.getHours().toString();
-        // let minutes: string = currTime.getMinutes().toString();
-        // let time: string = hours + ':' + minutes;
-        // this.scheduleObj.scrollTo(time);
+       
       
       }
 
@@ -159,10 +155,13 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
         }
     }
 
-    schedulerCreated(args: Object) {
-        this.updateCurrentView();
-
- 
+    schedulerCreated(args: Object) 
+    {
+        setTimeout(() => 
+        {
+            this.updateCurrentView();
+        },
+        500);
     }
 
     navigating(args: NavigatingEventArgs): void {
@@ -205,6 +204,8 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
         // }
 
         // this.updateView(args.currentDate, args.currentDate);
+
+      
     }
 
     openDrivingLessonModal(): void {

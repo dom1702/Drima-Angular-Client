@@ -13422,6 +13422,125 @@ export class SessionServiceProxy {
 }
 
 @Injectable()
+export class SimulatorExternalServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    testMethod(): Observable<string> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorExternal/TestMethod";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processTestMethod(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processTestMethod(<any>response_);
+                } catch (e) {
+                    return <Observable<string>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processTestMethod(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    updateModules(input: SimulatorUpdateModulesInput | null | undefined): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorExternal/UpdateModules";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateModules(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateModules(<any>response_);
+                } catch (e) {
+                    return <Observable<boolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<boolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateModules(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<boolean>(<any>null);
+    }
+}
+
+@Injectable()
 export class SimulatorLessonsServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -36104,6 +36223,155 @@ export interface IUpdateUserSignInTokenOutput {
     encodedTenantId: string | undefined;
 }
 
+export class SimulatorUpdateModulesInput implements ISimulatorUpdateModulesInput {
+    simulatorModules!: SimulatorModuleDto[] | undefined;
+    simulatorCode!: string | undefined;
+
+    constructor(data?: ISimulatorUpdateModulesInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["simulatorModules"] && data["simulatorModules"].constructor === Array) {
+                this.simulatorModules = [] as any;
+                for (let item of data["simulatorModules"])
+                    this.simulatorModules!.push(SimulatorModuleDto.fromJS(item));
+            }
+            this.simulatorCode = data["simulatorCode"];
+        }
+    }
+
+    static fromJS(data: any): SimulatorUpdateModulesInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new SimulatorUpdateModulesInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.simulatorModules && this.simulatorModules.constructor === Array) {
+            data["simulatorModules"] = [];
+            for (let item of this.simulatorModules)
+                data["simulatorModules"].push(item.toJSON());
+        }
+        data["simulatorCode"] = this.simulatorCode;
+        return data; 
+    }
+}
+
+export interface ISimulatorUpdateModulesInput {
+    simulatorModules: SimulatorModuleDto[] | undefined;
+    simulatorCode: string | undefined;
+}
+
+export class SimulatorModuleDto implements ISimulatorModuleDto {
+    simType!: SimulatorType | undefined;
+    identifier!: string | undefined;
+    description!: string | undefined;
+    exerciseUnits!: SimulatorExerciseUnitDto[] | undefined;
+
+    constructor(data?: ISimulatorModuleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.simType = data["simType"];
+            this.identifier = data["identifier"];
+            this.description = data["description"];
+            if (data["exerciseUnits"] && data["exerciseUnits"].constructor === Array) {
+                this.exerciseUnits = [] as any;
+                for (let item of data["exerciseUnits"])
+                    this.exerciseUnits!.push(SimulatorExerciseUnitDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): SimulatorModuleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SimulatorModuleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["simType"] = this.simType;
+        data["identifier"] = this.identifier;
+        data["description"] = this.description;
+        if (this.exerciseUnits && this.exerciseUnits.constructor === Array) {
+            data["exerciseUnits"] = [];
+            for (let item of this.exerciseUnits)
+                data["exerciseUnits"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ISimulatorModuleDto {
+    simType: SimulatorType | undefined;
+    identifier: string | undefined;
+    description: string | undefined;
+    exerciseUnits: SimulatorExerciseUnitDto[] | undefined;
+}
+
+export enum SimulatorType {
+    Edusim = 0, 
+    EdusimTruck = 1, 
+}
+
+export class SimulatorExerciseUnitDto implements ISimulatorExerciseUnitDto {
+    identifier!: string | undefined;
+    description!: string | undefined;
+
+    constructor(data?: ISimulatorExerciseUnitDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.identifier = data["identifier"];
+            this.description = data["description"];
+        }
+    }
+
+    static fromJS(data: any): SimulatorExerciseUnitDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SimulatorExerciseUnitDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["identifier"] = this.identifier;
+        data["description"] = this.description;
+        return data; 
+    }
+}
+
+export interface ISimulatorExerciseUnitDto {
+    identifier: string | undefined;
+    description: string | undefined;
+}
+
 export class PagedResultDtoOfGetSimulatorLessonForViewDto implements IPagedResultDtoOfGetSimulatorLessonForViewDto {
     totalCount!: number | undefined;
     items!: GetSimulatorLessonForViewDto[] | undefined;
@@ -36634,9 +36902,8 @@ export interface IGetSimulatorForViewDto {
 
 export class SimulatorDto implements ISimulatorDto {
     name!: string | undefined;
-    manufacturer!: string | undefined;
+    simulatorType!: SimulatorType | undefined;
     model!: string | undefined;
-    modules!: string | undefined;
     inUse!: boolean | undefined;
     simulatorCode!: string | undefined;
     officeId!: number | undefined;
@@ -36654,9 +36921,8 @@ export class SimulatorDto implements ISimulatorDto {
     init(data?: any) {
         if (data) {
             this.name = data["name"];
-            this.manufacturer = data["manufacturer"];
+            this.simulatorType = data["simulatorType"];
             this.model = data["model"];
-            this.modules = data["modules"];
             this.inUse = data["inUse"];
             this.simulatorCode = data["simulatorCode"];
             this.officeId = data["officeId"];
@@ -36674,9 +36940,8 @@ export class SimulatorDto implements ISimulatorDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
-        data["manufacturer"] = this.manufacturer;
+        data["simulatorType"] = this.simulatorType;
         data["model"] = this.model;
-        data["modules"] = this.modules;
         data["inUse"] = this.inUse;
         data["simulatorCode"] = this.simulatorCode;
         data["officeId"] = this.officeId;
@@ -36687,9 +36952,8 @@ export class SimulatorDto implements ISimulatorDto {
 
 export interface ISimulatorDto {
     name: string | undefined;
-    manufacturer: string | undefined;
+    simulatorType: SimulatorType | undefined;
     model: string | undefined;
-    modules: string | undefined;
     inUse: boolean | undefined;
     simulatorCode: string | undefined;
     officeId: number | undefined;
@@ -36738,9 +37002,8 @@ export interface IGetSimulatorForEditOutput {
 
 export class CreateOrEditSimulatorDto implements ICreateOrEditSimulatorDto {
     name!: string;
-    manufacturer!: string | undefined;
+    simulatorType!: SimulatorType | undefined;
     model!: string | undefined;
-    modules!: string | undefined;
     inUse!: boolean | undefined;
     simulatorCode!: string | undefined;
     officeId!: number | undefined;
@@ -36758,9 +37021,8 @@ export class CreateOrEditSimulatorDto implements ICreateOrEditSimulatorDto {
     init(data?: any) {
         if (data) {
             this.name = data["name"];
-            this.manufacturer = data["manufacturer"];
+            this.simulatorType = data["simulatorType"];
             this.model = data["model"];
-            this.modules = data["modules"];
             this.inUse = data["inUse"];
             this.simulatorCode = data["simulatorCode"];
             this.officeId = data["officeId"];
@@ -36778,9 +37040,8 @@ export class CreateOrEditSimulatorDto implements ICreateOrEditSimulatorDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
-        data["manufacturer"] = this.manufacturer;
+        data["simulatorType"] = this.simulatorType;
         data["model"] = this.model;
-        data["modules"] = this.modules;
         data["inUse"] = this.inUse;
         data["simulatorCode"] = this.simulatorCode;
         data["officeId"] = this.officeId;
@@ -36791,9 +37052,8 @@ export class CreateOrEditSimulatorDto implements ICreateOrEditSimulatorDto {
 
 export interface ICreateOrEditSimulatorDto {
     name: string;
-    manufacturer: string | undefined;
+    simulatorType: SimulatorType | undefined;
     model: string | undefined;
-    modules: string | undefined;
     inUse: boolean | undefined;
     simulatorCode: string | undefined;
     officeId: number | undefined;

@@ -111,6 +111,8 @@ import { SVTheoryPracticeResultsComponent } from './studentsView/theoryPractice/
 import { SVLicenseClassDimensionInfoComponent } from './studentsView/theoryPractice/customElements/sv-licenseClassDimensionInfo.componet';
 import { LicenseClassLookupTableModalComponent } from '@app/shared/common/lookup/licenseClass-lookup-table-modal.component';
 
+import { CheckBoxModule } from '@syncfusion/ej2-angular-buttons';
+
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
 @NgModule({
@@ -155,7 +157,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       CardModule,
       SelectButtonModule,
       PaginationModule.forRoot(),
-      ScrollPanelModule
+      ScrollPanelModule,
+      CheckBoxModule 
     ],
     declarations: 
     [

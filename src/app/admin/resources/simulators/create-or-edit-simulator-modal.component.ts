@@ -1,4 +1,4 @@
-import { Component, ViewChild, Injector, Output, EventEmitter} from '@angular/core';
+import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
 import { SimulatorsServiceProxy, CreateOrEditSimulatorDto } from '@shared/service-proxies/service-proxies';
@@ -26,6 +26,7 @@ export class CreateOrEditSimulatorModalComponent extends AppComponentBase {
 
     officeName = '';
 
+    simulatorCode = '';
 
     constructor(
         injector: Injector,
@@ -36,11 +37,13 @@ export class CreateOrEditSimulatorModalComponent extends AppComponentBase {
 
     show(simulatorId?: number): void {
 
+        this.simulatorCode = '';
+
         if (!simulatorId) {
             this.simulator = new CreateOrEditSimulatorDto();
             this.simulator.id = simulatorId;
             this.officeName = '';
-
+            this.simulator.inUse = true;
             this.active = true;
             this.modal.show();
         } else {
@@ -48,6 +51,7 @@ export class CreateOrEditSimulatorModalComponent extends AppComponentBase {
                 this.simulator = result.simulator;
 
                 this.officeName = result.officeName;
+                this.simulatorCode = result.simulator.simulatorCode;
 
                 this.active = true;
                 this.modal.show();
@@ -56,32 +60,32 @@ export class CreateOrEditSimulatorModalComponent extends AppComponentBase {
     }
 
     save(): void {
-            this.saving = true;
+        this.saving = true;
 
-			
-            this._simulatorsServiceProxy.createOrEdit(this.simulator)
-             .pipe(finalize(() => { this.saving = false;}))
-             .subscribe(() => {
+        this.simulator.simulatorCode = this.simulatorCode;
+        this._simulatorsServiceProxy.createOrEdit(this.simulator)
+            .pipe(finalize(() => { this.saving = false; }))
+            .subscribe(() => {
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();
                 this.modalSave.emit(null);
-             });
+            });
     }
 
-        openSelectOfficeModal() {
+    openSelectOfficeModal() {
         this.simulatorOfficeLookupTableModal.id = this.simulator.officeId;
         this.simulatorOfficeLookupTableModal.displayName = this.officeName;
         this.simulatorOfficeLookupTableModal.show();
     }
 
 
-        setOfficeIdNull() {
+    setOfficeIdNull() {
         this.simulator.officeId = null;
         this.officeName = '';
     }
 
 
-        getNewOfficeId() {
+    getNewOfficeId() {
         this.simulator.officeId = this.simulatorOfficeLookupTableModal.id;
         this.officeName = this.simulatorOfficeLookupTableModal.displayName;
     }
@@ -91,5 +95,30 @@ export class CreateOrEditSimulatorModalComponent extends AppComponentBase {
 
         this.active = false;
         this.modal.hide();
+    }
+
+    generateNewCode(): void {
+        if (this.simulator.id) {
+            this.message.confirm(
+                'This will overwrite the existing API key. You will have to change it in the simulators configuration.',
+                (isConfirmed) => {
+                    if (isConfirmed) {
+                        this._simulatorsServiceProxy.createApiKey().subscribe(result => {
+                            this.simulatorCode = result;
+                        })
+                    }
+                }
+            );
+        }
+        else
+        {
+            this._simulatorsServiceProxy.createApiKey().subscribe(result => {
+                this.simulatorCode = result;
+            })
+        }
+    }
+
+    copy(): void {
+        navigator.clipboard.writeText(this.simulatorCode).then().catch(e => console.error(e));
     }
 }

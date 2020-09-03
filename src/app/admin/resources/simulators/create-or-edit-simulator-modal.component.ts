@@ -119,6 +119,6 @@ export class CreateOrEditSimulatorModalComponent extends AppComponentBase {
     }
 
     copy(): void {
-        navigator.clipboard.writeText(this.simulatorCode).then().catch(e => console.error(e));
+        //navigator.clipboard.writeText(this.simulatorCode).then().catch(e => console.error(e));
     }
 }

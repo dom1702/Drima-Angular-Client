@@ -41,21 +41,20 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="Simulator_Manufacturer">{{l("Manufacturer")}}</label>
-                        <input type="text" id="Simulator_Manufacturer" class="form-control"
-                            [(ngModel)]="simulator.manufacturer" name="Manufacturer" />
-                    </div>
-
-                    <div class="form-group">
                         <label for="Simulator_Model">{{l("Model")}}</label>
                         <input type="text" id="Simulator_Model" class="form-control" [(ngModel)]="simulator.model"
                             name="Model" />
                     </div>
 
                     <div class="form-group">
-                        <label for="Simulator_Modules">{{l("Modules")}}</label>
-                        <input type="text" id="Simulator_Modules" class="form-control" [(ngModel)]="simulator.modules"
-                            name="Modules" />
+                        <label for="Simulator_Type">{{l("SimulatorType")}}</label>
+                        <select class="form-control" name="SimulatorType" id="Simulator_Type" [(ngModel)]="simulator.simulatorType">
+                        <option value="0">{{l('Edusim')}}</option>
+
+                        <option value="1">{{l('EdusimTruck')}}</option>
+
+
+                        </select>
                     </div>
 
                     <label for="Simulator_SimulatorCode">{{l("SimulatorCode")}} *</label>

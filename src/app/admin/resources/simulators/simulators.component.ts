@@ -1,6 +1,6 @@
 import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SimulatorsServiceProxy, SimulatorDto  } from '@shared/service-proxies/service-proxies';
+import { SimulatorsServiceProxy, SimulatorDto, SimulatorType  } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -36,6 +36,8 @@ export class SimulatorsComponent extends AppComponentBase {
     modulesFilter = '';
     inUseFilter = -1;
         officeNameFilter = '';
+
+    simType : SimulatorType;
 
 
     _entityTypeFullName = 'Drima.Resources.Simulator';

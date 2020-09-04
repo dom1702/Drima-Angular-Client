@@ -13482,8 +13482,6 @@ export class SimulatorExternalServiceProxy {
         }
         return _observableOf<string>(<any>null);
     }
-<<<<<<< HEAD
-=======
 
     /**
      * @param input (optional) 
@@ -13540,7 +13538,6 @@ export class SimulatorExternalServiceProxy {
         }
         return _observableOf<boolean>(<any>null);
     }
->>>>>>> e5e815064fb95ce47fe05136a8f14c84378829dd
 }
 
 @Injectable()

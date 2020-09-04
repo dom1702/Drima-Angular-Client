@@ -497,7 +497,8 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
             case 0: // TrafficSituation
                 temp.displayType = 2;
                 temp.contentType = 1;               
-                temp.pictureUrl = target.singleChoiceAnswer.imageUrl;                
+                temp.pictureUrl = target.singleChoiceAnswer.imageUrl;   
+                temp.hint = target.hintAfterWrongAnswer;                     
             break;
             case 1: // ClassRelated
                 temp.displayType = 0;

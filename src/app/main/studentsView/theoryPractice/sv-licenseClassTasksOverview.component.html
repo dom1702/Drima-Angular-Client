@@ -47,45 +47,121 @@
                                         <h6>Traffic Situations</h6>                                                                                                                                                                                                                      
                                     </ng-template>   
                                     <div class="container">
-                                        <div *ngIf="trafficSituationQuestionSeries" class="row justify-content-center">                      
-                                            <div class="col-sm-12">
-                                                <span>Choose a question serie by clicking the links below.</span>
+                                                                                                          
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-info" role="alert">
+                                                        <span>Choose a question serie by clicking the numbered buttons right to the topics.</span>
+                                                    </div>
+                                                </div>          
                                             </div>
-                                            <div class="col-sm-12 mt-3">
-                                                <div>
-                                                    <button type="button" value="can_drive_straight" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">
-                                                        I can drive straight on using this lane
-                                                    </button>
-                                                    <button type="button" value="can_turn_right" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">
-                                                        I can turn right using this lane
-                                                    </button>
-                                                    <button type="button" value="can_turn_left" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">
-                                                        I can turn left using this lane
-                                                    </button>
-                                                    <button type="button" value="straight_give_way" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">
-                                                        I'am going on straight, I have to give way to one or more road users in the picture
-                                                    </button>
-                                                    <button type="button" value="right_give_way" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">
-                                                        I'am turning right, I have to give way to one or more road users in the picture
-                                                    </button>
-                                                    <button type="button" value="left_give_way" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">
-                                                        I'am turning left, I have to give way to one or more road user seen in the picture
-                                                    </button>
-                                                    <button type="button" value="start_passing" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">
-                                                        I can start passing the car driving ahead me
-                                                    </button>
-                                                    <button type="button" value="change_lane" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">
-                                                        I can change lane
-                                                    </button>
-                                                    <button type="button" value="have_to_stop" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id)">
-                                                        I have to stop
-                                                    </button>
-                                                    <button type="button" value="parked_correctly" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id)">
-                                                        The car in the picture is parked correctly
-                                                    </button>
-                                                </div>                                               
+                                                                                                                   
+                                            <div class="row mb-4 mt-1">
+                                                <div class="col-sm-4">
+                                                    I can drive straight on using this lane
+                                                </div>  
+                                                                    
+                                                <div class="col" *ngFor="let series of driveStraightSeries">  
+                                                    <div *ngIf="series.finishedOnce; then successBtn else dangerBtn"></div> 
+                                                    <ng-template #successBtn>
+                                                        <button *ngIf="series.groupId == 1" type="button" class="btn btn-success btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button> 
+                                                    </ng-template>
+                                                    <ng-template #dangerBtn>
+                                                        <button *ngIf="series.groupId == 1" type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button> 
+                                                    </ng-template>         
+                                                </div> 
+                                                <div class="col-2"></div>                                 
                                             </div>
-                                        </div> 
+
+                                            <div class="row mb-4">
+                                                <div class="col-sm-4">
+                                                    I can turn right using this lane
+                                                </div>
+                                                <div class="col" *ngFor="let series of turnRightSeries">                                            
+                                                    <button *ngIf="series.groupId == 2" type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button> 
+                                                </div>
+                                                <div class="col-2"></div>
+                                            </div>
+
+                                            <div class="row mb-4">
+                                                <div class="col-sm-4">
+                                                    I can turn left using this lane
+                                                </div>
+                                                <div class="col" *ngFor="let series of turnLeftSeries"> 
+                                                    <button *ngIf="series.groupId == 3" type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button>   
+                                                </div>
+                                                <div class="col-2"></div>
+                                            </div>
+
+                                            <div class="row mb-4">
+                                                <div class="col-sm-4">
+                                                    I'am going on straight, I have to give way to one or more road users in the picture
+                                                </div>
+                                                <div class="col" *ngFor="let series of giveWayStraightSeries">      
+                                                    <button *ngIf="series.groupId == 4" type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button>                    
+                                                </div>
+                                                <div class="col-2"></div>
+                                            </div>
+
+                                            <div class="row mb-4">
+                                                <div class="col-sm-4">
+                                                    I'am turning right, I have to give way to one or more road users in the picture
+                                                </div>
+                                                <div class="col" *ngFor="let series of giveWayRightSeries">              
+                                                    <button *ngIf="series.groupId == 5" type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button>
+                                                </div>
+                                                <div class="col-2"></div>
+                                            </div>
+
+                                            <div class="row mb-4">
+                                                <div class="col-sm-4">
+                                                    I'am turning left, I have to give way to one or more road user seen in the picture
+                                                </div>
+                                                <div class="col" *ngFor="let series of giveWayLeftSeries"> 
+                                                    <button *ngIf="series.groupId == 6" type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button>
+                                                </div>
+                                                <div class="col-2"></div>
+                                            </div>
+
+                                            <div class="row mb-4">
+                                                <div class="col-sm-4">
+                                                    I can start passing the car driving ahead me
+                                                </div>
+                                                <div class="col" *ngFor="let series of passingSeries"> 
+                                                    <button *ngIf="series.groupId == 7" type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button>
+                                                </div>
+                                                <div class="col-2"></div>
+                                            </div>
+
+                                            <div class="row mb-4">
+                                                <div class="col-sm-4">
+                                                    I can change lane
+                                                </div>
+                                                <div class="col" *ngFor="let series of changeLaneSeries">    
+                                                    <button *ngIf="series.groupId == 8" type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button>
+                                                </div>
+                                                <div class="col-2"></div>
+                                            </div>
+
+                                            <div class="row mb-4">
+                                                <div class="col-sm-4">
+                                                    I have to stop
+                                                </div>
+                                                <div class="col" *ngFor="let series of stopSeries"> 
+                                                    <button *ngIf="series.groupId == 9" type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button>
+                                                </div>
+                                                <div class="col-2"></div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    The car in the picture is parked correctly
+                                                </div>
+                                                <div class="col" *ngFor="let series of parkedSeries"> 
+                                                    <button *ngIf="series.groupId == 10" type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{series.groupName}}</button>
+                                                </div>
+                                                <div class="col-2"></div>
+                                            </div>
                                     </div>                                                                                                                                                                                                       
                                 </tab>
                                 <tab id="classQuestions">                                  
@@ -95,17 +171,13 @@
                                     <div class="container">
                                         <div *ngIf="classQuestionSeries" class="row justify-content-center">                      
                                             <div class="col-sm-12">
-                                                <span>Choose a question serie by clicking the links below. Each serie includes 10 questions.</span>
+                                                <div class="alert alert-info" role="alert">
+                                                    <span>Choose a question serie by clicking the links below. Each serie includes 10 questions.</span>
+                                                </div>
                                             </div>
                                             <div class="col-sm-12 mt-3">
-                                                <div *ngFor="let tab of classQuestionSeries; index as i;">
-                                                    <div *ngIf="i % 2 === 0; then whiteTab else lightTab"></div>
-                                                    <ng-template #whiteTab>
-                                                        <button type="button" class="btn btn-primary btn-block" (click)="startSelectedQuiz(tab.id, false)">{{tab.topic}}</button>                                                                                                         
-                                                    </ng-template>
-                                                    <ng-template #lightTab>
-                                                        <button type="button" class="btn btn-secondary btn-block" (click)="startSelectedQuiz(tab.id, false)">{{tab.topic}}</button>                                                                                                           
-                                                    </ng-template> 
+                                                <div *ngFor="let series of classQuestionSeries; index as i;">
+                                                    <button type="button" class="btn btn-danger btn-sm" (click)="startSelectedQuiz(series.id, false)">{{i+1}}</button>                                            
                                                 </div>
                                             </div>
                                         </div> 

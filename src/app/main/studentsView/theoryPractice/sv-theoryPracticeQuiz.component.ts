@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { TheoryExamQuestion, QuizSession, EvaluatedQuiz } from './sv-licenseClassTasksOverview.component';
 import { MessageService, SelectItem } from 'primeng/api';
 import { SVTheoryPracticeHelperService } from './sv-theoryPracticeHelper.service';
-import { TheoryExamsServiceProxy, QuestionDto, QuestionSeriesDto, GetNextTheoryExamQuestionSeriesInput, FinishTheoryExamQuestionSeriesInput, TESingleChoiceDto, TESingleChoiceResultDto } from '@shared/service-proxies/service-proxies';
+import { TheoryExamsServiceProxy, QuestionDto, QuestionSeriesDto, GetNextTheoryExamQuestionSeriesInput, FinishTheoryExamQuestionSeriesInput, TESingleChoiceDto, TESingleChoiceResultDto, FinishTopicQuestionSeriesInput } from '@shared/service-proxies/service-proxies';
 import { Router } from '@angular/router';
 
 @Component({
@@ -168,7 +168,7 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
 
     ngOnInit(): void {      
         let quizId = this.theoryPracticeHelperService.quizId;
-        if(quizId)
+        if(quizId !== 101)
         {
             this.getQuestionSeriesAsync(quizId);
         }
@@ -200,6 +200,7 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         input.correctlyAnsweredRiskIdentifyingQuestions = results.correctRiskQuestions;
         input.correctlyAnsweredTrafficSituationsQuestions = results.correctSituationQuestions;
         input.startTime = this.currentQuizSession.startTime;
+        input.correctlyAnsweredQuestionIds = [];
         
         for (let index = 0; index < results.correctQuestions.length; index++) {
             input.correctlyAnsweredQuestionIds.push(results.correctQuestions[index].questionId);        
@@ -209,7 +210,14 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
             input.wrongAnsweredSingleChoiceQuestions.push(this.convertToQuestionResultDto(results.incorrectQuestions[index]));          
         }
 
-        this.theoryExamService.finishTheoryExamQuestionSeries(input);
+        this.theoryExamService.finishTheoryExamQuestionSeries(input).subscribe();     
+    }
+
+    setTheoryPracticeSeriesResultAsync()
+    {        
+        let input : FinishTopicQuestionSeriesInput = new FinishTopicQuestionSeriesInput();
+        input.questionSeriesId = this.theoryPracticeHelperService.quizId;
+        this.theoryExamService.finisTopicQuestionSeries(input).subscribe();     
     }
 
     generateQuiz(questionSeries: QuestionSeriesDto) {
@@ -275,6 +283,8 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
         this.evaluateQuiz();
         if(this.currentQuizSession.isMarkable) // is exam --> send data to server      
             this.setTheoryExamQuestionSeriesResultAsync(this.currentQuizSession.results);
+        else
+            this.setTheoryPracticeSeriesResultAsync();
               
         this.toggleQuizNavigation(false);
         this.quizFinished = true;

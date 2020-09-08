@@ -143,14 +143,14 @@
                                             <ng-template #singleChoiceContainer>
                                                 <div class="container">
                                                     <div class="row">
-                                                        <div class="col-sm-5">
-                                                            <div class="row mb-3" *ngFor="let answer of currentQuizSession.quiz[questionContentIndex].answerOptions; index as i"> 
+                                                        <div class="col-5">
+                                                            <div class="mb-3" *ngFor="let answer of currentQuizSession.quiz[questionContentIndex].answerOptions; index as i"> 
                                                                 <p-radioButton                               
-                                                                    value={{i}}  
-                                                                    label={{currentQuizSession.quiz[questionContentIndex].answerOptions[i]}}                
+                                                                    value={{i}}                                         
                                                                     (click)="setQuestionAnswerRadioButton(i)"
                                                                     [(ngModel)]="selectedOption">
                                                                 </p-radioButton>
+                                                                <span> {{currentQuizSession.quiz[questionContentIndex].answerOptions[i]}}</span>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-7">

@@ -13487,7 +13487,7 @@ export class SimulatorExternalServiceProxy {
      * @param input (optional) 
      * @return Success
      */
-    updateModules(input: SimulatorUpdateModulesInput | null | undefined): Observable<boolean> {
+    updateModules(input: SimulatorUpdateModulesInput | null | undefined): Observable<UpdateModulesOutput> {
         let url_ = this.baseUrl + "/api/services/app/SimulatorExternal/UpdateModules";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -13510,14 +13510,14 @@ export class SimulatorExternalServiceProxy {
                 try {
                     return this.processUpdateModules(<any>response_);
                 } catch (e) {
-                    return <Observable<boolean>><any>_observableThrow(e);
+                    return <Observable<UpdateModulesOutput>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<boolean>><any>_observableThrow(response_);
+                return <Observable<UpdateModulesOutput>><any>_observableThrow(response_);
         }));
     }
 
-    protected processUpdateModules(response: HttpResponseBase): Observable<boolean> {
+    protected processUpdateModules(response: HttpResponseBase): Observable<UpdateModulesOutput> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -13528,7 +13528,7 @@ export class SimulatorExternalServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            result200 = resultData200 ? UpdateModulesOutput.fromJS(resultData200) : new UpdateModulesOutput();
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -13536,7 +13536,7 @@ export class SimulatorExternalServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<boolean>(<any>null);
+        return _observableOf<UpdateModulesOutput>(<any>null);
     }
 }
 
@@ -36370,6 +36370,50 @@ export class SimulatorExerciseUnitDto implements ISimulatorExerciseUnitDto {
 export interface ISimulatorExerciseUnitDto {
     identifier: string | undefined;
     description: string | undefined;
+}
+
+export class UpdateModulesOutput implements IUpdateModulesOutput {
+    success!: boolean | undefined;
+    error!: boolean | undefined;
+    errorMessage!: string | undefined;
+
+    constructor(data?: IUpdateModulesOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.success = data["success"];
+            this.error = data["error"];
+            this.errorMessage = data["errorMessage"];
+        }
+    }
+
+    static fromJS(data: any): UpdateModulesOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateModulesOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["success"] = this.success;
+        data["error"] = this.error;
+        data["errorMessage"] = this.errorMessage;
+        return data; 
+    }
+}
+
+export interface IUpdateModulesOutput {
+    success: boolean | undefined;
+    error: boolean | undefined;
+    errorMessage: string | undefined;
 }
 
 export class PagedResultDtoOfGetSimulatorLessonForViewDto implements IPagedResultDtoOfGetSimulatorLessonForViewDto {

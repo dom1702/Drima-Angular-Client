@@ -227,7 +227,7 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
     }
 
     startSelectedQuiz(id: number) : void { 
-        console.log("current selected id: " + id);      
+        //console.log("current selected id: " + id);      
         this.theoryPracticeHelper.quizId = id;
         this.theoryPracticeHelper.quizMarkable = false;
         this.theoryPracticeHelper.quizDuration = this.duration;
@@ -246,6 +246,7 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
         this.theoryPracticeHelper.maxErrorsLicenseClassQuestions = this.errorsClassCount;  
         this.theoryPracticeHelper.maxErrorsRiskIdentifyingQuestions = this.errorsRiskIdentifyingCount;
         this.theoryPracticeHelper.maxErrorsTrafficSituationQuestions = this.errorsTrafficSituationCount;
+        this.theoryPracticeHelper.quizId = 101;
         this.router.navigateByUrl("/app/main/studentsView/theoryPractice/quiz");
     }
 
@@ -282,96 +283,44 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
             if(result.topics[index].name === "Traffic Situations") 
             {
                 for (let j = 0; j < result.topics[index].questionSeries.length; j++) {  
+                    let temp = {
+                        groupId: result.topics[index].questionSeries[j].groupId,
+                        groupName: result.topics[index].questionSeries[j].groupName,
+                        topic: result.topics[index].questionSeries[j].name,
+                        id: result.topics[index].questionSeries[j].id,
+                        finishedOnce: result.topics[index].questionSeries[j].finishedOnce
+                    }
                     switch (result.topics[index].questionSeries[j].groupId) {
+                        
                         case 1:
-                            this.driveStraightSeries.push({                                   
-                                groupId: result.topics[index].questionSeries[j].groupId,
-                                groupName: result.topics[index].questionSeries[j].groupName,
-                                topic: result.topics[index].questionSeries[j].name,
-                                id: result.topics[index].questionSeries[j].id,
-                                finishedOnce: result.topics[index].questionSeries[j].finishedOnce
-                            });
+                            this.driveStraightSeries.push(temp);
                         break;
                         case 2:
-                            this.turnRightSeries.push({                                   
-                                groupId: result.topics[index].questionSeries[j].groupId,
-                                groupName: result.topics[index].questionSeries[j].groupName,
-                                topic: result.topics[index].questionSeries[j].name,
-                                id: result.topics[index].questionSeries[j].id,
-                                finishedOnce: result.topics[index].questionSeries[j].finishedOnce
-                            });
+                            this.turnRightSeries.push(temp);
                         break;
                         case 3:
-                            this.turnLeftSeries.push({                                   
-                                groupId: result.topics[index].questionSeries[j].groupId,
-                                groupName: result.topics[index].questionSeries[j].groupName,
-                                topic: result.topics[index].questionSeries[j].name,
-                                id: result.topics[index].questionSeries[j].id,
-                                finishedOnce: result.topics[index].questionSeries[j].finishedOnce
-                            });
+                            this.turnLeftSeries.push(temp);
                         break;
                         case 4:
-                            this.giveWayStraightSeries.push({                                   
-                                groupId: result.topics[index].questionSeries[j].groupId,
-                                groupName: result.topics[index].questionSeries[j].groupName,
-                                topic: result.topics[index].questionSeries[j].name,
-                                id: result.topics[index].questionSeries[j].id,
-                                finishedOnce: result.topics[index].questionSeries[j].finishedOnce
-                            });                       
+                            this.giveWayStraightSeries.push(temp);                       
                         break;
                         case 5:
-                            this.giveWayRightSeries.push({                                   
-                                groupId: result.topics[index].questionSeries[j].groupId,
-                                groupName: result.topics[index].questionSeries[j].groupName,
-                                topic: result.topics[index].questionSeries[j].name,
-                                id: result.topics[index].questionSeries[j].id,
-                                finishedOnce: result.topics[index].questionSeries[j].finishedOnce
-                            });
+                            this.giveWayRightSeries.push(temp);
                         break;
                         case 6:
-                            this.giveWayLeftSeries.push({                                   
-                                groupId: result.topics[index].questionSeries[j].groupId,
-                                groupName: result.topics[index].questionSeries[j].groupName,
-                                topic: result.topics[index].questionSeries[j].name,
-                                id: result.topics[index].questionSeries[j].id,
-                                finishedOnce: result.topics[index].questionSeries[j].finishedOnce
-                            });
+                            this.giveWayLeftSeries.push(temp);
                         break;
                         case 7:
-                            this.passingSeries.push({                                   
-                                groupId: result.topics[index].questionSeries[j].groupId,
-                                groupName: result.topics[index].questionSeries[j].groupName,
-                                topic: result.topics[index].questionSeries[j].name,
-                                id: result.topics[index].questionSeries[j].id,
-                                finishedOnce: result.topics[index].questionSeries[j].finishedOnce
-                            });
+                            this.passingSeries.push(temp);
                         break;
                         case 8:
-                            this.changeLaneSeries.push({                                   
-                                groupId: result.topics[index].questionSeries[j].groupId,
-                                groupName: result.topics[index].questionSeries[j].groupName,
-                                topic: result.topics[index].questionSeries[j].name,
-                                id: result.topics[index].questionSeries[j].id,
-                                finishedOnce: result.topics[index].questionSeries[j].finishedOnce
-                            });
+                            this.changeLaneSeries.push(temp);
                         break;
                         case 9:
-                            this.stopSeries.push({                                   
-                                groupId: result.topics[index].questionSeries[j].groupId,
-                                groupName: result.topics[index].questionSeries[j].groupName,
-                                topic: result.topics[index].questionSeries[j].name,
-                                id: result.topics[index].questionSeries[j].id,
-                                finishedOnce: result.topics[index].questionSeries[j].finishedOnce
-                            });
+                            this.stopSeries.push(temp);
                         break;
                         case 10:
-                            this.parkedSeries.push({                                   
-                                groupId: result.topics[index].questionSeries[j].groupId,
-                                groupName: result.topics[index].questionSeries[j].groupName,
-                                topic: result.topics[index].questionSeries[j].name,
-                                id: result.topics[index].questionSeries[j].id,
-                                finishedOnce: result.topics[index].questionSeries[j].finishedOnce
-                            });
+                            this.parkedSeries.push(temp);
                         break;
                     
                         default:
@@ -386,7 +335,8 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
                         groupId: result.topics[index].questionSeries[j].groupId,
                         groupName: result.topics[index].questionSeries[j].groupName,
                         topic: result.topics[index].questionSeries[j].name,
-                        id: result.topics[index].questionSeries[j].id
+                        id: result.topics[index].questionSeries[j].id,
+                        finishedOnce: result.topics[index].questionSeries[j].finishedOnce
                     });
                 }
             }
@@ -397,7 +347,8 @@ export class SVLicenseClassTasksOverview extends AppComponentBase implements OnI
                         groupId: result.topics[index].questionSeries[j].groupId,
                         groupName: result.topics[index].questionSeries[j].groupName,
                         topic: result.topics[index].questionSeries[j].name,
-                        id: result.topics[index].questionSeries[j].id
+                        id: result.topics[index].questionSeries[j].id,
+                        finishedOnce: result.topics[index].questionSeries[j].finishedOnce
                     });
                 }
             }

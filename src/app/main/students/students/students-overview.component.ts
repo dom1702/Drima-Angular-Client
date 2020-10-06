@@ -93,6 +93,11 @@ export class StudentsOverviewComponent extends AppComponentBase {
         });
     }
 
+    public CallCourseChanged() : void 
+    {
+        this.courseChanged.emit();
+    }
+
     public UpdateStudentView(): Observable<any> {
     
         return Observable.create((observer: Observer<any>) => {

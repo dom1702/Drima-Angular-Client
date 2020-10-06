@@ -1,7 +1,7 @@
-import { Component, ViewChild, Injector, Output, EventEmitter} from '@angular/core';
+import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
-import { SimulatorLessonsServiceProxy, CreateOrEditSimulatorLessonDto } from '@shared/service-proxies/service-proxies';
+import { SimulatorLessonsServiceProxy, CreateOrEditSimulatorLessonDto, SimulatorLessonState } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { SimulatorLessonPersonLookupTableModalComponent } from './simulatorLesson-person-lookup-table-modal.component';
@@ -29,6 +29,11 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
     personLastName = '';
     simulatorName = '';
 
+    simulatorModules;
+    selectedModuleIdentifier;
+
+    manuallyMarkCompleted : boolean = false;
+
     startTime: Date = new Date();
 
     constructor(
@@ -36,6 +41,11 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
         private _simulatorLessonsServiceProxy: SimulatorLessonsServiceProxy
     ) {
         super(injector);
+
+        this.setSimulatorIdNull();
+        this.selectedModuleIdentifier = null;
+        this.simulatorModules = null;
+        this.manuallyMarkCompleted = false;
     }
 
     show(simulatorLessonId?: number): void {
@@ -52,7 +62,21 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
             this.modal.show();
         } else {
             this._simulatorLessonsServiceProxy.getSimulatorLessonForEdit(simulatorLessonId).subscribe(result => {
+
                 this.simulatorLesson = result.simulatorLesson;
+
+                var moduleIdentifierString = result.simulatorLesson.moduleIdentifier;
+
+                if (this.simulatorLesson.simulatorId != null) {
+                    this._simulatorLessonsServiceProxy.getAvailableModulesOnSimulator(this.simulatorLesson.simulatorId).subscribe(result => {
+                        this.simulatorModules = result;
+                        for(var i = 0; i< this.simulatorModules.availableModulesOnSim.length; i++)
+                        {
+                            if(this.simulatorModules.availableModulesOnSim[i].identifier == moduleIdentifierString)
+                                this.selectedModuleIdentifier = this.simulatorModules.availableModulesOnSim[i];
+                        }
+                    })
+                }
 
                 this.personLastName = result.personLastName;
                 this.simulatorName = result.simulatorName;
@@ -62,53 +86,63 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
                 this.modal.show();
             });
         }
+
+
     }
 
     save(): void {
-            this.saving = true;
+        this.saving = true;
 
-            this.simulatorLesson.startTime = moment(this.startTime);
-            this.simulatorLesson.startTime.hours(this.startTime.getHours());
-            this.simulatorLesson.startTime.minutes(this.startTime.getMinutes());
-			
-            this._simulatorLessonsServiceProxy.createOrEdit(this.simulatorLesson)
-             .pipe(finalize(() => { this.saving = false;}))
-             .subscribe(() => {
+        this.simulatorLesson.startTime = moment(this.startTime);
+        this.simulatorLesson.startTime.hours(this.startTime.getHours());
+        this.simulatorLesson.startTime.minutes(this.startTime.getMinutes());
+        this.simulatorLesson.moduleIdentifier = this.selectedModuleIdentifier.identifier;
+
+        if(this.manuallyMarkCompleted)
+            this.simulatorLesson.lessonState = SimulatorLessonState.Completed;
+
+        this._simulatorLessonsServiceProxy.createOrEdit(this.simulatorLesson)
+            .pipe(finalize(() => { this.saving = false; }))
+            .subscribe(() => {
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();
                 this.modalSave.emit(null);
-             });
+            });
     }
 
-        openSelectPersonModal() {
+    openSelectPersonModal() {
         this.simulatorLessonPersonLookupTableModal.id = this.simulatorLesson.studentId;
         this.simulatorLessonPersonLookupTableModal.displayName = this.personLastName;
         this.simulatorLessonPersonLookupTableModal.show();
     }
-        openSelectSimulatorModal() {
+    openSelectSimulatorModal() {
         this.simulatorLessonSimulatorLookupTableModal.id = this.simulatorLesson.simulatorId;
         this.simulatorLessonSimulatorLookupTableModal.displayName = this.simulatorName;
         this.simulatorLessonSimulatorLookupTableModal.show();
     }
 
 
-        setStudentIdNull() {
+    setStudentIdNull() {
         this.simulatorLesson.studentId = null;
         this.personLastName = '';
     }
-        setSimulatorIdNull() {
+    setSimulatorIdNull() {
         this.simulatorLesson.simulatorId = null;
         this.simulatorName = '';
     }
 
 
-        getNewStudentId() {
+    getNewStudentId() {
         this.simulatorLesson.studentId = this.simulatorLessonPersonLookupTableModal.id;
         this.personLastName = this.simulatorLessonPersonLookupTableModal.displayName;
     }
-        getNewSimulatorId() {
+    getNewSimulatorId() {
         this.simulatorLesson.simulatorId = this.simulatorLessonSimulatorLookupTableModal.id;
         this.simulatorName = this.simulatorLessonSimulatorLookupTableModal.displayName;
+
+        this._simulatorLessonsServiceProxy.getAvailableModulesOnSimulator(this.simulatorLesson.simulatorId).subscribe(result => {
+            this.simulatorModules = result;
+        })
     }
 
 

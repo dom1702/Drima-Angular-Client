@@ -51,6 +51,9 @@ export class SVOverviewComponent extends AppComponentBase implements OnInit, OnD
     {
         this.studentCourses = [];
 
+        if(this._helper.studentsCourses.length == 0)
+            return;
+
         for(var i = 0; i < this._helper.studentsCourses.length; i++)
         {
             this.studentCourses.push(this._helper.studentsCourses[i].course);
@@ -61,16 +64,23 @@ export class SVOverviewComponent extends AppComponentBase implements OnInit, OnD
 
     loadTheoryLessons()
     {
+        if(this.selectedStudentCourse == null)
+            return;
+
         abp.ui.setBusy(undefined, '', 1);
         this._studentViewService.getPredefinedTheoryLessonsOfCourse(this.selectedStudentCourse.id).subscribe((result) => 
         {
             abp.ui.clearBusy();
             this.theoryLessons = result;
+            console.log(this.theoryLessons);
         });
     }
 
     loadDrivingLessons()
     {
+        if(this.selectedStudentCourse == null)
+            return;
+
         abp.ui.setBusy(undefined, '', 1);
         this._studentViewService.getPredefinedDrivingLessonsOfCourse(this.selectedStudentCourse.id).subscribe((result) => 
         {

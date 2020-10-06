@@ -8,6 +8,9 @@ import { FileDownloadService } from '@shared/utils/file-download.service';
 import * as _ from 'lodash';
 import { SVBookDrivingLessonLookupSchedulerModalComponent } from './sv-book-drivingLesson-lookup-scheduler-modal.component';
 import { StudentViewHelper } from '../studentViewHelper.component';
+import { LazyLoadEvent } from 'primeng/api';
+import { Table } from 'primeng/table';
+import { Paginator } from 'primeng/primeng';
 
 @Component({
     templateUrl: './sv-drivingLesson.component.html',
@@ -16,6 +19,9 @@ import { StudentViewHelper } from '../studentViewHelper.component';
 })
 
 export class SVDrivingLessonComponent extends AppComponentBase implements OnInit {
+
+    @ViewChild('dataTable') dataTable: Table;
+    @ViewChild('paginator') paginator: Paginator;
 
     selectedStudentCourse: CourseDto;
     studentCourses: CourseDto[];
@@ -50,6 +56,9 @@ export class SVDrivingLessonComponent extends AppComponentBase implements OnInit
     {
         this.studentCourses = [];
 
+        if(this._helper.studentsCourses.length == 0)
+        return;
+
         for(var i = 0; i < this._helper.studentsCourses.length; i++)
         {
             this.studentCourses.push(this._helper.studentsCourses[i].course);
@@ -60,6 +69,9 @@ export class SVDrivingLessonComponent extends AppComponentBase implements OnInit
 
     loadDrivingLessons()
     {
+        if(this.selectedStudentCourse == null)
+        return;
+
         abp.ui.setBusy(undefined, '', 1);
         this._studentViewService.getPredefinedDrivingLessonsOfCourse(this.selectedStudentCourse.id).subscribe((result) => 
         {
@@ -67,10 +79,28 @@ export class SVDrivingLessonComponent extends AppComponentBase implements OnInit
             this.drivingLessons = result;
         });
 
-        this._studentViewService.getAllDrivingLessonsOfStudent(this.selectedStudentCourse.id).subscribe((result) => 
-        {
+        this.getDrivingLessons();
+    }
+
+    getDrivingLessons(event?: LazyLoadEvent) {
+
+        if(this.selectedStudentCourse == null)
+        return;
+
+        this.primengTableHelper.showLoadingIndicator();
+        console.log(this.primengTableHelper.defaultRecordsCountPerPage);
+
+        this._studentViewService.getAllDrivingLessonsOfStudent(
+            this.selectedStudentCourse.id,
+            this.primengTableHelper.getSorting(this.dataTable),
+            0,
+            999
+        ).subscribe(result => {
+            this.primengTableHelper.totalRecordsCount = result.totalCount;
+            console.log(result.items);
+            this.primengTableHelper.records = result.items;
+            this.primengTableHelper.hideLoadingIndicator();
             abp.ui.clearBusy();
-            this.drivingLessonsList = result;
         });
     }
 

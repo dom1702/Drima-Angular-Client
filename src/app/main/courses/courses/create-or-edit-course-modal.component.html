@@ -15,7 +15,7 @@
 				<div class="modal-body">
 
 					<div class="form-group m-form__group">
-						<label for="LicenseClassName">{{l("LicenseClass")}}</label>
+						<label for="LicenseClassName">{{l("LicenseClass")}} *</label>
 						<div class="input-group">
 							<input class="form-control" id="LicenseClassName" name="licenseClassName"
 								[(ngModel)]="licenseClassSelected" type="text" disabled>
@@ -31,7 +31,7 @@
 						</div>
 					</div>
 					<input class="form-control" name="licenseClassSelected" [(ngModel)]="licenseClassSelected"
-						type="text" hidden>
+						type="text" required hidden>
 
 					<div *ngIf='licenseClassSelected'>
 

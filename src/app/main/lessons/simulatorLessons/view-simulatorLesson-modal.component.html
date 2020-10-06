@@ -21,10 +21,6 @@
                         {{ item.simulatorLesson.description }}
                     </div>
                     <div class="col-6 mb-3">
-                        <h6>{{l("Completed")}} :</h6>
-                        {{ item.simulatorLesson.completed }}
-                    </div>
-                    <div class="col-6 mb-3">
                         <h6>{{l("Topic")}} :</h6>
                         {{ item.simulatorLesson.topic }}
                     </div>
@@ -37,7 +33,14 @@
                         <h6>({{l("Simulator")}}) {{l("Name")}} :</h6>
                         {{item.simulatorName}}
                     </div>
-
+                    <div class="col-6 mb-3">
+                        <h6>{{l("LessonState")}} :</h6>
+                        {{l(lessonState[item.simulatorLesson.lessonState])}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("PINCode")}}:</h6>
+                        {{item.simulatorLesson.startCode}}
+                    </div>
                 </div>
 
             </div>

@@ -1,7 +1,7 @@
 import { Component, Injector, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
-import { StudentsServiceProxy, StudentDto, StudentCoursePredefinedTheoryLessonDto, OnlineTheoryServiceProxy, StartNextOnlineTheoryLessonInput, FinishOnlineTheoryLessonInput, StudentCourseDrivingLessonsDto } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, StudentDto, StudentCoursePredefinedTheoryLessonDto, OnlineTheoryServiceProxy, StartNextOnlineTheoryLessonInput, FinishOnlineTheoryLessonInput, StudentCourseDrivingLessonsDto, TheoryLessonState } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -43,6 +43,8 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     theoryLessons: StudentCoursePredefinedTheoryLessonDto[];
     drivingLessons: StudentCourseDrivingLessonsDto;
 
+    theoryLessonState = TheoryLessonState;
+
     constructor(
         injector: Injector,
         private _studentsServiceProxy: StudentsServiceProxy,
@@ -74,7 +76,7 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
         this.parentOverview.courseChanged.subscribe(() => {
             this._studentsServiceProxy.getPredefinedDrivingLessonsOfCourse(this.parentOverview.selectedStudentCourse.course.id, this.student.id).subscribe(result => {
                 this.drivingLessons = result;
-                console.log(result);
+              
             });
         });
     }
@@ -129,7 +131,7 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
         this.createOrEditStudentModal.show(this.student.id);
     }
 
-    createUserAccount(): void {
+    createOrEditUserAccount(): void {
         this.createOrEditStudentUserModal.show(this.student.lastName, this.student.firstName, this.student.email, this.student);
 
         // this._onlineTheory.finishOnlineTheoryLesson(new FinishOnlineTheoryLessonInput(
@@ -155,6 +157,11 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
 
     assignToCourse(): void {
         this.parentOverview.UpdateStudentView().subscribe();
+
+        setTimeout(() => {
+            this.parentOverview.CallCourseChanged();
+        }, 1000);
+   
     }
 
     userAccountCreated() {

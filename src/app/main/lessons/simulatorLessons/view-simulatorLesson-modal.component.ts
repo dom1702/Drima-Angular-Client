@@ -1,6 +1,6 @@
 import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
-import { GetSimulatorLessonForViewDto, SimulatorLessonDto } from '@shared/service-proxies/service-proxies';
+import { GetSimulatorLessonForViewDto, SimulatorLessonDto, SimulatorLessonState } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 
 @Component({
@@ -17,6 +17,7 @@ export class ViewSimulatorLessonModalComponent extends AppComponentBase {
 
     item: GetSimulatorLessonForViewDto;
 
+    lessonState = SimulatorLessonState;
 
     constructor(
         injector: Injector

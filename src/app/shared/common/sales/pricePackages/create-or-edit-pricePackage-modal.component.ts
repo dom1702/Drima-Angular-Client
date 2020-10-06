@@ -35,6 +35,7 @@ export class CreateOrEditPricePackageModalComponent extends AppComponentBase {
 
     priceEditable : boolean;
     nameEditable : boolean;
+    descriptionEditable : boolean;
 
     pricePackage: CreateOrEditPricePackageDto = new CreateOrEditPricePackageDto();
 
@@ -54,10 +55,11 @@ export class CreateOrEditPricePackageModalComponent extends AppComponentBase {
     }
 
 
-    show(pricePackageId?: number, priceEditable: boolean = false, nameEditable = true): void {
+    show(pricePackageId?: number, priceEditable: boolean = false, nameEditable = true, descriptionEditable = true): void {
 
         this.priceEditable = priceEditable;
         this.nameEditable = nameEditable;
+        this.descriptionEditable = descriptionEditable;
 
         this.itemForm = this.fb.group({
 

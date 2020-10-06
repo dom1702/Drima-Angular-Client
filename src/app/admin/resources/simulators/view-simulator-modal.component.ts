@@ -28,6 +28,7 @@ export class ViewSimulatorModalComponent extends AppComponentBase {
 
     show(item: GetSimulatorForViewDto): void {
         this.item = item;
+        console.log(this.item);
         this.active = true;
         this.modal.show();
     }

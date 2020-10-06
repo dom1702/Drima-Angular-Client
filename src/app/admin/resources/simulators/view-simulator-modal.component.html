@@ -33,6 +33,23 @@
                         <h6>({{l("Office")}}) {{l("Name")}} :</h6>
                         {{item.officeName}}
                     </div>
+                </div>
+                <div class="row">
+                    <h5 class="col-12 mb-3">
+                        {{l('InstalledModules')}}
+                    </h5>
+                    <div class="col-12" *ngFor="let m of item.simulator.simulatorModules">
+                    <h6>
+                        {{m.identifier}}
+                        <label *ngIf="m.description">({{m.description}})</label>
+                    </h6>
+                    <div *ngFor="let e of m.exerciseUnits">
+                        <label>
+                            {{e.identifier}}
+                        </label> 
+                        <label *ngIf="e.description"> ({{e.description}})</label>
+                        </div>
+                    </div>
 
                 </div>
 

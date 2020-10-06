@@ -171,12 +171,13 @@
                     </div>
                     <div class="row m--margin-top-20">
                         <div class="col-6" *ngFor="let pdl of drivingLessons.predefinedDrivingLessons; index as i">
-                            <div *ngIf="pdl.isDone" class="text-center"><i class="fa fa-check-circle m--font-success"
-                                    title="True"></i><label>&nbsp;{{pdl.name}}</label></div>
-                            <div *ngIf="!pdl.isDone && !pdl.isRunning" class="text-center"><i
+                            <div *ngIf="pdl.completed" class="text-center"><i class="fa fa-check-circle m--font-success"
+                                    title="True"></i><label>&nbsp;{{pdl.name}}</label>
+                                <label *ngIf="pdl.doneOnSimulator"></label> (Simulator)</div>
+                            <div *ngIf="!pdl.completed && !pdl.running" class="text-center"><i
                                     class="fa fa-times-circle m--font-danger"
                                     title="False"></i><label>&nbsp;{{pdl.name}}</label></div>
-                            <div *ngIf="!pdl.isDone && pdl.isRunning " class="text-center"><i
+                            <div *ngIf="!pdl.completed && pdl.running " class="text-center"><i
                                     class="fa fa-spinner m--font-info"
                                     title="False"></i><label>&nbsp;{{pdl.name}}</label></div>
                         </div>
@@ -188,12 +189,12 @@
                     <h5 class="text-md-center">{{l("TheoryLessons")}} </h5>
                     <div class="row">
                         <div class="col-6" *ngFor="let ptl of theoryLessons; index as i">
-                            <div *ngIf="ptl.isDone" class="text-center"><i class="fa fa-check-circle m--font-success"
+                            <div *ngIf="ptl.currentState == theoryLessonState.Completed" class="text-center"><i class="fa fa-check-circle m--font-success"
                                     title="True"></i><label>&nbsp;{{ptl.name}}</label></div>
-                            <div *ngIf="!ptl.isDone && !ptl.isRunning" class="text-center"><i
+                            <div *ngIf="ptl.currentState == theoryLessonState.NotStarted || ptl.currentState == theoryLessonState.Canceled" class="text-center"><i
                                     class="fa fa-times-circle m--font-danger"
                                     title="False"></i><label>&nbsp;{{ptl.name}}</label></div>
-                            <div *ngIf="!ptl.isDone && ptl.isRunning " class="text-center"><i
+                            <div *ngIf="ptl.currentState == theoryLessonState.Running" class="text-center"><i
                                     class="fa fa-spinner m--font-info"
                                     title="False"></i><label>&nbsp;{{ptl.name}}</label></div>
                         </div>
@@ -206,8 +207,12 @@
 
     </div>
 </div>
-<div *ngIf="!parentOverview.selectedStudentCourse">
-    <h6 style="color:red">{{l("NoCourseSelected")}}!</h6>
+<div *ngIf="!parentOverview.selectedStudentCourse" class="row">
+    <div class="col-6 mb-3">
+    <alert type="warning" >
+        <strong>Warning!</strong> {{l("NoCourseSelected")}}!
+    </alert>
+</div>
 </div>
 
 <h4 class="m--margin-top-30">{{l("PricePackage")}}</h4>
@@ -232,9 +237,11 @@
 <h4 class="m--margin-top-30">{{l("UserAccount")}}</h4>
 
 <label *ngIf="!student.userId">{{l("StudentNotLinkedToAUserAccount")}}</label>
-<br><button *ngIf="!student.userId" type="button" (click)="createUserAccount()"
+<br><button *ngIf="!student.userId" type="button" (click)="createOrEditUserAccount()"
     class="btn btn mr-5">{{l("CreateAndAssignUserAccount")}}</button>
 <label *ngIf="student.userId">{{l("UserName")}}: {{student.userName}} ({{student.userId}})</label>
+<br><button *ngIf="student.userId" type="button" (click)="createOrEditUserAccount()"
+    class="btn btn mr-5">{{l("EditStudentsUserAccount")}}</button>
 
 
 <div class="m--margin-top-30">

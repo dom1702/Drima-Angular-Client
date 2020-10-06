@@ -104,17 +104,15 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
             }
 
 
-            console.log(this.course.pricePackages);
-        
             if (this.course.pricePackages != null) {
 
                 for (var i = 0; i < this.course.pricePackages.length; i++) {
                     this.pricePackages.find(e => e.id === this.course.pricePackages[i].id).checked = true;
                 }
-            }
 
-            if(this.course.pricePackages.some(e => e.id === this.course.highlightedPricePackageId))
+                if(this.course.pricePackages.some(e => e.id === this.course.highlightedPricePackageId))
                 this.pricePackageSelectedAsHighlighted  = this.pricePackages.find(e => e.id === this.course.highlightedPricePackageId);
+            }
         });
 
     }
@@ -179,6 +177,9 @@ export class CreateOrEditCourseModalComponent extends AppComponentBase {
 
             this.licenseClassId = null;
             this.licenseClassSelected = '';
+
+            this.course.visibleOnFrontPage = true;
+            this.course.enrollmentAvailable = true;
 
             this.UpdateMultiSelect();
 

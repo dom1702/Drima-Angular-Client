@@ -13487,6 +13487,114 @@ export class SimulatorExternalServiceProxy {
         }
         return _observableOf<UpdateModulesOutput>(<any>null);
     }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    startWithStartCode(input: StartWithStartCodeInput | null | undefined): Observable<StartWithStartCodeOutput> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorExternal/StartWithStartCode";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processStartWithStartCode(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processStartWithStartCode(<any>response_);
+                } catch (e) {
+                    return <Observable<StartWithStartCodeOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<StartWithStartCodeOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processStartWithStartCode(response: HttpResponseBase): Observable<StartWithStartCodeOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? StartWithStartCodeOutput.fromJS(resultData200) : new StartWithStartCodeOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<StartWithStartCodeOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    finishSimulatorLesson(input: FinishSimulatorLessonInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorExternal/FinishSimulatorLesson";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFinishSimulatorLesson(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFinishSimulatorLesson(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processFinishSimulatorLesson(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
 }
 
 @Injectable()
@@ -13742,6 +13850,60 @@ export class SimulatorLessonsServiceProxy {
     }
 
     /**
+     * @param simulatorId (optional) 
+     * @return Success
+     */
+    getAvailableModulesOnSimulator(simulatorId: number | null | undefined): Observable<GetAvailableModulesOnSimulatorOutput> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorLessons/GetAvailableModulesOnSimulator?";
+        if (simulatorId !== undefined)
+            url_ += "simulatorId=" + encodeURIComponent("" + simulatorId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAvailableModulesOnSimulator(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAvailableModulesOnSimulator(<any>response_);
+                } catch (e) {
+                    return <Observable<GetAvailableModulesOnSimulatorOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetAvailableModulesOnSimulatorOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAvailableModulesOnSimulator(response: HttpResponseBase): Observable<GetAvailableModulesOnSimulatorOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetAvailableModulesOnSimulatorOutput.fromJS(resultData200) : new GetAvailableModulesOnSimulatorOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetAvailableModulesOnSimulatorOutput>(<any>null);
+    }
+
+    /**
      * @param id (optional) 
      * @return Success
      */
@@ -13915,6 +14077,60 @@ export class SimulatorLessonsServiceProxy {
             }));
         }
         return _observableOf<PagedResultDtoOfSimulatorLessonSimulatorLookupTableDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    downloadFeedbackPdf(id: number | null | undefined): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorLessons/DownloadFeedbackPdf?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDownloadFeedbackPdf(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDownloadFeedbackPdf(<any>response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDownloadFeedbackPdf(response: HttpResponseBase): Observable<FileDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileDto>(<any>null);
     }
 }
 
@@ -16121,6 +16337,112 @@ export class StudentsServiceProxy {
     }
 
     /**
+     * @param studentUserId (optional) 
+     * @return Success
+     */
+    getStudentsUserForEdit(studentUserId: number | null | undefined): Observable<GetStudentsUserForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/Students/GetStudentsUserForEdit?";
+        if (studentUserId !== undefined)
+            url_ += "StudentUserId=" + encodeURIComponent("" + studentUserId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetStudentsUserForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetStudentsUserForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetStudentsUserForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetStudentsUserForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetStudentsUserForEdit(response: HttpResponseBase): Observable<GetStudentsUserForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetStudentsUserForEditOutput.fromJS(resultData200) : new GetStudentsUserForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetStudentsUserForEditOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    updateStudentUserAsync(input: UpdateStudentUserInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Students/UpdateStudentUserAsync";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateStudentUserAsync(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateStudentUserAsync(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateStudentUserAsync(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
      * @param id (optional) 
      * @return Success
      */
@@ -16888,7 +17210,7 @@ export class StudentsViewServiceProxy {
      * @param courseId (optional) 
      * @return Success
      */
-    getAllTheoryLessonsOfStudent(courseId: number | null | undefined): Observable<SVTheoryLessonDto[]> {
+    getAllTheoryLessonsOfStudent(courseId: number | null | undefined): Observable<PagedResultDtoOfSVTheoryLessonDto> {
         let url_ = this.baseUrl + "/api/services/app/StudentsView/GetAllTheoryLessonsOfStudent?";
         if (courseId !== undefined)
             url_ += "courseId=" + encodeURIComponent("" + courseId) + "&"; 
@@ -16909,14 +17231,14 @@ export class StudentsViewServiceProxy {
                 try {
                     return this.processGetAllTheoryLessonsOfStudent(<any>response_);
                 } catch (e) {
-                    return <Observable<SVTheoryLessonDto[]>><any>_observableThrow(e);
+                    return <Observable<PagedResultDtoOfSVTheoryLessonDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<SVTheoryLessonDto[]>><any>_observableThrow(response_);
+                return <Observable<PagedResultDtoOfSVTheoryLessonDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetAllTheoryLessonsOfStudent(response: HttpResponseBase): Observable<SVTheoryLessonDto[]> {
+    protected processGetAllTheoryLessonsOfStudent(response: HttpResponseBase): Observable<PagedResultDtoOfSVTheoryLessonDto> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -16927,11 +17249,7 @@ export class StudentsViewServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SVTheoryLessonDto.fromJS(item));
-            }
+            result200 = resultData200 ? PagedResultDtoOfSVTheoryLessonDto.fromJS(resultData200) : new PagedResultDtoOfSVTheoryLessonDto();
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -16939,17 +17257,26 @@ export class StudentsViewServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<SVTheoryLessonDto[]>(<any>null);
+        return _observableOf<PagedResultDtoOfSVTheoryLessonDto>(<any>null);
     }
 
     /**
      * @param courseId (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
      * @return Success
      */
-    getAllDrivingLessonsOfStudent(courseId: number | null | undefined): Observable<SVDrivingLessonDto[]> {
+    getAllDrivingLessonsOfStudent(courseId: number | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfSVDrivingLessonDto> {
         let url_ = this.baseUrl + "/api/services/app/StudentsView/GetAllDrivingLessonsOfStudent?";
         if (courseId !== undefined)
-            url_ += "courseId=" + encodeURIComponent("" + courseId) + "&"; 
+            url_ += "CourseId=" + encodeURIComponent("" + courseId) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -16967,14 +17294,14 @@ export class StudentsViewServiceProxy {
                 try {
                     return this.processGetAllDrivingLessonsOfStudent(<any>response_);
                 } catch (e) {
-                    return <Observable<SVDrivingLessonDto[]>><any>_observableThrow(e);
+                    return <Observable<PagedResultDtoOfSVDrivingLessonDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<SVDrivingLessonDto[]>><any>_observableThrow(response_);
+                return <Observable<PagedResultDtoOfSVDrivingLessonDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetAllDrivingLessonsOfStudent(response: HttpResponseBase): Observable<SVDrivingLessonDto[]> {
+    protected processGetAllDrivingLessonsOfStudent(response: HttpResponseBase): Observable<PagedResultDtoOfSVDrivingLessonDto> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -16985,11 +17312,7 @@ export class StudentsViewServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SVDrivingLessonDto.fromJS(item));
-            }
+            result200 = resultData200 ? PagedResultDtoOfSVDrivingLessonDto.fromJS(resultData200) : new PagedResultDtoOfSVDrivingLessonDto();
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -16997,7 +17320,7 @@ export class StudentsViewServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<SVDrivingLessonDto[]>(<any>null);
+        return _observableOf<PagedResultDtoOfSVDrivingLessonDto>(<any>null);
     }
 
     /**
@@ -24572,6 +24895,8 @@ export class PredefinedDrivingLessonDto implements IPredefinedDrivingLessonDto {
     length!: number | undefined;
     requiredForClasses!: string | undefined;
     notRequiredIfClasses!: string | undefined;
+    canBeDoneOnSimulator!: boolean | undefined;
+    simulatorModuleIdentifier!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: IPredefinedDrivingLessonDto) {
@@ -24591,6 +24916,8 @@ export class PredefinedDrivingLessonDto implements IPredefinedDrivingLessonDto {
             this.length = data["length"];
             this.requiredForClasses = data["requiredForClasses"];
             this.notRequiredIfClasses = data["notRequiredIfClasses"];
+            this.canBeDoneOnSimulator = data["canBeDoneOnSimulator"];
+            this.simulatorModuleIdentifier = data["simulatorModuleIdentifier"];
             this.id = data["id"];
         }
     }
@@ -24610,6 +24937,8 @@ export class PredefinedDrivingLessonDto implements IPredefinedDrivingLessonDto {
         data["length"] = this.length;
         data["requiredForClasses"] = this.requiredForClasses;
         data["notRequiredIfClasses"] = this.notRequiredIfClasses;
+        data["canBeDoneOnSimulator"] = this.canBeDoneOnSimulator;
+        data["simulatorModuleIdentifier"] = this.simulatorModuleIdentifier;
         data["id"] = this.id;
         return data; 
     }
@@ -24622,6 +24951,8 @@ export interface IPredefinedDrivingLessonDto {
     length: number | undefined;
     requiredForClasses: string | undefined;
     notRequiredIfClasses: string | undefined;
+    canBeDoneOnSimulator: boolean | undefined;
+    simulatorModuleIdentifier: string | undefined;
     id: number | undefined;
 }
 
@@ -24687,6 +25018,7 @@ export interface IPredefinedTheoryLessonDto {
 
 export class PricePackageDto implements IPricePackageDto {
     name!: string | undefined;
+    description!: string | undefined;
     products!: PricePackageItemDto[] | undefined;
     highlight!: boolean | undefined;
     id!: number | undefined;
@@ -24703,6 +25035,7 @@ export class PricePackageDto implements IPricePackageDto {
     init(data?: any) {
         if (data) {
             this.name = data["name"];
+            this.description = data["description"];
             if (data["products"] && data["products"].constructor === Array) {
                 this.products = [] as any;
                 for (let item of data["products"])
@@ -24723,6 +25056,7 @@ export class PricePackageDto implements IPricePackageDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         if (this.products && this.products.constructor === Array) {
             data["products"] = [];
             for (let item of this.products)
@@ -24736,6 +25070,7 @@ export class PricePackageDto implements IPricePackageDto {
 
 export interface IPricePackageDto {
     name: string | undefined;
+    description: string | undefined;
     products: PricePackageItemDto[] | undefined;
     highlight: boolean | undefined;
     id: number | undefined;
@@ -33890,6 +34225,8 @@ export class CreateOrEditPredefinedDrivingLessonDto implements ICreateOrEditPred
     length!: number | undefined;
     requiredForClasses!: string | undefined;
     notRequiredIfClasses!: string | undefined;
+    canBeDoneOnSimulator!: boolean | undefined;
+    simulatorModuleIdentifier!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditPredefinedDrivingLessonDto) {
@@ -33909,6 +34246,8 @@ export class CreateOrEditPredefinedDrivingLessonDto implements ICreateOrEditPred
             this.length = data["length"];
             this.requiredForClasses = data["requiredForClasses"];
             this.notRequiredIfClasses = data["notRequiredIfClasses"];
+            this.canBeDoneOnSimulator = data["canBeDoneOnSimulator"];
+            this.simulatorModuleIdentifier = data["simulatorModuleIdentifier"];
             this.id = data["id"];
         }
     }
@@ -33928,6 +34267,8 @@ export class CreateOrEditPredefinedDrivingLessonDto implements ICreateOrEditPred
         data["length"] = this.length;
         data["requiredForClasses"] = this.requiredForClasses;
         data["notRequiredIfClasses"] = this.notRequiredIfClasses;
+        data["canBeDoneOnSimulator"] = this.canBeDoneOnSimulator;
+        data["simulatorModuleIdentifier"] = this.simulatorModuleIdentifier;
         data["id"] = this.id;
         return data; 
     }
@@ -33940,6 +34281,8 @@ export interface ICreateOrEditPredefinedDrivingLessonDto {
     length: number | undefined;
     requiredForClasses: string | undefined;
     notRequiredIfClasses: string | undefined;
+    canBeDoneOnSimulator: boolean | undefined;
+    simulatorModuleIdentifier: string | undefined;
     id: number | undefined;
 }
 
@@ -34245,6 +34588,7 @@ export interface IGetPricePackageForEditOutput {
 
 export class CreateOrEditPricePackageDto implements ICreateOrEditPricePackageDto {
     name!: string;
+    description!: string | undefined;
     products!: PricePackageItemDto[] | undefined;
     id!: number | undefined;
 
@@ -34260,6 +34604,7 @@ export class CreateOrEditPricePackageDto implements ICreateOrEditPricePackageDto
     init(data?: any) {
         if (data) {
             this.name = data["name"];
+            this.description = data["description"];
             if (data["products"] && data["products"].constructor === Array) {
                 this.products = [] as any;
                 for (let item of data["products"])
@@ -34279,6 +34624,7 @@ export class CreateOrEditPricePackageDto implements ICreateOrEditPricePackageDto
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         if (this.products && this.products.constructor === Array) {
             data["products"] = [];
             for (let item of this.products)
@@ -34291,6 +34637,7 @@ export class CreateOrEditPricePackageDto implements ICreateOrEditPricePackageDto
 
 export interface ICreateOrEditPricePackageDto {
     name: string;
+    description: string | undefined;
     products: PricePackageItemDto[] | undefined;
     id: number | undefined;
 }
@@ -36173,6 +36520,7 @@ export interface IUpdateUserSignInTokenOutput {
 }
 
 export class SimulatorUpdateModulesInput implements ISimulatorUpdateModulesInput {
+    apiKey!: string | undefined;
     simulatorModules!: SimulatorModuleDto[] | undefined;
     simulatorCode!: string | undefined;
 
@@ -36187,6 +36535,7 @@ export class SimulatorUpdateModulesInput implements ISimulatorUpdateModulesInput
 
     init(data?: any) {
         if (data) {
+            this.apiKey = data["apiKey"];
             if (data["simulatorModules"] && data["simulatorModules"].constructor === Array) {
                 this.simulatorModules = [] as any;
                 for (let item of data["simulatorModules"])
@@ -36205,6 +36554,7 @@ export class SimulatorUpdateModulesInput implements ISimulatorUpdateModulesInput
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["apiKey"] = this.apiKey;
         if (this.simulatorModules && this.simulatorModules.constructor === Array) {
             data["simulatorModules"] = [];
             for (let item of this.simulatorModules)
@@ -36216,6 +36566,7 @@ export class SimulatorUpdateModulesInput implements ISimulatorUpdateModulesInput
 }
 
 export interface ISimulatorUpdateModulesInput {
+    apiKey: string | undefined;
     simulatorModules: SimulatorModuleDto[] | undefined;
     simulatorCode: string | undefined;
 }
@@ -36365,6 +36716,158 @@ export interface IUpdateModulesOutput {
     errorMessage: string | undefined;
 }
 
+export class StartWithStartCodeInput implements IStartWithStartCodeInput {
+    apiKey!: string | undefined;
+    startCode!: string | undefined;
+    simulatorCode!: string | undefined;
+
+    constructor(data?: IStartWithStartCodeInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.apiKey = data["apiKey"];
+            this.startCode = data["startCode"];
+            this.simulatorCode = data["simulatorCode"];
+        }
+    }
+
+    static fromJS(data: any): StartWithStartCodeInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new StartWithStartCodeInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["apiKey"] = this.apiKey;
+        data["startCode"] = this.startCode;
+        data["simulatorCode"] = this.simulatorCode;
+        return data; 
+    }
+}
+
+export interface IStartWithStartCodeInput {
+    apiKey: string | undefined;
+    startCode: string | undefined;
+    simulatorCode: string | undefined;
+}
+
+export class StartWithStartCodeOutput implements IStartWithStartCodeOutput {
+    simulatorLessonId!: number | undefined;
+    isValid!: boolean | undefined;
+    errorMessage!: string | undefined;
+    startTime!: moment.Moment | undefined;
+    plannedModulesIdentifiers!: string[] | undefined;
+
+    constructor(data?: IStartWithStartCodeOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.simulatorLessonId = data["simulatorLessonId"];
+            this.isValid = data["isValid"];
+            this.errorMessage = data["errorMessage"];
+            this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
+            if (data["plannedModulesIdentifiers"] && data["plannedModulesIdentifiers"].constructor === Array) {
+                this.plannedModulesIdentifiers = [] as any;
+                for (let item of data["plannedModulesIdentifiers"])
+                    this.plannedModulesIdentifiers!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): StartWithStartCodeOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new StartWithStartCodeOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["simulatorLessonId"] = this.simulatorLessonId;
+        data["isValid"] = this.isValid;
+        data["errorMessage"] = this.errorMessage;
+        data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
+        if (this.plannedModulesIdentifiers && this.plannedModulesIdentifiers.constructor === Array) {
+            data["plannedModulesIdentifiers"] = [];
+            for (let item of this.plannedModulesIdentifiers)
+                data["plannedModulesIdentifiers"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IStartWithStartCodeOutput {
+    simulatorLessonId: number | undefined;
+    isValid: boolean | undefined;
+    errorMessage: string | undefined;
+    startTime: moment.Moment | undefined;
+    plannedModulesIdentifiers: string[] | undefined;
+}
+
+export class FinishSimulatorLessonInput implements IFinishSimulatorLessonInput {
+    apiKey!: string | undefined;
+    simulatorLessonId!: number | undefined;
+    completed!: boolean | undefined;
+    pdfFile!: string | undefined;
+
+    constructor(data?: IFinishSimulatorLessonInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.apiKey = data["apiKey"];
+            this.simulatorLessonId = data["simulatorLessonId"];
+            this.completed = data["completed"];
+            this.pdfFile = data["pdfFile"];
+        }
+    }
+
+    static fromJS(data: any): FinishSimulatorLessonInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new FinishSimulatorLessonInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["apiKey"] = this.apiKey;
+        data["simulatorLessonId"] = this.simulatorLessonId;
+        data["completed"] = this.completed;
+        data["pdfFile"] = this.pdfFile;
+        return data; 
+    }
+}
+
+export interface IFinishSimulatorLessonInput {
+    apiKey: string | undefined;
+    simulatorLessonId: number | undefined;
+    completed: boolean | undefined;
+    pdfFile: string | undefined;
+}
+
 export class PagedResultDtoOfGetSimulatorLessonForViewDto implements IPagedResultDtoOfGetSimulatorLessonForViewDto {
     totalCount!: number | undefined;
     items!: GetSimulatorLessonForViewDto[] | undefined;
@@ -36460,11 +36963,14 @@ export interface IGetSimulatorLessonForViewDto {
 export class SimulatorLessonDto implements ISimulatorLessonDto {
     startTime!: moment.Moment | undefined;
     description!: string | undefined;
-    completed!: boolean | undefined;
+    lessonState!: SimulatorLessonState | undefined;
     topic!: string | undefined;
     length!: number | undefined;
     studentId!: number | undefined;
     simulatorId!: number | undefined;
+    startCode!: string | undefined;
+    moduleIdentifier!: string | undefined;
+    feedbackPdfAvailableToDownload!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: ISimulatorLessonDto) {
@@ -36480,11 +36986,14 @@ export class SimulatorLessonDto implements ISimulatorLessonDto {
         if (data) {
             this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
             this.description = data["description"];
-            this.completed = data["completed"];
+            this.lessonState = data["lessonState"];
             this.topic = data["topic"];
             this.length = data["length"];
             this.studentId = data["studentId"];
             this.simulatorId = data["simulatorId"];
+            this.startCode = data["startCode"];
+            this.moduleIdentifier = data["moduleIdentifier"];
+            this.feedbackPdfAvailableToDownload = data["feedbackPdfAvailableToDownload"];
             this.id = data["id"];
         }
     }
@@ -36500,11 +37009,14 @@ export class SimulatorLessonDto implements ISimulatorLessonDto {
         data = typeof data === 'object' ? data : {};
         data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
         data["description"] = this.description;
-        data["completed"] = this.completed;
+        data["lessonState"] = this.lessonState;
         data["topic"] = this.topic;
         data["length"] = this.length;
         data["studentId"] = this.studentId;
         data["simulatorId"] = this.simulatorId;
+        data["startCode"] = this.startCode;
+        data["moduleIdentifier"] = this.moduleIdentifier;
+        data["feedbackPdfAvailableToDownload"] = this.feedbackPdfAvailableToDownload;
         data["id"] = this.id;
         return data; 
     }
@@ -36513,12 +37025,22 @@ export class SimulatorLessonDto implements ISimulatorLessonDto {
 export interface ISimulatorLessonDto {
     startTime: moment.Moment | undefined;
     description: string | undefined;
-    completed: boolean | undefined;
+    lessonState: SimulatorLessonState | undefined;
     topic: string | undefined;
     length: number | undefined;
     studentId: number | undefined;
     simulatorId: number | undefined;
+    startCode: string | undefined;
+    moduleIdentifier: string | undefined;
+    feedbackPdfAvailableToDownload: boolean | undefined;
     id: number | undefined;
+}
+
+export enum SimulatorLessonState {
+    NotStarted = 0, 
+    Running = 1, 
+    Completed = 2, 
+    Canceled = 3, 
 }
 
 export class GetSimulatorLessonForEditOutput implements IGetSimulatorLessonForEditOutput {
@@ -36568,11 +37090,12 @@ export interface IGetSimulatorLessonForEditOutput {
 export class CreateOrEditSimulatorLessonDto implements ICreateOrEditSimulatorLessonDto {
     startTime!: moment.Moment | undefined;
     description!: string | undefined;
-    completed!: boolean | undefined;
+    lessonState!: SimulatorLessonState | undefined;
     topic!: string | undefined;
     length!: number | undefined;
     studentId!: number | undefined;
     simulatorId!: number | undefined;
+    moduleIdentifier!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditSimulatorLessonDto) {
@@ -36588,11 +37111,12 @@ export class CreateOrEditSimulatorLessonDto implements ICreateOrEditSimulatorLes
         if (data) {
             this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
             this.description = data["description"];
-            this.completed = data["completed"];
+            this.lessonState = data["lessonState"];
             this.topic = data["topic"];
             this.length = data["length"];
             this.studentId = data["studentId"];
             this.simulatorId = data["simulatorId"];
+            this.moduleIdentifier = data["moduleIdentifier"];
             this.id = data["id"];
         }
     }
@@ -36608,11 +37132,12 @@ export class CreateOrEditSimulatorLessonDto implements ICreateOrEditSimulatorLes
         data = typeof data === 'object' ? data : {};
         data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
         data["description"] = this.description;
-        data["completed"] = this.completed;
+        data["lessonState"] = this.lessonState;
         data["topic"] = this.topic;
         data["length"] = this.length;
         data["studentId"] = this.studentId;
         data["simulatorId"] = this.simulatorId;
+        data["moduleIdentifier"] = this.moduleIdentifier;
         data["id"] = this.id;
         return data; 
     }
@@ -36621,12 +37146,97 @@ export class CreateOrEditSimulatorLessonDto implements ICreateOrEditSimulatorLes
 export interface ICreateOrEditSimulatorLessonDto {
     startTime: moment.Moment | undefined;
     description: string | undefined;
-    completed: boolean | undefined;
+    lessonState: SimulatorLessonState | undefined;
     topic: string | undefined;
     length: number | undefined;
     studentId: number | undefined;
     simulatorId: number | undefined;
+    moduleIdentifier: string | undefined;
     id: number | undefined;
+}
+
+export class GetAvailableModulesOnSimulatorOutput implements IGetAvailableModulesOnSimulatorOutput {
+    availableModulesOnSim!: Sim_Module[] | undefined;
+
+    constructor(data?: IGetAvailableModulesOnSimulatorOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["availableModulesOnSim"] && data["availableModulesOnSim"].constructor === Array) {
+                this.availableModulesOnSim = [] as any;
+                for (let item of data["availableModulesOnSim"])
+                    this.availableModulesOnSim!.push(Sim_Module.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetAvailableModulesOnSimulatorOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetAvailableModulesOnSimulatorOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.availableModulesOnSim && this.availableModulesOnSim.constructor === Array) {
+            data["availableModulesOnSim"] = [];
+            for (let item of this.availableModulesOnSim)
+                data["availableModulesOnSim"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IGetAvailableModulesOnSimulatorOutput {
+    availableModulesOnSim: Sim_Module[] | undefined;
+}
+
+export class Sim_Module implements ISim_Module {
+    description!: string | undefined;
+    identifier!: string | undefined;
+
+    constructor(data?: ISim_Module) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.description = data["description"];
+            this.identifier = data["identifier"];
+        }
+    }
+
+    static fromJS(data: any): Sim_Module {
+        data = typeof data === 'object' ? data : {};
+        let result = new Sim_Module();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        data["identifier"] = this.identifier;
+        return data; 
+    }
+}
+
+export interface ISim_Module {
+    description: string | undefined;
+    identifier: string | undefined;
 }
 
 export class PagedResultDtoOfSimulatorLessonPersonLookupTableDto implements IPagedResultDtoOfSimulatorLessonPersonLookupTableDto {
@@ -36900,6 +37510,7 @@ export class SimulatorDto implements ISimulatorDto {
     inUse!: boolean | undefined;
     simulatorCode!: string | undefined;
     officeId!: number | undefined;
+    simulatorModules!: SimulatorModuleDto[] | undefined;
     id!: number | undefined;
 
     constructor(data?: ISimulatorDto) {
@@ -36919,6 +37530,11 @@ export class SimulatorDto implements ISimulatorDto {
             this.inUse = data["inUse"];
             this.simulatorCode = data["simulatorCode"];
             this.officeId = data["officeId"];
+            if (data["simulatorModules"] && data["simulatorModules"].constructor === Array) {
+                this.simulatorModules = [] as any;
+                for (let item of data["simulatorModules"])
+                    this.simulatorModules!.push(SimulatorModuleDto.fromJS(item));
+            }
             this.id = data["id"];
         }
     }
@@ -36938,6 +37554,11 @@ export class SimulatorDto implements ISimulatorDto {
         data["inUse"] = this.inUse;
         data["simulatorCode"] = this.simulatorCode;
         data["officeId"] = this.officeId;
+        if (this.simulatorModules && this.simulatorModules.constructor === Array) {
+            data["simulatorModules"] = [];
+            for (let item of this.simulatorModules)
+                data["simulatorModules"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -36950,6 +37571,7 @@ export interface ISimulatorDto {
     inUse: boolean | undefined;
     simulatorCode: string | undefined;
     officeId: number | undefined;
+    simulatorModules: SimulatorModuleDto[] | undefined;
     id: number | undefined;
 }
 
@@ -38897,6 +39519,93 @@ export interface ICreateStudentUserInput {
     setRandomPassword: boolean | undefined;
 }
 
+export class GetStudentsUserForEditOutput implements IGetStudentsUserForEditOutput {
+    profilePictureId!: string | undefined;
+    user!: UserEditDto | undefined;
+
+    constructor(data?: IGetStudentsUserForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.profilePictureId = data["profilePictureId"];
+            this.user = data["user"] ? UserEditDto.fromJS(data["user"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetStudentsUserForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetStudentsUserForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["profilePictureId"] = this.profilePictureId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IGetStudentsUserForEditOutput {
+    profilePictureId: string | undefined;
+    user: UserEditDto | undefined;
+}
+
+export class UpdateStudentUserInput implements IUpdateStudentUserInput {
+    user!: UserEditDto;
+    sendActivationEmail!: boolean | undefined;
+    setRandomPassword!: boolean | undefined;
+
+    constructor(data?: IUpdateStudentUserInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.user = new UserEditDto();
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.user = data["user"] ? UserEditDto.fromJS(data["user"]) : new UserEditDto();
+            this.sendActivationEmail = data["sendActivationEmail"];
+            this.setRandomPassword = data["setRandomPassword"];
+        }
+    }
+
+    static fromJS(data: any): UpdateStudentUserInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateStudentUserInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["sendActivationEmail"] = this.sendActivationEmail;
+        data["setRandomPassword"] = this.setRandomPassword;
+        return data; 
+    }
+}
+
+export interface IUpdateStudentUserInput {
+    user: UserEditDto;
+    sendActivationEmail: boolean | undefined;
+    setRandomPassword: boolean | undefined;
+}
+
 export class GetFreeCoursesForStudentDto implements IGetFreeCoursesForStudentDto {
     courseId!: number | undefined;
     courseName!: string | undefined;
@@ -39360,6 +40069,54 @@ export interface ISVStudentCoursesDto {
     originalPricePackageId: number | undefined;
 }
 
+export class PagedResultDtoOfSVTheoryLessonDto implements IPagedResultDtoOfSVTheoryLessonDto {
+    totalCount!: number | undefined;
+    items!: SVTheoryLessonDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfSVTheoryLessonDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(SVTheoryLessonDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfSVTheoryLessonDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfSVTheoryLessonDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfSVTheoryLessonDto {
+    totalCount: number | undefined;
+    items: SVTheoryLessonDto[] | undefined;
+}
+
 export class SVTheoryLessonDto implements ISVTheoryLessonDto {
     lessonLength!: number | undefined;
     startTime!: moment.Moment | undefined;
@@ -39432,12 +40189,59 @@ export interface ISVTheoryLessonDto {
     instructorNames: string[] | undefined;
 }
 
+export class PagedResultDtoOfSVDrivingLessonDto implements IPagedResultDtoOfSVDrivingLessonDto {
+    totalCount!: number | undefined;
+    items!: SVDrivingLessonDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfSVDrivingLessonDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items!.push(SVDrivingLessonDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfSVDrivingLessonDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfSVDrivingLessonDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfSVDrivingLessonDto {
+    totalCount: number | undefined;
+    items: SVDrivingLessonDto[] | undefined;
+}
+
 export class SVDrivingLessonDto implements ISVDrivingLessonDto {
     length!: number | undefined;
     startTime!: moment.Moment | undefined;
     completed!: boolean | undefined;
     topic!: string | undefined;
-    licenseClass!: string | undefined;
     vehicle!: string | undefined;
     instructorNames!: string[] | undefined;
 
@@ -39456,7 +40260,6 @@ export class SVDrivingLessonDto implements ISVDrivingLessonDto {
             this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
             this.completed = data["completed"];
             this.topic = data["topic"];
-            this.licenseClass = data["licenseClass"];
             this.vehicle = data["vehicle"];
             if (data["instructorNames"] && data["instructorNames"].constructor === Array) {
                 this.instructorNames = [] as any;
@@ -39479,7 +40282,6 @@ export class SVDrivingLessonDto implements ISVDrivingLessonDto {
         data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
         data["completed"] = this.completed;
         data["topic"] = this.topic;
-        data["licenseClass"] = this.licenseClass;
         data["vehicle"] = this.vehicle;
         if (this.instructorNames && this.instructorNames.constructor === Array) {
             data["instructorNames"] = [];
@@ -39495,7 +40297,6 @@ export interface ISVDrivingLessonDto {
     startTime: moment.Moment | undefined;
     completed: boolean | undefined;
     topic: string | undefined;
-    licenseClass: string | undefined;
     vehicle: string | undefined;
     instructorNames: string[] | undefined;
 }

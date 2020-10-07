@@ -661,8 +661,8 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
         if(courseId != null)
           this.selectedCourse = this.courses.find(i => i.courseId == courseId);
 
-        this.form.get('recipientFirstName').setValue(result.firstName);
-        this.form.get('recipientLastName').setValue(result.lastName);
+        this.form.get('recipientFirstName').setValue(result.recipientFirstName);
+        this.form.get('recipientLastName').setValue(result.recipientLastName);
         this.form.get('recipientStreet').setValue(result.street);
         this.form.get('recipientZipCode').setValue(result.zipCode);
         this.form.get('recipientCity').setValue(result.city);

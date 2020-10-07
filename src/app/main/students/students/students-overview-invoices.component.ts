@@ -107,4 +107,11 @@ export class StudentsOverviewInvoicesComponent extends AppComponentBase {
             this.invoices = result;
         });
     }
+
+    getPayersAddressString() {
+        if (this.student == null)
+            return '';
+
+        return this.student.payersStreet + ", " + this.student.payersZipCode + ", " + this.student.payersCity;
+    }
 }

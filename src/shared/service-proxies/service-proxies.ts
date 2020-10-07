@@ -16783,6 +16783,58 @@ export class StudentsServiceProxy {
         }
         return _observableOf<StudentCourseDto[]>(<any>null);
     }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    sendEmailToStudent(input: SendEmailToStudentInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Students/SendEmailToStudent";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSendEmailToStudent(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSendEmailToStudent(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSendEmailToStudent(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
 }
 
 @Injectable()
@@ -38246,6 +38298,8 @@ export interface IStudentInvoiceItemDto {
 export class GetEmptyStudentInvoiceForViewDto implements IGetEmptyStudentInvoiceForViewDto {
     firstName!: string | undefined;
     lastName!: string | undefined;
+    recipientFirstName!: string | undefined;
+    recipientLastName!: string | undefined;
     street!: string | undefined;
     city!: string | undefined;
     zipCode!: string | undefined;
@@ -38264,6 +38318,8 @@ export class GetEmptyStudentInvoiceForViewDto implements IGetEmptyStudentInvoice
         if (data) {
             this.firstName = data["firstName"];
             this.lastName = data["lastName"];
+            this.recipientFirstName = data["recipientFirstName"];
+            this.recipientLastName = data["recipientLastName"];
             this.street = data["street"];
             this.city = data["city"];
             this.zipCode = data["zipCode"];
@@ -38286,6 +38342,8 @@ export class GetEmptyStudentInvoiceForViewDto implements IGetEmptyStudentInvoice
         data = typeof data === 'object' ? data : {};
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
+        data["recipientFirstName"] = this.recipientFirstName;
+        data["recipientLastName"] = this.recipientLastName;
         data["street"] = this.street;
         data["city"] = this.city;
         data["zipCode"] = this.zipCode;
@@ -38301,6 +38359,8 @@ export class GetEmptyStudentInvoiceForViewDto implements IGetEmptyStudentInvoice
 export interface IGetEmptyStudentInvoiceForViewDto {
     firstName: string | undefined;
     lastName: string | undefined;
+    recipientFirstName: string | undefined;
+    recipientLastName: string | undefined;
     street: string | undefined;
     city: string | undefined;
     zipCode: string | undefined;
@@ -39103,6 +39163,13 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
     licenseClasses!: string[] | undefined;
     licenseClassesAlreadyOwned!: string[] | undefined;
     ssn!: string | undefined;
+    payersSocialSecurityNo!: string | undefined;
+    payersName!: string | undefined;
+    payersStreet!: string | undefined;
+    payersZipCode!: string | undefined;
+    payersCity!: string | undefined;
+    payersPhone!: string | undefined;
+    payersEmail!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditStudentDto) {
@@ -39139,6 +39206,13 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
                     this.licenseClassesAlreadyOwned!.push(item);
             }
             this.ssn = data["ssn"];
+            this.payersSocialSecurityNo = data["payersSocialSecurityNo"];
+            this.payersName = data["payersName"];
+            this.payersStreet = data["payersStreet"];
+            this.payersZipCode = data["payersZipCode"];
+            this.payersCity = data["payersCity"];
+            this.payersPhone = data["payersPhone"];
+            this.payersEmail = data["payersEmail"];
             this.id = data["id"];
         }
     }
@@ -39175,6 +39249,13 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
                 data["licenseClassesAlreadyOwned"].push(item);
         }
         data["ssn"] = this.ssn;
+        data["payersSocialSecurityNo"] = this.payersSocialSecurityNo;
+        data["payersName"] = this.payersName;
+        data["payersStreet"] = this.payersStreet;
+        data["payersZipCode"] = this.payersZipCode;
+        data["payersCity"] = this.payersCity;
+        data["payersPhone"] = this.payersPhone;
+        data["payersEmail"] = this.payersEmail;
         data["id"] = this.id;
         return data; 
     }
@@ -39196,6 +39277,13 @@ export interface ICreateOrEditStudentDto {
     licenseClasses: string[] | undefined;
     licenseClassesAlreadyOwned: string[] | undefined;
     ssn: string | undefined;
+    payersSocialSecurityNo: string | undefined;
+    payersName: string | undefined;
+    payersStreet: string | undefined;
+    payersZipCode: string | undefined;
+    payersCity: string | undefined;
+    payersPhone: string | undefined;
+    payersEmail: string | undefined;
     id: number | undefined;
 }
 
@@ -39935,6 +40023,46 @@ export interface IStudentCourseDto {
     enrollmentDate: moment.Moment | undefined;
     pricePackage: PricePackageDto | undefined;
     originalPricePackageId: number | undefined;
+}
+
+export class SendEmailToStudentInput implements ISendEmailToStudentInput {
+    studentId!: number | undefined;
+    message!: string | undefined;
+
+    constructor(data?: ISendEmailToStudentInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.studentId = data["studentId"];
+            this.message = data["message"];
+        }
+    }
+
+    static fromJS(data: any): SendEmailToStudentInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new SendEmailToStudentInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["studentId"] = this.studentId;
+        data["message"] = this.message;
+        return data; 
+    }
+}
+
+export interface ISendEmailToStudentInput {
+    studentId: number | undefined;
+    message: string | undefined;
 }
 
 export class SVPersonalDataDto implements ISVPersonalDataDto {

@@ -246,7 +246,8 @@
 
 <div class="m--margin-top-30">
     <div class="m--align-right">
-
+        <button type="button" (click)="openSendMessage()"
+        class="btn btn-primary mr-5"><i class="fa fa-envelope"></i><span>{{l("SendEmail")}}</span></button>
         <button type="button" (click)="openAssignToCourseModal()"
             class="btn btn-primary mr-5">{{l("AssignToCourse")}}</button>
         <button type="button" (click)="editStudent()" class="btn btn-primary mr-5">{{l("EditStudentData")}}</button>
@@ -261,3 +262,4 @@
 <createOrEditStudentUserModal #createOrEditStudentUserModal (modalSave)="userAccountCreated()">
 </createOrEditStudentUserModal>
 <assignStudentToCourseModal #assignStudentToCourseModal (modalSave)="assignToCourse()"></assignStudentToCourseModal>
+<sendMessageToStudentModal #sendMessageToStudentModal (modalSave)="sendMail()"></sendMessageToStudentModal>

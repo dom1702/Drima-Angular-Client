@@ -17,6 +17,7 @@ import { CreateOrEditStudentUserModalComponent } from './create-or-edit-student-
 import { CountriesService } from '@app/shared/common/services/countries.service';
 import { LanguagesService } from '@app/shared/common/services/languages.service';
 import { AssignStudentToCourseModalComponent } from './assign-student-to-course-modal.component';
+import { SendMessageToStudentModalComponent } from './send-message-to-student-modal.component';
 
 @Component({
     selector: 'students-overview-overview',
@@ -29,6 +30,7 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     @ViewChild('createOrEditStudentModal') createOrEditStudentModal: CreateOrEditStudentModalComponent;
     @ViewChild('createOrEditStudentUserModal') createOrEditStudentUserModal: CreateOrEditStudentUserModalComponent;
     @ViewChild('assignStudentToCourseModal') assignStudentToCourseModal: AssignStudentToCourseModalComponent;
+    @ViewChild('sendMessageToStudentModal') sendMessageToStudentModal: SendMessageToStudentModalComponent;
 
     @Input() student: StudentDto;
     @Input() pricePackageName: string;
@@ -161,7 +163,15 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
         setTimeout(() => {
             this.parentOverview.CallCourseChanged();
         }, 1000);
-   
+    }
+
+    openSendMessage() : void{
+        this.sendMessageToStudentModal.show(this.student.id, this.student.email);
+    }
+
+    sendMail() : void
+    {
+
     }
 
     userAccountCreated() {

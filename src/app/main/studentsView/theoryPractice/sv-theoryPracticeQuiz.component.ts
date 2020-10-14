@@ -103,9 +103,9 @@ export class SVTheoryPracticeQuizComponent extends AppComponentBase implements O
     }
 
     get quizMainTitle() : string{
-        if(this.currentQuizSession != null)
+        if(this.currentQuizSession != null && !this.currentQuizSession.isMarkable)
         { 
-            return this.currentQuizSession.predefindedQuizId;
+            return "Theory Practice"
         }
         else
         {

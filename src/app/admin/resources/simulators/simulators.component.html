@@ -116,10 +116,6 @@
                                         {{l('Name')}}
                                         <p-sortIcon field="simulator.name"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="name">
-                                        {{l('SimulatorType')}}
-                                        <p-sortIcon field="simulator.simulatorType"></p-sortIcon>
-                                    </th>
                                     <th style="width: 150px" pSortableColumn="model">
                                         {{l('Model')}}
                                         <p-sortIcon field="simulator.model"></p-sortIcon>
@@ -167,10 +163,6 @@
 											<span class="ui-column-title"> {{l('Name')}}</span>
 											{{record.simulator.name}}
                                         </td>
-                                        <td style="width:150px">
-											<span class="ui-column-title"> {{l('SimulatorType')}}</span>
-											{{l(simType[record.simulator.simulatorType])}}
-										</td>
                                     <td style="width:150px">
 											<span class="ui-column-title"> {{l('Model')}}</span>
 											{{record.simulator.model}}

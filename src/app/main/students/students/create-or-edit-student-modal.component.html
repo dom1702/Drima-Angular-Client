@@ -120,7 +120,41 @@
 						<label>{{l("SSN")}}</label>
 						<input type="text" class="form-control" [(ngModel)]="student.ssn" name="SSN" />
 					</div>
+					<h4>{{l('PayersData')}}</h4>
+					<div class="form-group">
+						<label>{{l("PayersSSN")}}</label>
+						<input type="text" class="form-control" [(ngModel)]="student.payersSocialSecurityNo" name="PayersSSN" />
+					</div>
+					<div class="form-group">
+						<label for="Student_PayersName">{{l("PayersName")}}</label>
+						<input type="text" class="form-control" [(ngModel)]="student.payersName"
+							name="PayersName" />
+					</div>
+					<div class="form-group">
+						<label for="Student_PayersStreet">{{l("PayersStreet")}}</label>
+						<input type="text"class="form-control" [(ngModel)]="student.payersStreet"
+							name="PayersStreet" />
+					</div>
+					<div class="form-group">
+						<label for="Student_PayersZipCode">{{l("PayersZipCode")}}</label>
+						<input type="text" class="form-control" [(ngModel)]="student.payersZipCode"
+							name="PayersZipCode" />
+					</div>
+					<div class="form-group">
+						<label for="Student_PayersCity">{{l("PayersCity")}}</label>
+						<input type="text" class="form-control" [(ngModel)]="student.payersCity"
+							name="PayersCity" />
+					</div>
 
+					<div class="form-group">
+						<label for="Student_PayersEmail">{{l("PayersEmail")}}</label>
+						<input type="text" class="form-control" [(ngModel)]="student.payersEmail"
+							name="PayersEmail"  />
+					</div>
+					<div class="form-group">
+						<label for="Student_PayersPhoneNumber">{{l("PayersPhoneNumber")}}</label>
+						<input type="text" class="form-control" [(ngModel)]="student.payersPhone" name="PayersPhoneNumber" />
+					</div>
 				
 				</div>
 				<div class="modal-footer">

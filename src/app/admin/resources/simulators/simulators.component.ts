@@ -37,8 +37,6 @@ export class SimulatorsComponent extends AppComponentBase {
     inUseFilter = -1;
         officeNameFilter = '';
 
-    simType : SimulatorType;
-
 
     _entityTypeFullName = 'Drima.Resources.Simulator';
     entityHistoryEnabled = false;

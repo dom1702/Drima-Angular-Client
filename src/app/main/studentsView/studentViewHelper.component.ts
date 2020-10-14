@@ -33,7 +33,8 @@ export class StudentViewHelper extends AppComponentBase {
         this._studentViewService.getCoursesWithPP().subscribe((result) => 
         {
             this.studentsCourses = result;
-            this.selectedCourse = this.studentsCourses[0];
+            if(this.studentsCourses.length > 0)
+                this.selectedCourse = this.studentsCourses[0];
            
             this.checkDispatch();
         });

@@ -1,7 +1,7 @@
 import { AfterViewChecked, Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { CreateOrUpdateUserInput, OrganizationUnitDto, PasswordComplexitySetting, ProfileServiceProxy, UserEditDto, UserRoleDto, UserServiceProxy, StudentsServiceProxy, CreateStudentUserInput, StudentDto } from '@shared/service-proxies/service-proxies';
+import { CreateOrUpdateUserInput, OrganizationUnitDto, PasswordComplexitySetting, ProfileServiceProxy, UserEditDto, UserRoleDto, UserServiceProxy, StudentsServiceProxy, CreateStudentUserInput, StudentDto, UpdateStudentUserInput } from '@shared/service-proxies/service-proxies';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
@@ -28,18 +28,14 @@ export class CreateOrEditStudentUserModalComponent extends AppComponentBase {
     passwordComplexitySetting: PasswordComplexitySetting = new PasswordComplexitySetting();
 
     user: UserEditDto = new UserEditDto();
-    roles: UserRoleDto[];
     sendActivationEmail = true;
     setRandomPassword = true;
     passwordComplexityInfo = '';
     profilePicture: string;
 
-    userLastName : string;
-    userFirstName : string;
+    userLastName: string;
+    userFirstName: string;
     userEmail: string;
-
-    allOrganizationUnits: OrganizationUnitDto[];
-    memberedOrganizationUnits: string[];
 
     student: StudentDto;
 
@@ -52,32 +48,53 @@ export class CreateOrEditStudentUserModalComponent extends AppComponentBase {
         super(injector);
     }
 
-    show(lastName: string, firstName: string, email: string, student: StudentDto, userId?: number): void {
+    show(lastName: string, firstName: string, email: string, student: StudentDto): void {
 
-        console.log("Called show");
-        if (!userId) {
+  
             this.active = true;
             this.setRandomPassword = true;
             this.sendActivationEmail = true;
-           
-          
+
+
             this.userLastName = lastName;
             this.userFirstName = firstName;
             this.userEmail = email;
             this.student = student;
-        }
+    
+    
+        var studentUserId = student.userId;
+        if(studentUserId == null)
+            studentUserId = undefined;
 
-        this._userService.getUserForEdit(userId).subscribe(userResult => {
+            console.log(studentUserId);
+
+        this._studentService.getStudentsUserForEdit(studentUserId).subscribe(userResult => {
             this.user = userResult.user;
-            this.roles = userResult.roles;
+
+            if(studentUserId == undefined)
+            {
+                this.active = true;
+                
+                this.setRandomPassword = true;
+                this.sendActivationEmail = true;
+    
+                this.userLastName = lastName;
+                this.userFirstName = firstName;
+                this.userEmail = email;
+                this.student = student;
+            }
+            else
+            {
+          
+            this.userLastName = this.user.surname;
+            this.userFirstName = this.user.name;
+            this.userEmail = this.user.emailAddress;
+
             this.canChangeUserName = this.user.userName !== AppConsts.userManagement.defaultAdminUserName;
 
-            this.allOrganizationUnits = userResult.allOrganizationUnits;
-            this.memberedOrganizationUnits = userResult.memberedOrganizationUnits;
+            
 
-            this.getProfilePicture(userResult.profilePictureId);
-
-            if (userId) {
+            if (student.userId) {
                 this.active = true;
 
                 setTimeout(() => {
@@ -86,6 +103,9 @@ export class CreateOrEditStudentUserModalComponent extends AppComponentBase {
 
                 this.sendActivationEmail = false;
             }
+        }
+
+        this.getProfilePicture(userResult.profilePictureId);
 
             this._profileService.getPasswordComplexitySetting().subscribe(passwordComplexityResult => {
                 this.passwordComplexitySetting = passwordComplexityResult.setting;
@@ -143,35 +163,48 @@ export class CreateOrEditStudentUserModalComponent extends AppComponentBase {
     }
 
     save(): void {
-        let input = new CreateStudentUserInput();
 
-        input.user = this.user;
-        input.user.name = this.userLastName;
-        input.user.surname = this.userFirstName; 
-        input.user.emailAddress = this.userEmail;
+        if (!this.user.id) {
+            let input = new CreateStudentUserInput();
 
-        input.setRandomPassword = this.setRandomPassword;
-        input.sendActivationEmail = this.sendActivationEmail;
+            input.user = this.user;
+            input.user.name = this.userLastName;
+            input.user.surname = this.userFirstName;
+            input.user.emailAddress = this.userEmail;
 
-        input.student = this.student;
+            input.setRandomPassword = this.setRandomPassword;
+            input.sendActivationEmail = this.sendActivationEmail;
 
-        this.saving = true;
-        this._studentService.createUserAsync(input)
-            .pipe(finalize(() => { this.saving = false; }))
-            .subscribe(() => {
-                this.notify.info(this.l('SavedSuccessfully'));
-                this.close();
-                this.modalSave.emit(null);
-            });
+            input.student = this.student;
+
+            this.saving = true;
+            this._studentService.createUserAsync(input)
+                .pipe(finalize(() => { this.saving = false; }))
+                .subscribe(() => {
+                    this.notify.info(this.l('SavedSuccessfully'));
+                    this.close();
+                    this.modalSave.emit(null);
+                });
+        }
+        else{
+            let input = new UpdateStudentUserInput();
+            input.user = this.user;
+            input.setRandomPassword = this.setRandomPassword;
+            input.sendActivationEmail = this.sendActivationEmail;
+
+            this._studentService.updateStudentUserAsync(input)
+                .pipe(finalize(() => { this.saving = false; }))
+                .subscribe(() => {
+                    this.notify.info(this.l('SavedSuccessfully'));
+                    this.close();
+                    this.modalSave.emit(null);
+                });
+        }
     }
 
     close(): void {
         this.active = false;
         this.modal.hide();
         console.log("Called close");
-    }
-
-    getAssignedRoleCount(): number {
-        return _.filter(this.roles, { isAssigned: true }).length;
     }
 }

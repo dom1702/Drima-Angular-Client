@@ -95,7 +95,7 @@ export class StudentsOverviewPricePackageComponent extends AppComponentBase {
     }
 
     editPricePackage() {
-        this.createOrEditPricePackageModal.show(this.selectedStudentCourse.pricePackageId, true, false);
+        this.createOrEditPricePackageModal.show(this.selectedStudentCourse.pricePackageId, true, false, false);
     }
 
     setPricePackageIdNull() {

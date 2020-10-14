@@ -7,6 +7,8 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { StudentViewHelper } from '../studentViewHelper.component';
+import { Table } from 'primeng/table';
+import { LazyLoadEvent, Paginator } from 'primeng/primeng';
 
 @Component({
     templateUrl: './sv-theoryLessons.component.html',
@@ -15,6 +17,9 @@ import { StudentViewHelper } from '../studentViewHelper.component';
 })
 
 export class SVTheoryLessonsComponent extends AppComponentBase implements OnInit {
+
+    @ViewChild('dataTable') dataTable: Table;
+    @ViewChild('paginator') paginator: Paginator;
     
     selectedStudentCourse: CourseDto;
     studentCourses: CourseDto[];
@@ -50,6 +55,9 @@ export class SVTheoryLessonsComponent extends AppComponentBase implements OnInit
     {
         this.studentCourses = [];
 
+        if(this._helper.studentsCourses.length == 0)
+        return;
+
         for(var i = 0; i < this._helper.studentsCourses.length; i++)
         {
             this.studentCourses.push(this._helper.studentsCourses[i].course);
@@ -60,6 +68,9 @@ export class SVTheoryLessonsComponent extends AppComponentBase implements OnInit
 
     loadTheoryLessons()
     {
+        if(this.selectedStudentCourse == null)
+            return;
+
         abp.ui.setBusy(undefined, '', 1);
         this._studentViewService.getPredefinedTheoryLessonsOfCourse(this.selectedStudentCourse.id).subscribe((result) => 
         {
@@ -67,11 +78,25 @@ export class SVTheoryLessonsComponent extends AppComponentBase implements OnInit
             this.theoryLessons = result;
         });
 
-        this._studentViewService.getAllTheoryLessonsOfStudent(this.selectedStudentCourse.id).subscribe((result) => 
-        {
+        this.getTheoryLessons();
+    }
+
+    getTheoryLessons(event?: LazyLoadEvent) {
+
+        if(this.selectedStudentCourse == null)
+            return;
+            
+        this.primengTableHelper.showLoadingIndicator();
+        console.log(this.primengTableHelper.defaultRecordsCountPerPage);
+
+        this._studentViewService.getAllTheoryLessonsOfStudent(
+            this.selectedStudentCourse.id
+        ).subscribe(result => {
+            this.primengTableHelper.totalRecordsCount = result.totalCount;
+            console.log(result.items);
+            this.primengTableHelper.records = result.items;
+            this.primengTableHelper.hideLoadingIndicator();
             abp.ui.clearBusy();
-            this.theoryLessonsList = result;
-            console.log(result);
         });
     }
 

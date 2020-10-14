@@ -112,6 +112,7 @@ import { SVLicenseClassDimensionInfoComponent } from './studentsView/theoryPract
 import { LicenseClassLookupTableModalComponent } from '@app/shared/common/lookup/licenseClass-lookup-table-modal.component';
 
 import { CheckBoxModule } from '@syncfusion/ej2-angular-buttons';
+import { SendMessageToStudentModalComponent } from './students/students/send-message-to-student-modal.component';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -227,7 +228,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       EnrollmentsComponent,
       ViewEnrollmentModalComponent,		
       CreateOrEditEnrollmentModalComponent,
-      LicenseClassLookupTableModalComponent
+      LicenseClassLookupTableModalComponent,
+      SendMessageToStudentModalComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

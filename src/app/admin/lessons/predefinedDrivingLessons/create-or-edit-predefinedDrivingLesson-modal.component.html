@@ -44,6 +44,22 @@
 									<label for="PredefinedDrivingLesson_NotRequiredIfClasses">{{l("NotRequiredIfClasses")}}</label>
 									<input type="text" id="PredefinedDrivingLesson_NotRequiredIfClasses" class="form-control" [(ngModel)]="predefinedDrivingLesson.notRequiredIfClasses" name="NotRequiredIfClasses"    />
 								</div>
+
+								<div class="form-group">
+									<label for="PredefinedDrivingLesson_SimulatorModuleIdentifier">{{l("SimulatorModuleIdentifier")}}</label>
+									<input type="text" id="PredefinedDrivingLesson_SimulatorModuleIdentifier" class="form-control" [(ngModel)]="predefinedDrivingLesson.simulatorModuleIdentifier" name="SimulatorModuleIdentifier"    />
+								</div>
+
+								<div class="m-checkbox-list">
+									<label for="PredefinedDrivingLesson_CanBeDoneOnSimulator" class="m-checkbox">
+										<input id="PredefinedDrivingLesson_CanBeDoneOnSimulator" type="checkbox" name="CanBeDoneOnSimulator"
+											[(ngModel)]="predefinedDrivingLesson.canBeDoneOnSimulator">
+										{{l("CanBeDoneOnSimulator")}}
+										<span></span>
+									</label>
+								</div>
+
+								
 					
 
                 </div>

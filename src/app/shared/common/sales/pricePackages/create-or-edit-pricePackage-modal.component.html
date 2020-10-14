@@ -22,6 +22,14 @@
                             name="Name" readonly />
                     </div>
 
+                    <div class="form-group">
+                        <label for="PricePackage_Description">{{l("Description")}}</label>
+                        <input *ngIf="descriptionEditable" type="text" id="PricePackage_Description" class="form-control" [(ngModel)]="pricePackage.description"
+                            name="Description" />
+                            <input *ngIf="!descriptionEditable" type="text" id="PricePackage_Description" class="form-control" [(ngModel)]="pricePackage.description"
+                            name="Description" readonly />
+                    </div>
+
                     <label for="Products">{{l("Products")}}</label>
                     <form [formGroup]="itemForm">
                         <table class="table">

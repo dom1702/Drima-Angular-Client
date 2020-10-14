@@ -60,15 +60,6 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <label for="CompletedFilterSelect">{{l("Completed")}}</label>
-                                <select class="form-control" name="CompletedFilter" id="CompletedFilterSelect"
-                                    [(ngModel)]="completedFilter">
-                                    <option value="-1">{{l("All")}}</option>
-                                    <option value="0">{{l("False")}}</option>
-                                    <option value="1">{{l("True")}}</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="TopicFilter">{{l("Topic")}}</label>
                                     <input type="text" class="form-control" id="TopicFilter" name="topicFilter"
@@ -129,15 +120,14 @@
                                         {{l('Simulator')}}
                                         <p-sortIcon field="simulatorName"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="length">
+                                    <th style="width: 100px" pSortableColumn="length">
                                         {{l('Length')}}
                                         <p-sortIcon field="simulatorLesson.length"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="completed">
-                                        {{l('Completed')}}
-                                        <p-sortIcon field="simulatorLesson.completed"></p-sortIcon>
+                                    <th style="width: 150px" pSortableColumn="length">
+                                        {{l('LessonState')}}
+                                        <p-sortIcon field="simulatorLesson.lessonState"></p-sortIcon>
                                     </th>
-
 
                                 </tr>
                             </ng-template>
@@ -153,6 +143,11 @@
                                                 <li>
                                                     <a href="javascript:;"
                                                         (click)="viewSimulatorLessonModal.show(record)">{{l('View')}}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;"
+                                                        *ngIf="record.simulatorLesson.feedbackPdfAvailableToDownload"
+                                                        (click)="downloadFeedbackPdf(record.simulatorLesson.id)">{{l('DownloadFeedbackPdf')}}</a>
                                                 </li>
                                                 <li>
                                                     <a href="javascript:;"
@@ -183,16 +178,13 @@
                                         {{record.simulatorName}}
                                     </td>
                                   
-                                    <td style="width:150px">
+                                    <td style="width:100px">
                                         <span class="ui-column-title"> {{l('Length')}}</span>
                                         {{record.simulatorLesson.length}}
                                     </td>
                                     <td style="width:150px">
-                                        <span class="ui-column-title"> {{l('Completed')}}</span>
-                                        <div *ngIf="record.simulatorLesson.completed" class="text-center"><i
-                                                class="fa fa-check-circle kt--font-success" title="True"></i></div>
-                                        <div *ngIf="!record.simulatorLesson.completed" class="text-center"><i
-                                                class="fa fa-times-circle" title="False"></i></div>
+                                        <span class="ui-column-title"> {{l('LessonState')}}</span>
+                                        {{l(lessonState[record.simulatorLesson.lessonState])}}
                                     </td>
                                  
 

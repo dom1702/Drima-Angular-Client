@@ -1,6 +1,6 @@
 import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SimulatorLessonsServiceProxy, SimulatorLessonDto  } from '@shared/service-proxies/service-proxies';
+import { SimulatorLessonsServiceProxy, SimulatorLessonDto, SimulatorLessonState  } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -35,7 +35,7 @@ export class SimulatorLessonsComponent extends AppComponentBase {
         personLastNameFilter = '';
         simulatorNameFilter = '';
 
-
+        lessonState = SimulatorLessonState;
 
 
     constructor(
@@ -71,6 +71,7 @@ export class SimulatorLessonsComponent extends AppComponentBase {
         ).subscribe(result => {
             this.primengTableHelper.totalRecordsCount = result.totalCount;
             this.primengTableHelper.records = result.items;
+            console.log(result.items);
             this.primengTableHelper.hideLoadingIndicator();
         });
     }
@@ -81,6 +82,15 @@ export class SimulatorLessonsComponent extends AppComponentBase {
 
     createSimulatorLesson(): void {
         this.createOrEditSimulatorLessonModal.show();
+    }
+
+    downloadFeedbackPdf(id : number) : void 
+    {
+        this._simulatorLessonsServiceProxy.downloadFeedbackPdf(id)
+        .subscribe((result) => {
+           
+            this._fileDownloadService.downloadTempFile(result);
+        });
     }
 
     deleteSimulatorLesson(simulatorLesson: SimulatorLessonDto): void {

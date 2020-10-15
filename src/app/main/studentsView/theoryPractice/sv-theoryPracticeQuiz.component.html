@@ -69,35 +69,35 @@
                                 <div class="row mb-4 mt-2"><!--Questions-->
                                     <p-toast key="trafficSituationToast" position="center" [modal]="true" closable="true" life="7000"></p-toast>
                                     <div class="col-sm-12">
-                                        <h4 class="m-portlet__head-text">
+                                        <h4 class="m-portlet__head-text mb-4" style="text-align:center;">
                                             {{currentQuizSession.quiz[questionContentIndex].quest}}
                                         </h4>
                                         <div *ngIf="currentQuizSession.quiz[questionContentIndex].displayType == 1; then pictureContainer else defaultContainer"></div>
                                         <ng-template #pictureContainer>
                                             <div class="row justify-content-center">
-                                                <div class="col-sm-4 mb-2">
+                                                <div class="col-sm-4 mb-2" style="text-align:center;">   
                                                     <div>
                                                         <figure class="figure">
                                                             <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[0]}} 
                                                                 class="figure-img img-fluid" 
                                                                 style="max-width:128px; height:auto; width:100%;">       
-                                                            <figcaption class="figure-caption">Sign 1</figcaption>
+                                                            <figcaption class="figure-caption text-center">Sign 1</figcaption>
                                                         </figure> 
                                                     </div>
                                                     <div>
                                                         <button #pic01 class="btn btn-secondary mr-5" (click)="setQuestionAnswerPictureButton(0)">                           
                                                             Select
                                                         </button>
-                                                    </div>                              
+                                                    </div>                                      
                                                 </div>
                                                 
-                                                <div class="col-sm-4 mb-2">
+                                                <div class="col-sm-4 mb-2" style="text-align:center;">
                                                     <div>
                                                         <figure class="figure">
                                                             <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[1]}} 
                                                                 class="figure-img img-fluid" 
                                                                 style="max-width:128px; height:auto; width:100%;">       
-                                                            <figcaption class="figure-caption">Sign 2</figcaption>
+                                                            <figcaption class="figure-caption text-center">Sign 2</figcaption>
                                                         </figure>
                                                     </div>
                                                      <div>
@@ -107,13 +107,13 @@
                                                      </div>                          
                                                 </div>
                                                 
-                                                <div class="col-sm-4 mb-2">
+                                                <div class="col-sm-4 mb-2" style="text-align:center;">
                                                     <div>
                                                         <figure class="figure">
                                                             <img src={{currentQuizSession.quiz[questionContentIndex].answerOptions[2]}} 
                                                                 class="figure-img img-fluid" 
                                                                 style="max-width:128px; height:auto; width:100%;">       
-                                                            <figcaption class="figure-caption">Sign 3</figcaption>
+                                                            <figcaption class="figure-caption text-center">Sign 3</figcaption>
                                                         </figure> 
                                                     </div>                        
                                                     <div>
@@ -128,7 +128,7 @@
                                             
                                             <div *ngIf="currentQuizSession.quiz[questionContentIndex].displayType == 2; then selectContainer else singleChoiceContainer"></div>
                                             <ng-template #selectContainer>
-                                                <div class="mb-1 mt-1">
+                                                <div class="mb-3 mt-1">
                                                     <img src={{currentQuizSession.quiz[questionContentIndex].pictureUrl}} style="max-width:2000px; height:auto; width:100%;"> 
                                                 </div> 
                                                 <div class="row justify-content-center">
@@ -169,28 +169,31 @@
 
                                 <hr class="ng-tns-c19-1"> 
                                     
-                                <div class="row"> <!--Quiz Buttons-->                           
-                                    <div class="col-sm-8 mb-1"> 
-                                        <button class="btn btn-primary mr-5" type="button"
-                                            [disabled]="!currentQuizSession.isMarkable"    
+                                <div class="row"> <!--Quiz Buttons--> 
+                                    <div class="col-6 mb-1">
+                                        <h6 class="m-portlet__head-text" *ngIf="currentQuizSession.quiz[questionContentIndex].selectedAnswer > -1">
+                                            Selected answer:  {{parsedAnswer}}
+                                        </h6>
+                                    </div>
+                                    <div class="col-sm-4 mb-1">
+                                        <button 
+                                            *ngIf="currentQuizSession.isMarkable"
+                                            class="btn btn-primary mr-5" type="button"
                                             (click)="markQuestion()">  
                                             Mark                 
-                                        </button>                    
-                                        <button type="button" class="btn btn-primary mr-5"
-                                            [disabled]="!currentQuizSession.hasAnswer(questionContentIndex)"
-                                            (click)="nextPage(false)">  
-                                            Next                 
-                                        </button>                                                                     
+                                        </button>                                                                      
                                         <button type="button" class="btn btn-primary mr-5"
                                             *ngIf="showDirectionalLinks"                      
                                             (click)="finishQuiz()">  
                                                 Results                 
-                                        </button>
-                                    </div> 
-                                    <div class="col-sm-4 mb-1">
-                                        <h6 class="m-portlet__head-text" *ngIf="currentQuizSession.quiz[questionContentIndex].selectedAnswer > -1">
-                                            Selected answer:  {{parsedAnswer}}
-                                        </h6>   
+                                        </button>                                         
+                                    </div>                                                                                                                              
+                                    <div class="col-2 mb-1"> 
+                                        <button type="button" class="btn btn-primary mr-5"
+                                        [disabled]="!currentQuizSession.hasAnswer(questionContentIndex)"
+                                        (click)="nextPage(false)">  
+                                        Next                 
+                                    </button>                  
                                     </div>                              
                                 </div>
                             </ng-template>

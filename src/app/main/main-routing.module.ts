@@ -47,7 +47,6 @@ import { SVTheoryPracticeQuizComponent } from './studentsView/theoryPractice/sv-
                     { path: 'studentsView/theoryLessons', component: SVTheoryLessonsComponent, data: { permission: 'StudentView' } },
                     { path: 'studentsView/drivingLessons', component: SVDrivingLessonComponent, data: { permission: 'StudentView' }},
                     { path: 'studentsView/frequentlyAskedQuestions', component: SVFrequentlyAskedQuestionsComponent, data: { permission: 'StudentView' }},
-                    { path: 'studentsView/theoryPractice', component: SVTheoryPracticeComponent, data: { permission: 'StudentView' }},
                     { path: 'studentsView/invoices', component: SVInvoicesComponent, data: { permission: 'StudentView' }},
                     { 
                         path: 'studentsView/theoryCourse/quiz', 

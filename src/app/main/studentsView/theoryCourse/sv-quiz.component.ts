@@ -161,7 +161,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
         {
             this.message.confirm('Confirm', "eLesson has to be started again if you cancel it, are you sure?",
             (isConfirmed) => {
-                if (isConfirmed) {            
+                if (isConfirmed) {                               
                     this.enableQuizPart(this.currentSession.progress);  
                 }                 
             });
@@ -349,12 +349,12 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             //console.log("sheet not completed yet " + this.currentTimer.toString());
             this.showMessage("Sheet not completed yet.", 'You need to answer all questions correctly!');
         }
-        else if(this.currentTimer > 0)
+        /*else if(this.currentTimer > 0)
         {
            // console.log("timer is not 0 yet " + this.currentTimer.toString());
             this.showMessage("Minimum time not reached yet!", 'You need to wait for another ' + 
                 this.getTimeInMinutes(this.currentTimer) + "!");
-        }
+        }*/
         else {
            // console.log("enable next sheet " + this.currentTimer.toString());
             this.enableQuizPart(this.currentSession.progress+1);
@@ -449,7 +449,7 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
     }
 
     startTimer(timerValue : number) {        
-        this.currentTimer = 1; //(timerValue * 60);
+        this.currentTimer = timerValue * 60; //(timerValue * 60);
         let intervalId = setInterval(() => {
             this.currentTimer =  (timerValue * 60);
             if(this.currentTimer === 0) clearInterval(intervalId)           
@@ -477,9 +477,19 @@ export class SVQuizComponent extends AppComponentBase implements OnInit, OnDestr
             if(index == 1)
                 tempAnswer = question.answer2;
             if(index == 2)
+            {
+                if(question.answer3 == "")
+                    continue;
+                else
                 tempAnswer = question.answer3;
-            if(index == 3)
-                tempAnswer = question.answer4; 
+            }
+            if(index == 3 )
+            {
+                if(question.answer4 == "")
+                    continue;
+                else
+                tempAnswer = question.answer4;
+            }           
             answers.push(tempAnswer);            
         }
         temp.answerOptions = answers;

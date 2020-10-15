@@ -1,3 +1,11 @@
+
+<div class="row justify-content-center">
+    <button class="btn btn-primary mr-5" type="button"   
+    routerLink="/app/main/studentsView/theoryPractice/licenseClassTasksOverview">  
+    Back to overview                 
+    </button>
+</div>
+
 <h4 class="m-portlet__head-text">
     Number of correct answers:
 </h4>
@@ -43,19 +51,14 @@
     </h6>
 </div>
 
-<button class="btn btn-primary mr-5" type="button"   
-    routerLink="/app/main/studentsView/theoryPractice/licenseClassTasksOverview">  
-    Start over                 
-</button>
-
 <div *ngIf="evaluatedQuiz.incorrectQuestions">
-    <hr class="ng-tns-c19-1">
+    <hr style="height:2px;border-width:10;color:gray;background-color:gray">
 
-    <h2 class="m-portlet__head-text mb-2">
+    <h2 class="m-portlet__head-text mb-2" style="text-align:center;">
         Feedback
     </h2>
 
-    <p-scrollPanel [style]="{width: '100%', height: '450px'}" refresh>
+    <p-scrollPanel [style]="{width: '100%', height: '650px'}" refresh>
         <div *ngFor="let question of evaluatedQuiz.incorrectQuestions">
 
             <h4 class="m-portlet__head-text"> <!--Question-->
@@ -171,7 +174,7 @@
                 </div>         
             </div>
             
-            <hr class="ng-tns-c19-1">  
+            <hr style="height:2px;border-width:10;color:gray;background-color:gray">   
         </div>
     </p-scrollPanel>
 </div>

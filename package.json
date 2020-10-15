@@ -57,7 +57,7 @@
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.28",
-    "ng-multiselect-dropdown": "^0.2.10",
+    "ng-multiselect-dropdown": "^0.2.4",
     "ng-recaptcha": "^4.3.0",
     "ng2-file-upload": "^1.4.0",
     "ngx-bootstrap": "^4.3.0",

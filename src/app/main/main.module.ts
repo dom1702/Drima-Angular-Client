@@ -228,7 +228,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       ViewEnrollmentModalComponent,		
       CreateOrEditEnrollmentModalComponent,
       LicenseClassLookupTableModalComponent,
-      SendMessageToStudentModalComponent
+      SendMessageToStudentModalComponent,
+      SVTheoryPracticeComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

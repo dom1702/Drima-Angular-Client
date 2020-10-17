@@ -55,7 +55,7 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
 
     startTime: Date;
 
-    vehicles : GetAllVehiclesForSchedulerDto;
+    //vehicles : GetAllVehiclesForSchedulerDto;
 
     eventTypeFilter: any = { drivingLessons: true, simulatorLessons: false, theoryLessons: true, otherEvents: true };
 
@@ -86,11 +86,11 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
         
         this.updateCurrentView();
 
-        this.vehicles = new GetAllVehiclesForSchedulerDto();
-        this.vehicles.vehicles = [];
-        this._schedulerServiceProxy.getAllVehicles().subscribe(result => {
-            this.vehicles = result;
-        });
+        // this.vehicles = new GetAllVehiclesForSchedulerDto();
+        // this.vehicles.vehicles = [];
+        // this._schedulerServiceProxy.getAllVehicles().subscribe(result => {
+        //     this.vehicles = result;
+        // });
     }
 
     // onChange(args) {
@@ -111,11 +111,6 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
     //     var CurData = dm.executeLocal(new ej.data.Query().where("Category", 'equal', id));
     //     return CurData;
     //   }
-
-    onCreated(): void {
-       
-      
-      }
 
     onPopupOpen(args: PopupOpenEventArgs): void {
         args.cancel = true;
@@ -258,7 +253,7 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
             this.eventTypeFilter.otherEvents,
             this.eventTypeFilter.simulatorLessons).subscribe(result => {
 
-                console.log(result);
+                //console.log(result);
 
                 for (var item of result) {
                     this.data.push(
@@ -268,7 +263,7 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
                             StartTime: item.startTime.toDate(),
                             EndTime: item.endTime.toDate(),
                             AppointmentType: item.appointmentType.toString(),
-                            VehicleID: 1
+                           // VehicleID: 1
                         });
                 }
 

@@ -32,25 +32,32 @@
                     <input class="form-control" name="drivingLesson.studentId" [(ngModel)]="drivingLesson.studentId"
                         type="text" hidden>
 
-                        <div class="form-group m-form__group" *ngIf="!showStudentSelection">
-                            <h5>Student: {{studentFullName}}</h5>
-                        </div>
+                    <div class="form-group m-form__group" *ngIf="!showStudentSelection">
+                        <h5>Student: {{studentFullName}}</h5>
+                    </div>
 
                     <div *ngIf="studentSelected">
                         <div class="m--margin-top-40">
-                   
 
+                            <div *ngIf="studentCourses.length > 0">
                                 <label>Course Specific: </label><br>
-                                    <div class="form-group">
+                                <div class="form-group">
 
-                                        <select class="form-control" name="studentCourse"
-                                            [(ngModel)]="selectedStudentCourse">
-                                            <option *ngFor="let course of studentCourses" [ngValue]="course">
-                                                {{course.name}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="row">
+                                    <select class="form-control" name="studentCourse"
+                                        [(ngModel)]="selectedStudentCourse">
+                                        <option *ngFor="let course of studentCourses" [ngValue]="course">
+                                            {{course.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div *ngIf="studentCourses.length == 0">
+                                <alert type="info" >
+                                    <strong>Note</strong> 
+                                    {{l("NoCourseSelected")}}!
+                                </alert>
+                            </div>
+                            <div class="row">
                                 <div class="col-6 border-right">
                                     <div class="form-group">
                                         <label class="m-radio">
@@ -162,7 +169,7 @@
                             <h5>{{l("Time")}}</h5>
                             <div class="row">
                                 <div class="col-6 border-right">
-                                    
+
 
                                     <div class="form-group">
                                         <label for="DrivingLesson_StartTime">{{l("StartDate")}}</label>
@@ -179,7 +186,7 @@
                                         <!-- <input required class="form-control m-input" type="time" timepicker [(ngModel)]="drivingLesson.startTime.time" id="DrivingLesson_StartTime" name="DrivingLesson_StartTime"> -->
                                     </div>
 
-                                   
+
                                 </div>
 
                                 <div class="col-6">

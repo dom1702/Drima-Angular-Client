@@ -25789,7 +25789,7 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
     vehicleId!: number | undefined;
     instructors!: InstructorDto[] | undefined;
     courseId!: number | undefined;
-    predefinedDrivingLessonId!: number | undefined;
+    predefinedDrivingLessonId!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditDrivingLessonDto) {
@@ -25868,7 +25868,7 @@ export interface ICreateOrEditDrivingLessonDto {
     vehicleId: number | undefined;
     instructors: InstructorDto[] | undefined;
     courseId: number | undefined;
-    predefinedDrivingLessonId: number | undefined;
+    predefinedDrivingLessonId: string | undefined;
     id: number | undefined;
 }
 
@@ -39919,6 +39919,7 @@ export class PredefinedDL implements IPredefinedDL {
     running!: boolean | undefined;
     name!: string | undefined;
     plannedDate!: moment.Moment | undefined;
+    doneOnSimulator!: boolean | undefined;
 
     constructor(data?: IPredefinedDL) {
         if (data) {
@@ -39936,6 +39937,7 @@ export class PredefinedDL implements IPredefinedDL {
             this.running = data["running"];
             this.name = data["name"];
             this.plannedDate = data["plannedDate"] ? moment(data["plannedDate"].toString()) : <any>undefined;
+            this.doneOnSimulator = data["doneOnSimulator"];
         }
     }
 
@@ -39953,6 +39955,7 @@ export class PredefinedDL implements IPredefinedDL {
         data["running"] = this.running;
         data["name"] = this.name;
         data["plannedDate"] = this.plannedDate ? this.plannedDate.toISOString() : <any>undefined;
+        data["doneOnSimulator"] = this.doneOnSimulator;
         return data; 
     }
 }
@@ -39963,6 +39966,7 @@ export interface IPredefinedDL {
     running: boolean | undefined;
     name: string | undefined;
     plannedDate: moment.Moment | undefined;
+    doneOnSimulator: boolean | undefined;
 }
 
 export class StudentCourseDto implements IStudentCourseDto {

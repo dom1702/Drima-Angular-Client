@@ -65,16 +65,7 @@ export class StudentsOverviewComponent extends AppComponentBase {
 
                 this._studentsServiceProxy.getAllCourses(this.student.id).subscribe(result => {
 
-                    if(this.studentCourses != null)
-                    {
-                    for(var i = 0; i < this.studentCourses.length; i++)
-                        console.log(this.studentCourses[i]);
-                    }
-
                     this.studentCourses = result
-
-                    for(var i = 0; i < this.studentCourses.length; i++)
-                    console.log(this.studentCourses[i]);
 
                     if(this.studentCourses.length > 0)
                     {
@@ -106,11 +97,10 @@ export class StudentsOverviewComponent extends AppComponentBase {
                 this.student = result.student;
 
                 this._studentsServiceProxy.getAllCourses(this.student.id).subscribe(result => {
-                    this.studentCourses = result
-                    console.log(this.studentCourses.length);
+                    this.studentCourses = result;
+
                     if(this.studentCourses.length > 0)
                     {
-                        console.log(this.studentCourses[0]);
                         this.selectedStudentCourse = this.studentCourses[0];
                         
                         if(this.selectedStudentCourse != null)

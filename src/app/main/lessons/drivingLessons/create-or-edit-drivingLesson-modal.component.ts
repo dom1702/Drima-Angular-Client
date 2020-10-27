@@ -162,7 +162,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
                             for(let pdl of course.predefinedDrivingLessons)
                             {
-                                if(pdl.id == result.drivingLesson.predefinedDrivingLessonId)
+                                if(pdl.lessonIdString == result.drivingLesson.predefinedDrivingLessonId)
                                     this.selectedPdl = pdl;
                             }
                         }
@@ -202,7 +202,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
         if(this.selectedPdl)
         {
-            this.drivingLesson.predefinedDrivingLessonId = this.selectedPdl.id;
+            this.drivingLesson.predefinedDrivingLessonId = this.selectedPdl.lessonIdString;
         }
         else
         {
@@ -343,7 +343,8 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     }
 
     getNewStudentId() {
-
+        if(this.studentLookupTableModal.id == null)
+            return;
         this.drivingLesson.studentId = this.studentLookupTableModal.id;
         this.studentFirstName = this.studentLookupTableModal.firstName;
         this.studentLastName = this.studentLookupTableModal.lastName;
@@ -365,7 +366,6 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
             if(this.studentCourses.length > 0)
             {
-                console.log(this.studentCourses[0]);
                 this.selectedStudentCourse = this.studentCourses[0];
             }
         })

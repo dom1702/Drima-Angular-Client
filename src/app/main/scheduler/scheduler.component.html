@@ -106,7 +106,7 @@
                                     <span></span>
                                 </label>
                             </div>
-                            <div class="col-md-auto">
+                            <div *ngIf="simulatorFeatureEnabled" class="col-md-auto">
                                 <!-- <button type="button" class="btn btn-info active" (click)="updateCurrentView()"
                                 [(ngModel)]="eventTypeFilter.simulatorLessons" btnCheckbox btnCheckboxTrue="true"
                                 btnCheckboxFalse="false">

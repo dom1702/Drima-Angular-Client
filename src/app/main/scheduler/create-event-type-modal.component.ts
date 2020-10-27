@@ -46,7 +46,11 @@ export class CreateEventTypeModalComponent extends AppComponentBase implements O
         this.allowCreateDrivingLesson = allowCreateDrivingLesson;
         this.allowCreateTheoryLesson = allowCreateTheoryLesson;
         this.allowCreateEvent = allowCreateEvent;
-        this.allowCreateSimulatorLesson = allowCreateSimulatorLesson;
+
+        if(abp.features.isEnabled("App.Simulator"))
+            this.allowCreateSimulatorLesson = allowCreateSimulatorLesson;
+        else
+            this.allowCreateSimulatorLesson = false;
 
         this.scheduler = scheduler
 

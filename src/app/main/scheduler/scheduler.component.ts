@@ -55,6 +55,8 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
 
     startTime: Date;
 
+    simulatorFeatureEnabled;
+
     //vehicles : GetAllVehiclesForSchedulerDto;
 
     eventTypeFilter: any = { drivingLessons: true, simulatorLessons: false, theoryLessons: true, otherEvents: true };
@@ -85,6 +87,8 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
         this.eventTypeFilter.drivingLessons = true;
         
         this.updateCurrentView();
+
+        this.simulatorFeatureEnabled = abp.features.isEnabled("App.Simulator");
 
         // this.vehicles = new GetAllVehiclesForSchedulerDto();
         // this.vehicles.vehicles = [];
@@ -320,6 +324,9 @@ export class SchedulerComponent extends AppComponentBase implements IScheduler, 
 
 
     getNewInstructorId() {
+        if(this.instructorLookupTableModal.id == null)
+        return;
+
         this.instructorId = this.instructorLookupTableModal.id;
         this.currentInstructorFullName = this.instructorLookupTableModal.firstName + ' ' + this.instructorLookupTableModal.lastName;
 

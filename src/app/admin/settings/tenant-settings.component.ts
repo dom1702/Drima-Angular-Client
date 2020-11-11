@@ -1,6 +1,6 @@
 import { IAjaxResponse } from '@abp/abpHttpInterceptor';
 import { TokenService } from '@abp/auth/token.service';
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
@@ -8,6 +8,7 @@ import { SettingScopes, SendTestEmailInput, TenantSettingsEditDto, TenantSetting
 import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
 import { finalize } from 'rxjs/operators';
 import { DomSanitizer } from '@angular/platform-browser';
+import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
 
 @Component({
     templateUrl: './tenant-settings.component.html',

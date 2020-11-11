@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { PricePackageLookupTableModalComponent } from './pricePackage-lookup-table-modal.component';
 import { Country, CountriesService } from '@app/shared/common/services/countries.service';
 import { Language, LanguagesService } from '@app/shared/common/services/languages.service';
+import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
 
 @Component({
     selector: 'createOrEditStudentModal',
@@ -42,6 +43,10 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
     currentNativeLanguage: string;
     languages: Language[];
+
+    @ViewChild('instructorLookupTableModal') instructorLookupTableModal: InstructorLookupTableModalComponent;
+    instructorFullName = '';
+    defaultInstructorId;
 
     constructor(
         injector: Injector,
@@ -293,7 +298,8 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
         }
         if (this.currentNativeLanguage != null)
             this.student.nativeLanguage = this._languagesService.getCode(this.currentNativeLanguage);
-       
+
+        this.student.defaultInstructorId = this.defaultInstructorId;
 
         this._studentsServiceProxy.createOrEdit(this.student)
             .pipe(finalize(() => { this.saving = false; }))
@@ -308,5 +314,26 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
         this.active = false;
         this.modal.hide();
+    }
+
+    openSelectInstructorModal() {
+        //this.vehicleLicenseClassLookupTableModal.id = this.vehicle.licenseClassId;
+        //this.vehicleLicenseClassLookupTableModal.displayName = this.licenseClassClass;
+        this.instructorLookupTableModal.show();
+    }
+
+
+    setInstructorNull() {
+        this.defaultInstructorId = null;
+        this.instructorFullName = '';
+    }
+
+
+    getNewInstructorId() {
+        if(this.instructorLookupTableModal.id != null)
+        {
+        this.defaultInstructorId = this.instructorLookupTableModal.id;
+        this.instructorFullName = this.instructorLookupTableModal.firstName + ' ' + this.instructorLookupTableModal.lastName;
+        }
     }
 }

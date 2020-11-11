@@ -44,7 +44,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     selectedItems = [];
     dropdownSettings = {};
     placeholder = this.l("Select");
-  
+
     instructorPersonalLesson: boolean;
     instructorId?: number;
 
@@ -56,10 +56,11 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
     selectedPdl;
 
-    numberOfLessonsAddition : string = "(á -- minutes)";
+    numberOfLessonsAddition: string = "(á -- minutes)";
 
-    setTopicNameAutomatically : boolean = true;
+    setTopicNameAutomatically: boolean = true;
 
+    currentStudentDefaultInstructorId;
 
     constructor(
         injector: Injector,
@@ -156,13 +157,11 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
                     this.studentCourses = result2.courses;
 
                     for (let course of this.studentCourses) {
-                        if(course.id == result.drivingLesson.courseId)
-                        {
+                        if (course.id == result.drivingLesson.courseId) {
                             this.selectedStudentCourse = course;
 
-                            for(let pdl of course.predefinedDrivingLessons)
-                            {
-                                if(pdl.lessonIdString == result.drivingLesson.predefinedDrivingLessonId)
+                            for (let pdl of course.predefinedDrivingLessons) {
+                                if (pdl.lessonIdString == result.drivingLesson.predefinedDrivingLessonId)
                                     this.selectedPdl = pdl;
                             }
                         }
@@ -180,7 +179,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     save(): void {
         this.saving = true;
 
-        if(!this.setTopicNameAutomatically)
+        if (!this.setTopicNameAutomatically)
             this.drivingLesson.topic = this.drivingLessonTopic;
         else
             this.drivingLesson.topic = this.selectedStudentCourse.licenseClass + " - " + this.studentFirstName + " " + this.studentLastName;
@@ -200,12 +199,10 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             );
         }
 
-        if(this.selectedPdl)
-        {
+        if (this.selectedPdl) {
             this.drivingLesson.predefinedDrivingLessonId = this.selectedPdl.lessonIdString;
         }
-        else
-        {
+        else {
             this.drivingLesson.predefinedDrivingLessonId = null;
         }
 
@@ -232,7 +229,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     }
 
     updateInstructors(drivingLessonEdit: boolean): void {
-       // console.log(this.active);
+        // console.log(this.active);
         if (!this.active) {
             return;
         }
@@ -244,7 +241,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             "",
             0,
             1000).subscribe(result => {
-               // console.log("in");
+                // console.log("in");
                 // for(var r = 0; r < result.items.length; r++)
                 //     console.log(result.items[r].id);
 
@@ -264,7 +261,7 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
                 if (drivingLessonEdit) {
                     for (var item of this.dropdownList) {
-                     //   console.log(this.drivingLesson.instructors.length);
+                        //   console.log(this.drivingLesson.instructors.length);
                         for (var instructor of this.drivingLesson.instructors) {
                             console.log(instructor.id);
                             console.log(this.dropdownListIds[item.item_id]);
@@ -283,13 +280,31 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
                     //console.log(this.selectedItems.length);
                 }
+                else {
+                    for (var item of this.dropdownList) {
+                        //   console.log(this.drivingLesson.instructors.length);
+                    
+                     
+                            if (this.dropdownListIds[item.item_id] == this.currentStudentDefaultInstructorId) {
+                                console.log("Add it now" + this.currentStudentDefaultInstructorId);
+                                this.selectedItems.push(
+                                    {
+                                        item_id: item.item_id,
+                                        item_text: item.item_text
+                                    }
+                                );
+                            }
+                        
+
+                    }
+
+                }
 
                 this.primengTableHelper.hideLoadingIndicator();
             });
     }
 
-    updateCheck()
-    {
+    updateCheck() {
         console.log(this.selectedPdl);
     }
 
@@ -343,8 +358,9 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     }
 
     getNewStudentId() {
-        if(this.studentLookupTableModal.id == null)
+        if (this.studentLookupTableModal.id == null)
             return;
+
         this.drivingLesson.studentId = this.studentLookupTableModal.id;
         this.studentFirstName = this.studentLookupTableModal.firstName;
         this.studentLastName = this.studentLookupTableModal.lastName;
@@ -364,10 +380,28 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         this._drivingLessonsServiceProxy.getCoursesForCreateOrEdit(this.drivingLesson.studentId).subscribe(result => {
             this.studentCourses = result.courses
 
-            if(this.studentCourses.length > 0)
-            {
+            if (this.studentCourses.length > 0) {
                 this.selectedStudentCourse = this.studentCourses[0];
             }
+
+            console.log(result.defaultInstructorId);
+
+            this.currentStudentDefaultInstructorId = result.defaultInstructorId;
+
+            for (var item of this.dropdownList) {
+
+                if (this.dropdownListIds[item.item_id] == this.currentStudentDefaultInstructorId) {
+                    this.selectedItems.push(
+                        {
+                            item_id: item.item_id,
+                            item_text: item.item_text
+                        }
+                    );
+                }
+            }
+
+            console.log(this.dropdownList);
+            console.log(this.selectedItems);
         })
     }
 

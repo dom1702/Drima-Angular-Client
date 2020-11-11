@@ -24,6 +24,7 @@
                             <label for="Timezone">{{"Timezone" | localize}}</label>
                             <timezone-combo name="Timezone" [(ngModel)]="settings.general.timezone" defaultTimezoneScope="{{defaultTimezoneScope}}"></timezone-combo>
                         </div>
+                        
                     </tab>
                     <tab *ngIf="true" heading="{{'Appearance' | localize}}" [active]="activeTabIndex == 1" customClass="m-tabs__item">
                         <div class="row m-form">

@@ -120,6 +120,19 @@
 						<label>{{l("SSN")}}</label>
 						<input type="text" class="form-control" [(ngModel)]="student.ssn" name="SSN" />
 					</div>
+
+					<div class="form-group">
+						<label for="DefaultInstructor">{{l("DefaultInstructor")}}</label>
+						<div class="input-group">
+							<input class="form-control" id="instructorFullName" name="instructorFullName" [(ngModel)]="instructorFullName" type="text" disabled>     
+							<div class="input-group-append">
+								<button class="btn btn-primary blue" (click)="openSelectInstructorModal()" type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>
+							</div> <div class="input-group-prepend">
+								<button class="btn btn-danger btn-icon" type="button" (click)="setInstructorNull()"><i class="fa fa-times"></i></button>
+							</div>
+						</div>
+					</div>
+					<input class="form-control" name="defaultInstructorId" [(ngModel)]="defaultInstructorId" type="text"  hidden>
 					<h4>{{l('PayersData')}}</h4>
 					<div class="form-group">
 						<label>{{l("PayersSSN")}}</label>
@@ -167,5 +180,5 @@
 			</form>
 		</div>
 	</div>
-
+    <instructorLookupTableModal #instructorLookupTableModal (modalSave)="getNewInstructorId()"></instructorLookupTableModal>
 </div>

@@ -26234,6 +26234,8 @@ export interface IDrivingLessonInstructorLookupTableDto {
 
 export class GetCoursesForCreateOrEditDto implements IGetCoursesForCreateOrEditDto {
     courses!: CourseDto[] | undefined;
+    defaultInstructorId!: number | undefined;
+    defaultInstructorFullName!: string | undefined;
 
     constructor(data?: IGetCoursesForCreateOrEditDto) {
         if (data) {
@@ -26251,6 +26253,8 @@ export class GetCoursesForCreateOrEditDto implements IGetCoursesForCreateOrEditD
                 for (let item of data["courses"])
                     this.courses!.push(CourseDto.fromJS(item));
             }
+            this.defaultInstructorId = data["defaultInstructorId"];
+            this.defaultInstructorFullName = data["defaultInstructorFullName"];
         }
     }
 
@@ -26268,12 +26272,16 @@ export class GetCoursesForCreateOrEditDto implements IGetCoursesForCreateOrEditD
             for (let item of this.courses)
                 data["courses"].push(item.toJSON());
         }
+        data["defaultInstructorId"] = this.defaultInstructorId;
+        data["defaultInstructorFullName"] = this.defaultInstructorFullName;
         return data; 
     }
 }
 
 export interface IGetCoursesForCreateOrEditDto {
     courses: CourseDto[] | undefined;
+    defaultInstructorId: number | undefined;
+    defaultInstructorFullName: string | undefined;
 }
 
 export class PagedResultDtoOfGetDrivingLessonTopicForViewDto implements IPagedResultDtoOfGetDrivingLessonTopicForViewDto {
@@ -38981,6 +38989,7 @@ export class StudentDto implements IStudentDto {
     userId!: number | undefined;
     userName!: string | undefined;
     ssn!: string | undefined;
+    defaultInstructorId!: number | undefined;
     payersSocialSecurityNo!: string | undefined;
     payersName!: string | undefined;
     payersStreet!: string | undefined;
@@ -39026,6 +39035,7 @@ export class StudentDto implements IStudentDto {
             this.userId = data["userId"];
             this.userName = data["userName"];
             this.ssn = data["ssn"];
+            this.defaultInstructorId = data["defaultInstructorId"];
             this.payersSocialSecurityNo = data["payersSocialSecurityNo"];
             this.payersName = data["payersName"];
             this.payersStreet = data["payersStreet"];
@@ -39071,6 +39081,7 @@ export class StudentDto implements IStudentDto {
         data["userId"] = this.userId;
         data["userName"] = this.userName;
         data["ssn"] = this.ssn;
+        data["defaultInstructorId"] = this.defaultInstructorId;
         data["payersSocialSecurityNo"] = this.payersSocialSecurityNo;
         data["payersName"] = this.payersName;
         data["payersStreet"] = this.payersStreet;
@@ -39101,6 +39112,7 @@ export interface IStudentDto {
     userId: number | undefined;
     userName: string | undefined;
     ssn: string | undefined;
+    defaultInstructorId: number | undefined;
     payersSocialSecurityNo: string | undefined;
     payersName: string | undefined;
     payersStreet: string | undefined;
@@ -39113,6 +39125,7 @@ export interface IStudentDto {
 
 export class GetStudentForEditOutput implements IGetStudentForEditOutput {
     student!: CreateOrEditStudentDto | undefined;
+    defaultInstructorFullName!: string | undefined;
 
     constructor(data?: IGetStudentForEditOutput) {
         if (data) {
@@ -39126,6 +39139,7 @@ export class GetStudentForEditOutput implements IGetStudentForEditOutput {
     init(data?: any) {
         if (data) {
             this.student = data["student"] ? CreateOrEditStudentDto.fromJS(data["student"]) : <any>undefined;
+            this.defaultInstructorFullName = data["defaultInstructorFullName"];
         }
     }
 
@@ -39139,12 +39153,14 @@ export class GetStudentForEditOutput implements IGetStudentForEditOutput {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["student"] = this.student ? this.student.toJSON() : <any>undefined;
+        data["defaultInstructorFullName"] = this.defaultInstructorFullName;
         return data; 
     }
 }
 
 export interface IGetStudentForEditOutput {
     student: CreateOrEditStudentDto | undefined;
+    defaultInstructorFullName: string | undefined;
 }
 
 export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
@@ -39163,6 +39179,7 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
     licenseClasses!: string[] | undefined;
     licenseClassesAlreadyOwned!: string[] | undefined;
     ssn!: string | undefined;
+    defaultInstructorId!: number | undefined;
     payersSocialSecurityNo!: string | undefined;
     payersName!: string | undefined;
     payersStreet!: string | undefined;
@@ -39206,6 +39223,7 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
                     this.licenseClassesAlreadyOwned!.push(item);
             }
             this.ssn = data["ssn"];
+            this.defaultInstructorId = data["defaultInstructorId"];
             this.payersSocialSecurityNo = data["payersSocialSecurityNo"];
             this.payersName = data["payersName"];
             this.payersStreet = data["payersStreet"];
@@ -39249,6 +39267,7 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
                 data["licenseClassesAlreadyOwned"].push(item);
         }
         data["ssn"] = this.ssn;
+        data["defaultInstructorId"] = this.defaultInstructorId;
         data["payersSocialSecurityNo"] = this.payersSocialSecurityNo;
         data["payersName"] = this.payersName;
         data["payersStreet"] = this.payersStreet;
@@ -39277,6 +39296,7 @@ export interface ICreateOrEditStudentDto {
     licenseClasses: string[] | undefined;
     licenseClassesAlreadyOwned: string[] | undefined;
     ssn: string | undefined;
+    defaultInstructorId: number | undefined;
     payersSocialSecurityNo: string | undefined;
     payersName: string | undefined;
     payersStreet: string | undefined;

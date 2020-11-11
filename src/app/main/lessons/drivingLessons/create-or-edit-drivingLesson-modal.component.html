@@ -39,7 +39,7 @@
                     <div *ngIf="studentSelected">
                         <div class="m--margin-top-40">
 
-                            <div *ngIf="studentCourses.length > 0">
+                            <div *ngIf="studentCourses != null && studentCourses.length > 0">
                                 <label>Course Specific: </label><br>
                                 <div class="form-group">
 
@@ -51,7 +51,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div *ngIf="studentCourses.length == 0">
+                            <div *ngIf="studentCourses != null && studentCourses.length == 0">
                                 <alert type="info" >
                                     <strong>Note</strong> 
                                     {{l("NoCourseSelected")}}!

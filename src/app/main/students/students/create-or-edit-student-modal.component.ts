@@ -46,7 +46,6 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
     @ViewChild('instructorLookupTableModal') instructorLookupTableModal: InstructorLookupTableModalComponent;
     instructorFullName = '';
-    defaultInstructorId;
 
     constructor(
         injector: Injector,
@@ -140,6 +139,8 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
             this._studentsServiceProxy.getStudentForEdit(studentId).subscribe(result => {
                 this.student = result.student;
                 this.student.id = studentId;
+
+                this.instructorFullName = result.defaultInstructorFullName;
 
                 if (this.student.dateOfBirth) {
                     this.dateOfBirth = this.student.dateOfBirth.toDate();
@@ -299,8 +300,6 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
         if (this.currentNativeLanguage != null)
             this.student.nativeLanguage = this._languagesService.getCode(this.currentNativeLanguage);
 
-        this.student.defaultInstructorId = this.defaultInstructorId;
-
         this._studentsServiceProxy.createOrEdit(this.student)
             .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
@@ -324,7 +323,7 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
 
     setInstructorNull() {
-        this.defaultInstructorId = null;
+        this.student.defaultInstructorId = null;
         this.instructorFullName = '';
     }
 
@@ -332,7 +331,7 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
     getNewInstructorId() {
         if(this.instructorLookupTableModal.id != null)
         {
-        this.defaultInstructorId = this.instructorLookupTableModal.id;
+        this.student.defaultInstructorId = this.instructorLookupTableModal.id;
         this.instructorFullName = this.instructorLookupTableModal.firstName + ' ' + this.instructorLookupTableModal.lastName;
         }
     }

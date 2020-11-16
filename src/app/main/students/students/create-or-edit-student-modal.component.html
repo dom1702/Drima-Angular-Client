@@ -132,7 +132,14 @@
 							</div>
 						</div>
 					</div>
-					<input class="form-control" name="defaultInstructorId" [(ngModel)]="defaultInstructorId" type="text"  hidden>
+					<input class="form-control" name="defaultInstructorId" [(ngModel)]="student.defaultInstructorId" type="text"  hidden>
+
+					<div class="form-group">
+						<label for="Student_DefaultLocation">{{l("DefaultLocation")}}</label>
+						<input type="text" class="form-control" [(ngModel)]="student.defaultLocation"
+							name="DefaultLocation"  />
+					</div>
+
 					<h4>{{l('PayersData')}}</h4>
 					<div class="form-group">
 						<label>{{l("PayersSSN")}}</label>

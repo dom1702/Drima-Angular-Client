@@ -90,7 +90,8 @@
                                     <div class="card-body">
                                         <h5 class="card-title">{{l('Class')}} {{licenseClassOwned.licenseClass}}
                                         </h5>
-                                        <ul class="list-group list-group-flush mb-5" *ngIf="licenseClassOwned.description">
+                                        <ul class="list-group list-group-flush mb-5"
+                                            *ngIf="licenseClassOwned.description">
                                             <li class="list-group-item"> {{licenseClassOwned.description}}
                                             </li>
                                         </ul>
@@ -214,13 +215,15 @@
                             <div class="card-deck">
 
 
-                                <div class="card my-5" 
-                                *ngFor="let pp of pricePackages.pricePackages;  let i = index">
-                                    <img class="card-img-top" [src]="pp.highlighted ? 'assets/symbols/price_highlighted.png' : 'assets/symbols/price.png'" alt="Card image cap">
+                                <div class="card my-5" *ngFor="let pp of pricePackages.pricePackages;  let i = index">
+                                    <img class="card-img-top"
+                                        [src]="pp.highlighted ? 'assets/symbols/price_highlighted.png' : 'assets/symbols/price.png'"
+                                        alt="Card image cap">
                                     <div class="card-body">
                                         <div *ngIf="pp.highlighted">
-                                        <h2><span class="badge badge-secondary">Standard
-                                                package</span></h2></div>
+                                            <h2><span class="badge badge-secondary">Standard
+                                                    package</span></h2>
+                                        </div>
                                         <h5 class="card-title"> {{pp.packageName}} </h5>
                                         <div class="card-header">
                                             {{pp.finalPrice}}€
@@ -355,11 +358,11 @@
 
                         </div>
                         <div class="form-group row">
-                            <label for="dateOfBirthInput" class="col-sm-2 col-form-label">Date of birth *</label>
+                            <!-- <label for="dateOfBirthInput" class="col-sm-2 col-form-label">Date of birth *</label>
                             <div class="col-sm-4">
                                 <input class="form-control m-input" type="datetime" bsDatepicker
                                     [(ngModel)]="dateOfBirth" name="dateOfBirth" required>
-                            </div>
+                            </div> -->
                             <label for="Student_Country" class="col-sm-2 col-form-label">{{l("Country")}}</label>
                             <div class="col-sm-4">
                                 <select class="form-control" name="Student_Country" [(ngModel)]="currentCountry">
@@ -406,59 +409,79 @@
 
                         <h3 class="my-5">If you don't pay yourself, please add payer's data below!</h3>
 
-
-                        <div class="form-group row">
-                            <label for="payersPersonId" class="col-sm-2 col-form-label">Payers Person ID</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="payersPersonId" placeholder="PPKKVV-XXXX"
-                                    [(ngModel)]="userData.payersSocialSecurityNo" name="payersSocialSecurityNo">
-                            </div>
-                            <label for="payersNameInput" class="col-sm-2 col-form-label">Payers Name</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="payersNameInput"
-                                    placeholder="Enter the payers name" [(ngModel)]="userData.payersName"
-                                    name="payersName">
-                            </div>
+                        <div class="form-group row" *ngIf="!hasPayer">
+                            <div class="col text-center">
+                            <button
+                                class="btn btn-link"
+                                (click)="openPayerPart()">
+                                Add payer
+                            </button>
                         </div>
-
-                        <div class="form-group row">
-                            <label for="payersStreetInput" class="col-sm-2 col-form-label">Payers Street</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="payersStreetInput"
-                                    placeholder="Enter the payers street" [(ngModel)]="userData.payersStreet"
-                                    name="payersStreet">
-                            </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="payersZipCodeInput" class="col-sm-2 col-form-label">Payers ZIP code</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="payersZipCodeInput"
-                                    placeholder="Enter the payers ZIP code" [(ngModel)]="userData.payersZipCode"
-                                    name="payersZipCode">
-                            </div>
-                            <label for="payersCityInput" class="col-sm-2 col-form-label">Payers City</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="payersCityInput"
-                                    placeholder="Enter the payers city" [(ngModel)]="userData.payersCity"
-                                    name="payersCity">
-                            </div>
+                        <div class="form-group row" *ngIf="hasPayer">
+                            <div class="col text-center">
+                            <button
+                                class="btn btn-link"
+                                (click)="closePayerPart()">
+                                Remove payer
+                            </button>
                         </div>
-
-
-                        <div class="form-group row">
-                            <label for="payersPhoneInput" class="col-sm-2 col-form-label">Payers Phone</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="payersPhoneInput"
-                                    placeholder="Enter the payers phone number" [(ngModel)]="userData.payersPhone"
-                                    name="payersPhone">
+                        </div>
+                        <div *ngIf="hasPayer">
+                            <div class="form-group row">
+                                <label for="payersPersonId" class="col-sm-2 col-form-label">Payers Person ID *</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="payersPersonId"
+                                        placeholder="PPKKVV-XXXX" [(ngModel)]="userData.payersSocialSecurityNo"
+                                        name="payersSocialSecurityNo" [required]="hasPayer">
+                                </div>
+                                <label for="payersNameInput" class="col-sm-2 col-form-label">Payers Name *</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="payersNameInput"
+                                        placeholder="Enter the payers name" [(ngModel)]="userData.payersName"
+                                        name="payersName" [required]="hasPayer">
+                                </div>
                             </div>
-                            <label for="payersEmailInput" class="col-sm-2 col-form-label">Payers E-mail</label>
-                            <div class="col-sm-4">
-                                <input type="email" class="form-control" id="payersEmailInput"
-                                    placeholder="Enter the payers email" [(ngModel)]="userData.payersEmail"
-                                    name="payersEmail">
+
+                            <div class="form-group row">
+                                <label for="payersStreetInput" class="col-sm-2 col-form-label">Payers Street *</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="payersStreetInput"
+                                        placeholder="Enter the payers street" [(ngModel)]="userData.payersStreet"
+                                        name="payersStreet" [required]="hasPayer">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="payersZipCodeInput" class="col-sm-2 col-form-label">Payers ZIP code *</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="payersZipCodeInput"
+                                        placeholder="Enter the payers ZIP code" [(ngModel)]="userData.payersZipCode"
+                                        name="payersZipCode" [required]="hasPayer">
+                                </div>
+                                <label for="payersCityInput" class="col-sm-2 col-form-label">Payers City *</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="payersCityInput"
+                                        placeholder="Enter the payers city" [(ngModel)]="userData.payersCity"
+                                        name="payersCity" [required]="hasPayer">
+                                </div>
                             </div>
 
+
+                            <div class="form-group row">
+                                <label for="payersPhoneInput" class="col-sm-2 col-form-label">Payers Phone *</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="payersPhoneInput"
+                                        placeholder="Enter the payers phone number" [(ngModel)]="userData.payersPhone"
+                                        name="payersPhone" [required]="hasPayer">
+                                </div>
+                                <label for="payersEmailInput" class="col-sm-2 col-form-label">Payers E-mail *</label>
+                                <div class="col-sm-4">
+                                    <input type="email" class="form-control" id="payersEmailInput"
+                                        placeholder="Enter the payers email" [(ngModel)]="userData.payersEmail"
+                                        name="payersEmail" [required]="hasPayer">
+                                </div>
+
+                            </div>
                         </div>
 
                         <div class="mt-5">
@@ -481,13 +504,13 @@
                                 [buttonBusy]="submitting" [busyText]="l('PleaseWait')">Submit</button>
                         </div>
                     </form>
-<div class="mt-5">
-                    <button
-                    class="btn btn-secondary m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
-                    (click)="goToPreviousPage()">
-                    Back
-                </button>
-            </div>
+                    <div class="mt-5">
+                        <button
+                            class="btn btn-secondary m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                            (click)="goToPreviousPage()">
+                            Back
+                        </button>
+                    </div>
                 </div>
             </div>
 

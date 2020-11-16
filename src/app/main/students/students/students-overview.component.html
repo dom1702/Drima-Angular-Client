@@ -31,9 +31,12 @@
                 <tabset>
                     <tab heading={{overviewTabName}} id="tab1">
                         <students-overview-overview [student]="student" [parentOverview]="this"
-                            [pricePackageName]="pricePackageName"></students-overview-overview>
+                            [pricePackageName]="pricePackageName" [drivingLessons]="this.drivingLessons"></students-overview-overview>
                     </tab>
-
+                    <tab heading={{lessonsTabName}} id="tab2">
+                        <students-overview-lessons [student]="student" [parentOverview]="this"
+                        [drivingLessons]="this.drivingLessons"></students-overview-lessons>
+                    </tab>
                     <tab heading={{pricePackageTabName}}>
                         
                             <students-overview-pricePackage  *ngIf="selectedStudentCourse" [parentOverview]="this" [student]="student" [selectedStudentCourse]="selectedStudentCourse"></students-overview-pricePackage>

@@ -1,4 +1,4 @@
-import { Component, ViewChild, Injector, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, ViewChild, Injector, Output, EventEmitter, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
 import { DrivingLessonsServiceProxy, CreateOrEditDrivingLessonDto, InstructorDto, InstructorsOwnDrivingLessonsServiceProxy, CourseDto, PredefinedDrivingLessonDto, StudentCourseDto, StudentsServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -10,6 +10,9 @@ import { DLStudentLookupTableModalComponent } from './drivingLesson-student-look
 import { TimepickerComponent } from 'ngx-bootstrap/timepicker';
 import { VehicleLookupTableModalComponent } from '@app/shared/common/lookup/vehicle-lookup-table-modal.component';
 import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+import { MultiSelectComponent } from '@syncfusion/ej2-angular-dropdowns';
+import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'createOrEditDrivingLessonModal',
@@ -39,14 +42,15 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     studentLastName = '';
     studentFullName = '';
     vehicleName = '';
-    dropdownListIds = [];
-    dropdownList = [];
-    selectedItems = [];
-    dropdownSettings = {};
-    placeholder = this.l("Select");
 
     instructorPersonalLesson: boolean;
     instructorId?: number;
+
+    @ViewChildren('instructor_multiselect') insturctor_Multiselect: QueryList<MultiSelectComponent>;
+    instructors: Object[];
+    fields: Object = { text: 'instr', value: 'id' };
+    placeholderInstructorSelection: string = 'Select instructors';
+    private instructorMultiselectSubscription: Subscription;
 
     showStudentSelection = false;
     studentSelected = false;
@@ -72,16 +76,6 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
     }
 
     ngOnInit() {
-        this.dropdownSettings = {
-            singleSelection: false,
-            idField: 'item_id',
-            textField: 'item_text',
-            selectAllText: this.l("SelectAll"),
-            unSelectAllText: this.l("UnselectAll"),
-            allowSearchFilter: false,
-            noDataAvailablePlaceholderText: this.l('NoData')
-        };
-
         this.ismeridian = false;
 
         var minutesPerLesson = abp.setting.get("App.CoreData.DurationDrivingLesson");
@@ -94,6 +88,28 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
     onSelectAll(items: any) {
         console.log(items);
+    }
+
+    updateMultiSelect(id: number) {
+        this.instructorMultiselectSubscription = this.insturctor_Multiselect.changes.subscribe((comps: QueryList<MultiSelectComponent>) => {
+            var selected: number[] = [];
+
+            if (this.drivingLesson.instructors != null) {
+
+                for (var i = 0; i < this.drivingLesson.instructors.length; i++) {
+                    selected.push(this.drivingLesson.instructors[i].id);
+                }
+
+                this.insturctor_Multiselect.first.value = selected;
+            }
+            else if (id != null) {
+                selected.push(id);
+
+                this.insturctor_Multiselect.first.value = selected;
+            }
+
+            this.instructorMultiselectSubscription.unsubscribe();
+        });
     }
 
     show(drivingLessonId?: number, instructorPersonalLesson: boolean = false): void {
@@ -119,6 +135,8 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
 
             this.active = true;
             this.updateInstructors(false);
+
+            this.updateMultiSelect(null);
 
             this.modal.show();
         } else if (this.instructorPersonalLesson) {
@@ -171,6 +189,8 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
                 this.active = true;
                 this.updateInstructors(true);
 
+                this.updateMultiSelect(null);
+
                 this.modal.show();
             });
         }
@@ -191,14 +211,6 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         this.drivingLesson.startTime.hours(this.startTime.getHours());
         this.drivingLesson.startTime.minutes(this.startTime.getMinutes());
 
-        for (var instructor of this.selectedItems) {
-            var i = new InstructorDto();
-            i.id = this.dropdownListIds[instructor.item_id];
-            this.drivingLesson.instructors.push(
-                i
-            );
-        }
-
         if (this.selectedPdl) {
             this.drivingLesson.predefinedDrivingLessonId = this.selectedPdl.lessonIdString;
         }
@@ -207,6 +219,15 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         }
 
         this.drivingLesson.courseId = this.selectedStudentCourse.id;
+
+        if (this.insturctor_Multiselect.first.value != null) {
+            this.drivingLesson.instructors = [];
+            for (var j = 0; j < this.insturctor_Multiselect.first.value.length; j++) {
+                var ins: InstructorDto = new InstructorDto()
+                ins.id = Number(this.insturctor_Multiselect.first.value[j]);
+                this.drivingLesson.instructors.push(ins);
+            }
+        }
 
         if (this.instructorPersonalLesson) {
             this._instructorsOwnDrivingLessonsServiceProxy.createOrEdit(this.drivingLesson)
@@ -241,66 +262,16 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
             "",
             0,
             1000).subscribe(result => {
-                // console.log("in");
-                // for(var r = 0; r < result.items.length; r++)
-                //     console.log(result.items[r].id);
+                this.instructors = [];
 
-                this.dropdownList = [];
-                this.dropdownListIds = [];
-                this.selectedItems = [];
-
-                for (var _i = 0; _i < result.items.length; _i++) {
-                    this.dropdownList.push(
+                for (var i = 0; i < result.items.length; i++) {
+                    this.instructors.push(
                         {
-                            item_id: _i,
-                            item_text: result.items[_i].displayName
-                        });
-
-                    this.dropdownListIds.push(result.items[_i].id);
-                }
-
-                if (drivingLessonEdit) {
-                    for (var item of this.dropdownList) {
-                        //   console.log(this.drivingLesson.instructors.length);
-                        for (var instructor of this.drivingLesson.instructors) {
-                            console.log(instructor.id);
-                            console.log(this.dropdownListIds[item.item_id]);
-                            if (this.dropdownListIds[item.item_id] == instructor.id) {
-                                console.log("Add it now" + instructor.id);
-                                this.selectedItems.push(
-                                    {
-                                        item_id: item.item_id,
-                                        item_text: item.item_text
-                                    }
-                                );
-                            }
+                            id: result.items[i].id,
+                            instr: result.items[i].displayName
                         }
-
-                    }
-
-                    //console.log(this.selectedItems.length);
+                    );
                 }
-                else {
-                    for (var item of this.dropdownList) {
-                        //   console.log(this.drivingLesson.instructors.length);
-                    
-                     
-                            if (this.dropdownListIds[item.item_id] == this.currentStudentDefaultInstructorId) {
-                                console.log("Add it now" + this.currentStudentDefaultInstructorId);
-                                this.selectedItems.push(
-                                    {
-                                        item_id: item.item_id,
-                                        item_text: item.item_text
-                                    }
-                                );
-                            }
-                        
-
-                    }
-
-                }
-
-                this.primengTableHelper.hideLoadingIndicator();
             });
     }
 
@@ -384,24 +355,10 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
                 this.selectedStudentCourse = this.studentCourses[0];
             }
 
-            console.log(result.defaultInstructorId);
-
             this.currentStudentDefaultInstructorId = result.defaultInstructorId;
+            this.drivingLesson.startingLocation = result.defaultStartingLocation;
 
-            for (var item of this.dropdownList) {
-
-                if (this.dropdownListIds[item.item_id] == this.currentStudentDefaultInstructorId) {
-                    this.selectedItems.push(
-                        {
-                            item_id: item.item_id,
-                            item_text: item.item_text
-                        }
-                    );
-                }
-            }
-
-            console.log(this.dropdownList);
-            console.log(this.selectedItems);
+            this.updateMultiSelect(this.currentStudentDefaultInstructorId);
         })
     }
 

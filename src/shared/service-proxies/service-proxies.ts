@@ -25580,6 +25580,7 @@ export class DrivingLessonDto implements IDrivingLessonDto {
     licenseClass!: string | undefined;
     studentId!: number | undefined;
     vehicleId!: number | undefined;
+    startingLocation!: string | undefined;
     instructors!: InstructorDto[] | undefined;
     instructorNames!: string[] | undefined;
     id!: number | undefined;
@@ -25602,6 +25603,7 @@ export class DrivingLessonDto implements IDrivingLessonDto {
             this.licenseClass = data["licenseClass"];
             this.studentId = data["studentId"];
             this.vehicleId = data["vehicleId"];
+            this.startingLocation = data["startingLocation"];
             if (data["instructors"] && data["instructors"].constructor === Array) {
                 this.instructors = [] as any;
                 for (let item of data["instructors"])
@@ -25632,6 +25634,7 @@ export class DrivingLessonDto implements IDrivingLessonDto {
         data["licenseClass"] = this.licenseClass;
         data["studentId"] = this.studentId;
         data["vehicleId"] = this.vehicleId;
+        data["startingLocation"] = this.startingLocation;
         if (this.instructors && this.instructors.constructor === Array) {
             data["instructors"] = [];
             for (let item of this.instructors)
@@ -25655,6 +25658,7 @@ export interface IDrivingLessonDto {
     licenseClass: string | undefined;
     studentId: number | undefined;
     vehicleId: number | undefined;
+    startingLocation: string | undefined;
     instructors: InstructorDto[] | undefined;
     instructorNames: string[] | undefined;
     id: number | undefined;
@@ -25784,6 +25788,7 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
     internalDescription!: string | undefined;
     completed!: boolean | undefined;
     topic!: string | undefined;
+    startingLocation!: string | undefined;
     licenseClass!: string | undefined;
     studentId!: number | undefined;
     vehicleId!: number | undefined;
@@ -25810,6 +25815,7 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
             this.internalDescription = data["internalDescription"];
             this.completed = data["completed"];
             this.topic = data["topic"];
+            this.startingLocation = data["startingLocation"];
             this.licenseClass = data["licenseClass"];
             this.studentId = data["studentId"];
             this.vehicleId = data["vehicleId"];
@@ -25840,6 +25846,7 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
         data["internalDescription"] = this.internalDescription;
         data["completed"] = this.completed;
         data["topic"] = this.topic;
+        data["startingLocation"] = this.startingLocation;
         data["licenseClass"] = this.licenseClass;
         data["studentId"] = this.studentId;
         data["vehicleId"] = this.vehicleId;
@@ -25863,6 +25870,7 @@ export interface ICreateOrEditDrivingLessonDto {
     internalDescription: string | undefined;
     completed: boolean | undefined;
     topic: string | undefined;
+    startingLocation: string | undefined;
     licenseClass: string | undefined;
     studentId: number | undefined;
     vehicleId: number | undefined;
@@ -26235,7 +26243,7 @@ export interface IDrivingLessonInstructorLookupTableDto {
 export class GetCoursesForCreateOrEditDto implements IGetCoursesForCreateOrEditDto {
     courses!: CourseDto[] | undefined;
     defaultInstructorId!: number | undefined;
-    defaultInstructorFullName!: string | undefined;
+    defaultStartingLocation!: string | undefined;
 
     constructor(data?: IGetCoursesForCreateOrEditDto) {
         if (data) {
@@ -26254,7 +26262,7 @@ export class GetCoursesForCreateOrEditDto implements IGetCoursesForCreateOrEditD
                     this.courses!.push(CourseDto.fromJS(item));
             }
             this.defaultInstructorId = data["defaultInstructorId"];
-            this.defaultInstructorFullName = data["defaultInstructorFullName"];
+            this.defaultStartingLocation = data["defaultStartingLocation"];
         }
     }
 
@@ -26273,7 +26281,7 @@ export class GetCoursesForCreateOrEditDto implements IGetCoursesForCreateOrEditD
                 data["courses"].push(item.toJSON());
         }
         data["defaultInstructorId"] = this.defaultInstructorId;
-        data["defaultInstructorFullName"] = this.defaultInstructorFullName;
+        data["defaultStartingLocation"] = this.defaultStartingLocation;
         return data; 
     }
 }
@@ -26281,7 +26289,7 @@ export class GetCoursesForCreateOrEditDto implements IGetCoursesForCreateOrEditD
 export interface IGetCoursesForCreateOrEditDto {
     courses: CourseDto[] | undefined;
     defaultInstructorId: number | undefined;
-    defaultInstructorFullName: string | undefined;
+    defaultStartingLocation: string | undefined;
 }
 
 export class PagedResultDtoOfGetDrivingLessonTopicForViewDto implements IPagedResultDtoOfGetDrivingLessonTopicForViewDto {
@@ -38990,6 +38998,7 @@ export class StudentDto implements IStudentDto {
     userName!: string | undefined;
     ssn!: string | undefined;
     defaultInstructorId!: number | undefined;
+    defaultLocation!: string | undefined;
     payersSocialSecurityNo!: string | undefined;
     payersName!: string | undefined;
     payersStreet!: string | undefined;
@@ -39036,6 +39045,7 @@ export class StudentDto implements IStudentDto {
             this.userName = data["userName"];
             this.ssn = data["ssn"];
             this.defaultInstructorId = data["defaultInstructorId"];
+            this.defaultLocation = data["defaultLocation"];
             this.payersSocialSecurityNo = data["payersSocialSecurityNo"];
             this.payersName = data["payersName"];
             this.payersStreet = data["payersStreet"];
@@ -39082,6 +39092,7 @@ export class StudentDto implements IStudentDto {
         data["userName"] = this.userName;
         data["ssn"] = this.ssn;
         data["defaultInstructorId"] = this.defaultInstructorId;
+        data["defaultLocation"] = this.defaultLocation;
         data["payersSocialSecurityNo"] = this.payersSocialSecurityNo;
         data["payersName"] = this.payersName;
         data["payersStreet"] = this.payersStreet;
@@ -39113,6 +39124,7 @@ export interface IStudentDto {
     userName: string | undefined;
     ssn: string | undefined;
     defaultInstructorId: number | undefined;
+    defaultLocation: string | undefined;
     payersSocialSecurityNo: string | undefined;
     payersName: string | undefined;
     payersStreet: string | undefined;
@@ -39180,6 +39192,7 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
     licenseClassesAlreadyOwned!: string[] | undefined;
     ssn!: string | undefined;
     defaultInstructorId!: number | undefined;
+    defaultLocation!: string | undefined;
     payersSocialSecurityNo!: string | undefined;
     payersName!: string | undefined;
     payersStreet!: string | undefined;
@@ -39224,6 +39237,7 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
             }
             this.ssn = data["ssn"];
             this.defaultInstructorId = data["defaultInstructorId"];
+            this.defaultLocation = data["defaultLocation"];
             this.payersSocialSecurityNo = data["payersSocialSecurityNo"];
             this.payersName = data["payersName"];
             this.payersStreet = data["payersStreet"];
@@ -39268,6 +39282,7 @@ export class CreateOrEditStudentDto implements ICreateOrEditStudentDto {
         }
         data["ssn"] = this.ssn;
         data["defaultInstructorId"] = this.defaultInstructorId;
+        data["defaultLocation"] = this.defaultLocation;
         data["payersSocialSecurityNo"] = this.payersSocialSecurityNo;
         data["payersName"] = this.payersName;
         data["payersStreet"] = this.payersStreet;
@@ -39297,6 +39312,7 @@ export interface ICreateOrEditStudentDto {
     licenseClassesAlreadyOwned: string[] | undefined;
     ssn: string | undefined;
     defaultInstructorId: number | undefined;
+    defaultLocation: string | undefined;
     payersSocialSecurityNo: string | undefined;
     payersName: string | undefined;
     payersStreet: string | undefined;

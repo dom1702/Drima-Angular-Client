@@ -2,7 +2,7 @@ import { Component, Injector, ViewEncapsulation, ViewChild, Output, EventEmitter
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
-import { StudentsServiceProxy, StudentDto, StudentCourseDto } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, StudentDto, StudentCourseDto, StudentCourseDrivingLessonsDto } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -30,12 +30,15 @@ export class StudentsOverviewComponent extends AppComponentBase {
     pricePackageTabName: string = this.l("PricePackage");
     studentInvoicesTabName: string = this.l("StudentInvoices");
     studentFormsTabName: string = this.l("Forms");
+    lessonsTabName: string = this.l("Lessons");
 
     student: StudentDto;
     pricePackageName: string = "";
 
     selectedStudentCourse: StudentCourseDto;
     studentCourses: StudentCourseDto[];
+
+    drivingLessons: StudentCourseDrivingLessonsDto;
 
     @Output() courseChanged = new EventEmitter();
 
@@ -72,7 +75,7 @@ export class StudentsOverviewComponent extends AppComponentBase {
                         this.selectedStudentCourse = this.studentCourses[0];
 
                         // Emit manually once on start
-                        this.courseChanged.emit();
+                        this.CallCourseChanged();
                         
                         this.pricePackageName = this.selectedStudentCourse.pricePackageName;
 
@@ -87,6 +90,11 @@ export class StudentsOverviewComponent extends AppComponentBase {
     public CallCourseChanged() : void 
     {
         this.courseChanged.emit();
+
+        this._studentsServiceProxy.getPredefinedDrivingLessonsOfCourse(this.selectedStudentCourse.course.id, this.student.id).subscribe(result => {
+            this.drivingLessons = result;
+          console.log(this.drivingLessons);
+        });
     }
 
     public UpdateStudentView(): Observable<any> {

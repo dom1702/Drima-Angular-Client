@@ -64,6 +64,8 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
     submitting = false;
     confirmTerms = false;
 
+    hasPayer = false;
+
     userData : any =
     {
         firstName: "",
@@ -129,6 +131,16 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
         })
 
         this.isUserLoggedIn = abp.session.userId > 0;
+    }
+
+    openPayerPart()
+    {
+        this.hasPayer = true;
+    }
+
+    closePayerPart()
+    {
+        this.hasPayer = false;
     }
 
     goToNextPage() {
@@ -264,7 +276,7 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
         input.birthCountry = this._countriesService.getCode(this.currentBirthCountry),
         input.nativeLanguage = this._languagesService.getCode(this.currentNativeLanguage),
         input.country = this._countriesService.getCode(this.currentCountry),
-        input.dateOfBirth = moment(this.dateOfBirth);
+        //input.dateOfBirth = moment(this.dateOfBirth);
         input.additionalInformation = this.userData.additionalInformation,
         input.payersSocialSecurityNo = this.userData.payersSocialSecurityNo,
         input.payersName = this.userData.payersName,

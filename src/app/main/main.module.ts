@@ -113,6 +113,7 @@ import { LicenseClassLookupTableModalComponent } from '@app/shared/common/lookup
 
 import { CheckBoxModule } from '@syncfusion/ej2-angular-buttons';
 import { SendMessageToStudentModalComponent } from './students/students/send-message-to-student-modal.component';
+import { StudentsOverviewLessonsComponent } from './students/students/students-overview-lessons.component';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -192,6 +193,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       StudentsOverviewPricePackageComponent,
       StudentsOverviewInvoicesComponent,
       StudentsOverviewFormsComponent,
+      StudentsOverviewLessonsComponent,
       InstructorLookupTableModalComponent,
       CreateOrEditStudentUserModalComponent,
       SVOverviewComponent,

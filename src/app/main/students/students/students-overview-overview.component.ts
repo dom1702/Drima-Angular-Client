@@ -43,7 +43,7 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
     nativeLanguage = '';
 
     theoryLessons: StudentCoursePredefinedTheoryLessonDto[];
-    drivingLessons: StudentCourseDrivingLessonsDto;
+    @Input() drivingLessons: StudentCourseDrivingLessonsDto;
 
     theoryLessonState = TheoryLessonState;
 
@@ -75,12 +75,12 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
             });
         });
 
-        this.parentOverview.courseChanged.subscribe(() => {
-            this._studentsServiceProxy.getPredefinedDrivingLessonsOfCourse(this.parentOverview.selectedStudentCourse.course.id, this.student.id).subscribe(result => {
-                this.drivingLessons = result;
-              console.log(this.drivingLessons);
-            });
-        });
+        // this.parentOverview.courseChanged.subscribe(() => {
+        //     this._studentsServiceProxy.getPredefinedDrivingLessonsOfCourse(this.parentOverview.selectedStudentCourse.course.id, this.student.id).subscribe(result => {
+        //         this.drivingLessons = result;
+        //       console.log(this.drivingLessons);
+        //     });
+        // });
     }
 
     updateLicenseClass(): void {
@@ -131,6 +131,8 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
 
     editStudent(): void {
         this.createOrEditStudentModal.show(this.student.id);
+
+        console.log(this.drivingLessons);
     }
 
     createOrEditUserAccount(): void {

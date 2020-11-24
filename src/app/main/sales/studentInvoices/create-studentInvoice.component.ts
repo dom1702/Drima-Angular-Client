@@ -650,8 +650,6 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
     this._studentInvoicesServiceProxy.getEmptyStudentInvoiceForView(this.studentInvoice.studentId)
       .subscribe(result => {
 
-        // TODO !!!!!!!!!!!!!!!!!
-        //this.studentPricePackageId = result.student.pricePackageId;
         this.studentFirstName = result.firstName;
         this.studentLastName = result.lastName;
         this.refreshStudentFullName();
@@ -659,7 +657,17 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
         this.setCourses(result.courses);
 
         if(courseId != null)
+        {
           this.selectedCourse = this.courses.find(i => i.courseId == courseId);
+        }
+
+        if(courseId != null && this.selectedCourse != null)
+        {
+          if(this.selectedCourse.pricePackageId != null)
+            this.studentPricePackageId = this.selectedCourse.pricePackageId;
+        }
+        else
+          this.studentPricePackageId = null;
 
         this.form.get('recipientFirstName').setValue(result.recipientFirstName);
         this.form.get('recipientLastName').setValue(result.recipientLastName);
@@ -684,15 +692,20 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
   updateCourse()
   {
     console.log("new selected course: " + this.selectedCourse);
-    // Update price package or something so the button add price package adds the pp of the newly selected course
+    this.studentPricePackageId = this.selectedCourse.pricePackageId;
   }
 
   setCourses(courses : GetEmptyStudentInvoiceForViewDtoCourseDto[])
   {
     this.courses = courses;
     this.courses.push(new GetEmptyStudentInvoiceForViewDtoCourseDto(
-      {courseId: null, courseName: this.l("NotCourseRelated")}
+      {courseId: null, courseName: this.l("NotCourseRelated"), pricePackageId: null}
       ));
+  }
+
+  splitAndSave()
+  {
+    console.log("Split and saved");
   }
 }
 

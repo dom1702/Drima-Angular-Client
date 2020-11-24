@@ -29,34 +29,47 @@
                         </div>
                     </div>
                     <input class="form-control" name="simulatorLesson.simulatorId"
-                        [(ngModel)]="simulatorLesson.simulatorId" type="text" required hidden> 
+                        [(ngModel)]="simulatorLesson.simulatorId" type="text" required hidden>
 
                     <div *ngIf="simulatorLesson.simulatorId">
 
-                        <div class="form-group" *ngIf="simulatorModules != null && simulatorModules.availableModulesOnSim != null">
+                        <div class="form-group"
+                            *ngIf="simulatorModules != null && simulatorModules.availableModulesOnSim != null">
                             <label for="SimulatorLesson_Modules">{{l("AvailableModules")}}</label>
                             <div *ngFor="let m of simulatorModules.availableModulesOnSim">
-                                <label class="m-radio">
-                                    <input type="radio" name="m_option" [value]="m"
-                                        [(ngModel)]="selectedModuleIdentifier" required>
-                                    {{m.identifier}}
-                                    <span></span>
-
-                                </label>
+                                <h6>{{m.identifier}}</h6>
+                                <div *ngFor="let eu of m.exerciseUnits">
+                                    <label class="m-radio">
+                                        <input type="radio" name="eu_option" [value]="eu"
+                                            [(ngModel)]="selectedExerciseUnit" required>
+                                        {{eu.identifier}}
+                                        <span></span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group">
+                            <div class="m-checkbox-list">
+                                <label for="SetTopicAutomatically" class="m-checkbox">
+                                    <input id="SetTopicAutomatically" type="checkbox" name="SetTopicAutomatically"
+                                        [(ngModel)]="setTopicNameAutomatically">
+                                    {{l("SetTopicAutomatically")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div *ngIf="!setTopicNameAutomatically" class="form-group">
                             <label for="SimulatorLesson_Topic">{{l("Topic")}}</label>
                             <input type="text" id="SimulatorLesson_Topic" class="form-control"
                                 [(ngModel)]="simulatorLesson.topic" name="Topic" />
                         </div>
 
                         <div class="form-group m-form__group">
-                            <label for="PersonLastName">{{l("Student")}}</label>
+                            <label for="studentCompleteName">{{l("Student")}} *</label>
                             <div class="input-group">
-                                <input class="form-control" id="PersonLastName" name="personLastName"
-                                    [(ngModel)]="personLastName" type="text" disabled>
+                                <input class="form-control" id="StudentCompleteName" name="studentCompleteName"
+                                    [(ngModel)]="studentCompleteName" type="text" disabled>
                                 <div class="input-group-append">
                                     <button class="btn btn-primary blue" (click)="openSelectPersonModal()"
                                         type="button"><i class="fa fa-search"></i> {{l("Pick")}}</button>

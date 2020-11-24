@@ -15,10 +15,10 @@ import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/i
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'createOrEditDrivingLessonModal',
-    templateUrl: './create-or-edit-drivingLesson-modal.component.html',
+    selector: 'createOrEditExamDrivingModal',
+    templateUrl: './create-or-edit-examDriving-modal.component.html',
 })
-export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase implements OnInit {
+export class CreateOrEditExamDrivingModalComponent extends AppComponentBase implements OnInit {
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('drivingLessonTopicLookupTableModal') drivingLessonTopicLookupTableModal: DrivingLessonTopicLookupTableModalComponent;
@@ -225,6 +225,8 @@ export class CreateOrEditDrivingLessonModalComponent extends AppComponentBase im
         this.drivingLesson.startTime = moment(this.startTime);
         this.drivingLesson.startTime.hours(this.startTime.getHours());
         this.drivingLesson.startTime.minutes(this.startTime.getMinutes());
+
+        this.drivingLesson.isExam = true;
 
         if (this.selectedPdl) {
             this.drivingLesson.predefinedDrivingLessonId = this.selectedPdl.lessonIdString;

@@ -5,8 +5,8 @@
             <form *ngIf="active" #drivingLessonForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        <span *ngIf="drivingLesson.id">{{l("EditDrivingLesson")}}</span>
-                        <span *ngIf="!drivingLesson.id">{{l("CreateNewDrivingLesson")}}</span>
+                        <span *ngIf="drivingLesson.id">{{l("EditExam")}}</span>
+                        <span *ngIf="!drivingLesson.id">{{l("CreateNewExam")}}</span>
                     </h4>
                     <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
                         <span aria-hidden="true">&times;</span>
@@ -57,32 +57,7 @@
                                     {{l("NoCourseSelected")}}!
                                 </alert>
                             </div>
-                            <div class="row">
-                                <div class="col-6 border-right">
-                                    <div class="form-group">
-                                        <label class="m-radio">
-                                            <input type="radio" name="pdl_option" [value]="null"
-                                                [(ngModel)]="selectedPdl" (change)='updateCheck()'>
-                                            {{l('Basic Lesson')}}
-                                            <span></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div *ngIf="selectedStudentCourse">
-                                        <div class="col-md-auto"
-                                            *ngFor="let pdl of selectedStudentCourse.predefinedDrivingLessons">
-                                            <label class="m-radio">
-                                                <input type="radio" name="pdl_option" [value]="pdl"
-                                                    [(ngModel)]="selectedPdl" (change)='updateCheck()'>
-                                                {{pdl.name}}
-                                                <span></span>
-
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <div class="m-checkbox-list">

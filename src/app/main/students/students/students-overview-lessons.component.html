@@ -1,6 +1,20 @@
 <div *ngIf="student">
 
-    <div *ngIf="drivingLessons != null" class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
+ 
+        <div class="row form-group">
+        
+            <div class="col text-right">
+                <button *ngIf="isGranted('Pages.DrivingLessons.Create')" (click)="createExam()" 
+                class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewExam")}}</button>
+                <button *ngIf="isGranted('Pages.DrivingLessons.Create')" (click)="createDrivingLesson()" 
+                class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewDrivingLesson")}}</button>
+                <button *ngIf="isGranted('Pages.SimulatorLessons.Create')" (click)="createSimulatorLesson()"
+                    class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewSimulatorLesson")}}</button>
+            </div>
+        </div>
+
+        <div class="row form-group">
+    <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
         <p-table #dataTable [value]="primengTableHelper.records"
           
             [scrollable]="true" ScrollWidth="100%" [responsive]="primengTableHelper.isResponsive"
@@ -10,6 +24,10 @@
                     <th style="width: 130px"
                         [hidden]="!isGrantedAny('Pages.DrivingLessons.Edit', 'Pages.DrivingLessons.Delete')">
                         {{l('Actions')}}</th>
+                        <th style="width: 150px" pSortableColumn="lessonType">
+                            {{l('LessonType')}}
+                            <p-sortIcon field="lessonType"></p-sortIcon>
+                        </th>
                     <th style="width: 150px" pSortableColumn="startTime">
                         {{l('StartTime')}}
                         <p-sortIcon field="startTime"></p-sortIcon>
@@ -19,7 +37,7 @@
                         <p-sortIcon field="instructorNames"></p-sortIcon>
                     </th>
                     <th style="width: 150px" pSortableColumn="vehicle">
-                        {{l('Vehicle')}}
+                        {{l('Vehicle')}}/{{l('Simulator')}}
                         <p-sortIcon field="vehicle"></p-sortIcon>
                     </th>
 
@@ -34,7 +52,7 @@
                     </th>
 
                     <th style="width: 100px" pSortableColumn="doneOnSimulator">
-                        {{l('DoneOnSimulator')}}
+                        {{l('Simulator')}}
                         <p-sortIcon field="doneOnSimulator"></p-sortIcon>
                     </th>
                 </tr>
@@ -50,11 +68,16 @@
                             <ul class="dropdown-menu" *dropdownMenu>
                                 <li>
                                     <a href="javascript:;"
-                                        (click)="viewDrivingLessonModal.show(record)">{{l('View')}}</a>
+                                        (click)="showView(record)">{{l('View')}}</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;"
+                                        *ngIf="record.feedbackPdfFileGuid != null"
+                                        (click)="downloadFeedbackPdf(record)">{{l('DownloadFeedbackPdf')}}</a>
                                 </li>
                                 <li>
                                     <a href="javascript:;" *ngIf="permission.isGranted('Pages.DrivingLessons.Edit')"
-                                        (click)="createOrEditDrivingLessonModal.show(record.id)">{{l('Edit')}}</a>
+                                        (click)="createOrEdit(record)">{{l('Edit')}}</a>
                                 </li>
                                 <li>
                                     <a href="javascript:;" *ngIf="permission.isGranted('Pages.DrivingLessons.Delete')"
@@ -65,6 +88,15 @@
                                         (click)="showHistory(record)">{{l('History')}}</a>
                                 </li>
                             </ul>
+                        </div>
+                    </td>
+                    <td style="width:150px">
+                        <span class="ui-column-title"> {{l('LessonType')}}</span>
+                        <div *ngIf="record.predefinedDrivingLessonId == l('Exam')">
+                            <strong>{{record.predefinedDrivingLessonId}}</strong>
+                        </div>
+                        <div *ngIf="record.predefinedDrivingLessonId != l('Exam')">
+                            {{record.predefinedDrivingLessonId}}
                         </div>
                     </td>
                     <td style="width:150px">
@@ -107,11 +139,14 @@
         <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
             {{l('NoData')}}
         </div>
-       
+    </div>
     </div>
 
-    <!-- <div *ngIf="createdForms && createdForms.length == 0" class="form-group">
-        <label>{{l("NoFormsCreatedYet")}}</label>
-    </div> -->
+    <createOrEditDrivingLessonModal #createOrEditDrivingLessonModal (modalSave)="refresh()"></createOrEditDrivingLessonModal>
+    <createOrEditExamDrivingModal #createOrEditExamDrivingModal (modalSave)="refresh()"></createOrEditExamDrivingModal>
+    <viewDrivingLessonModal #viewDrivingLessonModal></viewDrivingLessonModal>
+    <createOrEditSimulatorLessonModal #createOrEditSimulatorLessonModal (modalSave)="refresh()">
+    </createOrEditSimulatorLessonModal>
+    <viewSimulatorLessonModal #viewSimulatorLessonModal></viewSimulatorLessonModal>
 
 </div>

@@ -18,6 +18,7 @@ import { CountriesService } from '@app/shared/common/services/countries.service'
 import { LanguagesService } from '@app/shared/common/services/languages.service';
 import { AssignStudentToCourseModalComponent } from './assign-student-to-course-modal.component';
 import { SendMessageToStudentModalComponent } from './send-message-to-student-modal.component';
+import { ImpersonationService } from '@app/admin/users/impersonation.service';
 
 @Component({
     selector: 'students-overview-overview',
@@ -56,6 +57,7 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
         private _fileDownloadService: FileDownloadService,
         private _countriesService: CountriesService,
         private _languagesService: LanguagesService,
+        public _impersonationService: ImpersonationService,
 
         private _onlineTheory : OnlineTheoryServiceProxy
     ) {
@@ -185,5 +187,10 @@ export class StudentsOverviewOverviewComponent extends AppComponentBase {
             return '';
 
         return this.student.street + ", " + this.student.zipCode + ", " + this.student.city;
+    }
+
+    impersonate()
+    {
+        this._impersonationService.impersonate(this.student.userId, this.appSession.tenantId);
     }
 }

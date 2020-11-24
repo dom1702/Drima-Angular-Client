@@ -147,6 +147,8 @@
 
 <div class="m--margin-top-30">
     <div class="m--align-right">
+        <button type="button" (click)="impersonate()"
+        class="btn btn-primary mr-5"><span>{{l("Impersonate")}}</span></button>
         <button type="button" (click)="openSendMessage()"
         class="btn btn-primary mr-5"><i class="fa fa-envelope"></i><span>{{l("SendEmail")}}</span></button>
         <button type="button" (click)="openAssignToCourseModal()"

@@ -11,7 +11,7 @@ import { FileDownloadService } from '@shared/utils/file-download.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subscription, Observable, Observer } from 'rxjs';
-import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TabDirective, TabsModule } from 'ngx-bootstrap/tabs';
 import { StudentsOverviewPricePackageComponent } from './students-overview-pricePackage.component';
 
 @Component({
@@ -41,6 +41,7 @@ export class StudentsOverviewComponent extends AppComponentBase {
     drivingLessons: StudentCourseDrivingLessonsDto;
 
     @Output() courseChanged = new EventEmitter();
+    @Output() lessonsTabSelected = new EventEmitter();
 
     constructor(
         injector: Injector,
@@ -53,6 +54,11 @@ export class StudentsOverviewComponent extends AppComponentBase {
     ) {
         super(injector);
     }
+
+    onLessonsTabSelect(data: TabDirective): void {
+        if(data.heading === this.lessonsTabName)
+            this.lessonsTabSelected.emit();
+      }
 
     ngOnInit(): void {
 

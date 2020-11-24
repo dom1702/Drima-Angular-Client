@@ -26,15 +26,17 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
 
     simulatorLesson: CreateOrEditSimulatorLessonDto = new CreateOrEditSimulatorLessonDto();
 
-    personLastName = '';
+    studentCompleteName = '';
     simulatorName = '';
 
     simulatorModules;
-    selectedModuleIdentifier;
+    selectedExerciseUnit;
 
-    manuallyMarkCompleted : boolean = false;
+    manuallyMarkCompleted: boolean = false;
 
     startTime: Date = new Date();
+
+    setTopicNameAutomatically: boolean = true;
 
     constructor(
         injector: Injector,
@@ -43,18 +45,31 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
         super(injector);
 
         this.setSimulatorIdNull();
-        this.selectedModuleIdentifier = null;
+        this.selectedExerciseUnit = null;
         this.simulatorModules = null;
         this.manuallyMarkCompleted = false;
+        this.setTopicNameAutomatically = true;
     }
 
-    show(simulatorLessonId?: number): void {
+    show(simulatorLessonId?: number, studentId: number = null, 
+        studentName:string = "", studentLastName:string = ""): void {
 
         if (!simulatorLessonId) {
             this.simulatorLesson = new CreateOrEditSimulatorLessonDto();
+
+            if(studentId != null)
+            {
+                this.simulatorLesson.studentId = studentId;
+                this.studentCompleteName = studentName;
+            }
+            else
+            {
+                this.studentCompleteName = '';
+            }
+
             this.simulatorLesson.id = simulatorLessonId;
             this.simulatorLesson.startTime = moment().startOf('day');
-            this.personLastName = '';
+          
             this.simulatorName = '';
             this.simulatorLesson.length = 1;
 
@@ -65,20 +80,21 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
 
                 this.simulatorLesson = result.simulatorLesson;
 
-                var moduleIdentifierString = result.simulatorLesson.moduleIdentifier;
+                var euIdentifierString = result.simulatorLesson.exerciseUnitIdentifier;
 
                 if (this.simulatorLesson.simulatorId != null) {
                     this._simulatorLessonsServiceProxy.getAvailableModulesOnSimulator(this.simulatorLesson.simulatorId).subscribe(result => {
                         this.simulatorModules = result;
-                        for(var i = 0; i< this.simulatorModules.availableModulesOnSim.length; i++)
-                        {
-                            if(this.simulatorModules.availableModulesOnSim[i].identifier == moduleIdentifierString)
-                                this.selectedModuleIdentifier = this.simulatorModules.availableModulesOnSim[i];
+                        for (var i = 0; i < this.simulatorModules.availableModulesOnSim.length; i++) {
+                            for (var j = 0; j < this.simulatorModules.availableModulesOnSim[i].exerciseUnits.length; j++) {
+                                if (this.simulatorModules.availableModulesOnSim[i].exerciseUnits[j].identifier == euIdentifierString)
+                                    this.selectedExerciseUnit = this.simulatorModules.availableModulesOnSim[i].exerciseUnits[j];
+                            }
                         }
                     })
                 }
 
-                this.personLastName = result.personLastName;
+                this.studentCompleteName = result.studentName;
                 this.simulatorName = result.simulatorName;
                 this.startTime = result.simulatorLesson.startTime.toDate();
 
@@ -86,8 +102,6 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
                 this.modal.show();
             });
         }
-
-
     }
 
     save(): void {
@@ -96,9 +110,14 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
         this.simulatorLesson.startTime = moment(this.startTime);
         this.simulatorLesson.startTime.hours(this.startTime.getHours());
         this.simulatorLesson.startTime.minutes(this.startTime.getMinutes());
-        this.simulatorLesson.moduleIdentifier = this.selectedModuleIdentifier.identifier;
+        this.simulatorLesson.exerciseUnitIdentifier = this.selectedExerciseUnit.identifier;
 
-        if(this.manuallyMarkCompleted)
+        if(this.setTopicNameAutomatically)
+        {
+            this.simulatorLesson.topic = this.studentCompleteName + " - " + this.l(this.simulatorLesson.exerciseUnitIdentifier);
+        }
+
+        if (this.manuallyMarkCompleted)
             this.simulatorLesson.lessonState = SimulatorLessonState.Completed;
 
         this._simulatorLessonsServiceProxy.createOrEdit(this.simulatorLesson)
@@ -112,7 +131,7 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
 
     openSelectPersonModal() {
         this.simulatorLessonPersonLookupTableModal.id = this.simulatorLesson.studentId;
-        this.simulatorLessonPersonLookupTableModal.displayName = this.personLastName;
+        this.simulatorLessonPersonLookupTableModal.displayName = this.studentCompleteName;
         this.simulatorLessonPersonLookupTableModal.show();
     }
     openSelectSimulatorModal() {
@@ -124,7 +143,7 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
 
     setStudentIdNull() {
         this.simulatorLesson.studentId = null;
-        this.personLastName = '';
+        this.studentCompleteName = '';
     }
     setSimulatorIdNull() {
         this.simulatorLesson.simulatorId = null;
@@ -134,7 +153,7 @@ export class CreateOrEditSimulatorLessonModalComponent extends AppComponentBase 
 
     getNewStudentId() {
         this.simulatorLesson.studentId = this.simulatorLessonPersonLookupTableModal.id;
-        this.personLastName = this.simulatorLessonPersonLookupTableModal.displayName;
+        this.studentCompleteName = this.simulatorLessonPersonLookupTableModal.displayName;
     }
     getNewSimulatorId() {
         this.simulatorLesson.simulatorId = this.simulatorLessonSimulatorLookupTableModal.id;

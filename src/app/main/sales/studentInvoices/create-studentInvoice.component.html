@@ -202,9 +202,11 @@
 
                     <button [disabled]="saving" type="button" class="btn btn-default"
                         (click)="close()">{{l("Cancel")}}</button>
-                    <button type="submit" class="btn btn-primary blue" [disabled]="!studentInvoiceForm.form.valid"
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!studentInvoiceForm.form.valid  || itemForm.get('items').length == 0"
                         [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
                         <span>{{l("Save")}}</span></button>
+                    <button type="button" (click)="splitAndSave()" class="btn btn-primary blue" [disabled]="!studentInvoiceForm.form.valid || itemForm.get('items').length < 2"><i class="fa fa-save"></i>
+                        <span>{{l("SplitAndSave")}}</span></button>
                     <!-- <button type="button" class="btn btn-default" [buttonBusy]="currentlyCreatingPdf" [busyText]="l('CreatingPdfFile')" (click)="createPdfFile()"><span>{{l("CreatePDF")}}</span></button> -->
 
                 </form>

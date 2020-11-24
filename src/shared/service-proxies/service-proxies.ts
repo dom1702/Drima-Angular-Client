@@ -13492,6 +13492,62 @@ export class SimulatorExternalServiceProxy {
      * @param input (optional) 
      * @return Success
      */
+    authenticateStartCode(input: AuthenticateStartCodeInput | null | undefined): Observable<AuthenticateStartCodeOutput> {
+        let url_ = this.baseUrl + "/api/services/app/SimulatorExternal/AuthenticateStartCode";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAuthenticateStartCode(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAuthenticateStartCode(<any>response_);
+                } catch (e) {
+                    return <Observable<AuthenticateStartCodeOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AuthenticateStartCodeOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processAuthenticateStartCode(response: HttpResponseBase): Observable<AuthenticateStartCodeOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? AuthenticateStartCodeOutput.fromJS(resultData200) : new AuthenticateStartCodeOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AuthenticateStartCodeOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
     startWithStartCode(input: StartWithStartCodeInput | null | undefined): Observable<StartWithStartCodeOutput> {
         let url_ = this.baseUrl + "/api/services/app/SimulatorExternal/StartWithStartCode";
         url_ = url_.replace(/[?&]$/, "");
@@ -16724,6 +16780,67 @@ export class StudentsServiceProxy {
             }));
         }
         return _observableOf<StudentCourseDrivingLessonsDto>(<any>null);
+    }
+
+    /**
+     * @param courseId (optional) 
+     * @param studentId (optional) 
+     * @return Success
+     */
+    getAllDrivingLessonsOfCourse(courseId: number | null | undefined, studentId: number | null | undefined): Observable<DrivingLessonOfCourseDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Students/GetAllDrivingLessonsOfCourse?";
+        if (courseId !== undefined)
+            url_ += "CourseId=" + encodeURIComponent("" + courseId) + "&"; 
+        if (studentId !== undefined)
+            url_ += "StudentId=" + encodeURIComponent("" + studentId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllDrivingLessonsOfCourse(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllDrivingLessonsOfCourse(<any>response_);
+                } catch (e) {
+                    return <Observable<DrivingLessonOfCourseDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DrivingLessonOfCourseDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllDrivingLessonsOfCourse(response: HttpResponseBase): Observable<DrivingLessonOfCourseDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(DrivingLessonOfCourseDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DrivingLessonOfCourseDto[]>(<any>null);
     }
 
     /**
@@ -25583,6 +25700,8 @@ export class DrivingLessonDto implements IDrivingLessonDto {
     startingLocation!: string | undefined;
     instructors!: InstructorDto[] | undefined;
     instructorNames!: string[] | undefined;
+    predefinedDrivingLessonId!: string | undefined;
+    isExam!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: IDrivingLessonDto) {
@@ -25614,6 +25733,8 @@ export class DrivingLessonDto implements IDrivingLessonDto {
                 for (let item of data["instructorNames"])
                     this.instructorNames!.push(item);
             }
+            this.predefinedDrivingLessonId = data["predefinedDrivingLessonId"];
+            this.isExam = data["isExam"];
             this.id = data["id"];
         }
     }
@@ -25645,6 +25766,8 @@ export class DrivingLessonDto implements IDrivingLessonDto {
             for (let item of this.instructorNames)
                 data["instructorNames"].push(item);
         }
+        data["predefinedDrivingLessonId"] = this.predefinedDrivingLessonId;
+        data["isExam"] = this.isExam;
         data["id"] = this.id;
         return data; 
     }
@@ -25661,6 +25784,8 @@ export interface IDrivingLessonDto {
     startingLocation: string | undefined;
     instructors: InstructorDto[] | undefined;
     instructorNames: string[] | undefined;
+    predefinedDrivingLessonId: string | undefined;
+    isExam: boolean | undefined;
     id: number | undefined;
 }
 
@@ -25795,6 +25920,7 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
     instructors!: InstructorDto[] | undefined;
     courseId!: number | undefined;
     predefinedDrivingLessonId!: string | undefined;
+    isExam!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditDrivingLessonDto) {
@@ -25826,6 +25952,7 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
             }
             this.courseId = data["courseId"];
             this.predefinedDrivingLessonId = data["predefinedDrivingLessonId"];
+            this.isExam = data["isExam"];
             this.id = data["id"];
         }
     }
@@ -25857,6 +25984,7 @@ export class CreateOrEditDrivingLessonDto implements ICreateOrEditDrivingLessonD
         }
         data["courseId"] = this.courseId;
         data["predefinedDrivingLessonId"] = this.predefinedDrivingLessonId;
+        data["isExam"] = this.isExam;
         data["id"] = this.id;
         return data; 
     }
@@ -25877,6 +26005,7 @@ export interface ICreateOrEditDrivingLessonDto {
     instructors: InstructorDto[] | undefined;
     courseId: number | undefined;
     predefinedDrivingLessonId: string | undefined;
+    isExam: boolean | undefined;
     id: number | undefined;
 }
 
@@ -36784,12 +36913,12 @@ export interface IUpdateModulesOutput {
     errorMessage: string | undefined;
 }
 
-export class StartWithStartCodeInput implements IStartWithStartCodeInput {
+export class AuthenticateStartCodeInput implements IAuthenticateStartCodeInput {
     apiKey!: string | undefined;
     startCode!: string | undefined;
     simulatorCode!: string | undefined;
 
-    constructor(data?: IStartWithStartCodeInput) {
+    constructor(data?: IAuthenticateStartCodeInput) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -36806,9 +36935,9 @@ export class StartWithStartCodeInput implements IStartWithStartCodeInput {
         }
     }
 
-    static fromJS(data: any): StartWithStartCodeInput {
+    static fromJS(data: any): AuthenticateStartCodeInput {
         data = typeof data === 'object' ? data : {};
-        let result = new StartWithStartCodeInput();
+        let result = new AuthenticateStartCodeInput();
         result.init(data);
         return result;
     }
@@ -36822,20 +36951,20 @@ export class StartWithStartCodeInput implements IStartWithStartCodeInput {
     }
 }
 
-export interface IStartWithStartCodeInput {
+export interface IAuthenticateStartCodeInput {
     apiKey: string | undefined;
     startCode: string | undefined;
     simulatorCode: string | undefined;
 }
 
-export class StartWithStartCodeOutput implements IStartWithStartCodeOutput {
+export class AuthenticateStartCodeOutput implements IAuthenticateStartCodeOutput {
     simulatorLessonId!: number | undefined;
     isValid!: boolean | undefined;
     errorMessage!: string | undefined;
     startTime!: moment.Moment | undefined;
     plannedModulesIdentifiers!: string[] | undefined;
 
-    constructor(data?: IStartWithStartCodeOutput) {
+    constructor(data?: IAuthenticateStartCodeOutput) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -36858,9 +36987,9 @@ export class StartWithStartCodeOutput implements IStartWithStartCodeOutput {
         }
     }
 
-    static fromJS(data: any): StartWithStartCodeOutput {
+    static fromJS(data: any): AuthenticateStartCodeOutput {
         data = typeof data === 'object' ? data : {};
-        let result = new StartWithStartCodeOutput();
+        let result = new AuthenticateStartCodeOutput();
         result.init(data);
         return result;
     }
@@ -36880,12 +37009,88 @@ export class StartWithStartCodeOutput implements IStartWithStartCodeOutput {
     }
 }
 
-export interface IStartWithStartCodeOutput {
+export interface IAuthenticateStartCodeOutput {
     simulatorLessonId: number | undefined;
     isValid: boolean | undefined;
     errorMessage: string | undefined;
     startTime: moment.Moment | undefined;
     plannedModulesIdentifiers: string[] | undefined;
+}
+
+export class StartWithStartCodeInput implements IStartWithStartCodeInput {
+    apiKey!: string | undefined;
+    simulatorLessonId!: number | undefined;
+
+    constructor(data?: IStartWithStartCodeInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.apiKey = data["apiKey"];
+            this.simulatorLessonId = data["simulatorLessonId"];
+        }
+    }
+
+    static fromJS(data: any): StartWithStartCodeInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new StartWithStartCodeInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["apiKey"] = this.apiKey;
+        data["simulatorLessonId"] = this.simulatorLessonId;
+        return data; 
+    }
+}
+
+export interface IStartWithStartCodeInput {
+    apiKey: string | undefined;
+    simulatorLessonId: number | undefined;
+}
+
+export class StartWithStartCodeOutput implements IStartWithStartCodeOutput {
+    errorOccured!: boolean | undefined;
+
+    constructor(data?: IStartWithStartCodeOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.errorOccured = data["errorOccured"];
+        }
+    }
+
+    static fromJS(data: any): StartWithStartCodeOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new StartWithStartCodeOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["errorOccured"] = this.errorOccured;
+        return data; 
+    }
+}
+
+export interface IStartWithStartCodeOutput {
+    errorOccured: boolean | undefined;
 }
 
 export class FinishSimulatorLessonInput implements IFinishSimulatorLessonInput {
@@ -36986,7 +37191,7 @@ export interface IPagedResultDtoOfGetSimulatorLessonForViewDto {
 
 export class GetSimulatorLessonForViewDto implements IGetSimulatorLessonForViewDto {
     simulatorLesson!: SimulatorLessonDto | undefined;
-    personLastName!: string | undefined;
+    studentName!: string | undefined;
     simulatorName!: string | undefined;
 
     constructor(data?: IGetSimulatorLessonForViewDto) {
@@ -37001,7 +37206,7 @@ export class GetSimulatorLessonForViewDto implements IGetSimulatorLessonForViewD
     init(data?: any) {
         if (data) {
             this.simulatorLesson = data["simulatorLesson"] ? SimulatorLessonDto.fromJS(data["simulatorLesson"]) : <any>undefined;
-            this.personLastName = data["personLastName"];
+            this.studentName = data["studentName"];
             this.simulatorName = data["simulatorName"];
         }
     }
@@ -37016,7 +37221,7 @@ export class GetSimulatorLessonForViewDto implements IGetSimulatorLessonForViewD
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["simulatorLesson"] = this.simulatorLesson ? this.simulatorLesson.toJSON() : <any>undefined;
-        data["personLastName"] = this.personLastName;
+        data["studentName"] = this.studentName;
         data["simulatorName"] = this.simulatorName;
         return data; 
     }
@@ -37024,7 +37229,7 @@ export class GetSimulatorLessonForViewDto implements IGetSimulatorLessonForViewD
 
 export interface IGetSimulatorLessonForViewDto {
     simulatorLesson: SimulatorLessonDto | undefined;
-    personLastName: string | undefined;
+    studentName: string | undefined;
     simulatorName: string | undefined;
 }
 
@@ -37113,7 +37318,7 @@ export enum SimulatorLessonState {
 
 export class GetSimulatorLessonForEditOutput implements IGetSimulatorLessonForEditOutput {
     simulatorLesson!: CreateOrEditSimulatorLessonDto | undefined;
-    personLastName!: string | undefined;
+    studentName!: string | undefined;
     simulatorName!: string | undefined;
 
     constructor(data?: IGetSimulatorLessonForEditOutput) {
@@ -37128,7 +37333,7 @@ export class GetSimulatorLessonForEditOutput implements IGetSimulatorLessonForEd
     init(data?: any) {
         if (data) {
             this.simulatorLesson = data["simulatorLesson"] ? CreateOrEditSimulatorLessonDto.fromJS(data["simulatorLesson"]) : <any>undefined;
-            this.personLastName = data["personLastName"];
+            this.studentName = data["studentName"];
             this.simulatorName = data["simulatorName"];
         }
     }
@@ -37143,7 +37348,7 @@ export class GetSimulatorLessonForEditOutput implements IGetSimulatorLessonForEd
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["simulatorLesson"] = this.simulatorLesson ? this.simulatorLesson.toJSON() : <any>undefined;
-        data["personLastName"] = this.personLastName;
+        data["studentName"] = this.studentName;
         data["simulatorName"] = this.simulatorName;
         return data; 
     }
@@ -37151,7 +37356,7 @@ export class GetSimulatorLessonForEditOutput implements IGetSimulatorLessonForEd
 
 export interface IGetSimulatorLessonForEditOutput {
     simulatorLesson: CreateOrEditSimulatorLessonDto | undefined;
-    personLastName: string | undefined;
+    studentName: string | undefined;
     simulatorName: string | undefined;
 }
 
@@ -37163,7 +37368,7 @@ export class CreateOrEditSimulatorLessonDto implements ICreateOrEditSimulatorLes
     length!: number | undefined;
     studentId!: number | undefined;
     simulatorId!: number | undefined;
-    moduleIdentifier!: string | undefined;
+    exerciseUnitIdentifier!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditSimulatorLessonDto) {
@@ -37184,7 +37389,7 @@ export class CreateOrEditSimulatorLessonDto implements ICreateOrEditSimulatorLes
             this.length = data["length"];
             this.studentId = data["studentId"];
             this.simulatorId = data["simulatorId"];
-            this.moduleIdentifier = data["moduleIdentifier"];
+            this.exerciseUnitIdentifier = data["exerciseUnitIdentifier"];
             this.id = data["id"];
         }
     }
@@ -37205,7 +37410,7 @@ export class CreateOrEditSimulatorLessonDto implements ICreateOrEditSimulatorLes
         data["length"] = this.length;
         data["studentId"] = this.studentId;
         data["simulatorId"] = this.simulatorId;
-        data["moduleIdentifier"] = this.moduleIdentifier;
+        data["exerciseUnitIdentifier"] = this.exerciseUnitIdentifier;
         data["id"] = this.id;
         return data; 
     }
@@ -37219,7 +37424,7 @@ export interface ICreateOrEditSimulatorLessonDto {
     length: number | undefined;
     studentId: number | undefined;
     simulatorId: number | undefined;
-    moduleIdentifier: string | undefined;
+    exerciseUnitIdentifier: string | undefined;
     id: number | undefined;
 }
 
@@ -37270,8 +37475,60 @@ export interface IGetAvailableModulesOnSimulatorOutput {
 export class Sim_Module implements ISim_Module {
     description!: string | undefined;
     identifier!: string | undefined;
+    exerciseUnits!: Sim_Module_ExerciseUnit[] | undefined;
 
     constructor(data?: ISim_Module) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.description = data["description"];
+            this.identifier = data["identifier"];
+            if (data["exerciseUnits"] && data["exerciseUnits"].constructor === Array) {
+                this.exerciseUnits = [] as any;
+                for (let item of data["exerciseUnits"])
+                    this.exerciseUnits!.push(Sim_Module_ExerciseUnit.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Sim_Module {
+        data = typeof data === 'object' ? data : {};
+        let result = new Sim_Module();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        data["identifier"] = this.identifier;
+        if (this.exerciseUnits && this.exerciseUnits.constructor === Array) {
+            data["exerciseUnits"] = [];
+            for (let item of this.exerciseUnits)
+                data["exerciseUnits"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ISim_Module {
+    description: string | undefined;
+    identifier: string | undefined;
+    exerciseUnits: Sim_Module_ExerciseUnit[] | undefined;
+}
+
+export class Sim_Module_ExerciseUnit implements ISim_Module_ExerciseUnit {
+    description!: string | undefined;
+    identifier!: string | undefined;
+
+    constructor(data?: ISim_Module_ExerciseUnit) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -37287,9 +37544,9 @@ export class Sim_Module implements ISim_Module {
         }
     }
 
-    static fromJS(data: any): Sim_Module {
+    static fromJS(data: any): Sim_Module_ExerciseUnit {
         data = typeof data === 'object' ? data : {};
-        let result = new Sim_Module();
+        let result = new Sim_Module_ExerciseUnit();
         result.init(data);
         return result;
     }
@@ -37302,7 +37559,7 @@ export class Sim_Module implements ISim_Module {
     }
 }
 
-export interface ISim_Module {
+export interface ISim_Module_ExerciseUnit {
     description: string | undefined;
     identifier: string | undefined;
 }
@@ -38386,6 +38643,7 @@ export interface IGetEmptyStudentInvoiceForViewDto {
 export class GetEmptyStudentInvoiceForViewDtoCourseDto implements IGetEmptyStudentInvoiceForViewDtoCourseDto {
     courseId!: number | undefined;
     courseName!: string | undefined;
+    pricePackageId!: number | undefined;
 
     constructor(data?: IGetEmptyStudentInvoiceForViewDtoCourseDto) {
         if (data) {
@@ -38400,6 +38658,7 @@ export class GetEmptyStudentInvoiceForViewDtoCourseDto implements IGetEmptyStude
         if (data) {
             this.courseId = data["courseId"];
             this.courseName = data["courseName"];
+            this.pricePackageId = data["pricePackageId"];
         }
     }
 
@@ -38414,6 +38673,7 @@ export class GetEmptyStudentInvoiceForViewDtoCourseDto implements IGetEmptyStude
         data = typeof data === 'object' ? data : {};
         data["courseId"] = this.courseId;
         data["courseName"] = this.courseName;
+        data["pricePackageId"] = this.pricePackageId;
         return data; 
     }
 }
@@ -38421,6 +38681,7 @@ export class GetEmptyStudentInvoiceForViewDtoCourseDto implements IGetEmptyStude
 export interface IGetEmptyStudentInvoiceForViewDtoCourseDto {
     courseId: number | undefined;
     courseName: string | undefined;
+    pricePackageId: number | undefined;
 }
 
 export class GetStudentInvoiceForEditOutput implements IGetStudentInvoiceForEditOutput {
@@ -38662,6 +38923,7 @@ export interface ICreateOrEditStudentInvoiceDto {
 export class GetStudentInvoiceForEditOutputCourseDto implements IGetStudentInvoiceForEditOutputCourseDto {
     courseId!: number | undefined;
     courseName!: string | undefined;
+    pricePackageId!: number | undefined;
 
     constructor(data?: IGetStudentInvoiceForEditOutputCourseDto) {
         if (data) {
@@ -38676,6 +38938,7 @@ export class GetStudentInvoiceForEditOutputCourseDto implements IGetStudentInvoi
         if (data) {
             this.courseId = data["courseId"];
             this.courseName = data["courseName"];
+            this.pricePackageId = data["pricePackageId"];
         }
     }
 
@@ -38690,6 +38953,7 @@ export class GetStudentInvoiceForEditOutputCourseDto implements IGetStudentInvoi
         data = typeof data === 'object' ? data : {};
         data["courseId"] = this.courseId;
         data["courseName"] = this.courseName;
+        data["pricePackageId"] = this.pricePackageId;
         return data; 
     }
 }
@@ -38697,6 +38961,7 @@ export class GetStudentInvoiceForEditOutputCourseDto implements IGetStudentInvoi
 export interface IGetStudentInvoiceForEditOutputCourseDto {
     courseId: number | undefined;
     courseName: string | undefined;
+    pricePackageId: number | undefined;
 }
 
 export class PagedResultDtoOfStudentInvoiceStudentLookupTableDto implements IPagedResultDtoOfStudentInvoiceStudentLookupTableDto {
@@ -39893,6 +40158,7 @@ export class StudentCourseDrivingLessonsDto implements IStudentCourseDrivingLess
     basicLessons!: DrivingLessonDto[] | undefined;
     predefinedDrivingLessons!: PredefinedDL[] | undefined;
     basicLessonsCompletedCount!: number | undefined;
+    completedExam!: boolean | undefined;
 
     constructor(data?: IStudentCourseDrivingLessonsDto) {
         if (data) {
@@ -39916,6 +40182,7 @@ export class StudentCourseDrivingLessonsDto implements IStudentCourseDrivingLess
                     this.predefinedDrivingLessons!.push(PredefinedDL.fromJS(item));
             }
             this.basicLessonsCompletedCount = data["basicLessonsCompletedCount"];
+            this.completedExam = data["completedExam"];
         }
     }
 
@@ -39939,6 +40206,7 @@ export class StudentCourseDrivingLessonsDto implements IStudentCourseDrivingLess
                 data["predefinedDrivingLessons"].push(item.toJSON());
         }
         data["basicLessonsCompletedCount"] = this.basicLessonsCompletedCount;
+        data["completedExam"] = this.completedExam;
         return data; 
     }
 }
@@ -39947,6 +40215,7 @@ export interface IStudentCourseDrivingLessonsDto {
     basicLessons: DrivingLessonDto[] | undefined;
     predefinedDrivingLessons: PredefinedDL[] | undefined;
     basicLessonsCompletedCount: number | undefined;
+    completedExam: boolean | undefined;
 }
 
 export class PredefinedDL implements IPredefinedDL {
@@ -40003,6 +40272,110 @@ export interface IPredefinedDL {
     name: string | undefined;
     plannedDate: moment.Moment | undefined;
     doneOnSimulator: boolean | undefined;
+}
+
+export class DrivingLessonOfCourseDto implements IDrivingLessonOfCourseDto {
+    id!: number | undefined;
+    length!: number | undefined;
+    startTime!: moment.Moment | undefined;
+    endTime!: moment.Moment | undefined;
+    addingMinutesAfter!: number | undefined;
+    description!: string | undefined;
+    internalDescription!: string | undefined;
+    completed!: boolean | undefined;
+    topic!: string | undefined;
+    licenseClass!: string | undefined;
+    startingLocation!: string | undefined;
+    instructorNames!: string | undefined;
+    vehicleName!: string | undefined;
+    courseId!: number | undefined;
+    predefinedDrivingLessonId!: string | undefined;
+    doneOnSimulator!: boolean | undefined;
+    feedbackPdfFile!: string | undefined;
+    isExam!: boolean | undefined;
+
+    constructor(data?: IDrivingLessonOfCourseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.length = data["length"];
+            this.startTime = data["startTime"] ? moment(data["startTime"].toString()) : <any>undefined;
+            this.endTime = data["endTime"] ? moment(data["endTime"].toString()) : <any>undefined;
+            this.addingMinutesAfter = data["addingMinutesAfter"];
+            this.description = data["description"];
+            this.internalDescription = data["internalDescription"];
+            this.completed = data["completed"];
+            this.topic = data["topic"];
+            this.licenseClass = data["licenseClass"];
+            this.startingLocation = data["startingLocation"];
+            this.instructorNames = data["instructorNames"];
+            this.vehicleName = data["vehicleName"];
+            this.courseId = data["courseId"];
+            this.predefinedDrivingLessonId = data["predefinedDrivingLessonId"];
+            this.doneOnSimulator = data["doneOnSimulator"];
+            this.feedbackPdfFile = data["feedbackPdfFile"];
+            this.isExam = data["isExam"];
+        }
+    }
+
+    static fromJS(data: any): DrivingLessonOfCourseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DrivingLessonOfCourseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["length"] = this.length;
+        data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
+        data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
+        data["addingMinutesAfter"] = this.addingMinutesAfter;
+        data["description"] = this.description;
+        data["internalDescription"] = this.internalDescription;
+        data["completed"] = this.completed;
+        data["topic"] = this.topic;
+        data["licenseClass"] = this.licenseClass;
+        data["startingLocation"] = this.startingLocation;
+        data["instructorNames"] = this.instructorNames;
+        data["vehicleName"] = this.vehicleName;
+        data["courseId"] = this.courseId;
+        data["predefinedDrivingLessonId"] = this.predefinedDrivingLessonId;
+        data["doneOnSimulator"] = this.doneOnSimulator;
+        data["feedbackPdfFile"] = this.feedbackPdfFile;
+        data["isExam"] = this.isExam;
+        return data; 
+    }
+}
+
+export interface IDrivingLessonOfCourseDto {
+    id: number | undefined;
+    length: number | undefined;
+    startTime: moment.Moment | undefined;
+    endTime: moment.Moment | undefined;
+    addingMinutesAfter: number | undefined;
+    description: string | undefined;
+    internalDescription: string | undefined;
+    completed: boolean | undefined;
+    topic: string | undefined;
+    licenseClass: string | undefined;
+    startingLocation: string | undefined;
+    instructorNames: string | undefined;
+    vehicleName: string | undefined;
+    courseId: number | undefined;
+    predefinedDrivingLessonId: string | undefined;
+    doneOnSimulator: boolean | undefined;
+    feedbackPdfFile: string | undefined;
+    isExam: boolean | undefined;
 }
 
 export class StudentCourseDto implements IStudentCourseDto {

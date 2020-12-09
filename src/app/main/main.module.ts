@@ -115,6 +115,7 @@ import { CheckBoxModule } from '@syncfusion/ej2-angular-buttons';
 import { SendMessageToStudentModalComponent } from './students/students/send-message-to-student-modal.component';
 import { StudentsOverviewLessonsComponent } from './students/students/students-overview-lessons.component';
 import { CreateOrEditExamDrivingModalComponent } from './lessons/drivingLessons/create-or-edit-examDriving-modal.component';
+import { SplitInvoiceModalComponent } from './sales/studentInvoices/splitInvoice-modal.component';
 
 NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
@@ -233,7 +234,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
       CreateOrEditEnrollmentModalComponent,
       LicenseClassLookupTableModalComponent,
       SendMessageToStudentModalComponent,
-      SVTheoryPracticeComponent
+      SVTheoryPracticeComponent,
+      SplitInvoiceModalComponent
     ],
     providers: [
         { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },

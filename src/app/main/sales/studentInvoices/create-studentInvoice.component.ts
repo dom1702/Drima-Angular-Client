@@ -40,7 +40,7 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
   studentLastName = '';
 
   courses : GetEmptyStudentInvoiceForViewDtoCourseDto[];
-  selectedCourse : GetEmptyStudentInvoiceForViewDtoCourseDto;
+  //selectedCourse : GetEmptyStudentInvoiceForViewDtoCourseDto;
 
   studentId: number;
   studentPricePackageId: number;
@@ -77,13 +77,21 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
     this.buildForm(fb);
   }
 
+  hasInstallments() : boolean
+  {
+    return this.form.get('installmentActive').value;
+  }
+
   buildForm(fb: FormBuilder): void {
     this.form = fb.group({
 
       index: [''],
-
+      selectedCourse: [''],
       date: [moment().toDate()],
       date_due: [moment().add(abp.setting.get("App.Invoice.DefaultDaysToPay"), 'day').toDate()],
+      installmentActive: [false],
+      installmentCount: [3],
+      installmentInterval: [30],
       interest: ['0'
       ],
       recipientFirstName: [''],
@@ -103,6 +111,11 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
       createPdfOnSave: [true]
 
     });
+  }
+
+  check()
+  {
+    console.log(this.form.get('installmentCount').value);
   }
 
   ngOnInit(): void {
@@ -197,8 +210,9 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
           this.studentId = this.studentInvoice.studentId;
 
           this.setCourses(result.courses);
-          this.selectedCourse = this.courses.find(i => i.courseId == this.studentInvoice.courseId);
+          //this.selectedCourse = this.courses.find(i => i.courseId == this.studentInvoice.courseId);
 
+          this.form.get('selectedCourse').setValue(this.courses.find(i => i.courseId == this.studentInvoice.courseId));
           this.form.get('date').setValue(moment(result.studentInvoice.date).toDate());
           this.form.get('date_due').setValue(moment(result.studentInvoice.dateDue).toDate());
           this.form.get('recipientFirstName').setValue(result.studentInvoice.recipientFirstName);
@@ -527,7 +541,14 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
     input.items = items;
 
     input.studentId = this.studentId;
-    input.courseId = this.selectedCourse != null ? this.selectedCourse.courseId : null;
+    //input.courseId = this.selectedCourse != null ? this.selectedCourse.courseId : null;
+    input.courseId = this.form.get('selectedCourse').value != null ? this.form.get('selectedCourse').value.courseId : null;
+    input.useInstallments = this.form.get('installmentActive').value;
+    if(input.useInstallments)
+    {
+      input.installmentCount = this.form.get('installmentCount').value;
+      input.installmentInterval = this.form.get('installmentInterval').value;
+    }
 
     return input;
   }
@@ -658,13 +679,15 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
         if(courseId != null)
         {
-          this.selectedCourse = this.courses.find(i => i.courseId == courseId);
+          this.form.get('selectedCourse').setValue(this.courses.find(i => i.courseId == courseId));
+          console.log(this.form.get('selectedCourse').value);
+          //this.selectedCourse = this.courses.find(i => i.courseId == courseId);
         }
 
-        if(courseId != null && this.selectedCourse != null)
+        if(courseId != null && this.form.get('selectedCourse').value != null)
         {
-          if(this.selectedCourse.pricePackageId != null)
-            this.studentPricePackageId = this.selectedCourse.pricePackageId;
+          if(this.form.get('selectedCourse').value.pricePackageId != null)
+            this.studentPricePackageId = this.form.get('selectedCourse').value.pricePackageId;
         }
         else
           this.studentPricePackageId = null;
@@ -691,8 +714,8 @@ export class CreateStudentInvoiceComponent extends AppComponentBase implements O
 
   updateCourse()
   {
-    console.log("new selected course: " + this.selectedCourse);
-    this.studentPricePackageId = this.selectedCourse.pricePackageId;
+    console.log("new selected course: " + this.form.get('selectedCourse').value.courseId);
+    this.studentPricePackageId = this.form.get('selectedCourse').value.pricePackageId;
   }
 
   setCourses(courses : GetEmptyStudentInvoiceForViewDtoCourseDto[])

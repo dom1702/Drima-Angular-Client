@@ -38772,6 +38772,9 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
     text1!: string | undefined;
     text2!: string | undefined;
     items!: StudentInvoiceItemDto[] | undefined;
+    useInstallments!: boolean | undefined;
+    installmentCount!: number | undefined;
+    installmentInterval!: number | undefined;
     id!: number | undefined;
 
     constructor(data?: ICreateOrEditStudentInvoiceDto) {
@@ -38824,6 +38827,9 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
                 for (let item of data["items"])
                     this.items!.push(StudentInvoiceItemDto.fromJS(item));
             }
+            this.useInstallments = data["useInstallments"];
+            this.installmentCount = data["installmentCount"];
+            this.installmentInterval = data["installmentInterval"];
             this.id = data["id"];
         }
     }
@@ -38876,6 +38882,9 @@ export class CreateOrEditStudentInvoiceDto implements ICreateOrEditStudentInvoic
             for (let item of this.items)
                 data["items"].push(item.toJSON());
         }
+        data["useInstallments"] = this.useInstallments;
+        data["installmentCount"] = this.installmentCount;
+        data["installmentInterval"] = this.installmentInterval;
         data["id"] = this.id;
         return data; 
     }
@@ -38917,6 +38926,9 @@ export interface ICreateOrEditStudentInvoiceDto {
     text1: string | undefined;
     text2: string | undefined;
     items: StudentInvoiceItemDto[] | undefined;
+    useInstallments: boolean | undefined;
+    installmentCount: number | undefined;
+    installmentInterval: number | undefined;
     id: number | undefined;
 }
 

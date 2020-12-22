@@ -1,13 +1,15 @@
 import { Component, ViewChild, Injector, Output, EventEmitter, OnInit } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { finalize } from 'rxjs/operators';
-import { StudentsServiceProxy, CreateOrEditStudentDto } from '@shared/service-proxies/service-proxies';
+import { StudentsServiceProxy, CreateOrEditStudentDto, StudentDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as moment from 'moment';
 import { PricePackageLookupTableModalComponent } from './pricePackage-lookup-table-modal.component';
 import { Country, CountriesService } from '@app/shared/common/services/countries.service';
 import { Language, LanguagesService } from '@app/shared/common/services/languages.service';
 import { InstructorLookupTableModalComponent } from '@app/shared/common/lookup/instructor-lookup-table-modal.component';
+import { AssignStudentToCourseModalComponent } from './assign-student-to-course-modal.component';
+import { isValid } from "finnish-personal-identity-code-validator";
 
 @Component({
     selector: 'createOrEditStudentModal',
@@ -17,7 +19,6 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('pricePackageLookupTableModal') pricePackageLookupTableModal: PricePackageLookupTableModalComponent;
-
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
 
@@ -44,6 +45,8 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
     currentNativeLanguage: string;
     languages: Language[];
 
+    assignToCourseAfterSave;
+
     @ViewChild('instructorLookupTableModal') instructorLookupTableModal: InstructorLookupTableModalComponent;
     instructorFullName = '';
 
@@ -57,7 +60,6 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
     }
 
     ngOnInit() {
-
         this._countriesService.loadData().subscribe(result => {
             this.countries = result;
 
@@ -116,6 +118,7 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
     show(studentId?: number): void {
 
+        this.assignToCourseAfterSave = false;
         this.dateOfBirth = null;
 
         if (!studentId) {
@@ -264,6 +267,13 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
     }
 
     save(): void {
+
+        if(!isValid(this.student.ssn))
+        {
+            abp.message.error(this.l("SSNNotValidDescription"), this.l("SSNNotValidHeader"));
+            return;
+        }
+
         this.saving = true;
 
         this.student.licenseClasses = [];
@@ -292,21 +302,33 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
         else {
             this.student.dateOfBirth = null;
         }
-       
-        if (this.currentBirthCountry != null)
-        {
+
+        if (this.currentBirthCountry != null) {
             this.student.birthCountry = this._countriesService.getCode(this.currentBirthCountry);
         }
         if (this.currentNativeLanguage != null)
             this.student.nativeLanguage = this._languagesService.getCode(this.currentNativeLanguage);
 
-        this._studentsServiceProxy.createOrEdit(this.student)
-            .pipe(finalize(() => { this.saving = false; }))
-            .subscribe(() => {
-                this.notify.info(this.l('SavedSuccessfully'));
-                this.close();
-                this.modalSave.emit(null);
-            });
+        if (this.student.id == null && this.assignToCourseAfterSave) {
+
+            this._studentsServiceProxy.createAndGetId(this.student)
+                .pipe(finalize(() => { this.saving = false; }))
+                .subscribe((result) => {
+                    this.student.id = result;
+                    this.notify.info(this.l('SavedSuccessfully'));
+                    this.close();
+                    this.modalSave.emit(null);
+                });
+        }
+        else {
+            this._studentsServiceProxy.createOrEdit(this.student)
+                .pipe(finalize(() => { this.saving = false; }))
+                .subscribe(() => {
+                    this.notify.info(this.l('SavedSuccessfully'));
+                    this.close();
+                    this.modalSave.emit(null);
+                });
+        }
     }
 
     close(): void {
@@ -329,10 +351,11 @@ export class CreateOrEditStudentModalComponent extends AppComponentBase implemen
 
 
     getNewInstructorId() {
-        if(this.instructorLookupTableModal.id != null)
-        {
-        this.student.defaultInstructorId = this.instructorLookupTableModal.id;
-        this.instructorFullName = this.instructorLookupTableModal.firstName + ' ' + this.instructorLookupTableModal.lastName;
+        if (this.instructorLookupTableModal.id != null) {
+            this.student.defaultInstructorId = this.instructorLookupTableModal.id;
+            this.instructorFullName = this.instructorLookupTableModal.firstName + ' ' + this.instructorLookupTableModal.lastName;
         }
     }
+
+
 }

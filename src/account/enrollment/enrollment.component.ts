@@ -17,6 +17,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Language, LanguagesService } from '@app/shared/common/services/languages.service';
 import { CountriesService, Country } from '@app/shared/common/services/countries.service';
+import { isValid } from "finnish-personal-identity-code-validator";
 
 @Component({
     selector: 'enrollment',
@@ -263,6 +264,12 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
 
     onSubmit() {
 
+        if(!isValid(this.userData.socialSecurityNo))
+        {
+            abp.message.error(this.l("SSNNotValidDescription"), this.l("SSNNotValidHeader"));
+            return;
+        }
+
         var input = new SubmitEnrollmentInput();
 
         input.firstName = this.userData.firstName,
@@ -292,8 +299,6 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
         input.courseId = this.courseId,
         input.pricePackageId = this.pricePackageId
 
-        console.log(input);
-
         this.submitting = true;
 
         this._enrollmentService.submitEnrollment(input).subscribe(result => {
@@ -301,8 +306,6 @@ export class EnrollmentComponent extends AppComponentBase implements OnInit {
             //this.submitting = false;
             this._router.navigate(['account']);
             abp.message.success('Success', 'You just enrolled in a new course. Please read the confirmation email for further information!');
-           
-
         })
 
     }

@@ -62,11 +62,11 @@
 							[(ngModel)]="student.phoneNumber" name="PhoneNumber" />
 					</div>
 
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label for="Student_DateOfBirth">{{l("DateOfBirth")}}</label>
 						<input class="form-control m-input" type="datetime" bsDatepicker [(ngModel)]="dateOfBirth"
 							id="Student_DateOfBirth" name="Student_DateOfBirth">
-					</div>
+					</div> -->
 
 					<div class="form-group">
 						<label for="Student_Street">{{l("Street")}}</label>
@@ -117,8 +117,8 @@
 					</div>
 
 					<div class="form-group">
-						<label>{{l("SSN")}}</label>
-						<input type="text" class="form-control" [(ngModel)]="student.ssn" name="SSN" />
+						<label>{{l("SSN")}} *</label>
+						<input type="text" class="form-control" [(ngModel)]="student.ssn" name="SSN" required/>
 					</div>
 
 					<div class="form-group">
@@ -178,6 +178,11 @@
 				
 				</div>
 				<div class="modal-footer">
+					<label *ngIf="student.id == null" class="m-checkbox">
+						<input type="checkbox" name="assignToCourseAfterSave" [(ngModel)]="assignToCourseAfterSave">
+						{{l("AssignToCourseAfterSave")}}
+						<span></span>
+					</label>
 					<button [disabled]="saving" type="button" class="btn btn-default"
 						(click)="close()">{{l("Cancel")}}</button>
 					<button type="submit" class="btn btn-primary blue" [disabled]="!studentForm.form.valid"
@@ -187,5 +192,5 @@
 			</form>
 		</div>
 	</div>
-    <instructorLookupTableModal #instructorLookupTableModal (modalSave)="getNewInstructorId()"></instructorLookupTableModal>
+	<instructorLookupTableModal #instructorLookupTableModal (modalSave)="getNewInstructorId()"></instructorLookupTableModal>
 </div>

@@ -15,6 +15,7 @@ import { FileDownloadService } from '@shared/utils/file-download.service';
 import { EntityTypeHistoryModalComponent } from '@app/shared/common/entityHistory/entity-type-history-modal.component';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { AssignStudentToCourseModalComponent } from './assign-student-to-course-modal.component';
 
 @Component({
     templateUrl: './students.component.html',
@@ -28,6 +29,7 @@ export class StudentsComponent extends AppComponentBase {
     @ViewChild('entityTypeHistoryModal') entityTypeHistoryModal: EntityTypeHistoryModalComponent;
     @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
+    @ViewChild('assignStudentToCourseModal') assignStudentToCourseModal: AssignStudentToCourseModalComponent;
 
     advancedFiltersAreShown = false;
     filterText = '';
@@ -96,6 +98,11 @@ export class StudentsComponent extends AppComponentBase {
             this.primengTableHelper.totalRecordsCount = result.totalCount;
             this.primengTableHelper.records = result.items;
             this.primengTableHelper.hideLoadingIndicator();
+
+            if(this.createOrEditStudentModal.assignToCourseAfterSave)
+            {
+                this.openAssignToCourseModal();
+            }
         });
     }
 
@@ -161,4 +168,34 @@ export class StudentsComponent extends AppComponentBase {
             this._fileDownloadService.downloadTempFile(result);
          });
     }
+
+    openAssignToCourseModal(): void 
+    {
+        console.log(this.createOrEditStudentModal.student.id);
+        console.log(this.createOrEditStudentModal.student.firstName);
+        console.log(this.createOrEditStudentModal.student.lastName);
+        var studentDto : StudentDto = new StudentDto();
+        studentDto.id = this.createOrEditStudentModal.student.id;
+        studentDto.firstName = this.createOrEditStudentModal.student.firstName;
+        studentDto.lastName = this.createOrEditStudentModal.student.lastName;
+        this.assignStudentToCourseModal.show(studentDto);
+    }
+
+    // assignToCourse(): void {
+    //     if(this.assignStudentToCourseModal.selectedCourse != null)
+    //     {
+    //         this.selectedCourseName = this.assignStudentToCourseModal.selectedCourse.courseName;
+    //         this.student.selectedCourseId = this.assignStudentToCourseModal.selectedCourse.courseId;
+    //         this.student.selectedPricePackageId = this.assignStudentToCourseModal.selectedPricePackage.id;
+    //     }
+    //     else   
+    //     this.selectedCourseName = "";
+    // }
+
+    // setCourseToNull(): void
+    // {
+    //     this.selectedCourseName = "";
+    //     this.student.selectedCourseId = null;
+    //     this.student.selectedPricePackageId = null;
+    // }
 }

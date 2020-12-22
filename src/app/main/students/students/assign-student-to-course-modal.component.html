@@ -19,10 +19,16 @@
 					</div>
 
 					<div class="form-group">
+						<label class="m-checkbox">
+							<input type="checkbox" name="showExpiredCourses" [(ngModel)]="showExpiredCourses" (change)="showExpiredCoursesChanged()">
+							{{l("ShowExpiredCourses")}}
+							<span></span>
+						</label>
+					</div>
+					<div class="form-group">
 						<label>Course: *</label><br>
 						<select required *ngIf="availableCourses" name="selectedCourse" class="form-control"
-							(change)="selectedPricePackage = null"
-							[(ngModel)]="selectedCourse">
+							(change)="selectedPricePackage = null" [(ngModel)]="selectedCourse">
 							<option *ngFor="let course of availableCourses" [ngValue]="course">
 								{{course.courseName}}
 							</option>
@@ -38,15 +44,14 @@
 						</select>
 					</div>
 					<div class="form-group">
-					<div class="m-checkbox-list">
-						<label class="m-checkbox">
-							<input type="checkbox" name="EnrollmentMail"
-								[(ngModel)]="sendEnrollmentMail">
-							{{l("SendEnrollmentEmail")}}
-							<span></span>
-						</label>
+						<div class="m-checkbox-list">
+							<label class="m-checkbox">
+								<input type="checkbox" name="EnrollmentMail" [(ngModel)]="sendEnrollmentMail">
+								{{l("SendEnrollmentEmail")}}
+								<span></span>
+							</label>
+						</div>
 					</div>
-				</div>
 					<!-- <div class="form-group m-form__group">
 						<label for="PricePackage">{{l("PricePackage")}}</label>
 						<div class="input-group">
